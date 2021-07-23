@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "948515884264",
+    "project_id": "frienderr-5aa07",
+    "storage_bucket": "frienderr-5aa07.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948515884264:android:1093a930b20df743e54d5d",
+        "android_client_info": {
+          "package_name": "com.example.frienderr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948515884264-lgamkg03q0e50nhkur1mfsg1tclatvak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcbHFS6e2uO8BjnxZK-luIcJc0dh6T_0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948515884264-lgamkg03q0e50nhkur1mfsg1tclatvak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
