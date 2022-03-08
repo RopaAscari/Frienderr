@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:frienderr/screens/under_construction/under_construction.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:frienderr/blocs/notification_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/events/notification_event.dart';
@@ -17,18 +20,20 @@ import 'package:frienderr/widgets/bitmap_convertor/bitmap_converter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/services/services.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/screens/login/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/widgets/render_posts/render_posts.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:animations/animations.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Account extends StatefulWidget {
   final String profileUserId;
@@ -146,10 +151,22 @@ class FullScreenImage extends StatelessWidget {
                 child: Hero(
                   tag: tag,
                   child: CachedNetworkImage(
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.contain,
-                    imageUrl: imageUrl,
-                  ),
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.contain,
+                      imageUrl: imageUrl,
+                      progressIndicatorBuilder: (context, url,
+                              downloadProgress) =>
+                          Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              enabled: true,
+                              child: Container(
+                                //height: 220,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                width: MediaQuery.of(context).size.width,
+                              ))),
                 ))));
   }
 }
@@ -161,6 +178,9 @@ class AccountState extends State<Account>
 
   late UserState userState;
   List<dynamic> userStories = [];
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   String get profileUserId => widget.profileUserId;
   NotificationBloc notificationBloc = new NotificationBloc();
   bool get isProfileOwnerViewing => widget.isProfileOwnerViewing;
@@ -172,8 +192,6 @@ class AccountState extends State<Account>
   @override
   void initState() {
     userState = Provider.of<UserBloc>(context, listen: false).state;
-    //  print('PROFILE ${userState.user.id}');
-    // fetchUser(profileUserId);
     fetchStories(profileUserId);
     super.initState();
   }
@@ -184,34 +202,51 @@ class AccountState extends State<Account>
     super.didChangeDependencies();
   }
 
-  logOut() {
+  logOut(BuildContext actionSheetContext, BuildContext highLevelContext) async {
+    Navigator.of(actionSheetContext).pop();
+    //Future.delayed(Duration(milliseconds: 500));
     AuthRepository().signOut();
+    //Future.delayed(Duration(milliseconds: 500));
     Navigator.pushAndRemoveUntil(
-      context,
+      highLevelContext,
       MaterialPageRoute(builder: (context) => Login()),
       (Route<dynamic> route) => false,
     );
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> showLogOutDialog(BuildContext highLevelContext) async {
+    Navigator.of(context).pop();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Something went wrong'),
+          backgroundColor: Theme.of(context).canvasColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Text('Logout',
+              style: TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.55))),
           content: SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
-                Text('We are about to log you out of your account'),
+              children: <Widget>[
+                Text('We are about to log you out of your account',
+                    style: TextStyle(
+                        fontSize: ResponsiveFlutter.of(context).fontSize(1.5))),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Ok'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                logOut(context, highLevelContext);
               },
             ),
           ],
@@ -247,8 +282,8 @@ class AccountState extends State<Account>
           });
       final notification = new FollowNotificationModel(
         type: 'Follow',
-        recipient: profileUser['id'],
         senderId: appUser.id,
+        recipient: profileUser['id'],
         senderUsername: appUser.username,
         senderProfilePic: appUser.profilePic,
         dateCreated: DateTime.now().microsecondsSinceEpoch,
@@ -270,33 +305,85 @@ class AccountState extends State<Account>
     } catch (err) {}
   }
 
-  showActionSheet() {
+  showActionSheet(BuildContext highLevelContext) {
     showModalBottomSheet<void>(
       context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       builder: (BuildContext btx) {
         return Container(
             height: MediaQuery.of(context).size.height - 150,
             child: Column(children: [
               ListTile(
-                  leading: Icon(Icons.account_circle), title: Text('Profile')),
+                  leading: Icon(Icons.account_circle),
+                  title: Text('Profile',
+                      style: TextStyle(
+                          fontSize:
+                              ResponsiveFlutter.of(context).fontSize(1.55))),
+                  onTap: () {
+                    Navigator.of(btx).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UnderConstruction()));
+                  }),
               ListTile(
                   leading: Icon(Icons.theater_comedy),
-                  title: Text('Theme'),
+                  title: Text('Theme',
+                      style: TextStyle(
+                          fontSize:
+                              ResponsiveFlutter.of(context).fontSize(1.55))),
                   onTap: () {
                     Navigator.of(btx).pop();
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => ChangeTheme()));
                   }),
               ListTile(
+                  leading: Icon(Icons.bookmark_add),
+                  title: Text('Saved Posts',
+                      style: TextStyle(
+                          fontSize:
+                              ResponsiveFlutter.of(context).fontSize(1.55))),
+                  onTap: () {
+                    Navigator.of(btx).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UnderConstruction()));
+                  }),
+              ListTile(
                   leading: Icon(Icons.notifications),
-                  title: Text('Notifications')),
+                  title: Text('Notifications',
+                      style: TextStyle(
+                          fontSize:
+                              ResponsiveFlutter.of(context).fontSize(1.55))),
+                  onTap: () {
+                    Navigator.of(btx).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UnderConstruction()));
+                  }),
               ListTile(
                   leading: Icon(Icons.logout),
-                  title: Text('Logout'),
-                  onTap: () => logOut())
+                  title: Text('Logout',
+                      style: TextStyle(
+                          fontSize:
+                              ResponsiveFlutter.of(context).fontSize(1.55))),
+                  onTap: () => showLogOutDialog(highLevelContext))
             ]));
       },
     );
+  }
+
+  void _onRefresh() async {
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.loadComplete();
   }
 
   messageUser(dynamic user, dynamic profileUser) {
@@ -318,6 +405,7 @@ class AccountState extends State<Account>
   }
 
   Widget build(BuildContext context) {
+    super.build(context);
     final dynamic appUser =
         BlocProvider.of<UserBloc>(context, listen: true).state.user;
 
@@ -333,107 +421,146 @@ class AccountState extends State<Account>
               }
               dynamic user = snapshot.data!;
 
-              return SingleChildScrollView(
-                  child: Stack(
-                children: <Widget>[
-                  new Column(
+              return SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: false,
+                  header: ClassicHeader(
+                    idleText: '',
+                    releaseText: '',
+                    completeText: '',
+                    refreshingText: '',
+                    idleIcon: CupertinoActivityIndicator(radius: 10),
+                    completeIcon: CupertinoActivityIndicator(radius: 10),
+                    releaseIcon: CupertinoActivityIndicator(radius: 10),
+                  ),
+                  footer: CustomFooter(
+                    builder: (BuildContext context, LoadStatus? mode) {
+                      return Center();
+                    },
+                  ),
+                  controller: _refreshController,
+                  onRefresh: () => _onRefresh(),
+                  onLoading: () => _onLoading(),
+                  child: SingleChildScrollView(
+                      child: Stack(
                     children: <Widget>[
+                      new Column(
+                        children: <Widget>[
+                          new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  color: HexColor('#6D6D70'),
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15))),
+                              child: GestureDetector(
+                                  onTap: () => {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) {
+                                          return FullScreenImage(
+                                            tag: "coverPic",
+                                            userId: user['id'],
+                                            isProfileChanging: false,
+                                            imageUrl: user['coverPhoto'],
+                                            isProfileOwnerViewing:
+                                                isProfileOwnerViewing,
+                                          );
+                                        }))
+                                      },
+                                  child: Hero(
+                                    tag: "coverPic",
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          Shimmer.fromColors(
+                                              period:
+                                                  Duration(milliseconds: 1000),
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.grey[100]!,
+                                              enabled: true,
+                                              child: Container(
+                                                //height: 220,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                // width: MediaQuery.of(context).size.width,
+                                              )),
+                                      imageUrl: user['coverPhoto'],
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
+                                  ))),
+                          new Container(
+                              height: MediaQuery.of(context).size.height * .35,
+                              //  color: Colors.white,
+                              child: Column(
+                                children: [],
+                              ))
+                        ],
+                      ),
                       new Container(
-                          height: MediaQuery.of(context).size.height * .20,
+                        alignment: Alignment.topCenter,
+                        padding: new EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * .13,
+                            right: 20.0,
+                            left: 20.0),
+                        child: new Container(
+                          //height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: HexColor('#6D6D70'),
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15))),
-                          child: GestureDetector(
-                              onTap: () => {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (_) {
-                                      return FullScreenImage(
-                                        tag: "coverPic",
-                                        userId: user['id'],
-                                        isProfileChanging: false,
-                                        imageUrl: user['coverPhoto'],
-                                        isProfileOwnerViewing:
-                                            isProfileOwnerViewing,
-                                      );
-                                    }))
-                                  },
-                              child: Hero(
-                                tag: "coverPic",
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.cover,
-                                  imageUrl: user['coverPhoto'],
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                ),
-                              ))),
-                      new Container(
-                          height: MediaQuery.of(context).size.height * .35,
-                          //  color: Colors.white,
                           child: Column(
-                            children: [],
-                          ))
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    alignment: FractionalOffset.center,
+                                    child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 100),
+                                              child: !isProfileOwnerViewing
+                                                  ? followBottomWidget(
+                                                      user, appUser)
+                                                  : Container()),
+                                          Spacer(),
+                                          profilePictureWidget(user),
+                                          Spacer(),
+                                          Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 100),
+                                              child: isProfileOwnerViewing
+                                                  ? accountIconWidget()
+                                                  : Container()),
+                                          Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 100),
+                                              child: !isProfileOwnerViewing
+                                                  ? messageButtonWidget(
+                                                      appUser, user)
+                                                  : Container()),
+                                        ])),
+                                usernameDisplayWidget(user),
+                                accountMetadatatWidget(user),
+                                userStories.length > 0
+                                    ? postGridWidget(user)
+                                    : Center(
+                                        child: Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 200),
+                                            child: Text('You have no posts')))
+                              ]),
+                        ),
+                      ),
                     ],
-                  ),
-                  new Container(
-                    alignment: Alignment.topCenter,
-                    padding: new EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .13,
-                        right: 20.0,
-                        left: 20.0),
-                    child: new Container(
-                      //height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                                width: MediaQuery.of(context).size.width,
-                                alignment: FractionalOffset.center,
-                                child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 100),
-                                          child: !isProfileOwnerViewing
-                                              ? followBottomWidget(
-                                                  user, appUser)
-                                              : Container()),
-                                      Spacer(),
-                                      profilePictureWidget(user),
-                                      Spacer(),
-                                      Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 100),
-                                          child: isProfileOwnerViewing
-                                              ? accountIconWidget()
-                                              : Container()),
-                                      Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 100),
-                                          child: !isProfileOwnerViewing
-                                              ? messageButtonWidget(
-                                                  appUser, user)
-                                              : Container()),
-                                    ])),
-                            usernameDisplayWidget(user),
-                            accountMetadatatWidget(user),
-                            userStories.length > 0
-                                ? postSliderWidget(user)
-                                : Center(
-                                    child: Container(
-                                        margin: const EdgeInsets.only(top: 200),
-                                        child: Text('You have no posts')))
-                          ]),
-                    ),
-                  ),
-                ],
-              ));
+                  )));
             }));
   }
 
@@ -443,7 +570,7 @@ class AccountState extends State<Account>
         ? 'assets/images/dot_menu_light.png'
         : 'assets/images/dot_menu_dark.png';
     return GestureDetector(
-        onTap: () => showActionSheet(),
+        onTap: () => showActionSheet(context),
         child: Image.asset(dotIcon, height: 20, width: 20));
   }
 
@@ -488,7 +615,9 @@ class AccountState extends State<Account>
   }
 
   Widget usernameDisplayWidget(dynamic user) {
-    return Text('\n${user['username']}\n', style: TextStyle(fontSize: 14));
+    return Text('\n${user['username']}\n',
+        style:
+            TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.4)));
   }
 
   Widget profilePictureWidget(dynamic user) {
@@ -496,6 +625,19 @@ class AccountState extends State<Account>
         child: Hero(
             tag: "profilePic",
             child: CachedNetworkImage(
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      enabled: true,
+                      child: Container(
+                        //height: 220,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: 120.0,
+                        height: 120.0,
+                      )),
               fit: BoxFit.cover,
               imageBuilder: (context, imageProvider) => Container(
                 width: 120.0,
@@ -526,16 +668,19 @@ class AccountState extends State<Account>
 
   Widget accountMetadatatWidget(dynamic user) {
     return Container(
-        margin: const EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20, bottom: 25),
         // width: 00,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Column(children: [
             Text('${userStories.length}',
                 style: TextStyle(
-                  fontSize: 16.5,
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.55),
                 )),
-            Text('posts', style: TextStyle(fontSize: 12, color: Colors.grey))
+            Text('posts',
+                style: TextStyle(
+                    fontSize: ResponsiveFlutter.of(context).fontSize(1.25),
+                    color: Colors.grey))
           ]),
           GestureDetector(
               onTap: () => Navigator.push(
@@ -546,10 +691,12 @@ class AccountState extends State<Account>
               child: Column(children: [
                 Text('${user['followers'].length}',
                     style: TextStyle(
-                      fontSize: 16.5,
-                    )),
+                        fontSize:
+                            ResponsiveFlutter.of(context).fontSize(1.55))),
                 Text('followers',
-                    style: TextStyle(fontSize: 12, color: Colors.grey))
+                    style: TextStyle(
+                        fontSize: ResponsiveFlutter.of(context).fontSize(1.25),
+                        color: Colors.grey))
               ])),
           GestureDetector(
               onTap: () => Navigator.push(
@@ -559,9 +706,13 @@ class AccountState extends State<Account>
                           id: user['id'], isFollowersInitial: false))),
               child: Column(children: [
                 Text('${user['following'].length}',
-                    style: TextStyle(fontSize: 16.5)),
+                    style: TextStyle(
+                        fontSize:
+                            ResponsiveFlutter.of(context).fontSize(1.55))),
                 Text('following',
-                    style: TextStyle(fontSize: 12, color: Colors.grey))
+                    style: TextStyle(
+                        fontSize: ResponsiveFlutter.of(context).fontSize(1.25),
+                        color: Colors.grey))
               ]))
         ]));
   }
@@ -579,7 +730,7 @@ class AccountState extends State<Account>
         ]));
   }
 
-  Widget postSliderWidget(dynamic user) {
+  Widget postGridWidget(dynamic user) {
     return new StaggeredGridView.countBuilder(
       crossAxisCount: 4,
       shrinkWrap: true,
@@ -587,7 +738,11 @@ class AccountState extends State<Account>
       physics: new NeverScrollableScrollPhysics(),
       itemCount: userStories.length,
       itemBuilder: (BuildContext context, int index) {
-        final thumbnail = userStories[index]['content'][0]['media'];
+        final thumbnail = userStories[index]['content'][0]['type'] == 'video'
+            ? userStories[index]['content'][0]['thumbnail']
+            : userStories[index]['content'][0]['media'];
+
+        //  print('thumnail account $thumbnail');
 
         return OpenContainer(
             openElevation: 0,
@@ -605,6 +760,19 @@ class AccountState extends State<Account>
             closedBuilder: (BuildContext context, VoidCallback openContainer) {
               return CachedNetworkImage(
                 fit: BoxFit.cover,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[300]!,
+                        enabled: true,
+                        child: Container(
+                          width: 200,
+                          //height: 220,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          // width: MediaQuery.of(context).size.width,
+                        )),
                 imageBuilder: (context, imageProvider) => Container(
                   width: 200,
 

@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:frienderr/blocs/following_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/events/followers_event.dart';
 import 'package:frienderr/events/following_event.dart';
 import 'package:frienderr/models/chat/chat_model.dart';
@@ -23,9 +24,11 @@ import 'package:frienderr/services/services.dart';
 import 'package:frienderr/events/chat_event.dart';
 import 'package:frienderr/blocs/friends_bloc.dart';
 import 'package:frienderr/state/friends_state.dart';
-
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:frienderr/events/friends_event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 class ChatDashboard extends StatefulWidget {
   ChatDashboard({Key? key}) : super(key: key);
@@ -42,6 +45,9 @@ class ChatDashboardState extends State<ChatDashboard>
 
   late ChatBloc chatBloc = new ChatBloc();
   final storyController = StoryController();
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  final PanelController panelController = new PanelController();
   late FollowingBloc followingBloc = new FollowingBloc();
   final TextEditingController searchController = TextEditingController();
   final CollectionReference users =
@@ -61,6 +67,15 @@ class ChatDashboardState extends State<ChatDashboard>
     super.didChangeDependencies();
   }
 
+  void _onRefresh() async {
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.loadComplete();
+  }
+
   listenChats() {
     Stream<DocumentSnapshot> streamChats =
         users.doc(userState.user.id).snapshots();
@@ -70,46 +85,47 @@ class ChatDashboardState extends State<ChatDashboard>
     });
   }
 
-  showActionSheet(FollowingState state) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Container(
-          height: double.infinity,
-          child: renderFriendsListWidget(state),
-        );
-      },
-    );
-  }
-
   createChatFromFriendsList(String id, FollowingState state) {
     followingBloc.add(GetFollowing(id: id));
-    showActionSheet(state);
+    panelController.open();
   }
 
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
     final isDarkTheme = theme == Constants.darkTheme;
     return SafeArea(
         child: Scaffold(
-      body: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.only(
-                  top: 15.0, left: 9, right: 9, bottom: 5),
-              child: BlocBuilder<FollowingBloc, FollowingState>(
-                  bloc: followingBloc,
-                  builder: (
-                    BuildContext context,
-                    FollowingState state,
-                  ) {
-                    return headerWidget(state, isDarkTheme);
-                  })),
-          Expanded(child: chatContainerWidget(isDarkTheme))
-        ],
-      ),
-    ));
+            body: BlocBuilder<FollowingBloc, FollowingState>(
+                bloc: followingBloc,
+                builder: (
+                  BuildContext context,
+                  FollowingState state,
+                ) {
+                  return Stack(children: [
+                    Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15.0, left: 9, right: 9, bottom: 5),
+                            child: headerWidget(state, isDarkTheme)),
+                        Expanded(child: chatContainerWidget(isDarkTheme))
+                      ],
+                    ),
+                    SlidingUpPanel(
+                      controller: panelController,
+                      isDraggable: true,
+                      minHeight: 0,
+                      color: Colors.transparent,
+                      maxHeight: MediaQuery.of(context).size.height,
+                      backdropEnabled: true,
+                      panel: renderFriendsListWidget(state),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(18.0),
+                          topRight: Radius.circular(18.0)),
+                    ),
+                  ]);
+                })));
   }
 
   Widget headerWidget(FollowingState state, bool isDarkTheme) {
@@ -234,7 +250,7 @@ class ChatDashboardState extends State<ChatDashboard>
     return Text(
       TimeElapsed().elapsedTimeDynamic(
           new DateTime.fromMicrosecondsSinceEpoch(timeElapsed).toString()),
-      style: TextStyle(fontSize: 12),
+      style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.25)),
     );
   }
 
@@ -303,9 +319,10 @@ class ChatDashboardState extends State<ChatDashboard>
                 trailing: Icon(Icons.circle,
                     size: 15,
                     color: userPresence ? Colors.green : Colors.amber),
-                title: Text(
-                  '$username',
-                ),
+                title: Text('$username',
+                    style: TextStyle(
+                        fontSize:
+                            ResponsiveFlutter.of(context).fontSize(1.45))),
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -339,90 +356,124 @@ class ChatDashboardState extends State<ChatDashboard>
         builder: (context, snapshot) {
           List<DocumentSnapshot> items = snapshot.data?.docs ?? [];
 
-          if (items.length == 0) {
-            return Center(child: Text('You have no messages'));
-          }
+          return SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: false,
+              header: ClassicHeader(
+                idleText: '',
+                releaseText: '',
+                completeText: '',
+                refreshingText: '',
+                idleIcon: CupertinoActivityIndicator(radius: 10),
+                completeIcon: CupertinoActivityIndicator(radius: 10),
+                releaseIcon: CupertinoActivityIndicator(radius: 10),
+              ),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus? mode) {
+                  return Center();
+                },
+              ),
+              controller: _refreshController,
+              onRefresh: () => _onRefresh(),
+              onLoading: () => _onLoading(),
+              child: items.length == 0
+                  ? Center(
+                      child: Text('You have no messages',
+                          style: TextStyle(
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.4))))
+                  : ListView.builder(
+                      itemCount: items.length,
+                      padding: EdgeInsets.only(top: 25),
+                      itemBuilder: (context, index) {
+                        final chatID = items[index]['id'];
+                        final unread = items[index]['latestMessage']['count'];
+                        final timeElapsed =
+                            items[index]['latestMessage']['date'];
+                        final displayName = items[index]['participants']
+                            .firstWhere((participant) =>
+                                participant['id'] !=
+                                userState.user.id)['username'];
+                        final displayPhoto = items[index]['participants']
+                            .firstWhere((participant) =>
+                                participant['id'] !=
+                                userState.user.id)['profilePic'];
+                        final displayMessage =
+                            items[index]['latestMessage']['message']['text'];
 
-          return ListView.builder(
-            itemCount: items.length,
-            padding: EdgeInsets.only(top: 25),
-            itemBuilder: (context, index) {
-              final chatID = items[index]['id'];
-              final unread = items[index]['latestMessage']['count'];
-              final timeElapsed = items[index]['latestMessage']['date'];
-              final displayName = items[index]['participants'].firstWhere(
-                  (participant) =>
-                      participant['id'] != userState.user.id)['username'];
-              final displayPhoto = items[index]['participants'].firstWhere(
-                  (participant) =>
-                      participant['id'] != userState.user.id)['profilePic'];
-              final displayMessage =
-                  items[index]['latestMessage']['message']['text'];
+                        final chatUser = items[index]['participants']
+                            .firstWhere((participant) =>
+                                participant['id'] == userState.user.id);
+                        final chatRecipient = items[index]['participants']
+                            .firstWhere((participant) =>
+                                participant['id'] != userState.user.id);
 
-              final chatUser = items[index]['participants'].firstWhere(
-                  (participant) => participant['id'] == userState.user.id);
-              final chatRecipient = items[index]['participants'].firstWhere(
-                  (participant) => participant['id'] != userState.user.id);
+                        final chatMetadata = new MessagingMetaData(
+                            chatUser: new ChatParticipant(
+                                id: chatUser['id'],
+                                username: chatUser['username'],
+                                profilePic: chatUser['profilePic']),
+                            chatRecipient: new ChatParticipant(
+                                id: chatRecipient['id'],
+                                username: chatRecipient['username'],
+                                profilePic: chatRecipient['profilePic']),
+                            chatId: chatID);
 
-              final chatMetadata = new MessagingMetaData(
-                  chatUser: new ChatParticipant(
-                      id: chatUser['id'],
-                      username: chatUser['username'],
-                      profilePic: chatUser['profilePic']),
-                  chatRecipient: new ChatParticipant(
-                      id: chatRecipient['id'],
-                      username: chatRecipient['username'],
-                      profilePic: chatRecipient['profilePic']),
-                  chatId: chatID);
-
-              return Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Column(children: [
-                    Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        color: isDarkTheme
-                            ? HexColor('#1B1921')
-                            : HexColor('#F5F5F5'), //HexColor('#121213'),
-                        child: Slidable(
-                          actionPane: SlidableDrawerActionPane(),
-                          actionExtentRatio: 0.25,
-                          child: ListTile(
-                              leading: CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage:
-                                      CachedNetworkImageProvider(displayPhoto)),
-                              subtitle: Text('$displayMessage',
-                                  style: TextStyle(fontSize: 12)),
-                              title: Text('$displayName',
-                                  style: TextStyle(fontSize: 17)),
-                              trailing: Container(
-                                  margin: const EdgeInsets.only(top: 15),
-                                  child: Column(children: [
-                                    timeElaspedWidget(timeElapsed),
-                                    unReadCounterWidget(unread)
-                                  ])),
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Messaging(metaData: chatMetadata)
-                                      // instantiateChatInstance(userState.user, )),
-                                      ))),
-                          secondaryActions: <Widget>[
-                            IconSlideAction(
-                              caption: 'Delete',
-                              color: Colors.red,
-                              icon: Icons.delete,
-                              // onTap: () => _showSnackBar('Delete'),
-                            ),
-                          ],
-                        )),
-                  ]));
-            },
-          );
+                        return Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Column(children: [
+                              Card(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  color: isDarkTheme
+                                      ? HexColor('#1B1921')
+                                      : HexColor(
+                                          '#F5F5F5'), //HexColor('#121213'),
+                                  child: Slidable(
+                                    actionPane: SlidableDrawerActionPane(),
+                                    actionExtentRatio: 0.25,
+                                    child: ListTile(
+                                        leading: CircleAvatar(
+                                            radius: 20,
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                                    displayPhoto)),
+                                        subtitle: Text('$displayMessage',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    ResponsiveFlutter.of(context)
+                                                        .fontSize(1.25))),
+                                        title: Text('$displayName',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    ResponsiveFlutter.of(context)
+                                                        .fontSize(1.54))),
+                                        trailing: Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 15),
+                                            child: Column(children: [
+                                              timeElaspedWidget(timeElapsed),
+                                              unReadCounterWidget(unread)
+                                            ])),
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Messaging(metaData: chatMetadata)
+                                                // instantiateChatInstance(userState.user, )),
+                                                ))),
+                                    secondaryActions: <Widget>[
+                                      IconSlideAction(
+                                        caption: 'Delete',
+                                        color: Colors.red,
+                                        icon: Icons.delete,
+                                        // onTap: () => _showSnackBar('Delete'),
+                                      ),
+                                    ],
+                                  )),
+                            ]));
+                      },
+                    ));
         });
   }
 }

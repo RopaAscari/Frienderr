@@ -1,10 +1,15 @@
-import 'package:frienderr/enums/enums.dart';
+import 'package:frienderr/core/enums/enums.dart';
 
 class Constants {
   static String darkTheme = 'Dark';
   static String lightTheme = 'Light';
-  static String appLogo = 'assets/images/splash.png';
-
+  static String heroTag = 'appLogo';
+  //static String appLogoHeroTag = 'appLogo2';
+  static String authVector = 'assets/images/auth_vector.png';
+  static String appLogo = 'assets/images/app_logo.png';
+  static String videoLogo =
+      'https://firebasestorage.googleapis.com/v0/b/frienderr-5aa07.appspot.com/o/video.jpg?alt=media&token=30d15478-65f1-41d3-9e52-80808dbb62d4';
+  static String constructionLogo = 'assets/images/construction.png';
   static List<Map> defaultStory = [
     {
       'media': '',

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/screens/live/live.dart';
+import 'package:frienderr/screens/camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:frienderr/widgets/gallery/gallery.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'package:frienderr/screens/user_stories/user_stories.dart';
 import 'package:frienderr/widgets/render_posts/render_posts.dart';
 
@@ -148,12 +152,15 @@ class TimelineState extends State<Timeline>
     super.build(context);
     return SafeArea(
         child: Scaffold(
+            drawer: Container(
+                width: MediaQuery.of(context).size.width,
+                child: new Drawer(child: CameraScreen())),
             body: Stack(children: [
-      isFetchingData
-          ? Center(child: CupertinoActivityIndicator())
-          : renderPosts(),
-      showRefresher ? refreshWidget() : Center()
-    ]))); //
+              isFetchingData
+                  ? Center(child: CupertinoActivityIndicator())
+                  : renderPosts(),
+              showRefresher ? refreshWidget() : Center()
+            ]))); //
   }
 
   Widget refreshWidget() {
@@ -182,6 +189,15 @@ class TimelineState extends State<Timeline>
     return SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
+        header: ClassicHeader(
+          idleText: '',
+          releaseText: '',
+          completeText: '',
+          refreshingText: '',
+          idleIcon: CupertinoActivityIndicator(radius: 10),
+          completeIcon: CupertinoActivityIndicator(radius: 10),
+          releaseIcon: CupertinoActivityIndicator(radius: 10),
+        ),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             return Center();
@@ -197,15 +213,15 @@ class TimelineState extends State<Timeline>
                 itemCount: posts.length,
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   final postUserId = posts[index]['user']['id'];
 
                   if (index == 0) {
-                    return Column(children: [
+                    return Flex(direction: Axis.vertical, children: [
                       Container(height: 250, child: renderStories()),
                       Container(
                           margin: const EdgeInsets.only(top: 20),
-                          height: MediaQuery.of(context).size.height - 150,
+                          height: MediaQuery.of(context).size.height,
                           child: RenderPost(
                               items: posts,
                               index: index,
@@ -213,14 +229,51 @@ class TimelineState extends State<Timeline>
                               shoudlPlayParent: index == index))
                     ]);
                   }
+
+                  if (index == posts.length - 1) {
+                    return Flex(direction: Axis.vertical, children: [
+                      Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          height: MediaQuery.of(context).size.height + 20,
+                          child: RenderPost(
+                              items: posts,
+                              index: index,
+                              isPostOwner: postUserId == userState.user.id,
+                              shoudlPlayParent: index == index)),
+                      Container(
+                          height: 200,
+                          child: Center(
+                              child: Column(children: [
+                            Text('You are at the end of your journey',
+                                style: TextStyle(
+                                    fontSize: ResponsiveFlutter.of(context)
+                                        .fontSize(1.4))),
+                            GestureDetector(
+                                onTap: () {
+                                  scrollController.animateTo(0.0,
+                                      duration: Duration(milliseconds: 1000),
+                                      curve: Curves.easeIn);
+                                  fetchPosts();
+                                },
+                                child: Text('\nReturn to top',
+                                    style: TextStyle(
+                                        color: Colors.blue[700],
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ResponsiveFlutter.of(context)
+                                            .fontSize(1.3))))
+                          ]))),
+                    ]);
+                  }
                   return Container(
-                      height: MediaQuery.of(context).size.height - 150,
+                      margin: const EdgeInsets.only(top: 0),
+                      height: MediaQuery.of(context).size.height + 20,
                       child: RenderPost(
                           items: posts,
                           index: index,
                           isPostOwner: postUserId == userState.user.id,
                           shoudlPlayParent: index == index));
-                })
+                },
+              )
             : Center(
                 child: Text(
                   "No new posts on your feed",
@@ -241,6 +294,10 @@ class TimelineState extends State<Timeline>
             return Center();
           }
           List<DocumentSnapshot> items = snapshot.data?.docs ?? [];
+
+          if (items.length == 0) {
+            return Container(height: 250, child: renderUserStory());
+          }
 
           return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -293,7 +350,7 @@ class TimelineState extends State<Timeline>
           padding: const EdgeInsets.all(10),
           child: Stack(children: [
             Opacity(
-                opacity: 0.5,
+                opacity: 0.6,
                 child: CachedNetworkImage(
                   height: 220,
                   width: 150,
@@ -301,7 +358,7 @@ class TimelineState extends State<Timeline>
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(255, 0, 0, 0.5),
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       // color: Colors.redAccent,
                       image: DecorationImage(
                           image: imageProvider, fit: BoxFit.cover),
@@ -313,10 +370,14 @@ class TimelineState extends State<Timeline>
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.only(bottom: 20, left: 7),
                     child: Row(children: [
                       Icon(Icons.add_circle_rounded),
-                      Text(' Add Story')
+                      Text(' Add Story',
+                          style: TextStyle(
+                              // color: Colors.grey,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.4)))
                     ]))),
           ]),
         ),
@@ -345,6 +406,18 @@ class TimelineState extends State<Timeline>
                   height: 220,
                   width: 150,
                   fit: BoxFit.cover,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          enabled: true,
+                          child: Container(
+                            height: 220,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            width: 150,
+                          )),
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(255, 0, 0, 0.5),
@@ -366,7 +439,10 @@ class TimelineState extends State<Timeline>
                           radius: 15,
                           backgroundImage:
                               CachedNetworkImageProvider(profilePic)),
-                      Text(' $username')
+                      Text(' $username',
+                          style: TextStyle(
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.35)))
                     ]))),
           ]),
         ),

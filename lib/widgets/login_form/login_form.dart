@@ -1,22 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frienderr/blocs/user_bloc.dart';
-import 'package:frienderr/events/user_event.dart';
 import 'package:frienderr/services/services.dart';
-import 'package:frienderr/models/user/user_model.dart';
+import 'package:frienderr/widgets/util/helpers.dart';
 import 'package:frienderr/blocs/authenticate_bloc.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/events/authenticate_event.dart';
-import 'package:frienderr/navigation/tab-navigation.dart';
 import 'package:frienderr/state/authentication_state.dart';
-import 'package:frienderr/widgets/flash_message/flash_message.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart'
     as transition;
-import 'package:frienderr/widgets/keyboard_builder/keyboard_builder.dart';
+import 'package:frienderr/widgets/util/conditional_render_delegate.dart';
 import 'package:frienderr/screens/register/registerUser/registerUser.dart';
-
-import 'package:frienderr/screens/register/registerUsername/registerUsername.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class LoginForm extends StatefulWidget {
   LoginForm({
@@ -26,15 +23,15 @@ class LoginForm extends StatefulWidget {
   LoginFormState createState() => LoginFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
+class LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
   String? errors = '';
   bool isLoading = false;
   bool canPasswordShow = true;
   bool isUsernameEmpty = true;
   bool isPasswordEmpty = true;
+  bool shouldRenderUI = false;
 
   final AuthenticationBloc authenticationBloc = new AuthenticationBloc();
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -71,87 +68,178 @@ class LoginFormState extends State<LoginForm> {
   }
 
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
         bloc: authenticationBloc,
-        builder: (
+        listener: (
           BuildContext context,
           AuthenticationState state,
         ) {
           if (state is AuthenticationFailure) {
-            _onWidgetDidBuild(() {
-              return FlashMessage.buildErrorSnackbar(context, state.error);
-            });
+            //_controller.reset();
           }
+        },
+        builder: (
+          BuildContext context,
+          AuthenticationState state,
+        ) {
           return Column(children: [
-            Container(
-                margin: const EdgeInsets.only(top: 25.0),
-                child: emailTextField(state)),
-            Container(
-                margin: const EdgeInsets.only(top: 15.0),
-                child: passwordTextField(state)),
-            KeyboardVisibilityBuilder(
-              builder: (context, isKeyboardVisible) {
-                return Container(
-                    margin: EdgeInsets.only(top: 25
-                        //isKeyboardVisible ? 25.0 : 240
-                        ),
-                    child: Column(children: [
-                      Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text.rich(TextSpan(
-                              text: "Don't have an account. Register",
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                              children: <InlineSpan>[
-                                TextSpan(
-                                    text: ' here',
-                                    recognizer: new TapGestureRecognizer()
-                                      ..onTap =
-                                          () => navigateToRegisterScreen(),
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.orangeAccent))
-                              ]))),
-                      loginButton()
-                    ]));
-              },
-            ),
-            Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 70),
-                child: loadingLogin(state))
+            appLogoVector(),
+            ConditionalRenderDelegate(
+                condition: shouldRenderUI,
+                renderWidget: appBody(state),
+                fallbackWidget: Center())
           ]);
         });
+  }
+
+  Widget appBody(state) {
+    return AnimationLimiter(
+        child: AnimationConfiguration.staggeredList(
+            position: 1,
+            duration: const Duration(milliseconds: 500),
+            child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                    child: Column(children: [
+                  Container(
+                      margin: const EdgeInsets.only(),
+                      child: emailTextField(state)),
+                  Container(
+                      margin: const EdgeInsets.only(top: 15.0),
+                      child: passwordTextField(state)),
+                  Container(
+                      margin: EdgeInsets.only(top: 25
+                          //isKeyboardVisible ? 25.0 : 240
+                          ),
+                      child: Column(children: [
+                        loginButton(context, state),
+                        Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text.rich(TextSpan(
+                                text: "Don't have an account. Register",
+                                style: TextStyle(
+                                  fontSize: ResponsiveFlutter.of(context)
+                                      .fontSize(1.5),
+                                ),
+                                children: <InlineSpan>[
+                                  TextSpan(
+                                      text: ' here',
+                                      recognizer: new TapGestureRecognizer()
+                                        ..onTap =
+                                            () => navigateToRegisterScreen(),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ResponsiveFlutter.of(context)
+                                                  .fontSize(1.5),
+                                          color: HexColor('#FCA28E')))
+                                ]))),
+                        socialVector()
+                      ])),
+                ])))));
+  }
+
+  Widget appLogoVector() {
+    final Widget appLogo = Align(
+        alignment: Alignment.topCenter,
+        child: Image.asset(Constants.appLogo, width: 250));
+    return Hero(
+        flightShuttleBuilder: (_, animation, __, ___, ____) {
+          animation.addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              this.setState(() {
+                shouldRenderUI = true;
+              });
+            }
+          });
+          return appLogo;
+        },
+        tag: Constants.heroTag,
+        child: Padding(
+            padding: EdgeInsets.only(top: 0, bottom: 25), child: appLogo));
+  }
+
+  Widget socialVector() {
+    return Padding(
+        padding: EdgeInsets.only(top: 110),
+        child: Image.asset(
+          Constants.authVector,
+        ));
+  }
+
+  Widget loginButton(BuildContext _, AuthenticationState state) {
+    List<Color> colors = state is LoginLoading
+        ? [Colors.grey[400]!, Colors.grey[300]!]
+        : [HexColor('#FA5B8E'), HexColor('#FCA28E')];
+
+    final width = MediaQuery.of(context).size.width;
+
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.5),
+          gradient: LinearGradient(
+            begin: const Alignment(-0.95, 0.0),
+            end: const Alignment(1.0, 0.0),
+            colors: colors,
+            stops: const [0.0, 1.0],
+          ),
+        ),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 60),
+            primary: Colors.transparent,
+            onSurface: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
+          child: ConditionalRenderDelegate(
+              condition: state is LoginLoading,
+              renderWidget: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    backgroundColor: HexColor('#FA5B8E'),
+                    strokeWidth: 3,
+                  )),
+              fallbackWidget: Text(
+                'Login',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize:
+                        const AdaptiveTextSize().getAdaptiveTextSize(_, 11.5)),
+              )),
+          onPressed: () {
+            _onLoginButtonPressed(context);
+          },
+        ));
   }
 
   Widget emailTextField(AuthenticationState state) {
     return TextField(
         obscureText: false,
         controller: emailController,
-        style: TextStyle(color: Colors.white),
+        // style: TextStyle(color: Colors.white),
         decoration: new InputDecoration(
             labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide: new BorderSide(color: Colors.grey[800]!),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             focusedBorder: OutlineInputBorder(
               // borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             border: new OutlineInputBorder(
-              // borderSide: new BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide: new BorderSide(color: Colors.grey[600]!),
+              borderRadius: BorderRadius.circular(8.0),
             ),
+            errorStyle: TextStyle(height: 0, color: HexColor('#FA55B8E')),
             errorText: state is AuthenticationFailure ? '' : null,
             prefixIcon: Icon(
               Icons.person,
               color: Colors.grey,
             ),
-            // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
             filled: true,
             labelText: 'Email',
+            fillColor: HexColor('#9C9C9C').withOpacity(0.1),
             contentPadding: const EdgeInsets.only(top: 40.0)));
   }
 
@@ -159,20 +247,20 @@ class LoginFormState extends State<LoginForm> {
     return TextField(
         obscureText: canPasswordShow,
         controller: passwordController,
-        style: TextStyle(color: Colors.white),
+        //   style: TextStyle(color: Colors.white),
         decoration: new InputDecoration(
             labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide: new BorderSide(color: Colors.grey[800]!),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             border: new OutlineInputBorder(
               borderSide: new BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             prefixIcon: Icon(
               Icons.lock,
@@ -204,35 +292,9 @@ class LoginFormState extends State<LoginForm> {
                     )),
             //  fillColor: HexColor('#C4C4C4').withOpacity(0.5),
             filled: true,
-            errorText: state is AuthenticationFailure ? '' : null,
+            //  errorStyle: TextStyle(height: 0),
+            errorText: state is AuthenticationFailure ? state.error : null,
             labelText: 'Password'));
-  }
-
-  Widget loginButton() {
-    return ElevatedButton(
-      style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Colors.transparent))),
-          backgroundColor: MaterialStateProperty.all<Color>(HexColor('#FFFFFF')
-              .withOpacity(isUsernameEmpty && isPasswordEmpty ? 0.7 : 1)),
-          minimumSize:
-              MaterialStateProperty.all<Size>(Size(double.infinity, 55))),
-      child:
-          Text('Continue', style: TextStyle(color: Colors.black, fontSize: 16)),
-      onPressed: isUsernameEmpty && isPasswordEmpty
-          ? null
-          : () {
-              _onLoginButtonPressed(context);
-            },
-    );
-  }
-
-  Widget loadingLogin(AuthenticationState state) {
-    return state is LoginLoading
-        ? new CupertinoActivityIndicator()
-        : Container();
   }
 
   void _onWidgetDidBuild(Function callback) {

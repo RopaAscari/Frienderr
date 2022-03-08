@@ -17,6 +17,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:frienderr/models/user/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 class Messaging extends StatefulWidget {
   final MessagingMetaData metaData;
@@ -160,13 +161,17 @@ class MessagingState extends State<Messaging> {
   }
 
   resetLatestMessageCount() async {
-    await chats
-        .doc(metaData.chatUser.id)
-        .collection('user_chats')
-        .doc(metaData.chatRecipient.id)
-        .update({
-      'latestMessage.count': 0,
-    });
+    try {
+      await chats
+          .doc(metaData.chatUser.id)
+          .collection('user_chats')
+          .doc(metaData.chatRecipient.id)
+          .update({
+        'latestMessage.count': 0,
+      });
+    } catch (err) {
+      print(err);
+    }
   }
 
   instantiateReciepientChat(
@@ -252,7 +257,7 @@ class MessagingState extends State<Messaging> {
     final dynamic appUser =
         BlocProvider.of<UserBloc>(context, listen: true).state.user;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: true,
         titleSpacing: 0,
@@ -288,8 +293,10 @@ class MessagingState extends State<Messaging> {
                 sendOnEnter: true,
                 textInputAction: TextInputAction.send,
                 user: user,
-                inputDecoration:
-                    InputDecoration.collapsed(hintText: "Add message here..."),
+                inputDecoration: InputDecoration.collapsed(
+                    hintText: "Add message here...",
+                    hintStyle: TextStyle(
+                        fontSize: ResponsiveFlutter.of(context).fontSize(1.3))),
                 dateFormat: DateFormat('yyyy-MMM-dd'),
                 timeFormat: DateFormat('HH:mm'),
                 messages: messages,

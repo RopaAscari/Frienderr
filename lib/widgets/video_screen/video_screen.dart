@@ -1,82 +1,66 @@
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends StatefulWidget {
-  const VideoScreen(
-      {Key? key, required this.videoFile, required this.shouldPlay})
-      : super(key: key);
-
-  final String videoFile;
-  final bool shouldPlay;
+  final String video;
+  VideoScreen({Key? key, required this.video}) : super(key: key);
 
   @override
-  _VideoScreenState createState() => _VideoScreenState();
+  VideoScreenState createState() => VideoScreenState();
 }
 
-class _VideoScreenState extends State<VideoScreen> {
+class VideoScreenState extends State<VideoScreen> {
   late VideoPlayerController _controller;
-  bool get shouldPlay => widget.shouldPlay;
-  bool initialized = false;
+  late Future<void> _initializeVideoPlayerFuture;
 
   @override
   void initState() {
-    _initVideo();
+    _controller = VideoPlayerController.network(widget.video);
+    _initializeVideoPlayerFuture = _controller.initialize();
+    _controller.setLooping(true);
     super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ///_controller.play();
+    });
   }
 
   @override
   void dispose() {
-    _controller.pause();
+    // Ensure disposing of the VideoPlayerController to free up resources.
     _controller.dispose();
+
     super.dispose();
-  }
-
-  _initVideo() async {
-    final video = widget.videoFile;
-    _controller = VideoPlayerController.network(video)
-      // Play the video again when it ends
-      ..setLooping(true)
-      // initialize the controller and notify UI when done
-      ..initialize().then((_) => setState(() => initialized = true));
-
-    if (shouldPlay) _controller.play();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: initialized
-          // If the video is initialized, display it
-          ? Scaffold(
-              body: Center(
-                  child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      // Use the VideoPlayer widget to display the video.
-
-                      child: VideoPlayer(_controller))),
-              floatingActionButton: FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  // Wrap the play or pause in a call to `setState`. This ensures the
-                  // correct icon is shown.
-                  setState(() {
-                    // If the video is playing, pause it.
-                    if (_controller.value.isPlaying) {
-                      _controller.pause();
-                    } else {
-                      // If the video is paused, play it.
-                      _controller.play();
-                    }
-                  });
-                },
-                // Display the correct icon depending on the state of the player.
-                child: Icon(
-                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                ),
-              ),
-            )
-          // If the video is not yet initialized, display a spinner
-          : Center(child: CircularProgressIndicator()),
+      body: FutureBuilder(
+        future: _initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            //_controller.play();
+            return Stack(fit: StackFit.loose, children: [
+              GestureDetector(
+                  child: VideoPlayer(_controller),
+                  onTap: () => setState(() {
+                        if (_controller.value.isPlaying) {
+                          _controller.pause();
+                        } else {
+                          _controller.play();
+                        }
+                      })),
+            ]);
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

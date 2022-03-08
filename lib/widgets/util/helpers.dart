@@ -3,7 +3,17 @@ import 'dart:math';
 import 'dart:async'; //For StreamController/Stream
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
+class AdaptiveTextSize {
+  const AdaptiveTextSize();
+
+  getAdaptiveTextSize(BuildContext context, dynamic value) {
+    // 720 is medium screen height
+    return (value / 720) * MediaQuery.of(context).size.height;
+  }
+}
 
 class Helpers {
   String generateId(int length) {

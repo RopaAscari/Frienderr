@@ -7,6 +7,7 @@ import 'package:frienderr/blocs/authenticate_bloc.dart';
 import 'package:frienderr/events/authenticate_event.dart';
 import 'package:frienderr/state/authentication_state.dart';
 import 'package:frienderr/repositories/user_repository.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:frienderr/widgets/flash_message/flash_message.dart';
 import 'package:frienderr/widgets/keyboard_builder/keyboard_builder.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart'
@@ -42,10 +43,12 @@ class RegisterUserState extends State<RegisterUser> {
 
   navigateToLoginScreen() {
     Navigator.push(
+        context, MaterialPageRoute(builder: (context) => RegisterUser()));
+    /* Navigator.push(
         context,
         transition.PageTransition(
             child: RegisterUser(),
-            type: transition.PageTransitionType.slideInLeft));
+            type: transition.PageTransitionType.slideInLeft));*/
   }
 
   @override
@@ -61,58 +64,69 @@ class RegisterUserState extends State<RegisterUser> {
               return FlashMessage.buildErrorSnackbar(context, state.error);
             });
           }
-          return SafeArea(
-              child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: Column(children: [
-                              IconButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  icon: Icon(Icons.arrow_back_ios_rounded)),
-                            ])),
-                        Container(
-                            padding: const EdgeInsets.all(30.0),
-                            margin: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(children: [
-                                        Container(
-                                          alignment: Alignment.topLeft,
-                                          child: Text("Create your account",
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                        Container(
+          return Container(
+              color: Theme.of(context).canvasColor,
+              child: SafeArea(
+                  child: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                alignment: Alignment.topLeft,
+                                child: Column(children: [
+                                  IconButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      icon: Icon(Icons.arrow_back_ios_rounded)),
+                                ])),
+                            Container(
+                                padding: const EdgeInsets.all(30.0),
+                                margin: const EdgeInsets.only(top: 10.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Column(children: [
+                                            Container(
+                                              alignment: Alignment.topLeft,
+                                              child: Text("Create your account",
+                                                  style: TextStyle(
+                                                      fontSize: 28,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
+                                              alignment: Alignment.topLeft,
+                                              child: Text("Let's sign you in",
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                  )),
+                                            ),
+                                          ])),
+                                      Container(
                                           margin:
-                                              const EdgeInsets.only(top: 10),
-                                          alignment: Alignment.topLeft,
-                                          child: Text("Let's sign you in",
-                                              style: TextStyle(fontSize: 18)),
-                                        ),
-                                      ])),
-                                  Container(
-                                      margin: const EdgeInsets.only(top: 20),
-                                      child: emailTextFieldWidget(state)),
-                                  Container(
-                                      margin: const EdgeInsets.only(top: 30),
-                                      child: passwordTextFieldWidget(state)),
-                                  Container(child: signUpButton()),
-                                  Container(
-                                      margin: const EdgeInsets.only(top: 30),
-                                      child: loadingWidget(state))
-                                ]))
-                      ],
-                    ),
-                  )));
+                                              const EdgeInsets.only(top: 20),
+                                          child: emailTextFieldWidget(state)),
+                                      Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 30),
+                                          child:
+                                              passwordTextFieldWidget(state)),
+                                      Container(child: signUpButton()),
+                                      Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 30),
+                                          child: loadingWidget(state))
+                                    ]))
+                          ],
+                        ),
+                      ))));
         });
   }
 
@@ -136,7 +150,7 @@ class RegisterUserState extends State<RegisterUser> {
                 child: Text.rich(TextSpan(
                     text: "Alreay have an account?. Login",
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.47),
                     ),
                     children: <InlineSpan>[
                       TextSpan(
@@ -144,7 +158,9 @@ class RegisterUserState extends State<RegisterUser> {
                           recognizer: new TapGestureRecognizer()
                             ..onTap = () => navigateToLoginScreen(),
                           style: TextStyle(
-                              fontSize: 15, color: Colors.orangeAccent))
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.5),
+                              color: Colors.orangeAccent))
                     ]))),
             ElevatedButton(
               style: ButtonStyle(
@@ -153,12 +169,15 @@ class RegisterUserState extends State<RegisterUser> {
                           borderRadius: BorderRadius.circular(7.0),
                           side: BorderSide(color: Colors.transparent))),
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      HexColor('#FFFFFF')
+                      Theme.of(context)
+                          .buttonColor
                           .withOpacity(isPasswordEmpty ? 0.7 : 1)),
                   minimumSize: MaterialStateProperty.all<Size>(
                       Size(double.infinity, 55))),
-              child:
-                  Text('Create Account', style: TextStyle(color: Colors.black)),
+              child: Text('Create Account',
+                  style: TextStyle(
+                    color: Theme.of(context).canvasColor,
+                  )),
               onPressed: isPasswordEmpty
                   ? null
                   : () {
@@ -212,6 +231,7 @@ class RegisterUserState extends State<RegisterUser> {
                     },
                     icon: const Icon(Icons.visibility)),
             filled: true,
+            errorStyle: TextStyle(height: 0),
             errorText: state is AuthenticationFailure ? '' : null,
             labelText: 'Password'));
   }
@@ -241,6 +261,7 @@ class RegisterUserState extends State<RegisterUser> {
             ),
             prefixIcon: Icon(Icons.email, color: Colors.grey),
             filled: true,
+            errorStyle: TextStyle(height: 0),
             errorText: state is AuthenticationFailure ? '' : null,
             labelText: 'Email'));
   }

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:frienderr/util/helpers.dart';
@@ -7,7 +8,7 @@ import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/navigation/tab-navigation.dart';
@@ -63,10 +64,10 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
   showActionSheet() {
     showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext actionSheet) {
         return Container(
           height: 200,
-          color: Colors.grey[700],
+          color: Theme.of(context).canvasColor,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -77,10 +78,10 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Uploading ',
-                      style: TextStyle(fontSize: 20),
+                      'Uploading  ',
+                      style: TextStyle(fontSize: 15),
                     ),
-                    CircularProgressIndicator()
+                    CupertinoActivityIndicator(radius: 10)
                   ],
                 )
               ],
@@ -188,8 +189,8 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
                 ? currentMediaItem['type'] == AssetType.image
                     ? Image.file(currentMediaItem['file'])
                     : VideoScreen(
-                        videoFile: currentMediaItem['file'],
-                        shouldPlay: true,
+                        video: currentMediaItem['file'],
+                        // shouldPlay: true,
                       )
                 : Container()),
         Align(

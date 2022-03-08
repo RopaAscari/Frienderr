@@ -1,4 +1,4 @@
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/events/theme_event.dart';

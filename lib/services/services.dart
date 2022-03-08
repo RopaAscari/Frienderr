@@ -56,6 +56,7 @@ class FirebaseServices {
       final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance
           .getInitialLink() as PendingDynamicLinkData;
 
+      print("DATA $data");
       final Uri deepLink = data.link;
       final String id = deepLink.queryParameters.containsKey('id')
           ? deepLink.queryParameters['id'] as String

@@ -13,12 +13,14 @@ import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/services/services.dart';
-import 'package:frienderr/constants/constants.dart';
+
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/models/user/user_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:frienderr/screens/account/account.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -87,7 +89,7 @@ class FindFriendsState extends State<FindFriends>
 
   @override
   void initState() {
-    getLoc();
+    //getLoc();
     super.initState();
 
     //_focus.addListener(() => !_focus.hasFocus ? toggleMapVisibility() : null);
@@ -106,6 +108,8 @@ class FindFriendsState extends State<FindFriends>
     setState(() {
       isSearching = true;
     });
+
+    await Future.delayed(Duration(seconds: 1));
 
     final searchedUsers =
         await users.where('username', isGreaterThanOrEqualTo: term).get();
@@ -329,19 +333,21 @@ class FindFriendsState extends State<FindFriends>
     });
   }
 
-  Future<List<Address>> _getAddress(double lat, double lang) async {
+  Future<List<Address>> getAddress(double lat, double lang) async {
     final coordinates = new Coordinates(lat, lang);
     List<Address> add =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     return add;
   }
 
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
         child: Scaffold(
             // backgroundColor: HexColor('#13111A'),
             resizeToAvoidBottomInset: false,
-            floatingActionButtonLocation:
+            /*floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniEndFloat,
             floatingActionButton: Container(
                 margin: const EdgeInsets.only(bottom: 15, right: 15),
@@ -354,13 +360,16 @@ class FindFriendsState extends State<FindFriends>
                             backgroundColor: HexColor('#EE6115'),
                             child: Icon(Elusive.location, color: Colors.white),
                             onPressed: () =>
-                                showMapActionSheet())))), // headerWidget(),
+                                showMapActionSheet()))))*/ // headerWidget(),
             body: Container(
-              height: MediaQuery.of(context).size.height - 150,
+              height: MediaQuery.of(context).size.height,
               child: Flex(direction: Axis.vertical, children: [
                 searchBar(),
                 isSearching
-                    ? Center(child: CupertinoActivityIndicator())
+                    ? Container(
+                        margin: EdgeInsets.only(
+                            top: (MediaQuery.of(context).size.height * .30)),
+                        child: Center(child: CupertinoActivityIndicator()))
                     : searchResults()
               ]),
             )));
@@ -496,7 +505,7 @@ class FindFriendsState extends State<FindFriends>
             //autofocus: true,
             obscureText: false,
             controller: searchController,
-            style: TextStyle(color: Colors.white),
+            //   style: TextStyle(color: Colors.white),
             onChanged: (text) {
               fetchUsers(text);
             },
@@ -514,10 +523,17 @@ class FindFriendsState extends State<FindFriends>
                   // borderSide: new BorderSide(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                suffixIcon: IconButton(
-                    color: Colors.white,
-                    onPressed: () {},
-                    icon: const Icon(Icons.search)),
+                suffixIcon: searchController.text != ''
+                    ? IconButton(
+                        color: Colors.white,
+                        onPressed: () {
+                          searchController.clear();
+                        },
+                        icon: const Icon(Icons.close))
+                    : IconButton(
+                        color: Colors.white,
+                        onPressed: () {},
+                        icon: const Icon(Icons.search)),
                 // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
                 filled: true,
                 //fillColor: Colors.white,
@@ -529,19 +545,33 @@ class FindFriendsState extends State<FindFriends>
   }
 
   Widget searchResults() {
+    if (searched.length == 0 && searchController.text != '') {
+      return Container(
+          margin: const EdgeInsets.only(top: 250),
+          child: Center(
+              child: Column(children: [
+            Opacity(
+                opacity: 0.5,
+                child: Image.asset('assets/images/search_icon.png',
+                    height: 200, width: 200)),
+            Text(
+              'No results',
+              style: TextStyle(
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.4),
+              ),
+            )
+          ])));
+    }
+
     if (searched.length == 0) {
       return Container(
           margin: const EdgeInsets.only(top: 250),
           child: Center(
               child: Column(children: [
-            Image.asset('assets/images/search_icon.png',
-                height: 200, width: 200),
-            Text(
-              'Find Friends',
-              style: TextStyle(
-                fontSize: 13,
-              ),
-            )
+            Opacity(
+                opacity: 0.35,
+                child: Image.asset('assets/images/search_icon.png',
+                    height: 250, width: 250, scale: 0.7)),
           ])));
     }
     return ListView.builder(
@@ -561,10 +591,12 @@ class FindFriendsState extends State<FindFriends>
                 radius: 20,
                 backgroundImage:
                     CachedNetworkImageProvider(searched[index]['profilePic'])),
-            title: Text(
-              '${searched[index]['username']}',
-              // To show light text with the dark variants...
-            ),
+            title: Text('${searched[index]['username']}',
+                style: TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.4),
+                )
+                // To show light text with the dark variants...
+                ),
             onTap: () {
               Navigator.push(
                   context,

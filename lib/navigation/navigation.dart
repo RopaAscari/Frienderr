@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frienderr/screens/login/login.dart';
+import 'package:frienderr/screens/splash_screen.dart';
 import '../screens/initial/Initial.dart';
-import 'package:frienderr/enums/enums.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/themes/themes.dart';
 import 'package:frienderr/blocs/chat_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/blocs/authenticate_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:frienderr/events/authenticate_event.dart';
@@ -69,7 +71,7 @@ class NavigationState extends State<Navigation> {
     } else if (authState is AuthenticationUsername) {
       return RegisterUsername(userId: authState.userId);
     }
-    return Intiial();
+    return Login();
   }
 
   determineTheme(String theme) {
@@ -92,6 +94,7 @@ class NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: MultiBlocProvider(
             providers: combineProviders(),
             child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -109,14 +112,7 @@ class NavigationState extends State<Navigation> {
                   return MaterialApp(
                     theme: currentTheme,
                     title: Constants.appName,
-                    home: AnimatedSplashScreen(
-                      duration: 3000,
-                      nextScreen: route,
-                      splashIconSize: 220,
-                      splash: Image.asset(Constants.appLogo),
-                      backgroundColor: currentTheme.canvasColor,
-                      splashTransition: SplashTransition.fadeTransition,
-                    ),
+                    home: SplashScreen(route: route),
                     debugShowCheckedModeBanner: false,
                   );
                 })));

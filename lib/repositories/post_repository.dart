@@ -1,8 +1,8 @@
 import 'package:frienderr/blocs/notification_bloc.dart';
 import 'package:frienderr/events/notification_event.dart';
-import 'package:frienderr/models/notification/notification_model.dart';
 import 'package:frienderr/models/user/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:frienderr/models/notification/notification_model.dart';
 
 class PostRepository {
   NotificationBloc notificationBloc = new NotificationBloc();
@@ -26,11 +26,13 @@ class PostRepository {
         final senderUsername = user.username;
         final senderProfilePic = user.profilePic;
         final media = post['content'][0]['media'];
+        final mediaType = post['content'][0]['type'];
 
         final notification = new LikeNotificationModel(
           type: 'Like',
           postId: postId,
           senderId: userId,
+          mediaType: mediaType,
           postThumbnail: media,
           recipient: postUserId,
           senderUsername: senderUsername,

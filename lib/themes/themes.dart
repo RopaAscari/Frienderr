@@ -24,7 +24,7 @@ final appThemeData = {
   AppTheme.Dark: ThemeData(
     brightness: Brightness.dark,
     buttonColor: Colors.white,
-    canvasColor: HexColor('#13111A'),
+    canvasColor: HexColor('#000000'),
     primaryColor: Colors.black,
     fontFamily: 'Inter',
     textTheme: TextTheme(

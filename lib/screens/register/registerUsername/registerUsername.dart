@@ -44,36 +44,39 @@ class RegisterUsernameState extends State<RegisterUsername> {
               return FlashMessage.buildErrorSnackbar(context, state.error);
             });
           }
-          return SafeArea(
-              child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            padding: const EdgeInsets.all(30.0),
-                            margin: const EdgeInsets.only(top: 40.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Choose A Username\n',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontFamily: 'Helvetica'),
-                                  ),
-                                  usernameTextFieldWidget(state),
-                                  usernameButtonWidget(),
-                                  loadingWidget(state)
-                                ]))
-                        // new Padding(padding: new EdgeInsets.all(20.0),child:button,),
-                        ,
-                      ],
-                    ),
-                  )));
+          return Container(
+              color: Theme.of(context).canvasColor,
+              child: SafeArea(
+                  child: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                padding: const EdgeInsets.all(30.0),
+                                margin: const EdgeInsets.only(top: 40.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Choose A Username\n',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            //   color: Colors.white,
+                                            fontSize: 15,
+                                            fontFamily: 'Helvetica'),
+                                      ),
+                                      usernameTextFieldWidget(state),
+                                      usernameButtonWidget(),
+                                      loadingWidget(state)
+                                    ]))
+                            // new Padding(padding: new EdgeInsets.all(20.0),child:button,),
+                            ,
+                          ],
+                        ),
+                      ))));
         });
   }
 
@@ -97,10 +100,12 @@ class RegisterUsernameState extends State<RegisterUsername> {
                         borderRadius: BorderRadius.circular(7.0),
                         side: BorderSide(color: Colors.transparent))),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                    HexColor('#FFFFFF').withOpacity(isUsernameEmpty ? 0.7 : 1)),
+                    Theme.of(context)
+                        .buttonColor
+                        .withOpacity(isUsernameEmpty ? 0.7 : 1)),
                 minimumSize:
                     MaterialStateProperty.all<Size>(Size(double.infinity, 55))),
-            child: Text('Continue', style: TextStyle(color: Colors.black)),
+            child: Text('Continue', style: TextStyle(color:Theme.of(context).canvasColor)),
             onPressed: isUsernameEmpty
                 ? null
                 : () {

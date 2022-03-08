@@ -14,6 +14,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:frienderr/blocs/notification_bloc.dart';
 import 'package:frienderr/events/notification_event.dart';
 import 'package:frienderr/models/comment/comment_model.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/models/notification/notification_model.dart';
 
@@ -53,12 +54,13 @@ class CommentScreenState extends State<Comment> {
     if (userState.user.id != post['user']['id']) {
       final notification = new CommentNotificationModel(
         type: 'Comment',
-        recipient: post['user']['id'],
         postId: post['id'],
-        comment: commentController.text,
-        postThumbnail: post['content'][0]['media'],
         senderId: userState.user.id,
+        recipient: post['user']['id'],
+        comment: commentController.text,
+        mediaType: post['content'][0]['type'],
         senderUsername: userState.user.username,
+        postThumbnail: post['content'][0]['media'],
         senderProfilePic: userState.user.profilePic,
         dateCreated: DateTime.now().microsecondsSinceEpoch,
       );
@@ -77,10 +79,11 @@ class CommentScreenState extends State<Comment> {
         bloc: commentBloc,
         builder: (BuildContext context, CommentState state) {
           return Scaffold(
-              resizeToAvoidBottomInset: false,
+              resizeToAvoidBottomInset: true,
               appBar: PreferredSize(
                   preferredSize: Size.fromHeight(45.0),
                   child: AppBar(
+                      elevation: 0,
                       backgroundColor: Theme.of(context).canvasColor,
                       title: const Text(
                         'Comments',
@@ -131,7 +134,11 @@ class CommentScreenState extends State<Comment> {
     if (state is CommentsLoading) {
       return Center(child: CircularProgressIndicator());
     } else if (state is CommentsEmpty) {
-      return Center(child: Text(state.message));
+      return Center(
+          child: Text(
+        state.message,
+        style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+      ));
     } else if (state is CommentsLoaded) {
       return ListView.builder(
         itemCount: state.comments.length,
@@ -150,16 +157,20 @@ class CommentScreenState extends State<Comment> {
               ),
               subtitle: Text(
                 comment,
-                style: TextStyle(fontSize: 13),
+                style: TextStyle(
+                    fontSize: ResponsiveFlutter.of(context).fontSize(1.3)),
               ),
               title: Text(
                 username,
+                style: TextStyle(
+                    fontSize: ResponsiveFlutter.of(context).fontSize(1.55)),
               ),
               trailing: Text(
                   TimeElapsed().elapsedTimeDynamic(
                       new DateTime.fromMicrosecondsSinceEpoch(dateCreated)
                           .toString()),
-                  style: TextStyle(fontSize: 13)),
+                  style: TextStyle(
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.3))),
               onTap: () {},
             ),
             secondaryActions: <Widget>[

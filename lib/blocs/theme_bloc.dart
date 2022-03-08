@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/models/theme/theme_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';

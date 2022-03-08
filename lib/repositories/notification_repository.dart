@@ -9,20 +9,20 @@ class NotificationRepository {
     activity
         .doc(notification.recipient)
         .collection('notifications')
-        .add(notification.toJson());
+        .add(notification.toMap());
   }
 
   sendLikeNotification(LikeNotificationModel notification) {
     activity
         .doc(notification.recipient)
         .collection('notifications')
-        .add(notification.toJson());
+        .add(notification.toMap());
   }
 
   sendCommentNotification(CommentNotificationModel notification) {
     activity
         .doc(notification.recipient)
         .collection('notifications')
-        .add(notification.toJson());
+        .add(notification.toMap());
   }
 }

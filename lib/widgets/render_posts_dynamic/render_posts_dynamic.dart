@@ -1,9 +1,10 @@
+import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:share/share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
-import 'package:frienderr/enums/enums.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:like_button/like_button.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:time_elapsed/time_elapsed.dart';
@@ -11,12 +12,14 @@ import 'package:frienderr/blocs/post_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/services/services.dart';
 import 'package:frienderr/events/post_event.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/screens/account/account.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/widgets/image_screen/image_screen.dart';
 import 'package:frienderr/widgets/video_screen/video_screen.dart';
@@ -34,6 +37,7 @@ class RenderPostDynamic extends StatefulWidget {
 class RenderPostDynamicState extends State<RenderPostDynamic>
     with TickerProviderStateMixin {
   int currentIndex = 0;
+  bool isError = false;
   double targetValue = 0;
   bool isPostReady = false;
   String get postId => widget.postId;
@@ -44,6 +48,8 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
   late final UserState userState = context.read<UserBloc>().state;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  final CollectionReference posts =
+      FirebaseFirestore.instance.collection('postCount');
   @override
   void initState() {
     fetchPost();
@@ -107,10 +113,72 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
     });
   }
 
+  deletePost(BuildContext alertContext) async {
+    try {
+      await posts.doc(postId).delete();
+
+      await FirebaseFirestore.instance
+          .collection('postCount')
+          .doc('count')
+          .update({'count': FieldValue.increment(-1)});
+      Navigator.pop(alertContext);
+    } catch (err) {}
+  }
+
+  Future<void> showAlertDialog(BuildContext highLevelContext) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext alertContext) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).canvasColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Text('Delete Post',
+              style: TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.55))),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'This action is irreversable. Is this what you intended to do?',
+                    style: TextStyle(
+                        fontSize: ResponsiveFlutter.of(context).fontSize(1.5))),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(alertContext).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                deletePost(alertContext);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   fetchPost() async {
     CollectionReference posts = FirebaseFirestore.instance.collection('posts');
     try {
       final post = await posts.doc(postId).get();
+      try {
+        final postId = post['id'];
+      } catch (err) {
+        setState(() {
+          isError = true;
+        });
+        return;
+      }
+
       setState(() {
         fetchedPost = post;
         isPostReady = true;
@@ -130,35 +198,43 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
   }
 
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: Center(
-                child: SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: false,
-                    footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus? mode) {
-                        return Center();
-                      },
-                    ),
-                    controller: _refreshController,
-                    onRefresh: _onRefresh,
-                    onLoading: _onLoading,
-                    child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          postHeaderWidget(),
-                          Stack(alignment: Alignment.center, children: [
-                            renderMediaWidget(),
-                            Align(
-                                alignment: Alignment.center,
-                                child: likeAnimationWidget()),
-                          ]),
-                          postDetailsWidget(),
-                          interactionHelper()
-                        ],
-                      ),
-                    )))));
+    return Container(
+        color: Theme.of(context).canvasColor,
+        child: SafeArea(
+            child: Scaffold(
+                body: Center(
+                    child: SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: false,
+                        footer: CustomFooter(
+                          builder: (BuildContext context, LoadStatus? mode) {
+                            return Center();
+                          },
+                        ),
+                        controller: _refreshController,
+                        onRefresh: _onRefresh,
+                        onLoading: _onLoading,
+                        child: Center(
+                          child: isPostReady
+                              ? Column(
+                                  children: <Widget>[
+                                    postHeaderWidget(),
+                                    Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          renderMediaWidget(),
+                                          Align(
+                                              alignment: Alignment.center,
+                                              child: likeAnimationWidget()),
+                                        ]),
+                                    postDetailsWidget(),
+                                    interactionHelper()
+                                  ],
+                                )
+                              : isError
+                                  ? Center(child: Text('Something went wrong'))
+                                  : CupertinoActivityIndicator(),
+                        ))))));
   }
 
   Widget interactionHelper() {
@@ -166,12 +242,20 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
 
     final shareCount = fetchedPost['shares'];
     final commentCount = fetchedPost['commentCount'];
+
+    final theme =
+        BlocProvider.of<ThemeBloc>(context, listen: false).state.theme;
+
     return Container(
-        width: MediaQuery.of(context).size.width * .57,
-        margin: const EdgeInsets.only(top: 15),
+        height: 70,
+        width: MediaQuery.of(context).size.width * .70,
+        margin: const EdgeInsets.only(top: 20),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-            color: Colors.black, borderRadius: BorderRadius.circular(20)),
+            color: theme == Constants.darkTheme
+                ? Colors.black
+                : Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(30)),
         child: Padding(
             padding: EdgeInsets.only(left: 10, right: 10),
             child: Row(
@@ -182,7 +266,10 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                       child: Row(children: [
                         Image.asset('assets/images/comment.png',
                             height: 35, width: 35),
-                        Text(' $commentCount')
+                        Text(' $commentCount',
+                            style: TextStyle(
+                                fontSize: ResponsiveFlutter.of(context)
+                                    .fontSize(1.3)))
                       ]),
                       onTap: () => Navigator.push(
                           context,
@@ -194,7 +281,10 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                       child: Row(children: [
                         Image.asset('assets/images/share.png',
                             height: 35, width: 35),
-                        Text(' $shareCount')
+                        Text(' $shareCount',
+                            style: TextStyle(
+                                fontSize: ResponsiveFlutter.of(context)
+                                    .fontSize(1.3)))
                       ]))
                 ])));
   }
@@ -249,7 +339,7 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                   position: currentIndex.toDouble(),
                   decorator: DotsDecorator(
                     size: Size(5, 5),
-                    activeColor: HexColor('#f3923c'),
+                    activeColor: Colors.blue[400]!,
                     spacing: const EdgeInsets.all(10.0),
                   ),
                 )),
@@ -258,16 +348,20 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                     child: Container(
                         height: 35,
                         child: Text(caption,
+                            //   softWrap: false,
+                            overflow: TextOverflow.fade,
                             style: TextStyle(
-                              fontSize: 14,
-                            )))),
+                                fontSize: ResponsiveFlutter.of(context)
+                                    .fontSize(1.3))))),
                 Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      TimeElapsed().elapsedTimeDynamic(
-                          new DateTime.fromMicrosecondsSinceEpoch(dateCreated)
-                              .toString()),
-                    )),
+                        TimeElapsed().elapsedTimeDynamic(
+                            new DateTime.fromMicrosecondsSinceEpoch(dateCreated)
+                                .toString()),
+                        style: TextStyle(
+                            fontSize:
+                                ResponsiveFlutter.of(context).fontSize(1.35)))),
               ])),
     );
   }
@@ -344,7 +438,8 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                   backgroundImage: CachedNetworkImageProvider(profilePic)))),
       Text(
         '  $username',
-        style: TextStyle(fontSize: 14),
+        style:
+            TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.45)),
       )
     ]);
   }
@@ -399,11 +494,26 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
       DocumentSnapshot<Object?> post, int itemIndex, int currentIndex) {
     final type = post['content'][itemIndex]['type'];
     final media = post['content'][itemIndex]['media'];
-
     if (type == Constants.mediaContainerTypes[MediaContainerType.Image]) {
-      return ImageScreen(imageFile: media);
+      //return ImageScreen(imageFile: media);
+      return Container(
+          //     height: 400,
+          width: MediaQuery.of(context).size.width,
+          decoration: new BoxDecoration(
+              // shape: BoxShape.circle,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(0),
+                  bottomLeft: Radius.circular(0)),
+              image: new DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  image: CachedNetworkImageProvider(media))));
     } else {
-      return VideoScreen(videoFile: media, shouldPlay: true);
+      return Container(
+          width: MediaQuery.of(context).size.width,
+          child: VideoScreen(
+            video: media,
+            //shouldPlay: (itemIndex == currentIndex && shoudlPlayParent)
+          ));
     }
   }
 }

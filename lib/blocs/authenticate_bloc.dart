@@ -3,8 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/events/user_event.dart';
 import 'package:frienderr/events/authenticate_event.dart';
+import 'package:frienderr/models/user/user_model.dart';
 import 'package:frienderr/navigation/tab-navigation.dart';
 import 'package:frienderr/state/authentication_state.dart';
 import 'package:frienderr/repositories/auth_repository.dart';
@@ -76,6 +78,8 @@ class AuthenticationBloc
 
     if (event is LoginButtonPressed) {
       yield LoginLoading();
+
+      //Timer(Duration(seconds: 5), () async* {
       try {
         final response = await authRepository.authenticateUser(
           email: event.email,
@@ -100,6 +104,7 @@ class AuthenticationBloc
 
         yield LoginSuccess();
       } catch (e) {}
+      // });
     }
 
     if (event is RegisterUsernameEvent) {
@@ -107,10 +112,29 @@ class AuthenticationBloc
 
       final response = await authRepository.verfyAndUpdateUsername(
           event.userId, event.username);
+
       if (!response) {
         yield AuthenticationFailure(error: 'Username is unavailable');
         return;
       }
+
+      BlocProvider.of<UserBloc>(event.context, listen: false).add(SetUser(
+          user: UserModel(
+        id: event.userId,
+        chats: [],
+        status: '',
+        stories: [],
+        username: event.username,
+        following: [],
+        followers: [],
+        presence: true,
+        isLocationEnabled: false,
+        location: {'latitude': 0, 'longitude': 0},
+        profilePic: '${Constants.defaultProfilePic}',
+        coverPhoto: '${Constants.defaultCoverPhoto}',
+        bitmapImage: '${Constants.defaultBitmapImage}',
+      )));
+
       Navigator.push(
           event.context,
           transition.PageTransition(

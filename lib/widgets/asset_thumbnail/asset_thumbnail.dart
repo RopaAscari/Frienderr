@@ -1,8 +1,9 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:frienderr/enums/enums.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/widgets/display_media/display_media.dart';
 import 'package:frienderr/widgets/display_selected_stories/display_selected_stories.dart';
 
@@ -41,6 +42,13 @@ class AssetThumbnailState extends State<AssetThumbnail> {
   ValueSetter<dynamic> get removeSelectedAssets => widget.removeSelectedAssets;
 
   @override
+  void didChangeDependencies() {
+    print('IS MULISELCTED $isMutliSelecting');
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<Uint8List>(
@@ -50,37 +58,48 @@ class AssetThumbnailState extends State<AssetThumbnail> {
         // If we have no data, display a spinner
         if (bytes == null) return Center(child: CircularProgressIndicator());
         // If there's data, display it as an image
-        return InkWell(
-          splashColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
+        return GestureDetector(
           onTap: () {
             if (isMutliSelecting) {
               if (selectedAsset != index) {
                 setState(() {
                   selectedAsset = index;
-                  fetchSelectedAssets(
-                      {'id': index, 'asset': asset, 'type': asset.type});
+                  fetchSelectedAssets({
+                    'id': index,
+                    'asset': asset,
+                    'type': asset.type,
+                  });
                 });
               } else {
                 setState(() {
                   selectedAsset = null;
-                  removeSelectedAssets(
-                      {'id': index, 'asset': asset, 'type': asset.type});
+                  removeSelectedAssets({
+                    'id': index,
+                    'asset': asset,
+                    'type': asset.type,
+                  });
                 });
               }
             } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => mediaAction ==
-                              Constants.postTypes[PostType.Post]
-                          ? DisplayMedia(selectedAssets: [
-                              {'id': index, 'asset': asset, 'type': asset.type}
-                            ])
-                          : DisplaySelectedStories(selectedAssets: [
-                              {'id': index, 'asset': asset, 'type': asset.type}
-                            ])));
+                      builder: (_) =>
+                          mediaAction == Constants.postTypes[PostType.Post]
+                              ? DisplayMedia(selectedAssets: [
+                                  {
+                                    'id': index,
+                                    'asset': asset,
+                                    'type': asset.type,
+                                  }
+                                ])
+                              : DisplaySelectedStories(selectedAssets: [
+                                  {
+                                    'id': index,
+                                    'asset': asset,
+                                    'type': asset.type,
+                                  }
+                                ])));
             }
           },
           onLongPress: () {},

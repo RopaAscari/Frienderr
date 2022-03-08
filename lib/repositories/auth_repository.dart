@@ -2,7 +2,7 @@ import 'package:frienderr/util/helpers.dart';
 import 'package:frienderr/errors/errors.dart';
 import 'package:frienderr/models/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/models/user/user_model.dart';
 

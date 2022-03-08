@@ -1,13 +1,10 @@
-import 'package:frienderr/enums/enums.dart';
-//import 'package:frienderr/util/helpers.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/models/comment/comment_model.dart';
 
 class CommentRepository {
-  // final Helpers helpers = new Helpers();
-
   CollectionReference comments = FirebaseFirestore.instance
       .collection(Constants.collections[Collections.Comments]!);
 

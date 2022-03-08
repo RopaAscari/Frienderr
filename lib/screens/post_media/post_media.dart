@@ -1,334 +1,327 @@
 import 'dart:io';
-
-import 'package:camera/camera.dart';
+import 'dart:ui';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:frienderr/widgets/display_media/display_media.dart';
-import 'package:frienderr/widgets/display_selected_stories/display_selected_stories.dart';
+import 'package:frienderr/models/user/user_model.dart';
 import 'package:provider/provider.dart';
-//import 'package:agora_rtm/agora_rtm.dart';
-import 'package:frienderr/enums/enums.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:frienderr/util/helpers.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
-import 'package:frienderr/services/services.dart';
-import 'package:frienderr/constants/constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:frienderr/widgets/gallery/gallery.dart';
-//import 'package:frienderr/screens/broadcast/broadcast.dart';
+import 'package:frienderr/core/constants/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:frienderr/navigation/tab-navigation.dart';
+import 'package:thumbnails/thumbnails.dart' as thumbanils;
+import 'package:responsive_flutter/responsive_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class PostMedia extends StatefulWidget {
-  PostMedia({Key? key}) : super(key: key);
+  PostMedia({
+    Key? key,
+    required this.user,
+    required this.selectedAssets,
+  }) : super(key: key);
 
-  @override
+  final UserModel user;
+  final List<dynamic> selectedAssets;
+
   PostMediaState createState() => PostMediaState();
 }
 
 class PostMediaState extends State<PostMedia> {
-  int x = 0;
-  int count = 1;
-  bool muted = false;
-  String myChannel = '';
-  bool isCameraInit = false;
-  //late AgoraRtmClient _client;
-  int currentTimelineIndex = 0;
-  List<dynamic> userStories = [];
-  late CameraController _controller;
-  final Map<String, int> _channelList = {};
-  late Future<void> _initializeControllerFuture;
-  final Map<String, List<String>> _seniorMember = {};
-  late UserState userState = context.read<UserBloc>().state;
-
+  bool isPrivate = false;
+  bool isPosting = false;
+  UserModel get user => widget.user;
+  dynamic get selectedAssets => widget.selectedAssets;
+  final TextEditingController caption = TextEditingController();
+  final CollectionReference post =
+      FirebaseFirestore.instance.collection('posts');
   @override
-  void initState() {
+  initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      initializeCameraController();
-    });
   }
 
-  @override
-  void dispose() {
-    // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
-    super.dispose();
-  }
-
-  initializeCameraController() async {
-    final cameras = await availableCameras();
-
-    // Get a specific camera from the list of available cameras.
-    final firstCamera = cameras.first;
-    // To display the current output from the Camera,
-    // create a CameraController.
-    _controller = CameraController(
-      // Get a specific camera from the list of available cameras.
-      firstCamera,
-      // Define the resolution to use.
-      ResolutionPreset.medium,
-    );
-
-    // Next, initialize the controller. This returns a Future.
-    _initializeControllerFuture = _controller.initialize();
+  toggleStoryPosting() {
     setState(() {
-      isCameraInit = true;
+      isPosting = !isPosting;
     });
+    FocusScope.of(context).unfocus();
   }
 
-  /* Future<AgoraRtmChannel> _createChannel(String name) async {
-    AgoraRtmChannel channel = await _client.createChannel(name);
-    channel.onMemberJoined = (AgoraRtmMember member) async {
-      print(
-          "Member joined: " + member.userId + ', channel: ' + member.channelId);
+  postStory() async {
+    toggleStoryPosting();
+    final dir = await path_provider.getTemporaryDirectory();
 
-      _seniorMember.values.forEach(
-        (element) async {
-          if (element.first == userState.user.username) {
-            // retrieve the number of users in a channel from the _channelList
-            for (int i = 0; i < _channelList.length; i++) {
-              if (_channelList.keys.toList()[i] == myChannel) {
-                setState(() {
-                  x = _channelList.values.toList()[i];
-                });
-              }
-            }
+    String thumb = '';
+    List metadata = [];
 
-            String data = myChannel + ':' + x.toString();
-            await _client.sendMessageToPeer(
-                member.userId, AgoraRtmMessage.fromText(data));
-          }
-        },
-      );
-    };
+    final content =
+        await Stream.fromIterable(selectedAssets).asyncMap((item) async {
+      final timestamp = DateTime.now().microsecondsSinceEpoch.toString();
 
-    channel.onMemberLeft = (AgoraRtmMember member) async {
-      print("Member left: " + member.userId + ', channel: ' + member.channelId);
-      // await leaveCall(member.channelId, member.userId);
-    };
-    channel.onMessageReceived =
-        (AgoraRtmMessage message, AgoraRtmMember member) async {
-      var data = message.text.split(':');
-      if (_channelList.keys.contains(data[0])) {
-        setState(() {
-          _channelList.update(data[0], (v) => int.parse(data[1]));
-        });
-        if (int.parse(data[1]) >= 2 && int.parse(data[1]) < 5) {
-          // await _handleCameraAndMic(Permission.camera);
-          //  await _handleCameraAndMic(Permission.microphone);
+      final Reference storageRef =
+          FirebaseStorage.instance.ref().child('/posts/$timestamp');
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BroadcastPage(
-                  channelName: 'buzz', isBroadcaster: true, user: userState),
+      final Reference thumbnailRef =
+          FirebaseStorage.instance.ref().child('/thumbnail/$timestamp');
+      final targetPath = dir.absolute.path + "/temp.jpg";
+      return item['asset'].file.then((File value) async {
+        var fileClone;
+        final result = await FlutterImageCompress.compressAndGetFile(
+          value.absolute.path,
+          targetPath,
+          quality: 30,
+          rotate: 0,
+        );
+        if (result == null) {
+          fileClone = value;
+        } else {
+          fileClone = result;
+        }
+
+        await storageRef.putFile(
+          fileClone,
+          SettableMetadata(
+            contentType:
+                item['type'] == AssetType.image ? 'image/jpg' : 'video/mp4',
+          ),
+        );
+
+        final url = await storageRef.getDownloadURL();
+
+        if (item['type'] == AssetType.video) {
+          String thumbs = await thumbanils.Thumbnails.getThumbnail(
+              // reates the specified path if it doesnt exist
+              videoFile: value.path,
+              imageType: thumbanils.ThumbFormat.PNG,
+              quality: 30);
+
+          final File file = await new File(thumbs).create(recursive: true);
+
+          await thumbnailRef.putFile(
+            file,
+            SettableMetadata(
+              contentType: 'image/jpg',
             ),
           );
+
+          thumb = await thumbnailRef.getDownloadURL();
+
+          return {
+            'media': url,
+            'thumbnail': thumb,
+            'metadata': metadata,
+            'type': item['type'] == AssetType.image ? 'image' : 'video'
+          };
         }
-      } else {
-        setState(() {
-          _channelList.putIfAbsent(data[0], () => int.parse(data[1]));
-        });
-      }
+
+        return {
+          'media': url,
+          'thumbnail': thumb,
+          'metadata': metadata,
+          'type': item['type'] == AssetType.image ? 'image' : 'video'
+        };
+      });
+    }).toList();
+
+    print('USERNAME ${user.id}');
+
+    final Map<String, dynamic> posts = {
+      'id': Helpers().generateId(25),
+      'likes': 0,
+      'commentCount': 0,
+      'userLikes': [],
+      'shares': 0,
+      'content': content,
+      'caption': caption.text,
+      'user': {
+        'id': user.id,
+        'username': user.username,
+        'profilePic': user.profilePic
+      },
+      'dateCreated': DateTime.now().microsecondsSinceEpoch,
     };
-    return channel;
-  }*/
 
-  changeMedia(int type) {
-    setState(() {
-      currentTimelineIndex = type;
-    });
-  }
-
-  openGallery() async {
-    final mediaAction =
-        currentTimelineIndex == Constants.mediaIndexes[MediaType.Posts]
-            ? 'Post'
-            : 'Story';
-    final permitted = await PhotoManager.requestPermission();
-    if (!permitted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => Gallery(mediaAction: mediaAction)),
-    );
-  }
-
-  startLiveBroadcast() {
-    /*  Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BroadcastPage(
-            channelName: 'buzz', isBroadcaster: true, user: userState
-            // userName: userState.user.username
-            ),
-      ),
-    );*/
-  }
-
-  takePicture() async {
-    final mediaAction =
-        currentTimelineIndex == Constants.mediaIndexes[MediaType.Posts]
-            ? 'Post'
-            : 'Story';
-    // Take the Picture in a try / catch block. If anything goes wrong,
-    // catch the error.
     try {
-      // Ensure that the camera is initialized.
-      await _initializeControllerFuture;
+      await post.doc(posts['id']).set(posts);
 
-      // Attempt to take a picture and then get the location
-      // where the image file is saved.
-      final image = await _controller.takePicture();
-      final file = await image.readAsBytes();
-      final asset = AssetModel(file: File.fromRawPath(file));
-      return;
+      await FirebaseFirestore.instance
+          .collection('postCount')
+          .doc('count')
+          .update({'count': FieldValue.increment(1)});
 
-      Navigator.push(
+      toggleStoryPosting();
+
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (_) => mediaAction == Constants.postTypes[PostType.Post]
-                  ? DisplayMedia(selectedAssets: [
-                      {'id': 0, 'asset': asset, 'type': AssetType.image}
-                    ])
-                  : DisplaySelectedStories(selectedAssets: [
-                      {'id': 0, 'asset': asset, 'type': AssetType.image}
-                    ])));
-    } catch (e) {
-      // If an error occurs, log the error to the console.
-      print(e);
+            builder: (context) => MainTab(),
+          ));
+    } catch (err) {
+      toggleStoryPosting();
     }
   }
 
-  Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.black,
-            body: Center(
-                child: FutureBuilder<void>(
-              future: isCameraInit ? _initializeControllerFuture : null,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Stack(children: <Widget>[
-                    cameraWidget(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[cameraOptions()],
-                    ),
-                    postSelectionWidget(),
-                  ]);
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ))));
-  }
-
-  Widget cameraOptions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-            margin: EdgeInsets.fromLTRB(20, 5, 1, 40), //margin here
-            child: SizedBox(
-                height: 50.0,
-                width: 50.0,
-                child: FittedBox(
-                    child: FloatingActionButton(
-                  backgroundColor: Colors.transparent,
-                  heroTag: null,
-                  child: Icon(Icons.photo_library_outlined,
-                      size: 40, color: Colors.grey),
-                  //  backgroundColor: Colors.white,
-                  elevation: 2,
-                  onPressed: () => openGallery(),
-                )))),
-        Container(
-            margin: EdgeInsets.fromLTRB(1, 5, 1, 40), //margin here
-            child: SizedBox(
-                height: 80.0,
-                width: 80.0,
-                child: FittedBox(
-                    child: FloatingActionButton(
-                  heroTag: null,
-                  child: Icon(Icons.camera, size: 50, color: Colors.grey),
-                  backgroundColor: Colors.transparent,
-                  elevation: 2,
-                  onPressed: () {
-                    takePicture();
-                  },
-                )))),
-        Container(
-            margin: EdgeInsets.fromLTRB(1, 5, 5, 40), //margin here
-            child: SizedBox(height: 40.0, width: 40.0, child: Center())),
-      ],
-    ); //;
-  }
-
-  Widget cameraWidget() {
+  @override
+  Widget build(BuildContext _) {
     return Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height - 80,
-        child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-              bottomLeft: Radius.circular(30),
-            ),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: CameraPreview(_controller),
-            )));
+        color: Theme.of(context).canvasColor,
+        child: SafeArea(
+            child: Scaffold(
+                resizeToAvoidBottomInset: true,
+                body: Column(children: [
+                  headerWidget(),
+                  imageSlider(),
+                  captionFieldWidget(),
+                  switchTileWidget(),
+                  postOptionsWidget(),
+                  loadingWidget()
+                ]))));
   }
 
-  Widget postSelectionWidget() {
-    return Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-            height: 30,
-            width: 120,
-            margin: EdgeInsets.all(35),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).canvasColor),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              GestureDetector(
-                  onTap: () =>
-                      changeMedia(Constants.mediaIndexes[MediaType.Posts]!),
-                  child: Text('Posts',
+  Widget loadingWidget() {
+    return isPosting
+        ? Container(
+            margin: const EdgeInsets.only(top: 100),
+            child: CupertinoActivityIndicator())
+        : Center();
+  }
+
+  Widget switchTileWidget() {
+    return Padding(
+        padding: const EdgeInsets.all(15),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+            'Private post',
+            style: TextStyle(
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.7)),
+          ),
+          CupertinoSwitch(
+            value: isPrivate,
+            onChanged: (value) {
+              setState(() {
+                isPrivate = value;
+              });
+            },
+          ),
+        ]));
+  }
+
+  Widget headerWidget() {
+    return Container(
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.only(top: 30, bottom: 25),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                icon: Icon(Icons.arrow_back_ios,
+                    size: ResponsiveFlutter.of(context).fontSize(2.1)),
+                onPressed: () => Navigator.pop(context)),
+            Text(
+              'New Post',
+              style: TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.7)),
+            )
+          ],
+        ));
+  }
+
+  Widget imageSlider() {
+    return SizedBox(
+        height: 70,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: selectedAssets.length,
+            itemBuilder: (context, index) {
+              return Container(
+                height: 40,
+                width: 45,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                child: Card(
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.amber.shade900, width: 1.5),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: FutureBuilder<Uint8List>(
+                      future: selectedAssets[index]['asset'].thumbData
+                          as Future<Uint8List>,
+                      builder: (_, snapshot) {
+                        final bytes = snapshot.data;
+                        if (bytes == null) return Container();
+                        return Image.memory(bytes, fit: BoxFit.cover);
+                      },
+                    ),
+                  ),
+                ),
+              );
+            }));
+  }
+
+  Widget captionFieldWidget() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10.0),
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: TextField(
+          style:
+              TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.6)),
+          controller: caption,
+          maxLines: 7,
+          decoration: new InputDecoration(
+              labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              border: new OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              filled: true,
+              hintText: ' Caption',
+              contentPadding: const EdgeInsets.all(10)),
+        ),
+      ),
+    );
+  }
+
+  Widget postOptionsWidget() {
+    final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
+
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: GestureDetector(
+          onTap: () => isPosting ? null : postStory(),
+          child: Container(
+              height: 60,
+              width: MediaQuery.of(context).size.width - 20,
+              margin: const EdgeInsets.only(top: 5),
+              child: Center(
+                  child: Text('Post',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .color!
-                              .withOpacity(currentTimelineIndex ==
-                                      Constants.mediaIndexes[MediaType.Posts]
-                                  ? 1
-                                  : 0.5),
-                          fontSize: 13))),
-              GestureDetector(
-                  onTap: () =>
-                      changeMedia(Constants.mediaIndexes[MediaType.Stories]!),
-                  child: Text(
-                    '   Stories',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .color!
-                            .withOpacity(currentTimelineIndex ==
-                                    Constants.mediaIndexes[MediaType.Stories]!
-                                ? 1
-                                : 0.5),
-                        fontSize: 13),
-                  )),
-            ])));
+                          color: theme == Constants.darkTheme
+                              ? Colors.black
+                              : Colors.white))),
+              decoration: BoxDecoration(
+                  color: isPosting
+                      ? Theme.of(context).buttonColor.withOpacity(0.6)
+                      : Theme.of(context).buttonColor,
+                  borderRadius: BorderRadius.circular(5)))),
+    );
   }
-}
-
-class AssetModel {
-  final dynamic file;
-  AssetModel({required this.file});
 }

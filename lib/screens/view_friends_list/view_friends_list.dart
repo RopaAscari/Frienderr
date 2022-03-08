@@ -8,7 +8,9 @@ import 'package:frienderr/events/following_event.dart';
 import 'package:frienderr/state/followers_state.dart';
 import 'package:frienderr/state/following_state.dart';
 import 'package:frienderr/screens/account/account.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 class ViewFriendsList extends StatefulWidget {
   final String id;
@@ -27,6 +29,12 @@ class ViewFriendsListState extends State<ViewFriendsList> {
   FollowersBloc followersBloc = new FollowersBloc();
   FollowingBloc followingBloc = new FollowingBloc();
   bool get isFollowersInitial => widget.isFollowersInitial;
+
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  RefreshController _refreshController2 =
+      RefreshController(initialRefresh: false);
 
   void initState() {
     fetchFriendsList();
@@ -49,6 +57,24 @@ class ViewFriendsListState extends State<ViewFriendsList> {
     setState(() {
       currentPage = page;
     });
+  }
+
+  void _onRefresh() async {
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.loadComplete();
+  }
+
+  void _onRefreshFollowers() async {
+    _refreshController2.refreshCompleted();
+  }
+
+  void _onLoadingFollowers() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController2.loadComplete();
   }
 
   @override
@@ -80,10 +106,14 @@ class ViewFriendsListState extends State<ViewFriendsList> {
                 Text(
                   'Followers\n',
                   style: TextStyle(
-                      fontSize: 16,
+                      fontWeight: currentPage == 0
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: ResponsiveFlutter.of(context)
+                          .fontSize(currentPage == 0 ? 1.6 : 1.5),
                       color: Theme.of(context).textTheme.bodyText1!.color),
                 ),
-                currentPage == 0 ? sliderBar() : Container()
+                // currentPage == 0 ? sliderBar() : Container()
               ])),
           GestureDetector(
               onTap: () => changePage(1),
@@ -91,10 +121,14 @@ class ViewFriendsListState extends State<ViewFriendsList> {
                 Text(
                   'Following\n',
                   style: TextStyle(
-                      fontSize: 16,
+                      fontWeight: currentPage == 1
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: ResponsiveFlutter.of(context)
+                          .fontSize(currentPage == 1 ? 1.6 : 1.5),
                       color: Theme.of(context).textTheme.bodyText1!.color),
                 ),
-                currentPage == 1 ? sliderBar() : Container()
+                // currentPage == 1 ? sliderBar() : Container()
               ]))
         ]);
   }
@@ -126,44 +160,67 @@ class ViewFriendsListState extends State<ViewFriendsList> {
               child: Text(state.message,
                   style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1!.color,
-                      fontSize: 18)),
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.4))),
             );
           }
 
           if (state is FollowerLoaded) {
-            ;
-            return ListView.builder(
-              itemCount: state.followers.length,
-              itemBuilder: (context, index) {
-                final id = state.followers[index].id;
-                final username = state.followers[index].username;
-                final profilePic = state.followers[index].profilePic;
-                final userPresence = state.followers[index].presence;
+            return SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                header: ClassicHeader(
+                  idleText: '',
+                  releaseText: '',
+                  completeText: '',
+                  refreshingText: '',
+                  idleIcon: CupertinoActivityIndicator(radius: 10),
+                  completeIcon: CupertinoActivityIndicator(radius: 10),
+                  releaseIcon: CupertinoActivityIndicator(radius: 10),
+                ),
+                footer: CustomFooter(
+                  builder: (BuildContext context, LoadStatus? mode) {
+                    return Center();
+                  },
+                ),
+                controller: _refreshController2,
+                onRefresh: () => _onRefreshFollowers(),
+                onLoading: () => _onLoadingFollowers(),
+                child: ListView.builder(
+                  itemCount: state.followers.length,
+                  itemBuilder: (context, index) {
+                    final id = state.followers[index].id;
+                    final username = state.followers[index].username;
+                    final profilePic = state.followers[index].profilePic;
+                    final userPresence = state.followers[index].presence;
 
-                return Card(
-                    color: Theme.of(context).canvasColor,
-                    child: ListTile(
-                        leading: CircleAvatar(
-                            radius: 15,
-                            backgroundImage:
-                                CachedNetworkImageProvider(profilePic)),
-                        trailing: Icon(Icons.circle,
-                            size: 15,
-                            color: userPresence ? Colors.green : Colors.amber),
-                        title: Text(
-                          '$username',
-                        ),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => new Account(
-                                isProfileOwnerViewing: false,
-                                profileUserId: id,
-                              ),
-                              // instantiateChatInstance(userState.user, )),
-                            ))));
-              },
-            );
+                    return Card(
+                        color: Theme.of(context).canvasColor,
+                        child: ListTile(
+                            leading: CircleAvatar(
+                                radius: 15,
+                                backgroundImage:
+                                    CachedNetworkImageProvider(profilePic)),
+                            trailing: Icon(Icons.circle,
+                                size: 15,
+                                color:
+                                    userPresence ? Colors.green : Colors.amber),
+                            title: Text(
+                              '$username',
+                              style: TextStyle(
+                                  fontSize: ResponsiveFlutter.of(context)
+                                      .fontSize(1.4)),
+                            ),
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => new Account(
+                                    isProfileOwnerViewing: false,
+                                    profileUserId: id,
+                                  ),
+                                  // instantiateChatInstance(userState.user, )),
+                                ))));
+                  },
+                ));
           } else {
             return Center();
           }
@@ -186,43 +243,67 @@ class ViewFriendsListState extends State<ViewFriendsList> {
           if (state is FollowingEmpty) {
             return Center(
               child: Text(state.message,
-                  style: Theme.of(context).textTheme.bodyText1),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.4))),
             );
           }
 
           if (state is FollowingLoaded) {
-            return ListView.builder(
-              itemCount: state.following.length,
-              itemBuilder: (context, index) {
-                final id = state.following[index].id;
-                final username = state.following[index].username;
-                final profilePic = state.following[index].profilePic;
-                final userPresence = state.following[index].presence;
+            return SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                header: ClassicHeader(
+                  idleText: '',
+                  releaseText: '',
+                  completeText: '',
+                  refreshingText: '',
+                  idleIcon: CupertinoActivityIndicator(radius: 10),
+                  completeIcon: CupertinoActivityIndicator(radius: 10),
+                  releaseIcon: CupertinoActivityIndicator(radius: 10),
+                ),
+                footer: CustomFooter(
+                  builder: (BuildContext context, LoadStatus? mode) {
+                    return Center();
+                  },
+                ),
+                controller: _refreshController,
+                onRefresh: () => _onRefresh(),
+                onLoading: () => _onLoading(),
+                child: ListView.builder(
+                  itemCount: state.following.length,
+                  itemBuilder: (context, index) {
+                    final id = state.following[index].id;
+                    final username = state.following[index].username;
+                    final profilePic = state.following[index].profilePic;
+                    final userPresence = state.following[index].presence;
 
-                return Card(
-                    color: Theme.of(context).canvasColor,
-                    child: ListTile(
-                        leading: CircleAvatar(
-                            radius: 15,
-                            backgroundImage:
-                                CachedNetworkImageProvider(profilePic)),
-                        trailing: Icon(Icons.circle,
-                            size: 15,
-                            color: userPresence ? Colors.green : Colors.amber),
-                        title: Text(
-                          '$username',
-                        ),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => new Account(
-                                isProfileOwnerViewing: false,
-                                profileUserId: id,
-                              ),
-                              // instantiateChatInstance(userState.user, )),
-                            ))));
-              },
-            );
+                    return Card(
+                        color: Theme.of(context).canvasColor,
+                        child: ListTile(
+                            leading: CircleAvatar(
+                                radius: 15,
+                                backgroundImage:
+                                    CachedNetworkImageProvider(profilePic)),
+                            trailing: Icon(Icons.circle,
+                                size: 15,
+                                color:
+                                    userPresence ? Colors.green : Colors.amber),
+                            title: Text('$username',
+                                style: TextStyle(
+                                    fontSize: ResponsiveFlutter.of(context)
+                                        .fontSize(1.4))),
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => new Account(
+                                    isProfileOwnerViewing: false,
+                                    profileUserId: id,
+                                  ),
+                                  // instantiateChatInstance(userState.user, )),
+                                ))));
+                  },
+                ));
           } else {
             return Center();
           }

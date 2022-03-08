@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frienderr/services/services.dart';
 import 'package:frienderr/navigation/navigation.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:frienderr/repositories/user_repository.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
@@ -29,7 +30,7 @@ class HandlerState extends State<Handler> with WidgetsBindingObserver {
       _timerLink = new Timer(
         const Duration(milliseconds: 1000),
         () async {
-          print('fetch link');
+          //print('fetch link');
           firebaseServices.retrieveDynamicLink(context);
         },
       );
@@ -49,8 +50,19 @@ class HandlerState extends State<Handler> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Navigation(
-          userRepository: widget.userRepository,
-        ));
+        home: RefreshConfiguration(
+            footerTriggerDistance: 15,
+            dragSpeedRatio: 0.91,
+            headerBuilder: () => MaterialClassicHeader(),
+            footerBuilder: () => ClassicFooter(),
+            enableLoadingWhenNoData: false,
+            enableRefreshVibrate: false,
+            enableLoadMoreVibrate: false,
+            shouldFooterFollowWhenNotFull: (state) {
+              return false;
+            },
+            child: Navigation(
+              userRepository: widget.userRepository,
+            )));
   }
 }
