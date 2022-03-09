@@ -16,10 +16,9 @@ import 'package:frienderr/core/constants/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/navigation/tab-navigation.dart';
-import 'package:thumbnails/thumbnails.dart' as thumbanils;
+
 import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class PostMedia extends StatefulWidget {
   PostMedia({
@@ -73,17 +72,17 @@ class PostMediaState extends State<PostMedia> {
       final targetPath = dir.absolute.path + "/temp.jpg";
       return item['asset'].file.then((File value) async {
         var fileClone;
-        final result = await FlutterImageCompress.compressAndGetFile(
+        /* final result = await FlutterImageCompress.compressAndGetFile(
           value.absolute.path,
           targetPath,
           quality: 30,
           rotate: 0,
-        );
-        if (result == null) {
-          fileClone = value;
-        } else {
-          fileClone = result;
-        }
+        );*/
+        // if (result == null) {
+        fileClone = value;
+        //  } else {
+        //  fileClone = result;
+        //  }
 
         await storageRef.putFile(
           fileClone,
@@ -96,20 +95,20 @@ class PostMediaState extends State<PostMedia> {
         final url = await storageRef.getDownloadURL();
 
         if (item['type'] == AssetType.video) {
-          String thumbs = await thumbanils.Thumbnails.getThumbnail(
+          /* If  String thumbs = await thumbanils.Thumbnails.getThumbnail(
               // reates the specified path if it doesnt exist
               videoFile: value.path,
               imageType: thumbanils.ThumbFormat.PNG,
-              quality: 30);
+              quality: 30);*/
 
-          final File file = await new File(thumbs).create(recursive: true);
+          //  final File file = await new File(thumbs).create(recursive: true);
 
-          await thumbnailRef.putFile(
+          /* await thumbnailRef.putFile(
             file,
             SettableMetadata(
               contentType: 'image/jpg',
             ),
-          );
+          );*/
 
           thumb = await thumbnailRef.getDownloadURL();
 

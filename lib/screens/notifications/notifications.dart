@@ -119,8 +119,9 @@ class NotificationScreenState extends State<Notifications>
     final timeElasped = notifications['dateCreated'];
     final senderUsername = notifications['senderUsername'];
     final senderProfilePic = notifications['senderProfilePic'];
+    return Center();
 
-    return Slidable(
+    /*return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       child: ListTile(
@@ -173,7 +174,7 @@ class NotificationScreenState extends State<Notifications>
           // onTap: () => _showSnackBar('Delete'),
         ),
       ],
-    );
+    );*/
   }
 
   Widget renderLikeNotification(QueryDocumentSnapshot<Object?> notifications) {
@@ -185,7 +186,9 @@ class NotificationScreenState extends State<Notifications>
     final senderUsername = notifications['senderUsername'];
     final senderProfilePic = notifications['senderProfilePic'];
 
-    return Slidable(
+    return Center();
+
+    /*return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       child: ListTile(
@@ -244,7 +247,7 @@ class NotificationScreenState extends State<Notifications>
           // onTap: () => _showSnackBar('Delete'),
         ),
       ],
-    );
+    );*/
   }
 
   Widget renderCommentNotification(
@@ -257,7 +260,8 @@ class NotificationScreenState extends State<Notifications>
     final senderUsername = notifications['senderUsername'];
     final senderProfilePic = notifications['senderProfilePic'];
 
-    return Slidable(
+    return Center();
+    /*  return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       child: ListTile(
@@ -314,6 +318,6 @@ class NotificationScreenState extends State<Notifications>
           // onTap: () => _showSnackBar('Delete'),
         ),
       ],
-    );
+    );*/
   }
 }

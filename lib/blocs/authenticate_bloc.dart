@@ -3,32 +3,28 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
-import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/events/user_event.dart';
-import 'package:frienderr/events/authenticate_event.dart';
 import 'package:frienderr/models/user/user_model.dart';
+import 'package:frienderr/events/authenticate_event.dart';
 import 'package:frienderr/navigation/tab-navigation.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/state/authentication_state.dart';
 import 'package:frienderr/repositories/auth_repository.dart';
 import 'package:frienderr/screens/register/chooseTheme/chooseTheme.dart';
-import 'package:frienderr/screens/register/registerUsername/registerUsername.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart'
     as transition;
+import 'package:frienderr/screens/register/registerUsername/registerUsername.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthRepository authRepository = new AuthRepository();
 
-  AuthenticationBloc() : super(AuthenticationState());
-
-  @override
-  Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event) async* {
-    if (event is AppStarted) {
+  AuthenticationBloc() : super(AuthenticationState()) {
+    on<AppStarted>((event, emit) async {
       final bool isAuthenticated = await authRepository.isAuthenticated();
 
       if (!isAuthenticated) {
-        yield AuthenticationUnauthenticated();
+        emit(AuthenticationUnauthenticated());
       } else {
         /*   final bool isUsernameSelected =
             await authRepository.isUsernameSelected();
@@ -38,29 +34,29 @@ class AuthenticationBloc
           yield AuthenticationUsername(userId: userId);
           return;
         }*/
-        yield AuthenticationAuthenticated();
+        emit(AuthenticationAuthenticated());
       }
-    }
+    });
 
-    if (event is LoggedIn) {
-      yield AuthenticationLoading();
-      yield AuthenticationAuthenticated();
-    }
+    on<LoggedIn>((event, emit) {
+      emit(AuthenticationLoading());
+      emit(AuthenticationAuthenticated());
+    });
 
-    if (event is LoggedOut) {
-      yield AuthenticationLoading();
+    on<LoggedOut>((event, emit) async {
+      emit(AuthenticationLoading());
       await authRepository.signOut();
-      yield AuthenticationUnauthenticated();
-    }
+      emit(AuthenticationUnauthenticated());
+    });
 
-    if (event is RegisterUserEvent) {
-      yield RegisterUserEventLoading();
+    on<RegisterUserEvent>((event, emit) async {
+      emit(RegisterUserEventLoading());
 
       final response = await authRepository.createUserAccount(
           email: event.email, password: event.password);
 
       if (response.hasError) {
-        yield AuthenticationFailure(error: response.error);
+        emit(AuthenticationFailure(error: response.error));
         return;
       }
 
@@ -74,47 +70,16 @@ class AuthenticationBloc
             type: transition.PageTransitionType.slideInLeft),
         (Route<dynamic> route) => false,
       );
-    }
+    });
 
-    if (event is LoginButtonPressed) {
-      yield LoginLoading();
-
-      //Timer(Duration(seconds: 5), () async* {
-      try {
-        final response = await authRepository.authenticateUser(
-          email: event.email,
-          password: event.password,
-        );
-
-        if (response.hasError) {
-          yield AuthenticationFailure(error: response.error);
-          return;
-        }
-
-        BlocProvider.of<UserBloc>(event.context, listen: false)
-            .add(SetUser(user: response.user));
-
-        Navigator.pushAndRemoveUntil(
-          event.context,
-          transition.PageTransition(
-              child: MainTab(),
-              type: transition.PageTransitionType.slideInLeft),
-          (Route<dynamic> route) => false,
-        );
-
-        yield LoginSuccess();
-      } catch (e) {}
-      // });
-    }
-
-    if (event is RegisterUsernameEvent) {
-      yield RegisterUsernameLoading();
+    on<RegisterUsernameEvent>((event, emit) async {
+      emit(RegisterUsernameLoading());
 
       final response = await authRepository.verfyAndUpdateUsername(
           event.userId, event.username);
 
       if (!response) {
-        yield AuthenticationFailure(error: 'Username is unavailable');
+        emit(AuthenticationFailure(error: 'Username is unavailable'));
         return;
       }
 
@@ -140,7 +105,35 @@ class AuthenticationBloc
           transition.PageTransition(
               child: ChooseTheme(),
               type: transition.PageTransitionType.slideInLeft));
-      yield RegisterUsernameSuccess();
-    }
+      emit(RegisterUsernameSuccess());
+    });
+
+    on<LoginButtonPressed>((event, emit) async {
+      try {
+        emit(LoginLoading());
+        final response = await authRepository.authenticateUser(
+          email: event.email,
+          password: event.password,
+        );
+
+        if (response.hasError) {
+          emit(AuthenticationFailure(error: response.error));
+          return;
+        }
+
+        BlocProvider.of<UserBloc>(event.context, listen: false)
+            .add(SetUser(user: response.user));
+
+        Navigator.pushAndRemoveUntil(
+          event.context,
+          transition.PageTransition(
+              child: MainTab(),
+              type: transition.PageTransitionType.slideInLeft),
+          (Route<dynamic> route) => false,
+        );
+
+        emit(LoginSuccess());
+      } catch (e) {}
+    });
   }
 }

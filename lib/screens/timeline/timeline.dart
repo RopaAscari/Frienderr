@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/services/services.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +16,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'package:frienderr/screens/user_stories/user_stories.dart';
 import 'package:frienderr/widgets/render_posts/render_posts.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Timeline extends StatefulWidget {
   Timeline({Key? key}) : super(key: key);
@@ -186,7 +189,204 @@ class TimelineState extends State<Timeline>
   }
 
   Widget renderPosts() {
-    return SmartRefresher(
+    return CustomScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        slivers: <Widget>[
+          SliverAppBar(
+            floating: true,
+            leading: const Center(),
+            //  actions: <Widget>[notificationIconWidget()],
+            title: null,
+            backgroundColor: Color.fromRGBO(0, 0, 0, 0.85),
+            expandedHeight: 50,
+            flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                background: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30))),
+                        height: 50,
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 15, right: 15),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Image.asset(Constants.appLogo, width: 150),
+                                  Icon(Icons.camera)
+                                ]))),
+                    // bodyTitle(context)
+                  ],
+                )),
+          ),
+          SliverPadding(
+              padding: const EdgeInsets.all(0),
+              sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                posts.length > 0
+                    ? /* CarouselSlider.builder(
+                        itemCount: posts.length,
+                        //  controller: scrollController,
+                        //   scrollDirection: Axis.vertical,
+                        options: CarouselOptions(
+                          enableInfiniteScroll: false,
+                          aspectRatio: 2.0,
+                          height: 1000,
+                          scrollDirection: Axis.vertical,
+                          enlargeCenterPage: true,
+                        ),
+                        itemBuilder: (context, index, realIdx) {
+                          final postUserId = posts[index]['user']['id'];
+
+                          if (index == posts.length - 1) {
+                            return Flex(direction: Axis.vertical, children: [
+                              Container(
+                                  margin: const EdgeInsets.only(top: 20),
+                                  height:
+                                      MediaQuery.of(context).size.height - 200,
+                                  child: RenderPost(
+                                      items: posts,
+                                      index: index,
+                                      isPostOwner:
+                                          postUserId == userState.user.id,
+                                      shoudlPlayParent: index == index)),
+                              Container(
+                                  height: 200,
+                                  child: Center(
+                                      child: Column(children: [
+                                    Text('You are at the end of your journey',
+                                        style: TextStyle(
+                                            fontSize:
+                                                ResponsiveFlutter.of(context)
+                                                    .fontSize(1.4))),
+                                    GestureDetector(
+                                        onTap: () {
+                                          scrollController.animateTo(0.0,
+                                              duration:
+                                                  Duration(milliseconds: 1000),
+                                              curve: Curves.easeIn);
+                                          fetchPosts();
+                                        },
+                                        child: Text('\nReturn to top',
+                                            style: TextStyle(
+                                                color: Colors.blue[700],
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: ResponsiveFlutter.of(
+                                                        context)
+                                                    .fontSize(1.3))))
+                                  ]))),
+                            ]);
+                          }
+                          return Container(
+                              margin: const EdgeInsets.only(top: 20),
+                              height: MediaQuery.of(context).size.height - 200,
+                              child: RenderPost(
+                                  items: posts,
+                                  index: index,
+                                  isPostOwner: postUserId == userState.user.id,
+                                  shoudlPlayParent: index == index));
+                        },
+                      )
+                    : Center(
+                        child: Text(
+                          "No new posts on your feed",
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      )*/
+
+                    ListView.separated(
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: posts.length,
+                        controller: scrollController,
+                        scrollDirection: Axis.vertical,
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          final postUserId = posts[index]['user']['id'];
+
+                          if (index == 0) {
+                            return Flex(direction: Axis.vertical, children: [
+                              Container(height: 250, child: renderStories()),
+                              Container(
+                                  margin: const EdgeInsets.only(top: 20),
+                                  height:
+                                      MediaQuery.of(context).size.height - 200,
+                                  child: RenderPost(
+                                      items: posts,
+                                      index: index,
+                                      isPostOwner:
+                                          postUserId == userState.user.id,
+                                      shoudlPlayParent: index == index))
+                            ]);
+                          }
+
+                          if (index == posts.length - 1) {
+                            return Flex(direction: Axis.vertical, children: [
+                              Container(
+                                  margin: const EdgeInsets.only(top: 20),
+                                  height:
+                                      MediaQuery.of(context).size.height - 200,
+                                  child: RenderPost(
+                                      items: posts,
+                                      index: index,
+                                      isPostOwner:
+                                          postUserId == userState.user.id,
+                                      shoudlPlayParent: index == index)),
+                              Container(
+                                  height: 200,
+                                  child: Center(
+                                      child: Column(children: [
+                                    Text('You are at the end of your journey',
+                                        style: TextStyle(
+                                            fontSize:
+                                                ResponsiveFlutter.of(context)
+                                                    .fontSize(1.4))),
+                                    GestureDetector(
+                                        onTap: () {
+                                          scrollController.animateTo(0.0,
+                                              duration:
+                                                  Duration(milliseconds: 1000),
+                                              curve: Curves.easeIn);
+                                          fetchPosts();
+                                        },
+                                        child: Text('\nReturn to top',
+                                            style: TextStyle(
+                                                color: Colors.blue[700],
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: ResponsiveFlutter.of(
+                                                        context)
+                                                    .fontSize(1.3))))
+                                  ]))),
+                            ]);
+                          }
+                          return Container(
+                              margin: const EdgeInsets.only(top: 20),
+                              height: MediaQuery.of(context).size.height - 200,
+                              child: RenderPost(
+                                  items: posts,
+                                  index: index,
+                                  isPostOwner: postUserId == userState.user.id,
+                                  shoudlPlayParent: index == index));
+                        },
+                      )
+                    : Center(
+                        child: Text(
+                          "No new posts on your feed",
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      )
+              ])))
+        ]);
+
+    /*return SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
         header: ClassicHeader(
@@ -279,7 +479,7 @@ class TimelineState extends State<Timeline>
                   "No new posts on your feed",
                   style: TextStyle(fontSize: 13),
                 ),
-              ));
+              )*/
   }
 
   Widget renderStories() {

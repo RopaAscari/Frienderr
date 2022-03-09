@@ -164,7 +164,7 @@ class MyTabsState extends State<MainTab>
               elevation: 10,
               enableFeedback: false,
               backgroundColor:
-                  isDarkTheme ? Color.fromRGBO(0, 0, 0, 0.9) : Colors.white,
+                  isDarkTheme ? Color.fromRGBO(0, 0, 0, 0.85) : Colors.white,
               type: BottomNavigationBarType.fixed,
               items: buildItems(isDarkTheme),
               currentIndex: _selectedIndex,

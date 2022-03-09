@@ -320,7 +320,7 @@ class MessagingState extends State<Messaging> {
                 inputTextStyle: TextStyle(fontSize: 14.0),
                 inputContainerStyle: BoxDecoration(
                   border: Border.all(width: 0.0),
-                  color: Theme.of(context).canvasColor,
+                  color: Colors.black,
                 ),
                 onQuickReply: (Reply reply) {
                   setState(() {

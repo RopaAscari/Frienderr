@@ -44,8 +44,6 @@ class SplashScreenState extends State<SplashScreen> {
         backgroundColor: Theme.of(context).canvasColor,
         body: Center(
             child: Hero(
-                tag: Constants.heroTag,
-                child: Image.asset(logo,
-                    width: MediaQuery.of(context).size.width * 0.50))));
+                tag: Constants.heroTag, child: Image.asset(logo, width: 200))));
   }
 }

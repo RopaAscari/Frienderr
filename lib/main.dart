@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:frienderr/services/services.dart';
+import 'package:frienderr/blocs/bloc_observer.dart';
 import 'package:frienderr/repositories/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -17,14 +18,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
+  final HydratedStorage storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
   );
 
   await Firebase.initializeApp();
-  // new FirebaseServices().getFcmToken();
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(Handler(userRepository: UserRepository()));
+  HydratedBlocOverrides.runZoned(
+    () => runApp(Handler(userRepository: UserRepository())),
+    storage: storage,
+    blocObserver: AppBlocObserver(),
+  );
 }

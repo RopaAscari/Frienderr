@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
+
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
@@ -333,12 +333,12 @@ class FindFriendsState extends State<FindFriends>
     });
   }
 
-  Future<List<Address>> getAddress(double lat, double lang) async {
+  /* Future<List<Address>> getAddress(double lat, double lang) async {
     final coordinates = new Coordinates(lat, lang);
     List<Address> add =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     return add;
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

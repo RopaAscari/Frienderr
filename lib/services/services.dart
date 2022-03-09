@@ -33,8 +33,8 @@ class FirebaseServices {
         (onError) => {print('Error occurred - $onError')});
   }
 
-  Future<Uri> createDynamicLink(String postId) async {
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
+  Future<dynamic> createDynamicLink(String postId) async {
+    /* final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://friend3rr.page.link',
       link: Uri.parse('https://frienderr.page.link.com/?id=$postId'),
       androidParameters: AndroidParameters(
@@ -47,8 +47,9 @@ class FirebaseServices {
         appStoreId: '123',
       ),
     );
-    final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
-    return shortDynamicLink.shortUrl;
+    late final ShortDynamicLink
+        shortDynamicLink; //= await parameters.buildShortLink();
+    return shortDynamicLink.shortUrl;*/
   }
 
   Future<void> retrieveDynamicLink(BuildContext context) async {
@@ -68,12 +69,12 @@ class FirebaseServices {
             ));
       }
 
-      FirebaseDynamicLinks.instance.onLink(
+      /* FirebaseDynamicLinks.instance.onLink(
           onSuccess: (PendingDynamicLinkData? dynamicLink) async {
         return Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Text('') //RenderPostDynamic(postId: id)
             ));
-      });
+      });*/
     } catch (e) {
       print(e.toString());
     }

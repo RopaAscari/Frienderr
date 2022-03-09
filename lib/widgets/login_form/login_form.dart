@@ -118,8 +118,8 @@ class LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                             child: Text.rich(TextSpan(
                                 text: "Don't have an account. Register",
                                 style: TextStyle(
-                                  fontSize: ResponsiveFlutter.of(context)
-                                      .fontSize(1.5),
+                                  fontSize: const AdaptiveTextSize()
+                                      .getAdaptiveTextSize(context, 9.5),
                                 ),
                                 children: <InlineSpan>[
                                   TextSpan(
@@ -128,10 +128,10 @@ class LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
                                         ..onTap =
                                             () => navigateToRegisterScreen(),
                                       style: TextStyle(
-                                          fontSize:
-                                              ResponsiveFlutter.of(context)
-                                                  .fontSize(1.5),
-                                          color: HexColor('#FCA28E')))
+                                          fontSize: const AdaptiveTextSize()
+                                              .getAdaptiveTextSize(
+                                                  context, 9.5),
+                                          color: HexColor('#FFB126')))
                                 ]))),
                         socialVector()
                       ])),
@@ -141,7 +141,7 @@ class LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
   Widget appLogoVector() {
     final Widget appLogo = Align(
         alignment: Alignment.topCenter,
-        child: Image.asset(Constants.appLogo, width: 250));
+        child: Image.asset(Constants.appLogo, width: 200));
     return Hero(
         flightShuttleBuilder: (_, animation, __, ___, ____) {
           animation.addStatusListener((status) {
@@ -169,47 +169,41 @@ class LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
   Widget loginButton(BuildContext _, AuthenticationState state) {
     List<Color> colors = state is LoginLoading
         ? [Colors.grey[400]!, Colors.grey[300]!]
-        : [HexColor('#FA5B8E'), HexColor('#FCA28E')];
-
-    final width = MediaQuery.of(context).size.width;
-
+        : [HexColor('#E09810'), HexColor('#FEDA43')];
     return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.5),
-          gradient: LinearGradient(
-            begin: const Alignment(-0.95, 0.0),
-            end: const Alignment(1.0, 0.0),
-            colors: colors,
-            stops: const [0.0, 1.0],
-          ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        gradient: LinearGradient(
+          begin: const Alignment(-0.95, 0.0),
+          end: const Alignment(1.0, 0.0),
+          colors: colors,
+          stops: const [0.0, 1.0],
         ),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 60),
-            primary: Colors.transparent,
-            onSurface: Colors.transparent,
-            shadowColor: Colors.transparent,
-          ),
-          child: ConditionalRenderDelegate(
-              condition: state is LoginLoading,
-              renderWidget: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    backgroundColor: HexColor('#FA5B8E'),
-                    strokeWidth: 3,
-                  )),
-              fallbackWidget: Text(
-                'Login',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize:
-                        const AdaptiveTextSize().getAdaptiveTextSize(_, 11.5)),
-              )),
-          onPressed: () {
-            _onLoginButtonPressed(context);
-          },
-        ));
+      ),
+      child: MaterialButton(
+        minWidth: double.infinity,
+        height: 60,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: const StadiumBorder(),
+        child: ConditionalRenderDelegate(
+            condition: state is LoginLoading,
+            renderWidget: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  backgroundColor: HexColor('#FA5B8E'),
+                  strokeWidth: 3,
+                )),
+            fallbackWidget: Text(
+              'Login',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize:
+                      const AdaptiveTextSize().getAdaptiveTextSize(_, 11.5)),
+            )),
+        onPressed: () => _onLoginButtonPressed(context),
+      ),
+    );
   }
 
   Widget emailTextField(AuthenticationState state) {

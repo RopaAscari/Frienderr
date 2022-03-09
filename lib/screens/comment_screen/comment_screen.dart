@@ -147,7 +147,9 @@ class CommentScreenState extends State<Comment> {
           final username = state.comments[index].username;
           final profilePic = state.comments[index].profilePic;
           final dateCreated = state.comments[index].dateCreated;
-          return Slidable(
+
+          return Center();
+          /* return Slidable(
             actionPane: SlidableDrawerActionPane(),
             actionExtentRatio: 0.25,
             child: ListTile(
@@ -181,7 +183,7 @@ class CommentScreenState extends State<Comment> {
                 // onTap: () => _showSnackBar('Delete'),
               ),
             ],
-          );
+          );*/
         },
       );
     } else {

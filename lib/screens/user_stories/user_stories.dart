@@ -86,7 +86,7 @@ class UserStoryState extends State<ViewUserStory> {
           elevation: 0.0,
           leading: Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(TimeElapsed().elapsedTimeDynamic(
+              child: Text(TimeElapsed.elapsedTimeDynamic(
                   new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                       .toString()))),
           actions: <Widget>[]),

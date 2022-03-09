@@ -158,7 +158,7 @@ class ChatDashboardState extends State<ChatDashboard>
           maxHeight: double.infinity,
         ),
         decoration: BoxDecoration(
-            color: isDarkTheme ? HexColor('#1B1921') : HexColor('#F5F5F5'),
+            color: isDarkTheme ? Colors.black : HexColor('#F5F5F5'),
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10.0),
                 topLeft: Radius.circular(10.0))),
@@ -247,11 +247,11 @@ class ChatDashboardState extends State<ChatDashboard>
   }
 
   Widget timeElaspedWidget(int timeElapsed) {
-    return Text(
-      TimeElapsed().elapsedTimeDynamic(
-          new DateTime.fromMicrosecondsSinceEpoch(timeElapsed).toString()),
-      style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.25)),
-    );
+    return Text(''
+        //    TimeElapsed().elapsedTimeDynamic(
+        //        new DateTime.fromMicrosecondsSinceEpoch(timeElapsed).toString()),
+        //    style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.25)),
+        );
   }
 
   Widget searchChatWidget(bool isDarkTheme) {
@@ -428,10 +428,11 @@ class ChatDashboardState extends State<ChatDashboard>
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   color: isDarkTheme
-                                      ? HexColor('#1B1921')
+                                      ? Colors.black
                                       : HexColor(
                                           '#F5F5F5'), //HexColor('#121213'),
-                                  child: Slidable(
+                                  child:
+                                      Center() /*Slidable(
                                     actionPane: SlidableDrawerActionPane(),
                                     actionExtentRatio: 0.25,
                                     child: ListTile(
@@ -470,7 +471,8 @@ class ChatDashboardState extends State<ChatDashboard>
                                         // onTap: () => _showSnackBar('Delete'),
                                       ),
                                     ],
-                                  )),
+                                  )*/
+                                  ),
                             ]));
                       },
                     ));

@@ -731,7 +731,8 @@ class AccountState extends State<Account>
   }
 
   Widget postGridWidget(dynamic user) {
-    return new StaggeredGridView.countBuilder(
+    return Center();
+    /*return new StaggeredGridView.countBuilder(
       crossAxisCount: 4,
       shrinkWrap: true,
       primary: true,
@@ -802,6 +803,6 @@ class AccountState extends State<Account>
       staggeredTileBuilder: (int index) => new StaggeredTile.count(2, 2),
       mainAxisSpacing: 10.0,
       crossAxisSpacing: 10.0,
-    );
+    );*/
   }
 }

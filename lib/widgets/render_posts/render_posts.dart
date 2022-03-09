@@ -265,6 +265,31 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     final postId = items[index]['id'];
     final shareCount = items[index]['shares'];
     final commentCount = items[index]['commentCount'];
+    final dateCreated = items[index]['dateCreated'];
+    final theme =
+        BlocProvider.of<ThemeBloc>(context, listen: false).state.theme;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(children: [
+          likeWidget(),
+          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.chat_bubble)),
+          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.share))
+        ]),
+        Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+                '${TimeElapsed.elapsedTimeDynamic(new DateTime.fromMicrosecondsSinceEpoch(dateCreated).toString())}',
+                style: TextStyle(
+                    fontSize: ResponsiveFlutter.of(context).fontSize(1.35))))
+      ],
+    );
+  }
+
+  /*Widget interactionHelper() {
+    final postId = items[index]['id'];
+    final shareCount = items[index]['shares'];
+    final commentCount = items[index]['commentCount'];
 
     final theme =
         BlocProvider.of<ThemeBloc>(context, listen: false).state.theme;
@@ -308,14 +333,14 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                                 fontSize: ResponsiveFlutter.of(context)
                                     .fontSize(1.3)))
                       ]))
-                ])));
+               ])));
   }
-
+*/
   Widget postDetailsWidget() {
     final postId = items[index]['id'];
     final caption = items[index]['caption'];
     final shareCount = items[index]['shares'];
-    final dateCreated = items[index]['dateCreated'];
+
     final commentCount = items[index]['commentCount'];
 
     final itemCount = items[index]['content'].length;
@@ -323,10 +348,9 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
       child: Container(
           width: double.infinity,
           // height: auto,
-          padding: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(8))),
+          padding: const EdgeInsets.only(bottom: 5),
+          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+          // borderRadius: BorderRadius.vertical(bottom: Radius.circular(8))),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,22 +368,13 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                 Padding(
                     padding: EdgeInsets.all(10),
                     child: Container(
-                        height: 35,
+                        height: 15,
                         child: Text(caption,
                             //   softWrap: false,
                             overflow: TextOverflow.fade,
                             style: TextStyle(
                                 fontSize: ResponsiveFlutter.of(context)
                                     .fontSize(1.3))))),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                        TimeElapsed().elapsedTimeDynamic(
-                            new DateTime.fromMicrosecondsSinceEpoch(dateCreated)
-                                .toString()),
-                        style: TextStyle(
-                            fontSize:
-                                ResponsiveFlutter.of(context).fontSize(1.35)))),
               ])),
     );
   }
@@ -402,11 +417,14 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   Widget postHeaderWidget() {
+    final dateCreated = items[index]['dateCreated'];
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          avatarWidget(),
+          Row(children: [
+            avatarWidget(),
+          ]),
           Align(
               alignment: Alignment.centerRight,
               child: IconButton(
@@ -445,7 +463,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
 
   Widget likeWidget() {
     return Padding(
-        padding: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.only(right: 5, left: 8),
         child: LikeButton(
           size: 30,
           circleColor:
@@ -455,14 +473,15 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
             dotSecondaryColor: Color(0xff0099cc),
           ),
           likeBuilder: (bool isLiked) {
-            return Icon(
-              Icons.favorite,
-              color: isPostLiked //||
-                  // (items[index]['userLikes'].contains(userState.user.id))
-                  ? Colors.red
-                  : Colors.grey,
-              size: 30,
-            );
+            return isPostLiked
+                ? Icon(
+                    Icons.favorite,
+                    color: //||
+                        // (items[index]['userLikes'].contains(userState.user.id))
+                        Colors.red,
+                    size: 30,
+                  )
+                : Icon(CupertinoIcons.heart, size: 30);
           },
           likeCount: postCount,
           countBuilder: (int count, bool isLiked, String text) {

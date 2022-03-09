@@ -356,7 +356,7 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                 Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                        TimeElapsed().elapsedTimeDynamic(
+                        TimeElapsed.elapsedTimeDynamic(
                             new DateTime.fromMicrosecondsSinceEpoch(dateCreated)
                                 .toString()),
                         style: TextStyle(

@@ -52,7 +52,7 @@ class AssetThumbnailState extends State<AssetThumbnail> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<Uint8List>(
-      future: asset.thumbData as Future<Uint8List>,
+      future: asset as Future<Uint8List>,
       builder: (_, snapshot) {
         final bytes = snapshot.data;
         // If we have no data, display a spinner

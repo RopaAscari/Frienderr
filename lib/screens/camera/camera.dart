@@ -73,8 +73,8 @@ class CameraScreenState extends State<CameraScreen> {
         currentTimelineIndex == Constants.mediaIndexes[MediaType.Posts]
             ? 'Post'
             : 'Story';
-    final permitted = await PhotoManager.requestPermission();
-    if (!permitted) return;
+    // final permitted = await PhotoManager.requestPermission();
+    // if (!permitted) return;
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => Gallery(mediaAction: mediaAction)),
