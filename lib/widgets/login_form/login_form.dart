@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frienderr/navigation/tab-navigation.dart';
 import 'package:frienderr/services/services.dart';
 import 'package:frienderr/widgets/util/helpers.dart';
 import 'package:frienderr/blocs/authenticate_bloc.dart';
@@ -76,6 +77,16 @@ class LoginFormState extends State<LoginForm> with TickerProviderStateMixin {
         ) {
           if (state is AuthenticationFailure) {
             //_controller.reset();
+          }
+
+          if(state is LoginSuccess){
+                 Navigator.pushAndRemoveUntil(
+          context,
+          transition.PageTransition(
+              child: MainTab(),
+              type: transition.PageTransitionType.slideInLeft),
+          (Route<dynamic> route) => false,
+        );
           }
         },
         builder: (

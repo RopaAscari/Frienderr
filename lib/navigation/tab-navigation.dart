@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frienderr/widgets/blur/blur.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/elusive_icons.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/services/services.dart';
 import 'package:frienderr/screens/chat/chat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/screens/camera/camera.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
@@ -118,7 +120,8 @@ class MyTabsState extends State<MainTab>
     }
   }
 
-  List<Widget> buildScreens(UserModel user) {
+  List<Widget> buildScreens() {
+    User? user = FirebaseAuth.instance.currentUser;
     return [
       Timeline(),
       ChatDashboard(),
@@ -127,7 +130,7 @@ class MyTabsState extends State<MainTab>
       FindFriends(),
       Account(
         isProfileOwnerViewing: true,
-        profileUserId: user.id,
+        profileUserId: user?.uid as String,
       ),
     ];
   }
@@ -141,8 +144,8 @@ class MyTabsState extends State<MainTab>
 
   @override
   Widget build(BuildContext context) {
-    final UserModel user =
-        BlocProvider.of<UserBloc>(context, listen: true).state.user;
+  //  final UserModel user =
+   //     BlocProvider.of<UserBloc>(context, listen: true).state.user;
     final bool isDarkTheme =
         BlocProvider.of<ThemeBloc>(context).state.theme == Constants.darkTheme;
 
@@ -150,13 +153,13 @@ class MyTabsState extends State<MainTab>
         body: PageView(
           controller: _pageController,
           physics: NeverScrollableScrollPhysics(),
-          children: buildScreens(user),
+          children: buildScreens(),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                  color: Colors.grey[700]!, spreadRadius: 0.1, blurRadius: 0.1),
+                  color: Colors.black!, spreadRadius: 0.1, blurRadius: 0.1),
             ],
           ),
           child: BottomNavigationBar(
@@ -164,7 +167,7 @@ class MyTabsState extends State<MainTab>
               elevation: 10,
               enableFeedback: false,
               backgroundColor:
-                  isDarkTheme ? Color.fromRGBO(0, 0, 0, 0.85) : Colors.white,
+                  isDarkTheme ? Colors.black.withOpacity(0.5) : Colors.white,
               type: BottomNavigationBarType.fixed,
               items: buildItems(isDarkTheme),
               currentIndex: _selectedIndex,

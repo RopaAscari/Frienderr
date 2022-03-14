@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/screens/live/live.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/screens/camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -43,7 +44,7 @@ class TimelineState extends State<Timeline>
   final CollectionReference stories =
       FirebaseFirestore.instance.collection('stories');
   late UserState userState = context.read<UserBloc>().state;
-
+User? user = FirebaseAuth.instance.currentUser;
   List<QueryDocumentSnapshot<Map<String, dynamic>>> posts = [];
   @override
   bool get wantKeepAlive => true;
@@ -254,7 +255,7 @@ class TimelineState extends State<Timeline>
                                       items: posts,
                                       index: index,
                                       isPostOwner:
-                                          postUserId == userState.user.id,
+                                          postUserId == user?.uid,
                                       shoudlPlayParent: index == index)),
                               Container(
                                   height: 200,
@@ -289,7 +290,7 @@ class TimelineState extends State<Timeline>
                               child: RenderPost(
                                   items: posts,
                                   index: index,
-                                  isPostOwner: postUserId == userState.user.id,
+                                  isPostOwner: postUserId == user?.uid,
                                   shoudlPlayParent: index == index));
                         },
                       )
@@ -323,7 +324,7 @@ class TimelineState extends State<Timeline>
                                       items: posts,
                                       index: index,
                                       isPostOwner:
-                                          postUserId == userState.user.id,
+                                          postUserId == user?.uid,
                                       shoudlPlayParent: index == index))
                             ]);
                           }
@@ -338,7 +339,7 @@ class TimelineState extends State<Timeline>
                                       items: posts,
                                       index: index,
                                       isPostOwner:
-                                          postUserId == userState.user.id,
+                                          postUserId == user?.uid,
                                       shoudlPlayParent: index == index)),
                               Container(
                                   height: 200,
@@ -373,7 +374,7 @@ class TimelineState extends State<Timeline>
                               child: RenderPost(
                                   items: posts,
                                   index: index,
-                                  isPostOwner: postUserId == userState.user.id,
+                                  isPostOwner: postUserId == user?.uid,
                                   shoudlPlayParent: index == index));
                         },
                       )
@@ -425,7 +426,7 @@ class TimelineState extends State<Timeline>
                           child: RenderPost(
                               items: posts,
                               index: index,
-                              isPostOwner: postUserId == userState.user.id,
+                              isPostOwner: postUserId == user?.uid,
                               shoudlPlayParent: index == index))
                     ]);
                   }
@@ -438,7 +439,7 @@ class TimelineState extends State<Timeline>
                           child: RenderPost(
                               items: posts,
                               index: index,
-                              isPostOwner: postUserId == userState.user.id,
+                              isPostOwner: postUserId == user?.uid,
                               shoudlPlayParent: index == index)),
                       Container(
                           height: 200,
@@ -470,7 +471,7 @@ class TimelineState extends State<Timeline>
                       child: RenderPost(
                           items: posts,
                           index: index,
-                          isPostOwner: postUserId == userState.user.id,
+                          isPostOwner: postUserId == user?.uid,
                           shoudlPlayParent: index == index));
                 },
               )
@@ -483,10 +484,11 @@ class TimelineState extends State<Timeline>
   }
 
   Widget renderStories() {
+    User? user = FirebaseAuth.instance.currentUser;
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('stories')
-            .where('id', isNotEqualTo: userState.user.id)
+            .where('id', isNotEqualTo: user?.uid)
             .orderBy('id', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
@@ -520,7 +522,7 @@ class TimelineState extends State<Timeline>
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('stories')
-            .doc(userState.user.id)
+            .doc(user?.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -594,7 +596,7 @@ class TimelineState extends State<Timeline>
     final username = story['user']['username'];
     final media = story['content'][0]['media'];
     final profilePic = story['user']['profilePic'];
-    final isStoryOwner = storyUserId == userState.user.id;
+    final isStoryOwner = storyUserId == user?.uid;
 
     return GestureDetector(
         child: Padding(

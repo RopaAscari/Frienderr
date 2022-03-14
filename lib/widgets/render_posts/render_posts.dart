@@ -22,6 +22,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/screens/account/account.dart';
 //import 'package:frienderr/screens/account/account.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/widgets/image_screen/image_screen.dart';
@@ -62,12 +63,14 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   late final UserState userState = context.read<UserBloc>().state;
   final CollectionReference posts =
       FirebaseFirestore.instance.collection('posts');
+      User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
     setState(() {
       postCount = items[index]['likes'];
-      isPostLiked = (items[index]['userLikes'].contains(userState.user.id));
+      
+      isPostLiked = (items[index]['userLikes'].contains(user?.uid));
     });
     _controller = AnimationController(
         duration: const Duration(milliseconds: 700), vsync: this);
@@ -226,11 +229,11 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
             direction: Axis.vertical,
             children: <Widget>[
               postHeaderWidget(),
-              Stack(alignment: Alignment.center, children: [
+            //  Stack(alignment: Alignment.center, children: [
                 renderMediaWidget(),
-                Align(
-                    alignment: Alignment.center, child: likeAnimationWidget()),
-              ]),
+             //   Align(
+             //       alignment: Alignment.center, child: likeAnimationWidget()),
+             // ]),
               postDetailsWidget(),
               interactionHelper()
             ],
@@ -389,7 +392,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                 .primaryColor, // HexColor('#E9E9E9'), //Colors.black,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8), topRight: Radius.circular(8))),
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * 0.5,
         child: Flex(direction: Axis.vertical, children: [
           Expanded(
               child: CarouselSlider.builder(

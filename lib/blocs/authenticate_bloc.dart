@@ -111,6 +111,7 @@ class AuthenticationBloc
     on<LoginButtonPressed>((event, emit) async {
       try {
         emit(LoginLoading());
+        
         final response = await authRepository.authenticateUser(
           email: event.email,
           password: event.password,
@@ -120,17 +121,6 @@ class AuthenticationBloc
           emit(AuthenticationFailure(error: response.error));
           return;
         }
-
-        BlocProvider.of<UserBloc>(event.context, listen: false)
-            .add(SetUser(user: response.user));
-
-        Navigator.pushAndRemoveUntil(
-          event.context,
-          transition.PageTransition(
-              child: MainTab(),
-              type: transition.PageTransitionType.slideInLeft),
-          (Route<dynamic> route) => false,
-        );
 
         emit(LoginSuccess());
       } catch (e) {}

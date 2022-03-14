@@ -22,6 +22,7 @@ dev_dependencies:
   shimmer: ^2.0.0
   equatable: ^2.0.3 
   jaguar_jwt: ^3.0.0
+  blur_bottom_bar: ^1.0.3
   flutter_bloc: ^8.0.1
   json_annotation: any
   hydrated_bloc: ^8.0.0
