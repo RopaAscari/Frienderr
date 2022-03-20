@@ -1,8 +1,8 @@
 // @dart=2.9
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:frienderr/handler.dart';
 import 'package:flutter/foundation.dart';
+import 'package:frienderr/handler-delegate.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -26,7 +26,7 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   HydratedBlocOverrides.runZoned(
-    () => runApp(Handler(userRepository: UserRepository())),
+    () => runApp(HandlerDelegate()),
     storage: storage,
     blocObserver: AppBlocObserver(),
   );

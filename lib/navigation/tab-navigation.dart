@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frienderr/widgets/blur/blur.dart';
+import 'package:frienderr/screens/snap_feed/snap_feed.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/elusive_icons.dart';
@@ -10,18 +10,17 @@ import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/services/services.dart';
 import 'package:frienderr/screens/chat/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/screens/camera/camera.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:frienderr/models/user/user_model.dart';
 import 'package:frienderr/screens/account/account.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/screens/timeline/timeline.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:frienderr/widgets/keep_alive/keep_alive.dart';
 import 'package:frienderr/screens/find_friends/find_friends.dart';
 import 'package:frienderr/screens/notifications/notifications.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MainTab extends StatefulWidget {
@@ -43,11 +42,19 @@ class MyTabsState extends State<MainTab>
     return [
       BottomNavigationBarItem(
         label: '',
-        activeIcon:
-            Icon(MdiIcons.homeExportOutline, color: Colors.blue, size: 24),
+        activeIcon: Icon(Icons.auto_awesome_mosaic_outlined,
+            color: Colors.blue, size: 24),
         backgroundColor: Colors.white,
         icon: const Opacity(
-            opacity: 0.4, child: Icon(MdiIcons.homeExportOutline, size: 24)),
+            opacity: 0.4,
+            child: Icon(Icons.auto_awesome_mosaic_outlined, size: 24)),
+      ),
+      BottomNavigationBarItem(
+        label: '',
+        backgroundColor: Colors.white,
+        icon: const Opacity(
+            opacity: 0.4, child: Icon(CupertinoIcons.play, size: 28)),
+        activeIcon: Icon(CupertinoIcons.play, color: Colors.purple, size: 28),
       ),
       BottomNavigationBarItem(
         label: '',
@@ -62,12 +69,6 @@ class MyTabsState extends State<MainTab>
         icon: const Opacity(
             opacity: 0.4, child: Icon(CupertinoIcons.bell, size: 25)),
         activeIcon: Icon(CupertinoIcons.bell, color: Colors.orange, size: 25),
-      ),
-      BottomNavigationBarItem(
-        label: '',
-        backgroundColor: Colors.white,
-        icon: const Opacity(opacity: 0.4, child: Icon(CupertinoIcons.camera)),
-        activeIcon: Icon(CupertinoIcons.camera, color: Colors.purple),
       ),
       BottomNavigationBarItem(
         label: '',
@@ -99,34 +100,15 @@ class MyTabsState extends State<MainTab>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final String userId =
-        BlocProvider.of<UserBloc>(context, listen: false).state.user.id;
-    switch (state) {
-      case AppLifecycleState.resumed:
-        final bool isOnline = true;
-        FirebaseServices().manageUserPresence(userId, isOnline);
-        break;
-      case AppLifecycleState.inactive:
-        final bool isOnline = false;
-        FirebaseServices().manageUserPresence(userId, isOnline);
-        break;
-      case AppLifecycleState.paused:
-        final bool isOnline = false;
-        FirebaseServices().manageUserPresence(userId, isOnline);
-        break;
-      case AppLifecycleState.detached:
-        break;
-    }
-  }
+  void didChangeAppLifecycleState(AppLifecycleState state) {}
 
   List<Widget> buildScreens() {
     User? user = FirebaseAuth.instance.currentUser;
     return [
       Timeline(),
+      SnapFeed(),
       ChatDashboard(),
       Notifications(),
-      CameraScreen(),
       FindFriends(),
       Account(
         isProfileOwnerViewing: true,
@@ -144,8 +126,8 @@ class MyTabsState extends State<MainTab>
 
   @override
   Widget build(BuildContext context) {
-  //  final UserModel user =
-   //     BlocProvider.of<UserBloc>(context, listen: true).state.user;
+    //  final UserModel user =
+    //     BlocProvider.of<UserBloc>(context, listen: true).state.user;
     final bool isDarkTheme =
         BlocProvider.of<ThemeBloc>(context).state.theme == Constants.darkTheme;
 
@@ -159,7 +141,7 @@ class MyTabsState extends State<MainTab>
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                  color: Colors.black!, spreadRadius: 0.1, blurRadius: 0.1),
+                  color: Colors.black, spreadRadius: 0.1, blurRadius: 0.1),
             ],
           ),
           child: BottomNavigationBar(

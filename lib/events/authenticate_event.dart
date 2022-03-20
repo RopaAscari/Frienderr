@@ -26,17 +26,14 @@ class LoggedOut extends AuthenticationEvent {
 }
 
 class LoginButtonPressed extends AuthenticationEvent {
-  final BuildContext context;
   final String email;
   final String password;
 
   LoginButtonPressed({
-    required this.context,
     required this.email,
     required this.password,
   });
 
-  @override
   List<Object> get props => [email, password];
 
   @override

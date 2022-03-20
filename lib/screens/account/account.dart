@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:frienderr/blocs/authenticate_bloc.dart';
 import 'package:frienderr/screens/under_construction/under_construction.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +30,7 @@ import 'package:frienderr/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/screens/login/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/widgets/render_posts/render_posts.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -176,7 +178,8 @@ class AccountState extends State<Account>
   @override
   bool get wantKeepAlive => true;
 
-  late UserState userState;
+  User? user = FirebaseAuth.instance.currentUser;
+
   List<dynamic> userStories = [];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -186,19 +189,17 @@ class AccountState extends State<Account>
   bool get isProfileOwnerViewing => widget.isProfileOwnerViewing;
   final CollectionReference posts =
       FirebaseFirestore.instance.collection('posts');
-  final CollectionReference user =
+  final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
   @override
   void initState() {
-    userState = Provider.of<UserBloc>(context, listen: false).state;
     fetchStories(profileUserId);
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    userState = Provider.of<UserBloc>(context, listen: true).state;
     super.didChangeDependencies();
   }
 
@@ -209,7 +210,10 @@ class AccountState extends State<Account>
     //Future.delayed(Duration(milliseconds: 500));
     Navigator.pushAndRemoveUntil(
       highLevelContext,
-      MaterialPageRoute(builder: (context) => Login()),
+      MaterialPageRoute(
+          builder: (context) => Login(
+              userBloc: UserBloc(),
+              authenticationBloc: new AuthenticationBloc())),
       (Route<dynamic> route) => false,
     );
   }
@@ -264,20 +268,20 @@ class AccountState extends State<Account>
   }
 
   fetchUser(String id) async {
-    final response = await user.doc(id).get();
+    final response = await userCollection.doc(id).get();
     //  print('RES ${response['username']}');
     setState(() {
-      userState = response.data() as dynamic;
+      // userState = response.data() as dynamic;
     });
   }
 
   followUser(profileUser, appUser) {
     try {
-      user.doc(userState.user.id).update({
+      userCollection.doc(user!.uid).update({
         'following': FieldValue.arrayUnion([profileUserId])
       }).then((value) => {
-            user.doc(profileUserId).update({
-              'followers': FieldValue.arrayUnion([userState.user.id])
+            userCollection.doc(profileUserId).update({
+              'followers': FieldValue.arrayUnion([user!.uid])
             })
           });
       final notification = new FollowNotificationModel(
@@ -295,11 +299,11 @@ class AccountState extends State<Account>
 
   unFollowUser() {
     try {
-      user.doc(userState.user.id).update({
+      userCollection.doc(user!.uid).update({
         'following': FieldValue.arrayRemove([profileUserId])
       }).then((value) => {
-            user.doc(profileUserId).update({
-              'followers': FieldValue.arrayRemove([userState.user.id])
+            userCollection.doc(profileUserId).update({
+              'followers': FieldValue.arrayRemove([user!.uid])
             })
           });
     } catch (err) {}
@@ -575,7 +579,7 @@ class AccountState extends State<Account>
   }
 
   Widget followBottomWidget(user, appUser) {
-    bool isFollowing = user['followers'].contains(userState.user.id);
+    bool isFollowing = user['followers'].contains(user.id);
 
     return Align(
       alignment: Alignment.centerLeft,

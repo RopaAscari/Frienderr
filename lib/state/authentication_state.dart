@@ -1,13 +1,18 @@
 import 'package:equatable/equatable.dart';
+import 'package:frienderr/models/user/user_model.dart';
 
 class AuthenticationState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class LoginLoading extends AuthenticationState {}
+class AuthenticationSuccess extends AuthenticationState {
+  final UserModel user;
 
-class LoginSuccess extends AuthenticationState {}
+  AuthenticationSuccess({required this.user});
+  @override
+  List<Object> get props => [];
+}
 
 class AuthenticationLoading extends AuthenticationState {}
 
@@ -24,6 +29,22 @@ class RegisterUsernameSuccess extends AuthenticationState {}
 class RegisterUsernameLoading extends AuthenticationState {}
 
 class RegisterUserEventLoading extends AuthenticationState {}
+
+class RegisterUserSuccess extends AuthenticationState {
+  final UserModel user;
+
+  RegisterUserSuccess({required this.user});
+  @override
+  List<Object> get props => [];
+}
+
+class RegisterUserFailure extends AuthenticationState {
+  final String error;
+
+  RegisterUserFailure({required this.error});
+  @override
+  List<Object> get props => [error];
+}
 
 class AuthenticationUninitialized extends AuthenticationState {}
 

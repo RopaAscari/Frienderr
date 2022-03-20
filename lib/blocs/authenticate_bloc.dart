@@ -8,12 +8,13 @@ import 'package:frienderr/models/user/user_model.dart';
 import 'package:frienderr/events/authenticate_event.dart';
 import 'package:frienderr/navigation/tab-navigation.dart';
 import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/screens/register/choose_theme/choose_theme.dart';
+import 'package:frienderr/screens/register/register_username/register_username.dart';
 import 'package:frienderr/state/authentication_state.dart';
 import 'package:frienderr/repositories/auth_repository.dart';
-import 'package:frienderr/screens/register/chooseTheme/chooseTheme.dart';
+
 import 'package:flutter_page_transition/flutter_page_transition.dart'
     as transition;
-import 'package:frienderr/screens/register/registerUsername/registerUsername.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -60,16 +61,7 @@ class AuthenticationBloc
         return;
       }
 
-      BlocProvider.of<UserBloc>(event.context, listen: false)
-          .add(SetUser(user: response.user));
-
-      Navigator.pushAndRemoveUntil(
-        event.context,
-        transition.PageTransition(
-            child: RegisterUsername(userId: response.user.id),
-            type: transition.PageTransitionType.slideInLeft),
-        (Route<dynamic> route) => false,
-      );
+      emit(RegisterUserSuccess(user: response.user));
     });
 
     on<RegisterUsernameEvent>((event, emit) async {
@@ -100,18 +92,13 @@ class AuthenticationBloc
         bitmapImage: '${Constants.defaultBitmapImage}',
       )));
 
-      Navigator.push(
-          event.context,
-          transition.PageTransition(
-              child: ChooseTheme(),
-              type: transition.PageTransitionType.slideInLeft));
       emit(RegisterUsernameSuccess());
     });
 
     on<LoginButtonPressed>((event, emit) async {
       try {
-        emit(LoginLoading());
-        
+        emit(AuthenticationLoading());
+
         final response = await authRepository.authenticateUser(
           email: event.email,
           password: event.password,
@@ -122,7 +109,7 @@ class AuthenticationBloc
           return;
         }
 
-        emit(LoginSuccess());
+        emit(AuthenticationSuccess(user: response.user));
       } catch (e) {}
     });
   }

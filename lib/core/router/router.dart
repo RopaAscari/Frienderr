@@ -14,5 +14,5 @@ dynamic getEPage(PageConfig config) {
 }
 
 Map<String, Widget Function(Map<String, dynamic>)> _routes = {
-  '/login': (args) => Login(),
+  // '/login': (args) => Login(),
 };

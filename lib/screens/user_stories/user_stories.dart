@@ -79,39 +79,47 @@ class UserStoryState extends State<ViewUserStory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          leading: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(TimeElapsed.elapsedTimeDynamic(
-                  new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
-                      .toString()))),
-          actions: <Widget>[]),
-      body: areStoriesReady
-          ? StoryView(
-              storyItems: storyItems,
-              onStoryShow: (s) {
-                // print("Completed a cycle ${s.duration}");
-              },
-              onComplete: () {
-                //   print("Completed a cycle");
-                Navigator.pop(context);
-              },
-              onVerticalSwipeComplete: (direction) {
-                if (direction == Direction.down) {
-                  Navigator.pop(context);
-                } else {
-                  isOwnerViewing ? storySlideUpAction() : null;
-                }
-              },
-              progressPosition: ProgressPosition.top,
-              repeat: false,
-              controller: storyController,
-            )
-          : CircularProgressIndicator(),
-    );
+    return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              leading: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(TimeElapsed.elapsedTimeDynamic(
+                      new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
+                          .toString()))),
+              actions: <Widget>[]),
+          body: Image.network(stories[0]['media'],
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height)
+
+          /*areStoriesReady
+              ? StoryView(
+                  storyItems: storyItems,
+                  onStoryShow: (s) {
+                    // print("Completed a cycle ${s.duration}");
+                  },
+                  onComplete: () {
+                    //   print("Completed a cycle");
+                    Navigator.pop(context);
+                  },
+                  onVerticalSwipeComplete: (direction) {
+                    if (direction == Direction.down) {
+                      Navigator.pop(context);
+                    } else {
+                      isOwnerViewing ? storySlideUpAction() : null;
+                    }
+                  },
+                  progressPosition: ProgressPosition.top,
+                  repeat: false,
+                  controller: storyController,
+                )
+              : CircularProgressIndicator()*/
+          ,
+        ));
   }
 }

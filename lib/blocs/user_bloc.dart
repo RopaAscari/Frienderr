@@ -8,7 +8,11 @@ import 'package:frienderr/repositories/user_repository.dart';
 
 class UserBloc extends HydratedBloc<UserEvent, UserState> {
   final UserRepository userRepository = new UserRepository();
-  UserBloc() : super(UserState({}));
+  UserBloc() : super(UserState({})) {
+    on<SetUser>((event, emit) async {
+      emit(UserLoaded(event.user));
+    });
+  }
 
   UserState get initialState {
     return UserState({});
@@ -30,15 +34,6 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       return state.user.toJson();
     } else {
       return null as Map<String, dynamic>;
-    }
-  }
-
-  @override
-  Stream<UserState> mapEventToState(
-    UserEvent event,
-  ) async* {
-    if (event is SetUser) {
-      yield UserLoaded(event.user);
     }
   }
 }

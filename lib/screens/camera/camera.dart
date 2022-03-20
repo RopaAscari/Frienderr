@@ -9,9 +9,10 @@ import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frienderr/core/constants/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:frienderr/widgets/gallery/gallery.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/widgets/display_media/display_media.dart';
 import 'package:frienderr/widgets/display_selected_stories/display_selected_stories.dart';
 

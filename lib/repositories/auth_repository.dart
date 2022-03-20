@@ -67,25 +67,16 @@ class AuthRepository {
           .where('id', isEqualTo: userCredential.user?.uid)
           .limit(1)
           .get();
-      final authUser = authenticatedUser.docs.toList()[0];
 
-      final user = new UserModel(
-          id: authUser['id'],
-          chats: authUser['chats'],
-          status: authUser['status'],
-          stories: authUser['stories'],
-          presence: authUser['presence'],
-          username: authUser['username'],
-          location: authUser['location'],
-          following: authUser['following'],
-          followers: authUser['followers'],
-          profilePic: authUser['profilePic'],
-          coverPhoto: authUser['coverPhoto'],
-          bitmapImage: authUser['bitmapImage'],
-          isLocationEnabled: authUser['isLocationEnabled']);
+      final QueryDocumentSnapshot<Object?> authUser =
+          authenticatedUser.docs.toList()[0];
+
+      final UserModel user =
+          UserModel.fromJson(authUser.data() as Map<String, dynamic>);
 
       return AuthResponse(user: user, hasError: false, error: null);
     } on FirebaseAuthException catch (e) {
+      print(e);
       return AuthResponse(user: null, hasError: true, error: Errors.login);
     }
   }
