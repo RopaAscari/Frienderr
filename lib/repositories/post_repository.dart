@@ -36,7 +36,7 @@ class PostRepository {
           postThumbnail: media,
           recipient: postUserId,
           senderUsername: senderUsername,
-          senderProfilePic: senderProfilePic,
+          senderProfilePic: senderProfilePic as String,
           dateCreated: DateTime.now().microsecondsSinceEpoch,
         );
 

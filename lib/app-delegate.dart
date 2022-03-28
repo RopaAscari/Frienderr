@@ -6,11 +6,8 @@ import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/screens/login/login.dart';
 import 'package:frienderr/screens/splash_screen.dart';
 import 'package:frienderr/core/constants/constants.dart';
-import 'package:frienderr/blocs/authenticate_bloc.dart';
-import 'package:frienderr/events/authenticate_event.dart';
 import 'package:frienderr/navigation/tab-navigation.dart';
-import 'package:frienderr/state/authentication_state.dart';
-import 'package:frienderr/screens/register/register_username/register_username.dart';
+import 'package:frienderr/blocs/authenticate/authenticate_bloc.dart';
 
 class AppDelegate extends StatefulWidget {
   final UserBloc userBloc;
@@ -36,7 +33,7 @@ class AppDelegateState extends State<AppDelegate> {
   @override
   void initState() {
     super.initState();
-    authenticationBloc.add(AppStarted());
+    authenticationBloc.add(AuthenticationEvent.initialize());
   }
 
   @override
@@ -45,14 +42,14 @@ class AppDelegateState extends State<AppDelegate> {
   }
 
   determineRoute(AuthenticationState authState) {
-    if (authState is AuthenticationAuthenticated) {
-      return MainTab();
-    } else if (authState is AuthenticationUsername) {
-      return Center(); // RegisterUsername(userId: authState.userId);
+    switch (authState.currentState) {
+      case AuthenticationStatus.Authenticated:
+        return MainTab();
+      default:
+        return Login(
+            userBloc: widget.userBloc,
+            authenticationBloc: widget.authenticationBloc);
     }
-    return Login(
-        userBloc: widget.userBloc,
-        authenticationBloc: widget.authenticationBloc);
   }
 
   determineTheme(String theme) {

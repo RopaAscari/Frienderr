@@ -349,9 +349,6 @@ class ChatDashboardState extends State<ChatDashboard>
             .collection('chats')
             .doc(userState.user.id)
             .collection('user_chats')
-            // .doc(metaData.chatRecipient.id)
-            //.collection('messages')
-            //.orderBy("createdAt")
             .snapshots(),
         builder: (context, snapshot) {
           List<DocumentSnapshot> items = snapshot.data?.docs ?? [];
@@ -431,26 +428,34 @@ class ChatDashboardState extends State<ChatDashboard>
                                       ? Colors.black
                                       : HexColor(
                                           '#F5F5F5'), //HexColor('#121213'),
-                                  child:
-                                      Center() /*Slidable(
-                                    actionPane: SlidableDrawerActionPane(),
-                                    actionExtentRatio: 0.25,
+                                  child: Slidable(
+                                    endActionPane: ActionPane(
+                                      motion: ScrollMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          spacing: 0,
+                                          flex: 1,
+                                          onPressed: (context) => null,
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.delete,
+                                          label: 'Delete',
+                                        ),
+                                      ],
+                                    ),
                                     child: ListTile(
                                         leading: CircleAvatar(
                                             radius: 20,
-                                            backgroundImage:
-                                                CachedNetworkImageProvider(
-                                                    displayPhoto)),
+                                            backgroundImage: CachedNetworkImageProvider(
+                                                displayPhoto)),
                                         subtitle: Text('$displayMessage',
                                             style: TextStyle(
-                                                fontSize:
-                                                    ResponsiveFlutter.of(context)
-                                                        .fontSize(1.25))),
+                                                fontSize: ResponsiveFlutter.of(context)
+                                                    .fontSize(1.25))),
                                         title: Text('$displayName',
                                             style: TextStyle(
-                                                fontSize:
-                                                    ResponsiveFlutter.of(context)
-                                                        .fontSize(1.54))),
+                                                fontSize: ResponsiveFlutter.of(context)
+                                                    .fontSize(1.54))),
                                         trailing: Container(
                                             margin:
                                                 const EdgeInsets.only(top: 15),
@@ -458,21 +463,8 @@ class ChatDashboardState extends State<ChatDashboard>
                                               timeElaspedWidget(timeElapsed),
                                               unReadCounterWidget(unread)
                                             ])),
-                                        onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => Messaging(metaData: chatMetadata)
-                                                // instantiateChatInstance(userState.user, )),
-                                                ))),
-                                    secondaryActions: <Widget>[
-                                      IconSlideAction(
-                                        caption: 'Delete',
-                                        color: Colors.red,
-                                        icon: Icons.delete,
-                                        // onTap: () => _showSnackBar('Delete'),
-                                      ),
-                                    ],
-                                  )*/
-                                  ),
+                                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Messaging(metaData: chatMetadata)))),
+                                  )),
                             ]));
                       },
                     ));

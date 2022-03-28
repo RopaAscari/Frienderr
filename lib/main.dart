@@ -28,6 +28,6 @@ Future<void> main() async {
   HydratedBlocOverrides.runZoned(
     () => runApp(HandlerDelegate()),
     storage: storage,
-    blocObserver: AppBlocObserver(),
+    // blocObserver: AppBlocObserver(),
   );
 }

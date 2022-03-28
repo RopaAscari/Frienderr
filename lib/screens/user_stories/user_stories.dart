@@ -93,33 +93,32 @@ class UserStoryState extends State<ViewUserStory> {
                       new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                           .toString()))),
               actions: <Widget>[]),
-          body: Image.network(stories[0]['media'],
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height)
+          body: //Image.network(stories[0]['media'],
+              // width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height)
 
-          /*areStoriesReady
-              ? StoryView(
-                  storyItems: storyItems,
-                  onStoryShow: (s) {
-                    // print("Completed a cycle ${s.duration}");
-                  },
-                  onComplete: () {
-                    //   print("Completed a cycle");
-                    Navigator.pop(context);
-                  },
-                  onVerticalSwipeComplete: (direction) {
-                    if (direction == Direction.down) {
-                      Navigator.pop(context);
-                    } else {
-                      isOwnerViewing ? storySlideUpAction() : null;
-                    }
-                  },
-                  progressPosition: ProgressPosition.top,
-                  repeat: false,
-                  controller: storyController,
-                )
-              : CircularProgressIndicator()*/
-          ,
+              areStoriesReady
+                  ? StoryView(
+                      storyItems: storyItems,
+                      onStoryShow: (s) {
+                        // print("Completed a cycle ${s.duration}");
+                      },
+                      onComplete: () {
+                        //   print("Completed a cycle");
+                        Navigator.pop(context);
+                      },
+                      onVerticalSwipeComplete: (direction) {
+                        if (direction == Direction.down) {
+                          Navigator.pop(context);
+                        } else {
+                          isOwnerViewing ? storySlideUpAction() : null;
+                        }
+                      },
+                      progressPosition: ProgressPosition.top,
+                      repeat: false,
+                      controller: storyController,
+                    )
+                  : CircularProgressIndicator(),
         ));
   }
 }

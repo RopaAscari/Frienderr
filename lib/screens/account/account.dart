@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:frienderr/blocs/authenticate_bloc.dart';
+import 'package:frienderr/blocs/authenticate/authenticate_bloc.dart';
 import 'package:frienderr/screens/under_construction/under_construction.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/cupertino.dart';
@@ -206,13 +206,14 @@ class AccountState extends State<Account>
   logOut(BuildContext actionSheetContext, BuildContext highLevelContext) async {
     Navigator.of(actionSheetContext).pop();
     //Future.delayed(Duration(milliseconds: 500));
-    AuthRepository().signOut();
+    //AuthRepository().signOut();
     //Future.delayed(Duration(milliseconds: 500));
     Navigator.pushAndRemoveUntil(
       highLevelContext,
       MaterialPageRoute(
           builder: (context) => Login(
               userBloc: UserBloc(),
+              shouldRenderUI: true,
               authenticationBloc: new AuthenticationBloc())),
       (Route<dynamic> route) => false,
     );
@@ -735,8 +736,7 @@ class AccountState extends State<Account>
   }
 
   Widget postGridWidget(dynamic user) {
-    return Center();
-    /*return new StaggeredGridView.countBuilder(
+    return new MasonryGridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,
       primary: true,
@@ -747,9 +747,11 @@ class AccountState extends State<Account>
             ? userStories[index]['content'][0]['thumbnail']
             : userStories[index]['content'][0]['media'];
 
-        //  print('thumnail account $thumbnail');
+        print(thumbnail);
 
-        return OpenContainer(
+        return Image.network(thumbnail);
+
+        /* OpenContainer(
             openElevation: 0,
             closedElevation: 0,
             closedColor: Colors.transparent,
@@ -762,51 +764,36 @@ class AccountState extends State<Account>
                 isPostOwner: true,
               );
             },
-            closedBuilder: (BuildContext context, VoidCallback openContainer) {
-              return CachedNetworkImage(
-                fit: BoxFit.cover,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[300]!,
-                        enabled: true,
-                        child: Container(
-                          width: 200,
-                          //height: 220,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          // width: MediaQuery.of(context).size.width,
-                        )),
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 200,
-
-                  // margin: const EdgeInsets.only(right: 40),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    color: Colors.redAccent,
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
-                  ),
-                ),
-                imageUrl: thumbnail,
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              );
-            });
-
-        /* return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ));
-          },
-          child: ,
-        );*/
+            closedBuilder: (BuildContext context, VoidCallback openContainer) {*/
+        return CachedNetworkImage(
+          fit: BoxFit.cover,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[300]!,
+                  enabled: true,
+                  child: Container(
+                    width: 200,
+                    //height: 220,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                  )),
+          imageBuilder: (context, imageProvider) => Container(
+            width: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              color: Colors.redAccent,
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            ),
+          ),
+          imageUrl: thumbnail,
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        );
+        //  });
       },
-      staggeredTileBuilder: (int index) => new StaggeredTile.count(2, 2),
-      mainAxisSpacing: 10.0,
-      crossAxisSpacing: 10.0,
-    );*/
+      mainAxisSpacing: 4,
+      crossAxisSpacing: 4,
+    );
   }
 }

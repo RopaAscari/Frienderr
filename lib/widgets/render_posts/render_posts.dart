@@ -63,13 +63,13 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   late final UserState userState = context.read<UserBloc>().state;
   final CollectionReference posts =
       FirebaseFirestore.instance.collection('posts');
-      User? user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
     setState(() {
       postCount = items[index]['likes'];
-      
+
       isPostLiked = (items[index]['userLikes'].contains(user?.uid));
     });
     _controller = AnimationController(
@@ -221,24 +221,22 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
 
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        child: SafeArea(
-            child: Scaffold(
-                body: Center(
-          child: Flex(
-            direction: Axis.vertical,
-            children: <Widget>[
-              postHeaderWidget(),
-            //  Stack(alignment: Alignment.center, children: [
-                renderMediaWidget(),
-             //   Align(
-             //       alignment: Alignment.center, child: likeAnimationWidget()),
-             // ]),
-              postDetailsWidget(),
-              interactionHelper()
-            ],
-          ),
-        ))));
+      ),
+      child: Column(
+        children: <Widget>[
+          postHeaderWidget(),
+          //  Stack(alignment: Alignment.center, children: [
+          renderMediaWidget(),
+          //   Align(
+          //       alignment: Alignment.center, child: likeAnimationWidget()),
+          // ]),
+          postDetailsWidget(),
+          interactionHelper()
+        ],
+      ),
+    );
   }
 
   Widget likeAnimationWidget() {
@@ -271,22 +269,33 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     final dateCreated = items[index]['dateCreated'];
     final theme =
         BlocProvider.of<ThemeBloc>(context, listen: false).state.theme;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(children: [
-          likeWidget(),
-          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.chat_bubble)),
-          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.share))
-        ]),
-        Padding(
-            padding: EdgeInsets.all(10),
-            child: Text(
-                '${TimeElapsed.elapsedTimeDynamic(new DateTime.fromMicrosecondsSinceEpoch(dateCreated).toString())}',
-                style: TextStyle(
-                    fontSize: ResponsiveFlutter.of(context).fontSize(1.35))))
-      ],
-    );
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              likeWidget(),
+              IconButton(
+                  onPressed: () {},
+                  color: Colors.grey[500],
+                  padding: EdgeInsets.zero,
+                  icon: Icon(CupertinoIcons.chat_bubble)),
+              IconButton(
+                  color: Colors.grey[500],
+                  onPressed: () {},
+                  padding: EdgeInsets.zero,
+                  icon: Icon(CupertinoIcons.share))
+            ]),
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                    '${TimeElapsed.elapsedTimeDynamic(new DateTime.fromMicrosecondsSinceEpoch(dateCreated).toString())}',
+                    style: TextStyle(
+                        fontSize:
+                            ResponsiveFlutter.of(context).fontSize(1.35))))
+          ],
+        ));
   }
 
   /*Widget interactionHelper() {
@@ -465,53 +474,53 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   Widget likeWidget() {
-    return Padding(
-        padding: const EdgeInsets.only(right: 5, left: 8),
-        child: LikeButton(
-          size: 30,
-          circleColor:
-              CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
-          bubblesColor: BubblesColor(
-            dotPrimaryColor: Color(0xff33b5e5),
-            dotSecondaryColor: Color(0xff0099cc),
-          ),
-          likeBuilder: (bool isLiked) {
-            return isPostLiked
-                ? Icon(
-                    Icons.favorite,
-                    color: //||
-                        // (items[index]['userLikes'].contains(userState.user.id))
-                        Colors.red,
-                    size: 30,
-                  )
-                : Icon(CupertinoIcons.heart, size: 30);
-          },
-          likeCount: postCount,
-          countBuilder: (int count, bool isLiked, String text) {
-            var color = isPostLiked //||
-                ? Colors.red
-                : Colors.grey;
-            Widget result;
-            if (count == 0) {
-              return null;
-            } else
-              result = Text(
-                text,
-                style: TextStyle(
-                    color: color,
-                    fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+    return LikeButton(
+      size: 30,
+      circleColor:
+          CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+      bubblesColor: BubblesColor(
+        dotPrimaryColor: Color(0xff33b5e5),
+        dotSecondaryColor: Color(0xff0099cc),
+      ),
+      likeBuilder: (bool isLiked) {
+        return isPostLiked
+            ? Icon(
+                Icons.favorite,
+                color: Colors.red,
+                size: 30,
+              )
+            : Icon(
+                CupertinoIcons.heart,
+                size: 30,
+                color: Colors.grey[500],
               );
-            return result;
-          } as Widget? Function(int?, bool, String)?,
-          onTap: (bool isLiked) async {
-            this.setState(() {
-              isPostLiked = !isPostLiked;
-              postCount = isPostLiked ? postCount + 1 : postCount - 1;
-            });
-            determineLikeAction();
-            return true;
-          },
-        ));
+      },
+      likeCount: postCount,
+      countBuilder: (int count, bool isLiked, String text) {
+        var color = isPostLiked //||
+            ? Colors.red
+            : Colors.grey;
+        Widget result;
+        if (count == 0) {
+          return null;
+        } else
+          result = Text(
+            text,
+            style: TextStyle(
+                color: color,
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.1)),
+          );
+        return result;
+      } as Widget? Function(int?, bool, String)?,
+      onTap: (bool isLiked) async {
+        this.setState(() {
+          isPostLiked = !isPostLiked;
+          postCount = isPostLiked ? postCount + 1 : postCount - 1;
+        });
+        determineLikeAction();
+        return true;
+      },
+    );
   }
 
   Widget mediaContainer(

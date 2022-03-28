@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:frienderr/app-delegate.dart';
 import 'package:frienderr/blocs/chat_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frienderr/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/services/services.dart';
-import 'package:frienderr/blocs/authenticate_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:frienderr/blocs/authenticate/authenticate_bloc.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:frienderr/state/authentication_state.dart';
 
 class HandlerDelegate extends StatefulWidget {
   HandlerDelegate({Key? key}) : super(key: key);
@@ -111,6 +111,8 @@ class HandlerDelegateState extends State<HandlerDelegate>
       BlocProvider<UserBloc>(create: (context) => UserBloc()),
       BlocProvider<ChatBloc>(create: (context) => ChatBloc()),
       BlocProvider<ThemeBloc>(create: (context) => ThemeBloc()),
+      BlocProvider<QuickBloc>(
+          create: (context) => QuickBloc()..add(QuickEvent.initialize())),
       BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc()),
     ];

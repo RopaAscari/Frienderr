@@ -21,16 +21,17 @@ dev_dependencies:
 
   path: ^1.8.0
   meta: ^1.3.0
+  
   shimmer: ^2.0.0
   equatable: ^2.0.3 
   jaguar_jwt: ^3.0.0
-  blur_bottom_bar: ^1.0.3
+  flutter_svg: ^1.0.3
   flutter_bloc: ^8.0.1
-  json_annotation: any
   hydrated_bloc: ^8.0.0
   firebase_auth: ^3.3.9
   firebase_core: ^1.13.1
   path_provider: ^2.0.2
+  blur_bottom_bar: ^1.0.3
   flutter_staggered_animations: ^1.0.0
 
   share: ^2.0.4
@@ -52,12 +53,12 @@ dev_dependencies:
   flutter_page_transition: ^0.1.0
   persistent_bottom_nav_bar: ^4.0.2
   material_design_icons_flutter: ^5.0.6595
-
+  badges: ^2.0.2
   story_view: ^0.13.1
   fluttericon: ^2.0.0
   image_picker: ^0.8.4+10
   photo_manager: ^2.0.1
-  video_player: ^2.1.10
+  video_player: ^2.3.0
   time_elapsed: ^0.2.4+2
   dots_indicator: ^2.0.0
   carousel_slider: ^4.0.0
@@ -67,17 +68,19 @@ dev_dependencies:
   inview_notifier_list: ^3.0.0
   cached_network_image: ^3.1.0
 
- 
   bloc: ^8.0.3
+  freezed: ^1.1.1
   provider: ^6.0.2
   location: ^4.2.0 
   animations: ^2.0.1
   dash_chat: ^1.1.16
+  geolocator: ^8.0.5 
   build_runner: ^2.0.4
-  geolocator: ^8.0.5
   media_gallery: ^0.1.5
   bottom_navy_bar: ^6.0.0
   pull_to_refresh: ^2.0.0
+  json_annotation: ^4.4.0
+  freezed_annotation: ^1.1.0
   google_maps_flutter: ^2.0.6
   flutter_cache_manager: ^3.1.2
   flutter_staggered_grid_view: ^0.6.1
@@ -96,6 +99,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
     - assets/map_styles/
 
   fonts:

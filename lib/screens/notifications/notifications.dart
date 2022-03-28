@@ -119,11 +119,8 @@ class NotificationScreenState extends State<Notifications>
     final timeElasped = notifications['dateCreated'];
     final senderUsername = notifications['senderUsername'];
     final senderProfilePic = notifications['senderProfilePic'];
-    return Center();
 
-    /*return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
+    return Slidable(
       child: ListTile(
           leading: GestureDetector(
               onTap: () => Navigator.push(
@@ -160,21 +157,27 @@ class NotificationScreenState extends State<Notifications>
                       onPressed: () => null,
                     )),
                 Text(
-                    TimeElapsed().elapsedTimeDynamic(
+                    TimeElapsed.elapsedTimeDynamic(
                         new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
                     style: TextStyle(
                         fontSize: ResponsiveFlutter.of(context).fontSize(1.3))),
               ])),
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          // onTap: () => _showSnackBar('Delete'),
-        ),
-      ],
-    );*/
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            spacing: 0,
+            flex: 1,
+            onPressed: (context) => null,
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+    );
   }
 
   Widget renderLikeNotification(QueryDocumentSnapshot<Object?> notifications) {
@@ -186,11 +189,7 @@ class NotificationScreenState extends State<Notifications>
     final senderUsername = notifications['senderUsername'];
     final senderProfilePic = notifications['senderProfilePic'];
 
-    return Center();
-
-    /*return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
+    return Slidable(
       child: ListTile(
           leading: GestureDetector(
               onTap: () => Navigator.push(
@@ -233,21 +232,27 @@ class NotificationScreenState extends State<Notifications>
                   ),
                 ),
                 Text(
-                    TimeElapsed().elapsedTimeDynamic(
+                    TimeElapsed.elapsedTimeDynamic(
                         new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
                     style: TextStyle(
                         fontSize: ResponsiveFlutter.of(context).fontSize(1.3)))
               ])),
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          // onTap: () => _showSnackBar('Delete'),
-        ),
-      ],
-    );*/
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            spacing: 0,
+            flex: 1,
+            onPressed: (context) => null,
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+    );
   }
 
   Widget renderCommentNotification(
@@ -260,10 +265,7 @@ class NotificationScreenState extends State<Notifications>
     final senderUsername = notifications['senderUsername'];
     final senderProfilePic = notifications['senderProfilePic'];
 
-    return Center();
-    /*  return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
+    return Slidable(
       child: ListTile(
           leading: GestureDetector(
               onTap: () => Navigator.push(
@@ -304,20 +306,26 @@ class NotificationScreenState extends State<Notifications>
                           borderRadius: BorderRadius.circular(5)),
                     )),
                 Text(
-                    TimeElapsed().elapsedTimeDynamic(
+                    TimeElapsed.elapsedTimeDynamic(
                         new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
                     style: TextStyle(
                         fontSize: ResponsiveFlutter.of(context).fontSize(1.3)))
               ])),
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          // onTap: () => _showSnackBar('Delete'),
-        ),
-      ],
-    );*/
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            spacing: 0,
+            flex: 1,
+            onPressed: (context) => null,
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+    );
   }
 }

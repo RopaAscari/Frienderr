@@ -1,27 +1,27 @@
 import 'package:bloc/bloc.dart';
+import 'package:frienderr/models/user/user_model.dart';
 import 'package:frienderr/state/followers_state.dart';
 import 'package:frienderr/events/followers_event.dart';
 import 'package:frienderr/repositories/user_repository.dart';
 
 class FollowersBloc extends Bloc<FollowerEvent, FollowerState> {
-  FollowersBloc() : super(FollowerState());
   final UserRepository userRepository = new UserRepository();
 
-  @override
-  Stream<FollowerState> mapEventToState(FollowerEvent event) async* {
-    if (event is GetFollowers) {
+  FollowersBloc() : super(FollowerState()) {
+    on<GetFollowers>((event, emit) async {
       try {
-        yield FollowersLoading();
+        emit(FollowersLoading());
 
-        final followers = await userRepository.fetchFollowers(event.id);
+        final List<UserModel> followers =
+            await userRepository.fetchFollowers(event.id);
         if (followers.length == 0) {
-          yield FollowersEmpty(message: 'You have no followers');
+          emit(FollowersEmpty(message: 'You have no followers'));
         } else {
-          yield FollowerLoaded(followers: followers);
+          emit(FollowerLoaded(followers: followers));
         }
       } catch (e) {
-        yield FollowersError(error: 'Error retrieving followers');
+        emit(FollowersError(error: 'Error retrieving followers'));
       }
-    }
+    });
   }
 }

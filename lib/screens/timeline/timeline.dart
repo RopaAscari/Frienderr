@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frienderr/blocs/quick/quick_bloc.dart';
+import 'package:frienderr/screens/chat/chat.dart';
+import 'package:frienderr/screens/find_friends/find_friends.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:badges/badges.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/screens/live/live.dart';
@@ -22,7 +27,8 @@ import 'package:flutter_page_transition/flutter_page_transition.dart'
 import 'package:frienderr/widgets/util/conditional_render_delegate.dart';
 
 class Timeline extends StatefulWidget {
-  Timeline({Key? key}) : super(key: key);
+  final QuickBloc quickBloc;
+  Timeline({Key? key, required this.quickBloc}) : super(key: key);
 
   @override
   TimelineState createState() => TimelineState();
@@ -60,6 +66,7 @@ class TimelineState extends State<Timeline>
     listenToTimelineUpdates();
     scrollController = ScrollController();
     scrollController.addListener(_scrollListener);
+    widget.quickBloc.add(QuickEvent.initialize());
   }
 
   @override
@@ -72,7 +79,7 @@ class TimelineState extends State<Timeline>
     super.didChangeDependencies();
   }
 
-  _scrollListener() {
+  void _scrollListener() {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       if (isUserCaughtUp == false) {
@@ -80,6 +87,24 @@ class TimelineState extends State<Timeline>
       }
     }
   }
+
+  void _navigateToChatScreen() => Navigator.push(
+        context,
+        transition.PageTransition(
+            child: ChatDashboard(),
+            type: transition.PageTransitionType.slideInLeft),
+      );
+
+  void _openSearch() => showGeneralDialog(
+        context: context,
+        barrierColor: Colors.black, // Background color
+        barrierDismissible: false,
+        barrierLabel: 'Dialog',
+        transitionDuration: Duration(milliseconds: 100),
+        pageBuilder: (_, __, ___) {
+          return FindFriends();
+        },
+      );
 
   void showAlert(BuildContext context) {
     showDialog(
@@ -267,7 +292,7 @@ class TimelineState extends State<Timeline>
             //  actions: <Widget>[notificationIconWidget()],
             title: null,
             backgroundColor: Color.fromRGBO(0, 0, 0, 0.85),
-            expandedHeight: 80,
+            expandedHeight: 55,
             flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: Column(
@@ -279,7 +304,7 @@ class TimelineState extends State<Timeline>
                             borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(30),
                                 bottomRight: Radius.circular(30))),
-                        height: 80,
+                        height: 55,
                         child: Padding(
                             padding: const EdgeInsets.only(left: 15, right: 15),
                             child: Row(
@@ -288,10 +313,34 @@ class TimelineState extends State<Timeline>
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   appLogoVector(),
-                                  IconButton(
+                                  Row(children: [
+                                    GestureDetector(
+                                        onTap: () => _navigateToChatScreen(),
+                                        child: Badge(
+                                            badgeContent: Text('3'),
+                                            child: SvgPicture.asset(
+                                              Constants.messageIconOutline,
+                                              width: 22,
+                                              height: 22,
+                                              color: Colors.white,
+                                            ))),
+                                    GestureDetector(
+                                        onTap: () => _openSearch(),
+                                        child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 18),
+                                            child: SvgPicture.asset(
+                                              Constants.searchIconOutline,
+                                              width: 22,
+                                              height: 22,
+                                              color: Colors.white,
+                                            ))),
+                                  ])
+
+                                  /* IconButton(
                                       padding: EdgeInsets.zero,
                                       constraints: BoxConstraints(),
-                                      icon: Icon(
+                     Color.fromARGB(255, 126, 15, 15)     icon: Icon(
                                         CupertinoIcons.camera,
                                       ),
                                       onPressed: () => Navigator.push(
@@ -300,7 +349,7 @@ class TimelineState extends State<Timeline>
                                               child: CameraScreen(),
                                               type: transition
                                                   .PageTransitionType
-                                                  .slideInLeft)))
+                                                  .slideInLeft)))*/
                                 ]))),
                     // bodyTitle(context)
                   ],
@@ -351,26 +400,17 @@ class TimelineState extends State<Timeline>
                                 return Flex(
                                     direction: Axis.vertical,
                                     children: [
-                                      Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 20),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              200,
-                                          child: RenderPost(
-                                              items: posts,
-                                              index: index,
-                                              isPostOwner:
-                                                  postUserId == user?.uid,
-                                              shoudlPlayParent:
-                                                  index == index)),
+                                      RenderPost(
+                                          items: posts,
+                                          index: index,
+                                          isPostOwner: postUserId == user?.uid,
+                                          shoudlPlayParent: index == index),
                                       Container(
                                           height: 200,
                                           child: Center(
                                               child: Column(children: [
                                             Text(
-                                                'You are at the end of your journey',
+                                                '\n\nYou are at the end of your journey',
                                                 style: TextStyle(
                                                     fontSize:
                                                         ResponsiveFlutter.of(
@@ -398,15 +438,11 @@ class TimelineState extends State<Timeline>
                                           ]))),
                                     ]);
                               }
-                              return Container(
-                                  margin: const EdgeInsets.only(top: 20),
-                                  height:
-                                      MediaQuery.of(context).size.height - 200,
-                                  child: RenderPost(
-                                      items: posts,
-                                      index: index,
-                                      isPostOwner: postUserId == user?.uid,
-                                      shoudlPlayParent: index == index));
+                              return RenderPost(
+                                  items: posts,
+                                  index: index,
+                                  isPostOwner: postUserId == user?.uid,
+                                  shoudlPlayParent: index == index);
                             },
                           )
                         : Center(
@@ -584,8 +620,7 @@ class TimelineState extends State<Timeline>
                     ]))),
           ]),
         ),
-        onTap: () => showAlert(
-            context) /*Navigator.push(
+        onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ViewUserStory(
@@ -593,7 +628,6 @@ class TimelineState extends State<Timeline>
                       timeElasped: dateCreated,
                       isOwnerViewing: isStoryOwner,
                       storyUser: story['user'],
-                    )))*/
-        );
+                    ))));
   }
 }

@@ -26,7 +26,7 @@ class _AppButtonState extends State<AppButton> {
     return Container(
       margin: widget.margin,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(6.5),
         gradient: LinearGradient(
           begin: const Alignment(-0.95, 0.0),
           end: const Alignment(1.0, 0.0),

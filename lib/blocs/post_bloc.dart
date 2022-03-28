@@ -5,36 +5,30 @@ import 'package:frienderr/repositories/post_repository.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository postRepository = new PostRepository();
-  PostBloc() : super(PostState());
-
-  @override
-  Stream<PostState> mapEventToState(PostEvent event) async* {
-    try {
-      if (event is LikePost) {
-        final response = await postRepository.likePost(event.post, event.user);
-        if (!response) {
-          yield LikeFailure(error: 'Failed to like post');
-        }
+  PostBloc() : super(PostState()) {
+    on<LikePost>((event, emit) async {
+      final bool response =
+          await postRepository.likePost(event.post, event.user);
+      if (!response) {
+        emit(LikeFailure(error: 'Failed to like post'));
       }
+    });
 
-      if (event is UnLikePost) {
-        final response =
-            await postRepository.unLikePost(event.postId, event.userId);
+    on<UnLikePost>((event, emit) async {
+      final response =
+          await postRepository.unLikePost(event.postId, event.userId);
 
-        if (!response) {
-          yield UnLikeFailure(error: 'Failed to unlike post');
-        }
+      if (!response) {
+        emit(UnLikeFailure(error: 'Failed to unlike post'));
       }
-      if (event is DeletePost) {
-        final response = await postRepository.deletePost(event.postId);
-        if (!response) {
-          yield DeleteFailure(error: 'Failed to delete post');
-          return;
-        }
-        yield DeleteSuccess();
+    });
+
+    on<DeletePost>((event, emit) async {
+      final response = await postRepository.deletePost(event.postId);
+      if (!response) {
+        emit(DeleteFailure(error: 'Failed to delete post'));
+        return;
       }
-    } catch (e) {
-      //yield ChatError(error: 'Something went wrong');
-    }
+    });
   }
 }

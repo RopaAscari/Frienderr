@@ -5,8 +5,41 @@ class Constants {
   static String heroTag = 'appLogo';
   static String lightTheme = 'Light';
   static String appLogo = 'assets/images/app_logo.png';
+  static String shareIcon = 'assets/icons/share-icon.svg';
+
+  static String dashboardIconFill = 'assets/icons/dashboard_fill_icon.svg';
+  static String dashboardIconOutline =
+      'assets/icons/dashboard_icon_outline.svg';
+
+  static String quickIconFill = 'assets/icons/quick_icon_fill.svg';
+  static String quickIconOutline = 'assets/icons/quick_icon_outline.svg';
+
+  static String cameraIconFill = 'assets/icons/camera_icon_fill.svg';
+  static String cameraIconOutline = 'assets/icons/camera_icon_outline.svg';
+
+  static String commentIconFill = 'assets/icons/comment_icon_fill.svg';
+  static String commentIconOutline = 'assets/icons/comment_icon_outline.svg';
+
+  static String searchIconFill = 'assets/icons/search_icon_fill.svg';
+  static String searchIconOutline = 'assets/icons/search_icon_outline.svg';
+
+  static String profileIconFill = 'assets/icons/profile_icon_fill.svg';
+  static String profileIconOutline = 'assets/icons/profile_icon_outline.svg';
+
+  static String homeIconFill = 'assets/icons/home_icon_fill.svg';
+  static String homeIconOutline = 'assets/icons/home_icon_outline.svg';
+
+  static String messageIconOutline = 'assets/icons/message_icon_outline.svg';
+
+  static String notificationIconFill =
+      'assets/icons/notification_icon_fill.svg';
+  static String notificationIconOutline =
+      'assets/icons/notification_icon_outline.svg';
+
   static String authVector = 'assets/images/auth_vector.png';
+
   static String registerVector = 'assets/images/register_vector.png';
+  static String resetPasswordVector = 'assets/images/reset_password.png';
 
   static String videoLogo =
       'https://firebasestorage.googleapis.com/v0/b/frienderr-5aa07.appspot.com/o/video.jpg?alt=media&token=30d15478-65f1-41d3-9e52-80808dbb62d4';

@@ -12,6 +12,15 @@ class AuthRepository {
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
 
+  Future<AuthResponse> recoverPassword({required String email}) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+      return AuthResponse(user: null, hasError: false, error: null);
+    } on FirebaseAuthException catch (e) {
+      return AuthResponse(user: null, hasError: true, error: Errors.generic);
+    }
+  }
+
   Future<AuthResponse> createUserAccount(
       {required String email, required String password}) async {
     try {
@@ -20,25 +29,14 @@ class AuthRepository {
         password: password,
       );
 
-      final id = userCredential.user!.uid;
+      final String id = userCredential.user!.uid;
 
       final UserModel user = UserModel(
         id: id,
-        chats: [],
-        status: '',
-        stories: [],
         username: '',
-        following: [],
-        followers: [],
-        presence: true,
-        isLocationEnabled: false,
-        location: {'latitude': 0, 'longitude': 0},
-        profilePic: '${Constants.defaultProfilePic}',
-        coverPhoto: '${Constants.defaultCoverPhoto}',
-        bitmapImage: '${Constants.defaultBitmapImage}',
       );
 
-      await users.doc(id).set(user.toJson());
+      await users.doc(id).set(user.toMap());
       return AuthResponse(user: user, hasError: false, error: null);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -72,7 +70,7 @@ class AuthRepository {
           authenticatedUser.docs.toList()[0];
 
       final UserModel user =
-          UserModel.fromJson(authUser.data() as Map<String, dynamic>);
+          UserModel.fromMap(authUser.data() as Map<String, dynamic>);
 
       return AuthResponse(user: user, hasError: false, error: null);
     } on FirebaseAuthException catch (e) {
@@ -97,30 +95,23 @@ class AuthRepository {
     }
   }
 
-  Future<bool> signOut() async {
+  Future<void> signOut(
+      {required Function onComplete, required Function onFailure}) async {
     try {
-      await auth.signOut();
-      return true;
+      onComplete(await auth.signOut());
     } on FirebaseAuthException catch (e) {
-      return false;
+      onFailure(e);
     }
   }
 
   Future<dynamic> isAuthenticated() async {
-    if (auth.currentUser?.uid == null) {
-      return false;
-    } else {
-      return true;
-    }
+    return auth.currentUser?.uid != null;
   }
 
   Future<bool> isUsernameSelected() async {
-    final user = await users.doc(auth.currentUser?.uid).get();
-    if (user['username'] != '') {
-      return true;
-    } else {
-      return false;
-    }
+    final DocumentSnapshot<Object?> user =
+        await users.doc(auth.currentUser?.uid).get();
+    return user['username'] != '';
   }
 
   Future<String> getUserId() async {

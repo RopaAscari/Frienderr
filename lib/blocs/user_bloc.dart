@@ -21,7 +21,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   @override
   UserState fromJson(Map<String, dynamic> json) {
     try {
-      final user = UserModel.fromJson(json);
+      final user = UserModel.fromMap(json);
       return UserLoaded(user);
     } catch (_) {
       return null as UserState;
@@ -31,7 +31,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   @override
   Map<String, dynamic> toJson(UserState state) {
     if (state is UserLoaded) {
-      return state.user.toJson();
+      return state.user.toMap();
     } else {
       return null as Map<String, dynamic>;
     }

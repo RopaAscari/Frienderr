@@ -104,6 +104,19 @@ class FindFriendsState extends State<FindFriends>
     });
   }
 
+  Widget _closeButton() {
+    return Padding(
+        padding: const EdgeInsets.all(0),
+        child: Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+                iconSize: 25,
+                icon: Icon(
+                  Icons.close,
+                ),
+                onPressed: () => Navigator.pop(context))));
+  }
+
   fetchUsers(String term) async {
     setState(() {
       isSearching = true;
@@ -364,7 +377,10 @@ class FindFriendsState extends State<FindFriends>
             body: Container(
               height: MediaQuery.of(context).size.height,
               child: Flex(direction: Axis.vertical, children: [
-                searchBar(),
+                Row(children: [
+                  searchBar(),
+                  _closeButton(),
+                ]),
                 isSearching
                     ? Container(
                         margin: EdgeInsets.only(
@@ -498,8 +514,9 @@ class FindFriendsState extends State<FindFriends>
 
   Widget searchBar() {
     return Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(top: 40),
+        width: MediaQuery.of(context).size.width * .90,
+        padding: const EdgeInsets.all(0),
+        margin: const EdgeInsets.only(top: 0),
         child: TextField(
             focusNode: _focus,
             //autofocus: true,

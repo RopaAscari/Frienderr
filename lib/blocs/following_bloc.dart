@@ -4,24 +4,22 @@ import 'package:frienderr/state/following_state.dart';
 import 'package:frienderr/repositories/user_repository.dart';
 
 class FollowingBloc extends Bloc<FollowingEvent, FollowingState> {
-  FollowingBloc() : super(FollowingState());
   final UserRepository userRepository = new UserRepository();
 
-  @override
-  Stream<FollowingState> mapEventToState(FollowingEvent event) async* {
-    if (event is GetFollowing) {
+  FollowingBloc() : super(FollowingState()) {
+    on<GetFollowing>((event, emit) async {
       try {
-        yield FollowingLoading();
+        emit(FollowingLoading());
 
         final following = await userRepository.fetchFollowing(event.id);
         if (following.length == 0) {
-          yield FollowingEmpty(message: 'You are not following anyone');
+          emit(FollowingEmpty(message: 'You are not following anyone'));
         } else {
-          yield FollowingLoaded(following: following);
+          emit(FollowingLoaded(following: following));
         }
       } catch (e) {
-        yield FollowingError(error: 'Error retrieving friends');
+        emit(FollowingError(error: 'Error retrieving friends'));
       }
-    }
+    });
   }
 }
