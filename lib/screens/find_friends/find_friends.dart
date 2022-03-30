@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'dart:async';
 import 'dart:typed_data';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,17 +12,17 @@ import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/theme_bloc.dart';
 import 'package:frienderr/services/services.dart';
-
-import 'package:frienderr/core/constants/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/models/user/user_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:frienderr/screens/account/account.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:frienderr/widgets/util/conditional_render_delegate.dart';
 
 class FindFriends extends StatefulWidget {
   FindFriends({Key? key}) : super(key: key);
@@ -98,26 +97,13 @@ class FindFriendsState extends State<FindFriends>
         user = BlocProvider.of<UserBloc>(context, listen: false).state.user);
   }
 
-  toggleMapVisibility() {
+  void toggleMapVisibility() {
     setState(() {
       showMap = !showMap;
     });
   }
 
-  Widget _closeButton() {
-    return Padding(
-        padding: const EdgeInsets.all(0),
-        child: Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-                iconSize: 25,
-                icon: Icon(
-                  Icons.close,
-                ),
-                onPressed: () => Navigator.pop(context))));
-  }
-
-  fetchUsers(String term) async {
+  Future<void> fetchUsers(String term) async {
     setState(() {
       isSearching = true;
     });
@@ -149,7 +135,7 @@ class FindFriendsState extends State<FindFriends>
     return byteData.buffer.asUint8List();
   }
 
-  appUserToMarkers(UserModel user) async {
+  Future<void> appUserToMarkers(UserModel user) async {
     try {
       final appUser = await FirebaseFirestore.instance
           .collection('users')
@@ -168,7 +154,7 @@ class FindFriendsState extends State<FindFriends>
     }
   }
 
-  appUsersToMarkers(UserModel user) async {
+  Future<void> appUsersToMarkers(UserModel user) async {
     final mapUsers = await users
         .where('isLocationEnabled', isEqualTo: true)
         // .where('id', isNotEqualTo: user.id)
@@ -209,7 +195,7 @@ class FindFriendsState extends State<FindFriends>
     }
   }
 
-  getLoc() async {
+  Future<void> getLoc() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
@@ -257,11 +243,10 @@ class FindFriendsState extends State<FindFriends>
     final UserModel user =
         BlocProvider.of<UserBloc>(context, listen: false).state.user;
     await appUserToMarkers(user);
-    print('runing mapp markers');
     await appUsersToMarkers(user);
   }
 
-  showMapActionSheet() {
+  Future<void> showMapActionSheet() async {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -297,7 +282,7 @@ class FindFriendsState extends State<FindFriends>
     );
   }
 
-  showSettingsActionSheet() {
+  Future<void> showSettingsActionSheet() async {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -323,15 +308,11 @@ class FindFriendsState extends State<FindFriends>
     );
   }
 
-  fetchMapUsers() async {
-    try {
-      return await users.where('isLocationEnabled', isEqualTo: true).get();
-    } catch (e) {
-      return [];
-    }
+  Future<QuerySnapshot<Object?>> fetchMapUsers() async {
+    return await users.where('isLocationEnabled', isEqualTo: true).get();
   }
 
-  toggleLocationStatus(bool value, Function setState) {
+  void toggleLocationStatus(bool value, Function setState) {
     final UserModel user =
         BlocProvider.of<UserBloc>(context, listen: false).state.user;
     users.doc(user.id).update({
@@ -358,37 +339,113 @@ class FindFriendsState extends State<FindFriends>
     super.build(context);
     return SafeArea(
         child: Scaffold(
-            // backgroundColor: HexColor('#13111A'),
             resizeToAvoidBottomInset: false,
-            /*floatingActionButtonLocation:
+            floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniEndFloat,
-            floatingActionButton: Container(
-                margin: const EdgeInsets.only(bottom: 15, right: 15),
-                child: SizedBox(
-                    height: 45.0,
-                    width: 45.0,
-                    child: FittedBox(
-                        child: FloatingActionButton(
-                            heroTag: null,
-                            backgroundColor: HexColor('#EE6115'),
-                            child: Icon(Elusive.location, color: Colors.white),
-                            onPressed: () =>
-                                showMapActionSheet()))))*/ // headerWidget(),
+            floatingActionButton: _mapButton(),
             body: Container(
+              margin: const EdgeInsets.only(top: 15),
               height: MediaQuery.of(context).size.height,
               child: Flex(direction: Axis.vertical, children: [
                 Row(children: [
-                  searchBar(),
-                  _closeButton(),
+                  _backIcon(),
+                  _searchBar(),
+                  _microPhoneButton(),
                 ]),
-                isSearching
-                    ? Container(
+                ConditionalRenderDelegate(
+                    condition: isSearching,
+                    renderWidget: Container(
                         margin: EdgeInsets.only(
                             top: (MediaQuery.of(context).size.height * .30)),
-                        child: Center(child: CupertinoActivityIndicator()))
-                    : searchResults()
+                        child: Center(child: CupertinoActivityIndicator())),
+                    fallbackWidget: searchResults())
               ]),
             )));
+  }
+
+  Widget _searchBar() {
+    return Container(
+        height: 40,
+        width: MediaQuery.of(context).size.width * .80,
+        padding: const EdgeInsets.all(0),
+        margin: const EdgeInsets.only(top: 0),
+        child: TextField(
+            focusNode: _focus,
+            //autofocus: true,
+            obscureText: false,
+            controller: searchController,
+            //   style: TextStyle(color: Colors.white),
+            onChanged: (term) => fetchUsers(term),
+            decoration: new InputDecoration(
+                labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  // borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                border: new OutlineInputBorder(
+                  // borderSide: new BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                suffixIcon: searchController.text != ''
+                    ? IconButton(
+                        color: Colors.white,
+                        onPressed: () {
+                          searchController.clear();
+                        },
+                        icon: const Icon(Icons.close))
+                    : IconButton(
+                        color: Colors.white,
+                        onPressed: () {},
+                        icon: const Icon(Icons.search)),
+                // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
+                filled: true,
+                //fillColor: Colors.white,
+                labelText: 'Search',
+                contentPadding: const EdgeInsets.only(
+                  top: 30.0,
+                  left: 20.0,
+                ))));
+  }
+
+  Widget _microPhoneButton() {
+    return Padding(
+        padding: const EdgeInsets.all(0),
+        child: Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+                iconSize: 25,
+                icon: Icon(
+                  Icons.mic,
+                ),
+                onPressed: () => Navigator.pop(context))));
+  }
+
+  Widget _backIcon() {
+    return IconButton(
+        iconSize: 25,
+        onPressed: () => Navigator.pop(context),
+        icon: Icon(Icons.arrow_back_ios));
+  }
+
+  Widget _mapButton() {
+    return ConditionalRenderDelegate(
+        condition: false,
+        renderWidget: Container(
+            margin: const EdgeInsets.only(bottom: 15, right: 15),
+            child: SizedBox(
+                height: 45.0,
+                width: 45.0,
+                child: FittedBox(
+                    child: FloatingActionButton(
+                        heroTag: null,
+                        backgroundColor: HexColor('#EE6115'),
+                        child: Icon(Elusive.location, color: Colors.white),
+                        onPressed: () => showMapActionSheet())))),
+        fallbackWidget: Center());
   }
 
   Widget mapUserList() {
@@ -510,55 +567,6 @@ class FindFriendsState extends State<FindFriends>
             size: 23,
           ),
         ));
-  }
-
-  Widget searchBar() {
-    return Container(
-        width: MediaQuery.of(context).size.width * .90,
-        padding: const EdgeInsets.all(0),
-        margin: const EdgeInsets.only(top: 0),
-        child: TextField(
-            focusNode: _focus,
-            //autofocus: true,
-            obscureText: false,
-            controller: searchController,
-            //   style: TextStyle(color: Colors.white),
-            onChanged: (text) {
-              fetchUsers(text);
-            },
-            decoration: new InputDecoration(
-                labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  // borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                border: new OutlineInputBorder(
-                  // borderSide: new BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                suffixIcon: searchController.text != ''
-                    ? IconButton(
-                        color: Colors.white,
-                        onPressed: () {
-                          searchController.clear();
-                        },
-                        icon: const Icon(Icons.close))
-                    : IconButton(
-                        color: Colors.white,
-                        onPressed: () {},
-                        icon: const Icon(Icons.search)),
-                // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
-                filled: true,
-                //fillColor: Colors.white,
-                labelText: 'Search',
-                contentPadding: const EdgeInsets.only(
-                  top: 30.0,
-                  left: 20.0,
-                ))));
   }
 
   Widget searchResults() {

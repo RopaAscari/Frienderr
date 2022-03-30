@@ -1,40 +1,44 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:frienderr/blocs/quick/quick_bloc.dart';
-import 'package:frienderr/screens/chat/chat.dart';
-import 'package:frienderr/screens/find_friends/find_friends.dart';
+import 'package:frienderr/models/post/post.dart';
+import 'package:frienderr/widgets/error/error.dart';
+
 import 'package:shimmer/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/screens/live/live.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frienderr/screens/chat/chat.dart';
 import 'package:frienderr/screens/camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:frienderr/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/widgets/gallery/gallery.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
+import 'package:frienderr/screens/find_friends/find_friends.dart';
 import 'package:frienderr/screens/user_stories/user_stories.dart';
 import 'package:frienderr/widgets/render_posts/render_posts.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart'
     as transition;
 import 'package:frienderr/widgets/util/conditional_render_delegate.dart';
+import 'package:frienderr/blocs/timeline/timeline_bloc.dart';
 
 class Timeline extends StatefulWidget {
   final QuickBloc quickBloc;
   Timeline({Key? key, required this.quickBloc}) : super(key: key);
 
   @override
-  TimelineState createState() => TimelineState();
+  _TimelineState createState() => _TimelineState();
 }
 
-class TimelineState extends State<Timeline>
+class _TimelineState extends State<Timeline>
     with AutomaticKeepAliveClientMixin<Timeline> {
   int currentIndex = 0;
   int postLength = 0;
@@ -55,18 +59,23 @@ class TimelineState extends State<Timeline>
   late UserState userState = context.read<UserBloc>().state;
   User? user = FirebaseAuth.instance.currentUser;
   List<QueryDocumentSnapshot<Map<String, dynamic>>> posts = [];
+
+  TimelineBloc timelineBloc = new TimelineBloc();
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     fetchPosts();
-    fetchPostCount();
+
     super.initState();
     listenToTimelineUpdates();
     scrollController = ScrollController();
     scrollController.addListener(_scrollListener);
+
     widget.quickBloc.add(QuickEvent.initialize());
+    timelineBloc.add(TimelineEvent.fetchTimelinePosts());
   }
 
   @override
@@ -106,60 +115,7 @@ class TimelineState extends State<Timeline>
         },
       );
 
-  void showAlert(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => Container(
-            decoration: BoxDecoration(color: Colors.white),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('stories')
-                    .where('id', isNotEqualTo: user?.uid)
-                    .orderBy('id', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center();
-                  }
-                  List<DocumentSnapshot> items = snapshot.data?.docs ?? [];
-
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: CarouselSlider.builder(
-                          itemCount: items.length,
-                          options: CarouselOptions(
-                            scrollDirection: Axis.vertical,
-                            autoPlay: true,
-                            // aspectRatio: 2.0,
-                            viewportFraction: 1,
-                            enableInfiniteScroll: false,
-                            enlargeCenterPage: true,
-                          ),
-                          itemBuilder: (context, index, realIdx) {
-                            {
-                              return ViewUserStory(
-                                stories: items[index]['content'],
-                                timeElasped: items[index]['dateCreated'],
-                                isOwnerViewing: items[index]['id'] == user?.uid,
-                                storyUser: items[index]['user'],
-                              );
-                            }
-                          }));
-                })));
-  }
-
-  void fetchPostCount() async {
-    final count = await FirebaseFirestore.instance
-        .collection('postCount')
-        .doc('count')
-        .get();
-    setState(() {
-      postLength = count['count'];
-    });
-  }
+  void fetchPostCount() async {}
 
   void _onRefresh() async {
     fetchPosts();
@@ -231,16 +187,199 @@ class TimelineState extends State<Timeline>
     return SafeArea(
         child: Scaffold(
             body: Stack(children: [
-      renderPosts(),
+      _timelineBody(),
       ConditionalRenderDelegate(
-          condition: showRefresher,
-          renderWidget: refreshWidget(),
-          fallbackWidget: Center())
+        condition: showRefresher,
+        fallbackWidget: Center(),
+        renderWidget: _refresherWidget(),
+      )
     ])));
-    //
   }
 
-  Widget refreshWidget() {
+  Widget _timelineBody() {
+    return CustomScrollView(
+        controller: scrollController,
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        slivers: <Widget>[
+          SliverAppBar(
+              floating: true,
+              leading: const Center(),
+              title: null,
+              backgroundColor: Color.fromRGBO(0, 0, 0, 0.85),
+              expandedHeight: 55,
+              flexibleSpace: _appBar()),
+          SliverPadding(
+              padding: const EdgeInsets.all(0),
+              sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                BlocConsumer<TimelineBloc, TimelineState>(
+                    bloc: timelineBloc,
+                    listener: (
+                      BuildContext context,
+                      TimelineState state,
+                    ) {},
+                    builder: (
+                      BuildContext context,
+                      TimelineState state,
+                    ) {
+                      return _determineTimelineRender(state);
+                    })
+              ])))
+        ]);
+  }
+
+  Widget _appBar() {
+    return FlexibleSpaceBar(
+        collapseMode: CollapseMode.pin,
+        background: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30))),
+                height: 55,
+                child: Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _appLogoVector(),
+                        _appBarIcons(),
+                      ],
+                    )),
+              )
+            ]));
+  }
+
+  Widget _appBarIcons() {
+    return Row(children: [
+      GestureDetector(
+          onTap: () => _navigateToChatScreen(),
+          child: Badge(
+              badgeContent: Text('3'),
+              child: SvgPicture.asset(
+                Constants.messageIconOutline,
+                width: 22,
+                height: 22,
+                color: Colors.white,
+              ))),
+      GestureDetector(
+          onTap: () => _openSearch(),
+          child: Padding(
+              padding: const EdgeInsets.only(left: 18),
+              child: SvgPicture.asset(
+                Constants.searchIconOutline,
+                width: 22,
+                height: 22,
+                color: Colors.white,
+              ))),
+    ]);
+  }
+
+  Widget _determineTimelineRender(TimelineState state) {
+    switch (state.status) {
+      case TimelineStatus.Loading:
+        return _timelineLoading();
+      case TimelineStatus.Error:
+        return _timelineError(state.error);
+      case TimelineStatus.Loaded:
+        return _timelinePostList(state.timelinePosts);
+      default:
+        return Center();
+    }
+  }
+
+  Widget _timelineError(String error) {
+    return ErrorDisplay(error: error);
+  }
+
+  Widget _timelineLoading() {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(
+            child: Padding(
+                padding: const EdgeInsets.only(left: 50, right: 50),
+                child: CircularProgressIndicator())));
+  }
+
+  //  Container(height: 250, child: renderStories()),
+
+  Widget _timelinePostList(List<Post> posts) {
+    if (posts.length == 0) {
+      return _emptyTimeline();
+    }
+
+    return ListView.separated(
+      primary: false,
+      shrinkWrap: true,
+      itemCount: posts.length,
+      scrollDirection: Axis.vertical,
+      separatorBuilder: (context, index) {
+        return Divider();
+      },
+      itemBuilder: (BuildContext context, int index) {
+        final postUserId = posts[index].user.id;
+
+        if (index == posts.length - 1) {
+          _trailingPost(posts[index]);
+        }
+        return RenderPost(
+          post: posts[index],
+          isPostOwner: postUserId == user?.uid,
+        );
+      },
+    );
+  }
+
+  Widget _trailingPost(Post post) {
+    return Flex(direction: Axis.vertical, children: [
+      RenderPost(
+        post: post,
+        isPostOwner: post.user.id == user?.uid,
+      ),
+      _userCaughtUp()
+    ]);
+  }
+
+  Widget _userCaughtUp() {
+    return Container(
+        height: 200,
+        child: Center(
+            child: Column(children: [
+          Text('\n\nYou are at the end of your journey',
+              style: TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.4))),
+          GestureDetector(
+              onTap: () {
+                scrollController.animateTo(0.0,
+                    duration: Duration(milliseconds: 1000),
+                    curve: Curves.easeIn);
+                fetchPosts();
+              },
+              child: Text('\nReturn to top',
+                  style: TextStyle(
+                      color: Colors.blue[700],
+                      fontWeight: FontWeight.bold,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.3))))
+        ])));
+  }
+
+  Widget _emptyTimeline() {
+    return Center(
+      child: Text(
+        "No new posts on your feed",
+        style: TextStyle(fontSize: 13),
+      ),
+    );
+  }
+
+  Widget _refresherWidget() {
     return GestureDetector(
         onTap: () {
           scrollController.animateTo(0.0,
@@ -262,7 +401,7 @@ class TimelineState extends State<Timeline>
                         color: Theme.of(context).canvasColor)))));
   }
 
-  Widget appLogoVector() {
+  Widget _appLogoVector() {
     final Widget appLogo = Align(
         alignment: Alignment.center,
         child: Padding(
@@ -278,181 +417,6 @@ class TimelineState extends State<Timeline>
         tag: 'none',
         child: Padding(
             padding: EdgeInsets.only(top: 0, bottom: 10), child: appLogo));
-  }
-
-  Widget renderPosts() {
-    return CustomScrollView(
-        controller: scrollController,
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        slivers: <Widget>[
-          SliverAppBar(
-            floating: true,
-            leading: const Center(),
-            //  actions: <Widget>[notificationIconWidget()],
-            title: null,
-            backgroundColor: Color.fromRGBO(0, 0, 0, 0.85),
-            expandedHeight: 55,
-            flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(30))),
-                        height: 55,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 15),
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  appLogoVector(),
-                                  Row(children: [
-                                    GestureDetector(
-                                        onTap: () => _navigateToChatScreen(),
-                                        child: Badge(
-                                            badgeContent: Text('3'),
-                                            child: SvgPicture.asset(
-                                              Constants.messageIconOutline,
-                                              width: 22,
-                                              height: 22,
-                                              color: Colors.white,
-                                            ))),
-                                    GestureDetector(
-                                        onTap: () => _openSearch(),
-                                        child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 18),
-                                            child: SvgPicture.asset(
-                                              Constants.searchIconOutline,
-                                              width: 22,
-                                              height: 22,
-                                              color: Colors.white,
-                                            ))),
-                                  ])
-
-                                  /* IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(),
-                     Color.fromARGB(255, 126, 15, 15)     icon: Icon(
-                                        CupertinoIcons.camera,
-                                      ),
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          transition.PageTransition(
-                                              child: CameraScreen(),
-                                              type: transition
-                                                  .PageTransitionType
-                                                  .slideInLeft)))*/
-                                ]))),
-                    // bodyTitle(context)
-                  ],
-                )),
-          ),
-          SliverPadding(
-              padding: const EdgeInsets.all(0),
-              sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                isFetchingData
-                    ? Center(child: CupertinoActivityIndicator())
-                    : posts.length > 0
-                        ? ListView.separated(
-                            primary: false,
-                            shrinkWrap: true,
-                            itemCount: posts.length,
-                            // controller: scrollController,
-                            scrollDirection: Axis.vertical,
-                            separatorBuilder: (context, index) {
-                              return Divider();
-                            },
-                            itemBuilder: (BuildContext context, int index) {
-                              final postUserId = posts[index]['user']['id'];
-
-                              if (index == 0) {
-                                return Flex(
-                                    direction: Axis.vertical,
-                                    children: [
-                                      Container(
-                                          height: 250, child: renderStories()),
-                                      Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 20),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              200,
-                                          child: RenderPost(
-                                              items: posts,
-                                              index: index,
-                                              isPostOwner:
-                                                  postUserId == user?.uid,
-                                              shoudlPlayParent: index == index))
-                                    ]);
-                              }
-
-                              if (index == posts.length - 1) {
-                                return Flex(
-                                    direction: Axis.vertical,
-                                    children: [
-                                      RenderPost(
-                                          items: posts,
-                                          index: index,
-                                          isPostOwner: postUserId == user?.uid,
-                                          shoudlPlayParent: index == index),
-                                      Container(
-                                          height: 200,
-                                          child: Center(
-                                              child: Column(children: [
-                                            Text(
-                                                '\n\nYou are at the end of your journey',
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        ResponsiveFlutter.of(
-                                                                context)
-                                                            .fontSize(1.4))),
-                                            GestureDetector(
-                                                onTap: () {
-                                                  scrollController.animateTo(
-                                                      0.0,
-                                                      duration: Duration(
-                                                          milliseconds: 1000),
-                                                      curve: Curves.easeIn);
-                                                  fetchPosts();
-                                                },
-                                                child: Text('\nReturn to top',
-                                                    style: TextStyle(
-                                                        color: Colors.blue[700],
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            ResponsiveFlutter
-                                                                    .of(context)
-                                                                .fontSize(
-                                                                    1.3))))
-                                          ]))),
-                                    ]);
-                              }
-                              return RenderPost(
-                                  items: posts,
-                                  index: index,
-                                  isPostOwner: postUserId == user?.uid,
-                                  shoudlPlayParent: index == index);
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              "No new posts on your feed",
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          )
-              ])))
-        ]);
   }
 
   Widget renderStories() {

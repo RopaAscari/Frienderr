@@ -1,4 +1,5 @@
 import 'package:frienderr/blocs/theme_bloc.dart';
+import 'package:frienderr/models/post/post.dart';
 import 'package:frienderr/widgets/flash_message/flash_message.dart';
 import 'package:share/share.dart';
 import 'package:flutter/material.dart';
@@ -30,17 +31,14 @@ import 'package:frienderr/widgets/video_screen/video_screen.dart';
 import 'package:frienderr/screens/comment_screen/comment_screen.dart';
 
 class RenderPost extends StatefulWidget {
-  final int index;
-  final dynamic items;
+  final Post post;
   final bool isPostOwner;
-  final bool shoudlPlayParent;
-  RenderPost(
-      {Key? key,
-      required this.items,
-      required this.index,
-      required this.isPostOwner,
-      required this.shoudlPlayParent})
-      : super(key: key);
+
+  RenderPost({
+    Key? key,
+    required this.post,
+    required this.isPostOwner,
+  }) : super(key: key);
 
   RenderPostState createState() => RenderPostState();
 }
@@ -51,12 +49,10 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   bool isPostLiked = false;
   int postCount = 0;
   PostBloc postBloc = new PostBloc();
-  dynamic get items => widget.items;
-  dynamic get index => widget.index;
+  Post get post => widget.post;
   final List<StoryItem> stories = [];
   late AnimationController _controller;
   final StoryController controller = StoryController();
-  dynamic get shoudlPlayParent => widget.shoudlPlayParent;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final FirebaseServices firebaseServices = new FirebaseServices();
@@ -68,9 +64,9 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     setState(() {
-      postCount = items[index]['likes'];
+      postCount = post.likes;
 
-      isPostLiked = (items[index]['userLikes'].contains(user?.uid));
+      isPostLiked = (post.userLikes.contains(user?.uid));
     });
     _controller = AnimationController(
         duration: const Duration(milliseconds: 700), vsync: this);
@@ -96,7 +92,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   deletePost(BuildContext alertContext) async {
-    final id = items[index]['id'];
+    final id = post.id;
 
     try {
       await posts.doc(id).delete();
@@ -202,9 +198,9 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   determineLikeAction() async {
-    (items[index]['userLikes'].contains(userState.user.id))
-        ? unLikePost(items[index]['id'])
-        : likePost(items[index]);
+    (post.userLikes.contains(userState.user.id))
+        ? unLikePost(post.id)
+        : likePost(post);
     setState(() {
       targetValue = 130;
     });
@@ -263,10 +259,10 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   Widget interactionHelper() {
-    final postId = items[index]['id'];
-    final shareCount = items[index]['shares'];
-    final commentCount = items[index]['commentCount'];
-    final dateCreated = items[index]['dateCreated'];
+    final postId = post.id;
+    final shareCount = post.shares;
+    final commentCount = post.commentCount;
+    final dateCreated = post.dateCreated;
     final theme =
         BlocProvider.of<ThemeBloc>(context, listen: false).state.theme;
     return Padding(
@@ -349,13 +345,13 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 */
   Widget postDetailsWidget() {
-    final postId = items[index]['id'];
-    final caption = items[index]['caption'];
-    final shareCount = items[index]['shares'];
+    final postId = post.id;
+    final caption = post.caption;
+    final shareCount = post.shares;
 
-    final commentCount = items[index]['commentCount'];
+    final commentCount = post.commentCount;
 
-    final itemCount = items[index]['content'].length;
+    final itemCount = post.content.length;
     return Material(
       child: Container(
           width: double.infinity,
@@ -392,7 +388,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   Widget renderMediaWidget() {
-    final itemCount = items[index]['content'].length;
+    final itemCount = post.content.length;
     return Container(
         //  height: 700,
         width: MediaQuery.of(context).size.width,
@@ -422,14 +418,16 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                       (BuildContext context, int itemIndex, int pageViewIndex) {
                     return GestureDetector(
                         onDoubleTap: () => determineLikeAction(),
-                        child: mediaContainer(items, index, itemIndex,
-                            currentIndex, shoudlPlayParent));
+                        child: mediaContainer(
+                          post,
+                          currentIndex,
+                        ));
                   }))
         ]));
   }
 
   Widget postHeaderWidget() {
-    final dateCreated = items[index]['dateCreated'];
+    final dateCreated = post.dateCreated;
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -448,9 +446,9 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   Widget avatarWidget() {
-    final id = items[index]['user']['id'];
-    final username = items[index]['user']['username'];
-    final profilePic = items[index]['user']['profilePic'];
+    final id = post.user.id;
+    final username = post.user.username;
+    final profilePic = post.user.profilePic;
     return Row(children: [
       Padding(
           padding: const EdgeInsets.all(5),
@@ -523,10 +521,9 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     );
   }
 
-  Widget mediaContainer(
-      items, index, itemIndex, currentIndex, shoudlPlayParent) {
-    final type = items[index]['content'][itemIndex]['type'];
-    final media = items[index]['content'][itemIndex]['media'];
+  Widget mediaContainer(items, itemIndex) {
+    final type = post.content[itemIndex].type;
+    final media = post.content[itemIndex].media;
 
     if (type == Constants.mediaContainerTypes[MediaContainerType.Image]) {
       //return ImageScreen(imageFile: media);

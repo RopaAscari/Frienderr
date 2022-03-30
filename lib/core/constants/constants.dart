@@ -7,6 +7,8 @@ class Constants {
   static String appLogo = 'assets/images/app_logo.png';
   static String shareIcon = 'assets/icons/share-icon.svg';
 
+  static String errorVector = 'assets/images/warning.png';
+
   static String dashboardIconFill = 'assets/icons/dashboard_fill_icon.svg';
   static String dashboardIconOutline =
       'assets/icons/dashboard_icon_outline.svg';
