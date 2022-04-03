@@ -1,26 +1,26 @@
-import 'package:frienderr/blocs/theme_bloc.dart';
-import 'package:frienderr/models/post/post.dart';
-import 'package:frienderr/widgets/flash_message/flash_message.dart';
 import 'package:share/share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
-import 'package:frienderr/core/enums/enums.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
 import 'package:frienderr/blocs/user_bloc.dart';
 import 'package:time_elapsed/time_elapsed.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/blocs/post_bloc.dart';
+import 'package:frienderr/core/enums/enums.dart';
+import 'package:frienderr/blocs/theme_bloc.dart';
+import 'package:frienderr/models/post/post.dart';
 import 'package:frienderr/state/user_state.dart';
 import 'package:frienderr/services/services.dart';
 import 'package:frienderr/events/post_event.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:frienderr/core/constants/constants.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/screens/account/account.dart';
+import 'package:frienderr/core/constants/constants.dart';
 //import 'package:frienderr/screens/account/account.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +28,7 @@ import 'package:story_view/controller/story_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/widgets/image_screen/image_screen.dart';
 import 'package:frienderr/widgets/video_screen/video_screen.dart';
+import 'package:frienderr/widgets/flash_message/flash_message.dart';
 import 'package:frienderr/screens/comment_screen/comment_screen.dart';
 
 class RenderPost extends StatefulWidget {
@@ -69,7 +70,13 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
       isPostLiked = (post.userLikes.contains(user?.uid));
     });
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 700), vsync: this);
+        duration: const Duration(milliseconds: 700),
+        lowerBound: 0.0,
+        upperBound: 0.1,
+        vsync: this)
+      ..addListener(() {
+        setState(() {});
+      });
     WidgetsBinding.instance?.addPostFrameCallback((_) => controller.pause());
   }
 
@@ -198,12 +205,11 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   determineLikeAction() async {
+    setState(() => targetValue = 170);
+
     (post.userLikes.contains(userState.user.id))
         ? unLikePost(post.id)
         : likePost(post);
-    setState(() {
-      targetValue = 130;
-    });
   }
 
   sharePost(String postId) async {
@@ -216,6 +222,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   Widget build(BuildContext context) {
+    dynamic _scale = 1 - _controller.value;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
@@ -223,11 +230,12 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
       child: Column(
         children: <Widget>[
           postHeaderWidget(),
-          //  Stack(alignment: Alignment.center, children: [
-          renderMediaWidget(),
-          //   Align(
-          //       alignment: Alignment.center, child: likeAnimationWidget()),
-          // ]),
+          Stack(alignment: Alignment.center, children: [
+            renderMediaWidget(),
+            Align(
+                alignment: Alignment.center,
+                child: likeAnimationWidget(_scale)),
+          ]),
           postDetailsWidget(),
           interactionHelper()
         ],
@@ -235,7 +243,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     );
   }
 
-  Widget likeAnimationWidget() {
+  Widget likeAnimationWidget(_scale) {
     return Align(
         alignment: Alignment.center,
         child: TweenAnimationBuilder<double>(
@@ -245,14 +253,17 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                     targetValue = 0;
                   })),
           tween: Tween(begin: 0, end: targetValue),
-          duration: const Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 200),
           builder: (BuildContext builder, double size, Widget? child) {
-            return IconButton(
-              iconSize: size,
-              color: Colors.grey,
-              icon: child!,
-              onPressed: () {},
-            );
+            print(size);
+            return Transform.scale(
+                scale: _scale,
+                child: IconButton(
+                  iconSize: size,
+                  color: Colors.grey,
+                  icon: child!,
+                  onPressed: () {},
+                ));
           },
           child: const Icon(Icons.favorite, color: Colors.red),
         ));
@@ -266,7 +277,7 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     final theme =
         BlocProvider.of<ThemeBloc>(context, listen: false).state.theme;
     return Padding(
-        padding: const EdgeInsets.only(bottom: 15),
+        padding: const EdgeInsets.only(bottom: 15, left: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -276,12 +287,22 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                   onPressed: () {},
                   color: Colors.grey[500],
                   padding: EdgeInsets.zero,
-                  icon: Icon(CupertinoIcons.chat_bubble)),
+                  icon: SvgPicture.asset(
+                    Constants.postCommentIconOutline,
+                    width: 30,
+                    height: 30,
+                    color: Colors.grey[200],
+                  )),
               IconButton(
                   color: Colors.grey[500],
                   onPressed: () {},
                   padding: EdgeInsets.zero,
-                  icon: Icon(CupertinoIcons.share))
+                  icon: SvgPicture.asset(
+                    Constants.sharePostIconOutline,
+                    width: 30,
+                    height: 30,
+                    color: Colors.grey[400],
+                  ))
             ]),
             Padding(
                 padding: EdgeInsets.all(10),
@@ -482,15 +503,17 @@ class RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
       ),
       likeBuilder: (bool isLiked) {
         return isPostLiked
-            ? Icon(
-                Icons.favorite,
+            ? SvgPicture.asset(
+                Constants.postLikeIconFill,
+                width: 30,
+                height: 30,
                 color: Colors.red,
-                size: 30,
               )
-            : Icon(
-                CupertinoIcons.heart,
-                size: 30,
-                color: Colors.grey[500],
+            : SvgPicture.asset(
+                Constants.postLikeIconOutline,
+                width: 30,
+                height: 30,
+                color: Colors.grey[400],
               );
       },
       likeCount: postCount,

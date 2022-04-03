@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:frienderr/blocs/story/story_bloc.dart';
 import 'package:frienderr/models/post/post.dart';
 import 'package:frienderr/widgets/error/error.dart';
 
@@ -60,6 +61,7 @@ class _TimelineState extends State<Timeline>
   User? user = FirebaseAuth.instance.currentUser;
   List<QueryDocumentSnapshot<Map<String, dynamic>>> posts = [];
 
+  StoryBloc storyBloc = new StoryBloc();
   TimelineBloc timelineBloc = new TimelineBloc();
 
   @override
@@ -187,7 +189,7 @@ class _TimelineState extends State<Timeline>
     return SafeArea(
         child: Scaffold(
             body: Stack(children: [
-      _timelineBody(),
+      _appBody(),
       ConditionalRenderDelegate(
         condition: showRefresher,
         fallbackWidget: Center(),
@@ -196,7 +198,7 @@ class _TimelineState extends State<Timeline>
     ])));
   }
 
-  Widget _timelineBody() {
+  Widget _appBody() {
     return CustomScrollView(
         controller: scrollController,
         physics: const BouncingScrollPhysics(
@@ -212,20 +214,8 @@ class _TimelineState extends State<Timeline>
           SliverPadding(
               padding: const EdgeInsets.all(0),
               sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                BlocConsumer<TimelineBloc, TimelineState>(
-                    bloc: timelineBloc,
-                    listener: (
-                      BuildContext context,
-                      TimelineState state,
-                    ) {},
-                    builder: (
-                      BuildContext context,
-                      TimelineState state,
-                    ) {
-                      return _determineTimelineRender(state);
-                    })
-              ])))
+                  delegate: SliverChildListDelegate(
+                      [_storyBlocConsumer(), _timelineBlocConsumer()])))
         ]);
   }
 
@@ -281,17 +271,28 @@ class _TimelineState extends State<Timeline>
     ]);
   }
 
-  Widget _determineTimelineRender(TimelineState state) {
-    switch (state.status) {
-      case TimelineStatus.Loading:
-        return _timelineLoading();
-      case TimelineStatus.Error:
-        return _timelineError(state.error);
-      case TimelineStatus.Loaded:
-        return _timelinePostList(state.timelinePosts);
-      default:
-        return Center();
-    }
+  Widget _timelineBlocConsumer() {
+    return BlocConsumer<TimelineBloc, TimelineState>(
+        bloc: timelineBloc,
+        listener: (
+          BuildContext context,
+          TimelineState state,
+        ) {},
+        builder: (
+          BuildContext context,
+          TimelineState state,
+        ) {
+          switch (state.status) {
+            case TimelineStatus.Loading:
+              return _timelineLoading();
+            case TimelineStatus.Error:
+              return _timelineError(state.error);
+            case TimelineStatus.Loaded:
+              return _timelinePostList(state.timelinePosts);
+            default:
+              return Center();
+          }
+        });
   }
 
   Widget _timelineError(String error) {
@@ -419,37 +420,48 @@ class _TimelineState extends State<Timeline>
             padding: EdgeInsets.only(top: 0, bottom: 10), child: appLogo));
   }
 
-  Widget renderStories() {
-    User? user = FirebaseAuth.instance.currentUser;
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('stories')
-            .where('id', isNotEqualTo: user?.uid)
-            .orderBy('id', descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center();
-          }
-          List<DocumentSnapshot> items = snapshot.data?.docs ?? [];
+  Widget _storyBlocConsumer() {
+    return BlocConsumer<StoryBloc, StoryState>(
+        bloc: storyBloc,
+        listener: (
+          BuildContext context,
+          StoryState state,
+        ) {},
+        builder: (
+          BuildContext context,
+          StoryState state,
+        ) {
+          return StreamBuilder<QuerySnapshot>(
+              stream: storyBloc.stories,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center();
+                }
+                List<DocumentSnapshot> items = snapshot.data?.docs ?? [];
 
-          if (items.length == 0) {
-            return Container(height: 250, child: renderUserStory());
-          }
-
-          return ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Row(children: [
-                    Container(height: 250, child: renderUserStory()),
-                    Container(height: 250, child: storyTemplate(items[index]))
-                  ]);
+                if (items.length == 0) {
+                  return Container(height: 250, child: renderUserStory());
                 }
 
-                return Container(
-                    height: 150, child: storyTemplate(items[index]));
+                return SizedBox(
+                    height: 220,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Row(children: [
+                              Container(height: 250, child: renderUserStory()),
+                              Container(
+                                  height: 250,
+                                  child: storyTemplate(items[index]))
+                            ]);
+                          }
+
+                          return Container(
+                              height: 150, child: storyTemplate(items[index]));
+                        }));
               });
         });
   }

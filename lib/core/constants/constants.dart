@@ -33,6 +33,11 @@ class Constants {
 
   static String messageIconOutline = 'assets/icons/message_icon_outline.svg';
 
+  static String postLikeIconOutline = 'assets/icons/like_post_icon.svg';
+  static String postLikeIconFill = 'assets/icons/like_post_icon_fill.svg';
+  static String sharePostIconOutline = 'assets/icons/share_post_icon.svg';
+  static String postCommentIconOutline = 'assets/icons/comment_post_icon.svg';
+
   static String notificationIconFill =
       'assets/icons/notification_icon_fill.svg';
   static String notificationIconOutline =
