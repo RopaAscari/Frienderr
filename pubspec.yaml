@@ -21,14 +21,22 @@ dev_dependencies:
 
   path: ^1.8.0
   meta: ^1.3.0
+
+  injectable_generator: ^1.5.3
+  
+  get_it: ^7.2.0
+  dartz: ^0.10.1
   
   shimmer: ^2.0.0
+  auto_route: ^3.2.4
   equatable: ^2.0.3 
+  injectable: ^1.5.3
   jaguar_jwt: ^3.0.0
   flutter_svg: ^1.0.3
   flutter_bloc: ^8.0.1
   hydrated_bloc: ^8.0.0
   firebase_auth: ^3.3.9
+
   firebase_core: ^1.13.1
   path_provider: ^2.0.2
   blur_bottom_bar: ^1.0.3
@@ -37,20 +45,24 @@ dev_dependencies:
   share: ^2.0.4
   camera: ^0.9.4+16
   like_button: ^2.0.2
+  
+  rive: ^0.8.4
+  file_picker: ^4.5.1
   cloud_firestore: ^3.1.10
   cupertino_icons: ^1.0.2
-  sliding_up_panel: ^2.0.0+1
   connectivity_plus: ^2.2.0
   json_serializable: ^6.1.5
-  responsive_flutter: ^0.0.4
+  sliding_up_panel: ^2.0.0+1
   shared_preferences: ^2.0.6
   firebase_analytics: ^9.1.2
   firebase_messaging: ^11.2.8
+  auto_route_generator: ^3.2.3
   curved_navigation_bar: ^1.0.1
   animated_splash_screen: ^1.1.0
   firebase_dynamic_links: ^4.0.8
   flutter_launcher_icons: ^0.9.0
-  flutter_page_transition: ^0.1.0
+ 
+  cube_transition_plus: ^2.0.1
   persistent_bottom_nav_bar: ^4.0.2
   material_design_icons_flutter: ^5.0.6595
   badges: ^2.0.2
@@ -72,11 +84,13 @@ dev_dependencies:
   freezed: ^1.1.1
   provider: ^6.0.2
   location: ^4.2.0 
+  flutter_stories: ^0.3.1
   animations: ^2.0.1
   dash_chat: ^1.1.16
   geolocator: ^8.0.5 
   build_runner: ^2.0.4
   media_gallery: ^0.1.5
+  flare_flutter: ^3.0.2
   bottom_navy_bar: ^6.0.0
   pull_to_refresh: ^2.0.0
   json_annotation: ^4.4.0
@@ -98,9 +112,10 @@ flutter_icons:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/
     - assets/icons/
+    - assets/images/
     - assets/map_styles/
+    - assets/animations/
 
   fonts:
     - family: Inter

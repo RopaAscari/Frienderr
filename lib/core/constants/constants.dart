@@ -7,6 +7,9 @@ class Constants {
   static String appLogo = 'assets/images/app_logo.png';
   static String shareIcon = 'assets/icons/share-icon.svg';
 
+  static String recordingAnimation = 'assets/animations/recording.flr';
+  static String loadingAnimation = 'assets/animations/loading.flr';
+  static String likeAnimation = 'assets/animations/like kiby.flr';
   static String errorVector = 'assets/images/warning.png';
 
   static String dashboardIconFill = 'assets/icons/dashboard_fill_icon.svg';
@@ -33,10 +36,14 @@ class Constants {
 
   static String messageIconOutline = 'assets/icons/message_icon_outline.svg';
 
+  static String recordingIcon = 'assets/icons/recording_icon.svg';
+
   static String postLikeIconOutline = 'assets/icons/like_post_icon.svg';
   static String postLikeIconFill = 'assets/icons/like_post_icon_fill.svg';
   static String sharePostIconOutline = 'assets/icons/share_post_icon.svg';
+  static String sharePostIconOutline1 = 'assets/icons/share_post_icon1.svg';
   static String postCommentIconOutline = 'assets/icons/comment_post_icon.svg';
+  static String postCommentIconOutline1 = 'assets/icons/comment_post_icon1.svg';
 
   static String notificationIconFill =
       'assets/icons/notification_icon_fill.svg';
@@ -71,6 +78,8 @@ class Constants {
     Collections.Chats: 'chats',
     Collections.Stories: 'stories',
     Collections.Comments: 'comments',
+    Collections.Activity: 'activity',
+    Collections.Notifications: 'notifications',
   };
 
   static Map<MediaContainerType, String> mediaContainerTypes = {
