@@ -26,7 +26,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:frienderr/core/constants/constants.dart';
 
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -42,7 +42,7 @@ class FindFriendsState extends State<FindFriends>
   @override
   bool get wantKeepAlive => true;
 
-  late Marker marker;
+  //late Marker marker;
   bool showMap = true;
   bool _lights = false;
   late final UserModel user;
@@ -53,27 +53,27 @@ class FindFriendsState extends State<FindFriends>
 
   Location location = Location();
   late String _address, _dateTime;
-  List<Marker> customMarkers = [];
+  //List<Marker> customMarkers = [];
   List<dynamic> globalMapUsers = [];
   FocusNode _focus = new FocusNode();
   late LocationData _currentPosition;
   //late GoogleMapController mapController;
   late UserBloc _userBloc = getIt<UserBloc>();
-  LatLng _initialcameraposition = LatLng(0.5937, 0.9629);
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  //LatLng _initialcameraposition = LatLng(0.5937, 0.9629);
+  //final LatLng _center = const LatLng(45.521563, -122.677433);
   final TextEditingController searchController = TextEditingController();
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
 
   late StreamSubscription<LocationData> locationSubscription;
 
-  void _onMapCreated(GoogleMapController controller) {
+  /*void _onMapCreated(GoogleMapController controller) {
     // mapController = controller;
     _loadMapStyles();
     // locationSubscription = location.onLocationChanged.listen((l) {
     //  animateToPosition(l.latitude ?? 0, l.longitude ?? 0);
     //});
-  }
+  }*/
 
   animateToPosition(double latitude, double longitude) {
     /* mapController.animateCamera(
@@ -141,7 +141,7 @@ class FindFriendsState extends State<FindFriends>
     return byteData.buffer.asUint8List();
   }
 
-  Future<void> appUserToMarkers(UserModel user) async {
+ /* Future<void> appUserToMarkers(UserModel user) async {
     try {
       final appUser = await FirebaseFirestore.instance
           .collection('users')
@@ -250,7 +250,7 @@ class FindFriendsState extends State<FindFriends>
         BlocProvider.of<UserBloc>(context, listen: false).state.user;
     await appUserToMarkers(user);
     await appUsersToMarkers(user);
-  }
+  }*/
 
   Future<void> showMapActionSheet() async {
     showModalBottomSheet<void>(
@@ -324,8 +324,8 @@ class FindFriendsState extends State<FindFriends>
     users.doc(user.id).update({
       'isLocationEnabled': value,
       'location': {
-        'latitude': _initialcameraposition.latitude,
-        'longitude': _initialcameraposition.longitude
+        //'latitude': _initialcameraposition.latitude,
+      //  'longitude': _initialcameraposition.longitude
       }
     });
     setState(() {
@@ -486,14 +486,14 @@ class FindFriendsState extends State<FindFriends>
               final longitutde =
                   globalMapUsers[itemIndex]['location']['longitude'];
               final bitmapImage = globalMapUsers[itemIndex]['bitmapImage'];
-              final distance = (Geolocator.distanceBetween(
+             /*final distance = (Geolocator.distanceBetween(
                         latitude,
                         longitutde,
-                        _initialcameraposition.latitude,
-                        _initialcameraposition.longitude,
+                    //    _initialcameraposition.latitude,
+                      //  _initialcameraposition.longitude,
                       ) /
                       1000)
-                  .toStringAsFixed(0);
+               //   .toStringAsFixed(0);*/
 
               return Container(
                   width: maxWidth - 20,
@@ -509,7 +509,7 @@ class FindFriendsState extends State<FindFriends>
                             CachedNetworkImageProvider(bitmapImage),
                       ),
                       title: Text(username),
-                      subtitle: Text('$distance km'),
+                      subtitle: Text('km'),
                       trailing: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
@@ -523,7 +523,7 @@ class FindFriendsState extends State<FindFriends>
             }));
   }
 
-  Widget mapWidget() {
+ /* Widget mapWidget() {
     return GoogleMap(
       myLocationEnabled: false,
       myLocationButtonEnabled: false,
@@ -533,7 +533,7 @@ class FindFriendsState extends State<FindFriends>
       initialCameraPosition:
           CameraPosition(target: _initialcameraposition, zoom: 15),
     );
-  }
+  }*/
 
   Widget headerWidget() {
     return Padding(
