@@ -9,6 +9,8 @@ import 'package:frienderr/features/presentation/blocs/timeline/timeline_bloc.dar
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
+import 'package:frienderr/features/presentation/navigation/tab_navigation.dart';
+import 'package:frienderr/features/presentation/screens/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
@@ -38,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _timelineBloc.add(TimelineEvent.fetchTimelinePosts());
   }
 
-  PageRouteInfo<dynamic> determineRoute(AuthenticationState state) {
+  Widget determineRoute(AuthenticationState state) {
     final BlocGroup _blocGroup = BlocGroup(
       userBloc: _userBloc,
       quickBloc: _quickBloc,
@@ -47,19 +49,26 @@ class _SplashScreenState extends State<SplashScreen> {
     );
     switch (state.currentState) {
       case AuthenticationStatus.Authenticated:
-        return MainRoute(
+        return MainScreen(
           blocGroup: _blocGroup,
         );
       default:
-        return LoginRoute(
+        return LoginScreen(
           blocGroup: _blocGroup,
         );
     }
   }
 
-  Future<dynamic> navigateToRoute(PageRouteInfo<dynamic> route) async =>
-      Future.delayed(
-          const Duration(milliseconds: 3000), () => _router.push(route));
+  Future<dynamic> navigateToRoute(Widget route) async =>
+      Future.delayed(const Duration(milliseconds: 3000), () {
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 3000),
+                pageBuilder: (_, __, ___) => route));
+      }
+          //   _router.push(route
+          );
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
           BuildContext context,
           AuthenticationState state,
         ) async {
-          final PageRouteInfo<dynamic> route = determineRoute(state);
+          final Widget route = determineRoute(state);
           await navigateToRoute(route);
         },
         child: _splashBody());

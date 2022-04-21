@@ -111,7 +111,7 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() => _shouldRenderUI = true),
                       ),
                       ConditionalRenderDelegate(
-                        condition: true,
+                        condition: _shouldRenderUI,
                         fallbackWidget: Center(),
                         renderWidget: _appBody(state),
                       )
