@@ -234,14 +234,14 @@ class AccountState extends State<Account>
           title: Text('Logout',
               style: TextStyle(
                   fontSize:
-                      AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('We are about to log you out of your account',
                     style: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))),
+                            .getAdaptiveTextSize(context, 10))),
               ],
             ),
           ),
@@ -329,7 +329,7 @@ class AccountState extends State<Account>
                   title: Text('Profile',
                       style: TextStyle(
                           fontSize: AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 5))),
+                              .getAdaptiveTextSize(context, 10))),
                   onTap: () {
                     Navigator.of(btx).pop();
                     Navigator.push(
@@ -342,7 +342,7 @@ class AccountState extends State<Account>
                   title: Text('Theme',
                       style: TextStyle(
                           fontSize: AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 5))),
+                              .getAdaptiveTextSize(context, 10))),
                   onTap: () {
                     Navigator.of(btx).pop();
                     Navigator.push(context,
@@ -353,7 +353,7 @@ class AccountState extends State<Account>
                   title: Text('Saved Posts',
                       style: TextStyle(
                           fontSize: AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 5))),
+                              .getAdaptiveTextSize(context, 10))),
                   onTap: () {
                     Navigator.of(btx).pop();
                     Navigator.push(
@@ -366,7 +366,7 @@ class AccountState extends State<Account>
                   title: Text('Notifications',
                       style: TextStyle(
                           fontSize: AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 5))),
+                              .getAdaptiveTextSize(context, 10))),
                   onTap: () {
                     Navigator.of(btx).pop();
                     Navigator.push(
@@ -379,7 +379,7 @@ class AccountState extends State<Account>
                   title: Text('Logout',
                       style: TextStyle(
                           fontSize: AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 5))),
+                              .getAdaptiveTextSize(context, 10))),
                   onTap: () => showLogOutDialog(highLevelContext))
             ]));
       },
@@ -626,7 +626,7 @@ class AccountState extends State<Account>
   Widget usernameDisplayWidget(dynamic user) {
     return Text('\n${user['username']}\n',
         style: TextStyle(
-            fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 2)));
+            fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10)));
   }
 
   Widget profilePictureWidget(dynamic user) {
@@ -684,12 +684,12 @@ class AccountState extends State<Account>
           Column(children: [
             Text('${userStories.length}',
                 style: TextStyle(
-                  fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                  fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                 )),
             Text('posts',
                 style: TextStyle(
                     fontSize:
-                        AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                        AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                     color: Colors.grey))
           ]),
           GestureDetector(
@@ -702,11 +702,11 @@ class AccountState extends State<Account>
                 Text('${user['followers'].length}',
                     style: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))),
+                            .getAdaptiveTextSize(context, 10))),
                 Text('followers',
                     style: TextStyle(
                         fontSize:
-                            AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                            AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                         color: Colors.grey))
               ])),
           GestureDetector(
@@ -719,11 +719,11 @@ class AccountState extends State<Account>
                 Text('${user['following'].length}',
                     style: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))),
+                            .getAdaptiveTextSize(context, 10))),
                 Text('following',
                     style: TextStyle(
                         fontSize:
-                            AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                            AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                         color: Colors.grey))
               ]))
         ]));

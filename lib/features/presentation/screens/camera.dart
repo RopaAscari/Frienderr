@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/core/enums/enums.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/features/presentation/widgets/gallery.dart';
@@ -26,20 +27,25 @@ class CameraScreen extends StatefulWidget {
 
 class CameraScreenState extends State<CameraScreen> {
   double progress = 0;
-  late Timer recordingTimer;
+  late File thumbnail;
   bool isRecording = false;
   bool isCameraInit = false;
   bool isCameraFront = false;
+  late Timer recordingTimer;
   int currentTimelineIndex = 0;
+  bool _isTthumbnailInitialzed = false;
 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  late Future<File?> _initializeThumbnailFuture;
   late UserState userState = context.read<UserBloc>().state;
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _fetchAssetThumbnail();
       _initializeCameraController();
     });
   }
@@ -48,6 +54,26 @@ class CameraScreenState extends State<CameraScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<File> _fetchAssetThumbnail() async {
+    const offset = 0;
+    final albums = await PhotoManager.getAssetPathList(type: RequestType.all);
+    final recentAlbum = albums.first;
+    final recentAssets = await recentAlbum.getAssetListRange(
+      start: 0, // start at index 0
+      end: 1, // end at a very big index (to get all the assets)
+    );
+
+    final file = await recentAssets[offset].file as File;
+
+    _initializeThumbnailFuture = recentAssets[offset].file;
+
+    setState(() {
+      _isTthumbnailInitialzed = true;
+    });
+
+    return file;
   }
 
   void _initializeCameraController() async {
@@ -210,17 +236,34 @@ class CameraScreenState extends State<CameraScreen> {
       child: Align(
           alignment: Alignment.center,
           child: Container(
-            child: AnimatedCrossFade(
-              duration: const Duration(milliseconds: 500),
-              firstCurve: Curves.easeInOut,
-              secondCurve: Curves.easeInOut,
-              sizeCurve: Curves.easeInOut,
-              firstChild: _recordingAnimation(),
-              secondChild: _captureVector(),
-              crossFadeState: isRecording
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-            ),
+            padding: const EdgeInsets.only(left: 80, right: 80),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(
+                    Constants.noFlashIconOutline,
+                    height: 35,
+                    width: 35,
+                    color: Colors.white,
+                  ),
+                  AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 500),
+                    firstCurve: Curves.easeInOut,
+                    secondCurve: Curves.easeInOut,
+                    sizeCurve: Curves.easeInOut,
+                    firstChild: _recordingAnimation(),
+                    secondChild: _captureVector(),
+                    crossFadeState: isRecording
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                  ),
+                  SvgPicture.asset(
+                    Constants.filterIconOutline,
+                    height: 30,
+                    width: 30,
+                    color: Colors.white,
+                  )
+                ]),
             margin: EdgeInsets.fromLTRB(1, 5, 1, 40),
           )),
       width: MediaQuery.of(context).size.width,
@@ -270,20 +313,34 @@ class CameraScreenState extends State<CameraScreen> {
           children: [
             Align(
                 alignment: Alignment.bottomLeft,
-                child: SizedBox(
-                    width: 45,
-                    height: 45,
-                    child: FittedBox(
-                        child: FloatingActionButton(
-                      backgroundColor: Colors.transparent,
-                      heroTag: null,
-                      child: Icon(Icons.photo_library_outlined,
-                          size: 40, color: Colors.grey),
-                      elevation: 2,
-                      onPressed: () {
-                        _openGallery();
-                      },
-                    )))),
+                child: GestureDetector(
+                    onTap: () {
+                      _openGallery();
+                    },
+                    child: ClipRRect(
+                      child: SizedBox(
+                          width: 45,
+                          height: 45,
+                          child: FutureBuilder<File?>(
+                              future: _isTthumbnailInitialzed
+                                  ? _initializeThumbnailFuture
+                                  : null,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snapshot.data == null) {
+                                    return Center();
+                                  } else {
+                                    return Image.file(snapshot.data as File);
+                                  }
+                                } else if (snapshot.hasError) {
+                                  return Center(); // error
+                                } else {
+                                  return CircularProgressIndicator(); // loading
+                                }
+                              })),
+                      borderRadius: BorderRadius.circular(7),
+                    ))),
             Align(
                 alignment: Alignment.bottomLeft,
                 child: IconButton(

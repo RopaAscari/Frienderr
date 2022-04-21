@@ -138,7 +138,7 @@ class _TimelinePostsState extends State<TimelinePosts> {
           Text('\n\nYou are at the end of your journey',
               style: TextStyle(
                   fontSize:
-                      AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
           GestureDetector(
               onTap: () {
                 _scrollController.animateTo(0.0,
@@ -151,7 +151,7 @@ class _TimelinePostsState extends State<TimelinePosts> {
                       color: Colors.blue[700],
                       fontWeight: FontWeight.bold,
                       fontSize:
-                          AdaptiveTextSize().getAdaptiveTextSize(context, 5))))
+                          AdaptiveTextSize().getAdaptiveTextSize(context, 10))))
         ])));
   }
 

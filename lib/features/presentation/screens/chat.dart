@@ -24,6 +24,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatDashboardScreen extends StatefulWidget {
   ChatDashboardScreen({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   @override
   bool get wantKeepAlive => true;
   late UserState userState;
-
+  User? appUser = FirebaseAuth.instance.currentUser;
   ChatBloc get chatBloc => getIt<ChatBloc>();
   final storyController = StoryController();
   RefreshController _refreshController =
@@ -52,7 +53,6 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
 
   @override
   void initState() {
-    userState = context.read<UserBloc>().state;
     listenChats();
     super.initState();
   }
@@ -72,8 +72,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   }
 
   listenChats() {
-    Stream<DocumentSnapshot> streamChats =
-        users.doc(userState.user.id).snapshots();
+    Stream<DocumentSnapshot> streamChats = users.doc(appUser?.uid).snapshots();
 
     streamChats.listen((event) {
       // chatBloc.add(GetChats(id: userState.user.id));
@@ -86,6 +85,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   }
 
   Widget build(BuildContext context) {
+    userState = BlocProvider.of<UserBloc>(context).state;
     super.build(context);
     final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
     final isDarkTheme = theme == Constants.darkTheme;
@@ -131,7 +131,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
           Text('Messages\n', style: TextStyle(fontSize: 17)),
           InkWell(
               onTap: () {
-                createChatFromFriendsList(userState.user.id, state);
+                createChatFromFriendsList(appUser!.uid, state);
               },
               child: Container(
                   decoration: BoxDecoration(
@@ -319,19 +319,19 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
                 title: Text('$username',
                     style: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))),
+                            .getAdaptiveTextSize(context, 10))),
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Messaging(
                             metaData: new MessagingMetaData(
-                                chatId: '${userState.user.id}-$id',
+                                chatId: '${appUser!.uid}-$id',
                                 chatRecipient: new ChatParticipant(
                                     id: id,
                                     username: username,
                                     profilePic: profilePic),
                                 chatUser: new ChatParticipant(
-                                    id: userState.user.id,
+                                    id: appUser!.uid,
                                     username: userState.user.username,
                                     profilePic:
                                         userState.user.profilePic ?? '')))
@@ -345,7 +345,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('chats')
-            .doc(userState.user.id)
+            .doc(appUser!.uid)
             .collection('user_chats')
             .snapshots(),
         builder: (context, snapshot) {
@@ -376,7 +376,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
                       child: Text('You have no messages',
                           style: TextStyle(
                               fontSize: AdaptiveTextSize()
-                                  .getAdaptiveTextSize(context, 5))))
+                                  .getAdaptiveTextSize(context, 10))))
                   : ListView.builder(
                       itemCount: items.length,
                       padding: EdgeInsets.only(top: 25),
@@ -451,12 +451,12 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
                                             style: TextStyle(
                                                 fontSize: AdaptiveTextSize()
                                                     .getAdaptiveTextSize(
-                                                        context, 5))),
+                                                        context, 10))),
                                         title: Text('$displayName',
                                             style: TextStyle(
                                                 fontSize: AdaptiveTextSize()
                                                     .getAdaptiveTextSize(
-                                                        context, 5))),
+                                                        context, 10))),
                                         trailing: Container(
                                             margin:
                                                 const EdgeInsets.only(top: 15),

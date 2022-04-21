@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/features/data/models/chat/messaging.dart';
@@ -253,8 +254,7 @@ class MessagingState extends State<Messaging> {
 
   @override
   Widget build(BuildContext context) {
-    final dynamic appUser =
-        BlocProvider.of<UserBloc>(context, listen: true).state.user;
+    User? appUser = FirebaseAuth.instance.currentUser;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -265,7 +265,7 @@ class MessagingState extends State<Messaging> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('chats')
-              .doc(appUser.id)
+              .doc(appUser?.uid)
               .collection('user_chats')
               .doc(metaData.chatRecipient.id)
               .collection('messages')
@@ -296,7 +296,7 @@ class MessagingState extends State<Messaging> {
                     hintText: "Add message here...",
                     hintStyle: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))),
+                            .getAdaptiveTextSize(context, 10))),
                 dateFormat: DateFormat('yyyy-MMM-dd'),
                 timeFormat: DateFormat('HH:mm'),
                 messages: messages,

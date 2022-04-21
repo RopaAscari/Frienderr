@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
@@ -39,8 +40,10 @@ class NotificationScreenState extends State<Notifications>
   }
 
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
     super.build(context);
-    late UserState userState = context.read<UserBloc>().state;
+
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -51,7 +54,7 @@ class NotificationScreenState extends State<Notifications>
         body: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('activity')
-                .doc(userState.user.id)
+                .doc(user?.uid)
                 .collection('notifications')
                 .orderBy('dateCreated', descending: true)
                 .snapshots(),
@@ -86,7 +89,7 @@ class NotificationScreenState extends State<Notifications>
                           child: Text('You have no notifications',
                               style: TextStyle(
                                   fontSize: AdaptiveTextSize()
-                                      .getAdaptiveTextSize(context, 5))))
+                                      .getAdaptiveTextSize(context, 10))))
                       : ListView.builder(
                           itemExtent: 72,
                           itemCount: notifications.length,
@@ -137,7 +140,7 @@ class NotificationScreenState extends State<Notifications>
           title: Text('$senderUsername has started following you',
               style: TextStyle(
                   fontSize:
-                      AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
           trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -164,7 +167,7 @@ class NotificationScreenState extends State<Notifications>
                             .toString()),
                     style: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))),
+                            .getAdaptiveTextSize(context, 10))),
               ])),
       endActionPane: ActionPane(
         motion: ScrollMotion(),
@@ -208,7 +211,7 @@ class NotificationScreenState extends State<Notifications>
           title: Text('$senderUsername liked your post',
               style: TextStyle(
                   fontSize:
-                      AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
           trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -240,8 +243,8 @@ class NotificationScreenState extends State<Notifications>
                         new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
                     style: TextStyle(
-                        fontSize:
-                            AdaptiveTextSize().getAdaptiveTextSize(context, 5)))
+                        fontSize: AdaptiveTextSize()
+                            .getAdaptiveTextSize(context, 10)))
               ])),
       endActionPane: ActionPane(
         motion: ScrollMotion(),
@@ -286,7 +289,7 @@ class NotificationScreenState extends State<Notifications>
           title: Text('$senderUsername comment "$comment" on your post',
               style: TextStyle(
                   fontSize:
-                      AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
           trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -316,8 +319,8 @@ class NotificationScreenState extends State<Notifications>
                         new DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
                     style: TextStyle(
-                        fontSize:
-                            AdaptiveTextSize().getAdaptiveTextSize(context, 5)))
+                        fontSize: AdaptiveTextSize()
+                            .getAdaptiveTextSize(context, 10)))
               ])),
       endActionPane: ActionPane(
         motion: ScrollMotion(),

@@ -102,7 +102,7 @@ class DisplayMediaState extends State<DisplayMedia> {
               child: Text('Cancel',
                   style: TextStyle(
                       fontSize:
-                          AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                          AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
             ),
             GestureDetector(
                 onTap: () => Navigator.push(
@@ -115,7 +115,7 @@ class DisplayMediaState extends State<DisplayMedia> {
                 child: Text('Next',
                     style: TextStyle(
                         fontSize: AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 5))))
+                            .getAdaptiveTextSize(context, 10))))
           ],
         ));
   }

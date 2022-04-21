@@ -28,6 +28,10 @@ class Constants {
   static String searchIconFill = 'assets/icons/search_icon_fill.svg';
   static String searchIconOutline = 'assets/icons/search_icon_outline.svg';
 
+  static String filterIconOutline = 'assets/icons/filter_icon.svg';
+  static String noFlashIconOutline = 'assets/icons/no_flash_icon.svg';
+  static String flashIconOutline = 'assets/icons/flash_icon.svg';
+
   static String profileIconFill = 'assets/icons/profile_icon_fill.svg';
   static String profileIconOutline = 'assets/icons/profile_icon_outline.svg';
 

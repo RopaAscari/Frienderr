@@ -200,7 +200,7 @@ class PostMediaState extends State<PostMedia> {
           Text(
             'Private post',
             style: TextStyle(
-                fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 5)),
+                fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10)),
           ),
           CupertinoSwitch(
             value: isPrivate,
@@ -222,12 +222,13 @@ class PostMediaState extends State<PostMedia> {
           children: [
             IconButton(
                 icon: Icon(Icons.arrow_back_ios,
-                    size: AdaptiveTextSize().getAdaptiveTextSize(context, 5)),
+                    size: AdaptiveTextSize().getAdaptiveTextSize(context, 10)),
                 onPressed: () => Navigator.pop(context)),
             Text(
               'New Post',
               style: TextStyle(
-                  fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 5)),
+                  fontSize:
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10)),
             )
           ],
         ));
@@ -275,7 +276,7 @@ class PostMediaState extends State<PostMedia> {
         padding: EdgeInsets.all(10.0),
         child: TextField(
           style: TextStyle(
-              fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 5)),
+              fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10)),
           controller: caption,
           maxLines: 7,
           decoration: new InputDecoration(

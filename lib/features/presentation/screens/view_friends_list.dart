@@ -107,7 +107,7 @@ class ViewFriendsListState extends State<ViewFriendsList> {
                           ? FontWeight.bold
                           : FontWeight.normal,
                       fontSize:
-                          AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                          AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                       color: Theme.of(context).textTheme.bodyText1!.color),
                 ),
                 // currentPage == 0 ? sliderBar() : Container()
@@ -122,7 +122,7 @@ class ViewFriendsListState extends State<ViewFriendsList> {
                           ? FontWeight.bold
                           : FontWeight.normal,
                       fontSize:
-                          AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                          AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                       color: Theme.of(context).textTheme.bodyText1!.color),
                 ),
                 // currentPage == 1 ? sliderBar() : Container()

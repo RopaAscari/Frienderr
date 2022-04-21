@@ -136,7 +136,7 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
           title: Text('Delete Post',
               style: TextStyle(
                   fontSize:
-                      AdaptiveTextSize().getAdaptiveTextSize(context, 5))),
+                      AdaptiveTextSize().getAdaptiveTextSize(context, 10))),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

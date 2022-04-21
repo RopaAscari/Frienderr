@@ -588,7 +588,7 @@ class FindFriendsState extends State<FindFriends>
             Text(
               'No results',
               style: TextStyle(
-                fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10),
               ),
             )
           ])));
@@ -624,7 +624,7 @@ class FindFriendsState extends State<FindFriends>
                     CachedNetworkImageProvider(searched[index]['profilePic'])),
             title: Text('${searched[index]['username']}',
                 style: TextStyle(
-                  fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 5),
+                  fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                 )
                 // To show light text with the dark variants...
                 ),
