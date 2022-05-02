@@ -1,22 +1,24 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:frienderr/features/data/models/story/story_model.dart';
 import 'package:time_elapsed/time_elapsed.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/features/domain/entities/story.dart';
 import 'package:cube_transition_plus/cube_transition_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/presentation/widgets/story.dart';
-import 'package:frienderr/features/presentation/widgets/like_button.dart';
 
-class ViewUserStory extends StatefulWidget {
+class ViewStories extends StatefulWidget {
   final int timeElasped;
-  final dynamic stories;
-  final dynamic storyUser;
   final bool isOwnerViewing;
   final int currentPosition;
-  ViewUserStory(
+  final UserEntity storyUser;
+  final List<StoryModel> stories;
+  ViewStories(
       {Key? key,
       required this.stories,
       required this.storyUser,
@@ -25,20 +27,19 @@ class ViewUserStory extends StatefulWidget {
       required this.currentPosition})
       : super(key: key);
 
-  UserStoryState createState() => UserStoryState();
+  ViewStoriesState createState() => ViewStoriesState();
 }
 
-class UserStoryState extends State<ViewUserStory> {
+class ViewStoriesState extends State<ViewStories> {
   late AnimationController _controller;
-  dynamic get stories => widget.stories;
-  dynamic get storyUser => widget.storyUser;
-  dynamic get timeElasped => widget.timeElasped;
+  int get timeElasped => widget.timeElasped;
+  UserEntity get storyUser => widget.storyUser;
+  List<StoryModel> get stories => widget.stories;
   bool get isOwnerViewing => widget.isOwnerViewing;
   PageController _pageController = PageController();
 
   @override
   void initState() {
-    print(widget.currentPosition);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
         //  _pageController.jumpToPage(
@@ -157,10 +158,10 @@ class UserStoryState extends State<ViewUserStory> {
         }
       },
       // onFlashBack: Navigator.of(context).pop,
-      momentCount: story['content'].length,
+      momentCount: story.content.length,
       momentDurationGetter: (idx) => Duration(seconds: 3),
       momentBuilder: (context, idx) => CachedNetworkImage(
-          imageUrl: story['content'][idx]['media'],
+          imageUrl: story.content[idx].media.url,
           progressIndicatorBuilder:
               ((BuildContext ctx, String _, DownloadProgress __) {
             return SizedBox(

@@ -754,8 +754,6 @@ class AccountState extends State<Account>
             ? userStories[index]['content'][0]['thumbnail']
             : userStories[index]['content'][0]['media'];
 
-        print(thumbnail);
-
         return Image.network(thumbnail);
 
         /* OpenContainer(

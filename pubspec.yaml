@@ -6,18 +6,22 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  video_compress: ^3.1.0
+  visibility_detector: ^0.2.2
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_lints: ^1.0.0
 
   path: ^1.8.0
   meta: ^1.3.0
@@ -28,6 +32,8 @@ dev_dependencies:
   dartz: ^0.10.1
   
   shimmer: ^2.0.0
+  video_thumbnail: ^0.5.0
+  auto_size_text: ^3.0.0
   auto_route: ^3.2.4
   equatable: ^2.0.3 
   injectable: ^1.5.3
@@ -61,7 +67,7 @@ dev_dependencies:
   animated_splash_screen: ^1.1.0
   firebase_dynamic_links: ^4.0.8
   flutter_launcher_icons: ^0.9.0
- 
+  provider: ^6.0.2
   cube_transition_plus: ^2.0.1
   persistent_bottom_nav_bar: ^4.0.2
   material_design_icons_flutter: ^5.0.6595
@@ -69,6 +75,7 @@ dev_dependencies:
   story_view: ^0.13.1
   fluttericon: ^2.0.0
   image_picker: ^0.8.4+10
+  google_maps_flutter: ^2.1.4
   photo_manager: ^2.0.1
   video_player: ^2.3.0
   time_elapsed: ^0.2.4+2
@@ -81,10 +88,12 @@ dev_dependencies:
   cached_network_image: ^3.1.0
 
   bloc: ^8.0.3
+  flutter_dotenv: ^5.0.2
   freezed: ^1.1.1
-  provider: ^6.0.2
+
   location: ^4.2.0 
   flutter_stories: ^0.3.1
+ 
   animations: ^2.0.1
   dash_chat: ^1.1.16
   geolocator: ^8.0.5 
@@ -119,7 +128,13 @@ flutter:
   fonts:
     - family: Inter
       fonts:
-         - asset: fonts/Inter-Medium.ttf
+         - asset: assets/fonts/Inter-Medium.ttf
     - family: Montserrat
       fonts:
-         - asset: fonts/Montserrat-Regular.ttf
+         - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: Roboto
+      fonts:
+         - asset: assets/fonts/Roboto-Regular.ttf
+    - family: OpenSans
+      fonts:
+         - asset: assets/fonts/OpenSans-VariableFont_wdth,wght.ttf

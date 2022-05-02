@@ -104,6 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 AppLogo(
                                   onFlightCompletion: () => null,
                                 ),
+                                SocialVector(vector: Constants.registerVector),
                                 _appBody(state),
                               ]);
                             })))));
@@ -156,7 +157,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               isLoading: state.currentState ==
                   AuthenticationStatus.CreateAccountLoading),
           _accountText(),
-          SocialVector(vector: Constants.registerVector),
         ]));
   }
 

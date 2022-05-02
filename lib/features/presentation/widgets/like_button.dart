@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class AppLikeButton extends StatefulWidget {
   final double size;
   final Color color;
   final int likeCount;
+  final bool hideCount;
   final Function onLike;
 
   const AppLikeButton({
     Key? key,
-    required this.color,
     required this.size,
+    required this.color,
     required this.onLike,
+    required this.hideCount,
     required this.likeCount,
   }) : super(key: key);
 
@@ -22,6 +26,16 @@ class AppLikeButton extends StatefulWidget {
 }
 
 class _AppLikeButtonState extends State<AppLikeButton> {
+  int count = 0;
+  bool isPostLiked = false;
+  @override
+  void initState() {
+    this.setState(() {
+      count = widget.likeCount;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LikeButton(
@@ -34,24 +48,26 @@ class _AppLikeButtonState extends State<AppLikeButton> {
       ),
       likeBuilder: (bool isLiked) {
         return ConditionalRenderDelegate(
-            condition: isLiked,
-            renderWidget: Icon(
-              Icons.favorite,
+            condition: isPostLiked,
+            renderWidget: SvgPicture.asset(
+              Constants.postLikeIconFill,
+              width: 30,
+              height: 30,
               color: Colors.red,
-              size: widget.size,
             ),
-            fallbackWidget: Icon(
-              CupertinoIcons.heart_fill,
-              size: widget.size,
-              color: widget.color,
+            fallbackWidget: SvgPicture.asset(
+              Constants.postLikeIconOutline,
+              width: 30,
+              height: 30,
+              color: Colors.grey[400],
             ));
       },
-      likeCount: widget.likeCount + 1,
+      likeCount: count,
       countBuilder: (int? count, bool isLiked, String text) {
-        Color color = isLiked ? Colors.red : Colors.grey[200]!;
+        Color color = isPostLiked ? Colors.red : Colors.grey[200]!;
 
         return ConditionalRenderDelegate(
-            condition: count == 0,
+            condition: count == 0 || widget.hideCount,
             renderWidget: Center(),
             fallbackWidget: Text(
               text,
@@ -60,7 +76,12 @@ class _AppLikeButtonState extends State<AppLikeButton> {
       },
       onTap: (bool isLiked) async {
         widget.onLike();
-        return !isLiked;
+
+        setState(() {
+          count++;
+          isPostLiked = !isPostLiked;
+        });
+        return true;
       },
     );
   }

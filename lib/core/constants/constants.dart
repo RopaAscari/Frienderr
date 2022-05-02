@@ -16,6 +16,8 @@ class Constants {
   static String dashboardIconOutline =
       'assets/icons/dashboard_icon_outline.svg';
 
+  static String multiSelectIcon = 'assets/icons/multi_select_icon.svg';
+  static String caughtUpAnimation = 'assets/animations/caught_up_animation.flr';
   static String quickIconFill = 'assets/icons/quick_icon_fill.svg';
   static String quickIconOutline = 'assets/icons/quick_icon_outline.svg';
 
@@ -35,12 +37,24 @@ class Constants {
   static String profileIconFill = 'assets/icons/profile_icon_fill.svg';
   static String profileIconOutline = 'assets/icons/profile_icon_outline.svg';
 
+  static String timelineMessageIconOutline =
+      'assets/icons/timeline_message_icon_outline.svg';
+
   static String homeIconFill = 'assets/icons/home_icon_fill.svg';
   static String homeIconOutline = 'assets/icons/home_icon_outline.svg';
 
   static String messageIconOutline = 'assets/icons/message_icon_outline.svg';
 
   static String recordingIcon = 'assets/icons/recording_icon.svg';
+
+  static String discoverOutlineIcon = 'assets/icons/discover_outline_icon.svg';
+  static String discoverFillIcon = 'assets/icons/discover_fill_icon.svg';
+
+  static String trashIcon = 'assets/images/trash-bin.png';
+
+  static String storyIcon = 'assets/icons/story_icon.svg';
+  static String postIcon = 'assets/icons/post_icon.svg';
+  static String quickIcon = 'assets/icons/quick_icon.svg';
 
   static String postLikeIconOutline = 'assets/icons/like_post_icon.svg';
   static String postLikeIconFill = 'assets/icons/like_post_icon_fill.svg';

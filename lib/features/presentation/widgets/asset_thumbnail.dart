@@ -1,18 +1,19 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:frienderr/core/constants/constants.dart';
-import 'package:frienderr/features/presentation/widgets/display_media.dart';
-import 'package:frienderr/features/presentation/widgets/display_selected_stories.dart';
+import 'package:frienderr/features/domain/entities/media_asset.dart';
+import 'package:frienderr/features/presentation/widgets/asset_image_fullscreen.dart';
+import 'package:frienderr/features/presentation/widgets/asset_video_fullscreen.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class AssetThumbnail extends StatefulWidget {
   const AssetThumbnail(
       {Key? key,
       required this.asset,
       required this.index,
-      required this.mediaAction,
+      required this.cameraMode,
       required this.isMutliSelecting,
       required this.fetchSelectedAssets,
       required this.currentSelectedIndex,
@@ -21,11 +22,11 @@ class AssetThumbnail extends StatefulWidget {
 
   final int index;
   final AssetEntity asset;
-  final String mediaAction;
   final bool isMutliSelecting;
   final int currentSelectedIndex;
-  final ValueSetter<dynamic> fetchSelectedAssets;
-  final ValueSetter<dynamic> removeSelectedAssets;
+  final CameraSelectionMode cameraMode;
+  final ValueSetter<GalleryAsset> fetchSelectedAssets;
+  final ValueSetter<GalleryAsset> removeSelectedAssets;
 
   AssetThumbnailState createState() => AssetThumbnailState();
 }
@@ -35,138 +36,124 @@ class AssetThumbnailState extends State<AssetThumbnail> {
   int get index => widget.index;
   List<dynamic> selectedAssets = [];
   AssetEntity get asset => widget.asset;
-  String get mediaAction => widget.mediaAction;
   bool get isMutliSelecting => widget.isMutliSelecting;
+  CameraSelectionMode get _cameraMode => widget.cameraMode;
   int get currentSelectedIndex => widget.currentSelectedIndex;
-  ValueSetter<dynamic> get fetchSelectedAssets => widget.fetchSelectedAssets;
-  ValueSetter<dynamic> get removeSelectedAssets => widget.removeSelectedAssets;
+  ValueSetter<GalleryAsset> get fetchSelectedAssets =>
+      widget.fetchSelectedAssets;
+  ValueSetter<GalleryAsset> get removeSelectedAssets =>
+      widget.removeSelectedAssets;
 
   @override
   void didChangeDependencies() {
-    print('IS MULISELCTED $isMutliSelecting');
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+  }
+
+  void _selectAsset() {
+    if (isMutliSelecting) {
+      if (selectedAsset != index) {
+        setState(() {
+          selectedAsset = index;
+          fetchSelectedAssets(
+              GalleryAsset(id: index, asset: asset, type: asset.type));
+        });
+      } else {
+        setState(() {
+          selectedAsset = null;
+          removeSelectedAssets(
+              GalleryAsset(id: index, asset: asset, type: asset.type));
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<Uint8List>(
-      future: asset as Future<Uint8List>,
-      builder: (_, snapshot) {
-        final bytes = snapshot.data;
-        // If we have no data, display a spinner
-        if (bytes == null) return Center(child: CircularProgressIndicator());
-        // If there's data, display it as an image
-        return GestureDetector(
-          onTap: () {
-            if (isMutliSelecting) {
-              if (selectedAsset != index) {
-                setState(() {
-                  selectedAsset = index;
-                  fetchSelectedAssets({
-                    'id': index,
-                    'asset': asset,
-                    'type': asset.type,
-                  });
-                });
+        body: OpenContainer(
+            openElevation: 0,
+            closedElevation: 0,
+            closedColor: Colors.transparent,
+            transitionType: ContainerTransitionType.fadeThrough,
+            openBuilder: (BuildContext context, VoidCallback _) {
+              final Future<File?> _file = asset.file;
+              if (asset.type == AssetType.image) {
+                return AssetImageFullscreen(file: _file);
               } else {
-                setState(() {
-                  selectedAsset = null;
-                  removeSelectedAssets({
-                    'id': index,
-                    'asset': asset,
-                    'type': asset.type,
-                  });
-                });
+                return AssetVideoFullscreen(file: _file);
               }
-            } else {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) =>
-                          mediaAction == Constants.postTypes[PostType.Post]
-                              ? DisplayMedia(selectedAssets: [
-                                  {
-                                    'id': index,
-                                    'asset': asset,
-                                    'type': asset.type,
-                                  }
-                                ])
-                              : DisplaySelectedStories(selectedAssets: [
-                                  {
-                                    'id': index,
-                                    'asset': asset,
-                                    'type': asset.type,
-                                  }
-                                ])));
-            }
-          },
-          onLongPress: () {},
-          child: Opacity(
-              opacity: isMutliSelecting ? .8 : 1,
-              child: Stack(children: [
-                // Wrap the image in a Positioned.fill to fill the space
-                Positioned.fill(child: Image.memory(bytes, fit: BoxFit.cover)),
+            },
+            closedBuilder: (BuildContext context, VoidCallback openContainer) {
+              return _thumbnailDisplay();
+            }));
+  }
 
-                if (isMutliSelecting)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: selectedAsset != index
-                            ? IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.circle,
-                                  size: 30,
-                                  color: Colors.grey[350],
-                                ))
-                            : Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Container(
-                                    height: 25,
-                                    width: 25,
-                                    /* child: Center(
-                                        child: Text(
-                                      '$currentSelectedIndex',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    )),*/
-                                    decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius:
-                                            BorderRadius.circular(100))),
-                              )
+  Widget _videoDisplay() {
+    if (asset.type == AssetType.video) {
+      return Center(
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.blue, borderRadius: BorderRadius.circular(30)),
+          child: Icon(
+            Icons.play_arrow,
+            color: Colors.white,
+          ),
+        ),
+      );
+    } else {
+      return Center();
+    }
+  }
 
-                        /* IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.check_circle_sharp,
-                                  size: 30,
-                                  color: Colors.orange[700],
-                                ))*/
-                        ),
-                  ),
-                // Display a Play icon if the asset is a video
-                if (asset.type == AssetType.video)
-                  Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Icon(
-                        Icons.play_arrow,
-                        color: Colors.white,
-                      ),
+  Widget _selectButton() {
+    if (isMutliSelecting) {
+      return Positioned(
+          top: 0,
+          right: 0,
+          child: Container(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(30)),
+              child: GestureDetector(
+                  onTap: () => _selectAsset(),
+                  child: ConditionalRenderDelegate(
+                    condition: selectedAsset != index,
+                    renderWidget: Icon(
+                      Icons.circle,
+                      size: 30,
+                      color: Colors.grey[350],
                     ),
-                  ),
-              ])),
-        );
-      },
-    ));
+                    fallbackWidget: Container(
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                            child: Text(
+                          '', //  '$currentSelectedIndex',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(100))),
+                  ))));
+    } else {
+      return Center();
+    }
+  }
+
+  Widget _thumbnailDisplay() {
+    return Opacity(
+        opacity: isMutliSelecting ? .8 : 1,
+        child: Stack(children: [
+          AssetEntityImage(
+            asset,
+            width: 200,
+            height: 200,
+            isOriginal: true,
+            fit: BoxFit.cover,
+            thumbnailFormat: ThumbnailFormat.jpeg, // Defaults to `jpeg`.
+          ),
+          _selectButton(),
+          _videoDisplay()
+        ]));
   }
 }

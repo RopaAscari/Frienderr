@@ -8,8 +8,8 @@ class SocialVector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(top: 80),
+        padding: EdgeInsets.only(top: 35),
         child: Image.asset(vector,
-            height: MediaQuery.of(context).size.height * .40));
+            height: MediaQuery.of(context).size.height * .39));
   }
 }

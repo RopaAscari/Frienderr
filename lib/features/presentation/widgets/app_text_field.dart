@@ -40,22 +40,22 @@ class _AppTextFieldState extends State<AppTextField> {
             errorText: widget.errorText,
             prefixIcon: widget.prefixIcon,
             suffixIcon: widget.isObscure ? passswordIcon() : widget.suffixIcon,
-            labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
+            labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
             enabledBorder: OutlineInputBorder(
               borderSide: new BorderSide(color: Colors.grey[800]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             focusedBorder: OutlineInputBorder(
-              // borderSide: BorderSide(color: Colors.transparent),
+              borderSide: BorderSide(color: Colors.transparent),
               borderRadius: BorderRadius.circular(8.0),
             ),
             border: new OutlineInputBorder(
-              borderSide: new BorderSide(color: Colors.grey[600]!),
+              borderSide: new BorderSide(color: Colors.grey[800]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             fillColor: HexColor('#9C9C9C').withOpacity(0.1),
             contentPadding: const EdgeInsets.only(top: 40.0),
-            errorStyle: TextStyle(height: 0.7, color: Colors.red),
+            errorStyle: TextStyle(height: 0.7, color: Colors.red, fontSize: 14),
           ),
           obscureText: widget.isObscure ? canPasswordShow : widget.isObscure,
         ));

@@ -10,14 +10,15 @@ _$_ContentModel _$$_ContentModelFromJson(Map<String, dynamic> json) =>
     _$_ContentModel(
       type: json['type'] as String? ?? '',
       media: json['media'] as String? ?? '',
-      thumbnail: json['thumbnail'] as String? ?? '',
-      metadata: json['metadata'] as List<dynamic>? ?? const [],
+      metadata: json['metadata'] == null
+          ? const PostMetadataModel()
+          : PostMetadataModel.fromJson(
+              json['metadata'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ContentModelToJson(_$_ContentModel instance) =>
     <String, dynamic>{
       'type': instance.type,
       'media': instance.media,
-      'thumbnail': instance.thumbnail,
       'metadata': instance.metadata,
     };

@@ -1,15 +1,18 @@
+import 'package:camera/camera.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frienderr/core/enums/enums.dart';
+
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
+import 'package:frienderr/features/presentation/screens/camera.dart';
 import 'package:frienderr/features/presentation/widgets/stories.dart';
 import 'package:frienderr/features/presentation/widgets/timeline.dart';
-import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/screens/find_friends.dart';
+import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
@@ -26,10 +29,8 @@ class _TimelineState extends State<Timeline>
     with AutomaticKeepAliveClientMixin<Timeline> {
   bool showRefresher = false;
   late ScrollController _scrollController;
-
   BlocGroup get _blocGroup => widget.blocGroup;
   User? user = FirebaseAuth.instance.currentUser;
-  late UserState userState = context.read<UserBloc>().state;
 
   @override
   bool get wantKeepAlive => true;
@@ -54,16 +55,21 @@ class _TimelineState extends State<Timeline>
     return await getIt<AppRouter>().push(ChatDashboardRoute());
   }
 
-  void _openSearch() => showGeneralDialog(
-        context: context,
-        barrierColor: Colors.black, // Background color
-        barrierDismissible: false,
-        barrierLabel: 'Dialog',
-        transitionDuration: Duration(milliseconds: 100),
-        pageBuilder: (_, __, ___) {
-          return FindFriends();
-        },
-      );
+  Future<Object?> _navigateToCamera() async {
+    return await getIt<AppRouter>().push(
+        CameraRoute(mode: CameraSelectionMode.post, blocGroup: _blocGroup));
+  }
+
+  Future<dynamic> _openCamera() {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return CameraScreen(
+            mode: CameraSelectionMode.post, blocGroup: _blocGroup);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +103,12 @@ class _TimelineState extends State<Timeline>
               padding: const EdgeInsets.all(0),
               sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                Stories(),
+                Stories(
+                  blocGroup: _blocGroup,
+                ),
                 TimelinePosts(
+                  postBloc: _blocGroup.postBloc,
                   scrollController: _scrollController,
-                  timelineBloc: _blocGroup.timelineBloc,
                 )
               ])))
         ]);
@@ -136,25 +144,25 @@ class _TimelineState extends State<Timeline>
   Widget _appBarIcons() {
     return Row(children: [
       GestureDetector(
-          onTap: () => _navigateToChatScreen(),
-          child: Badge(
-              badgeContent: Text('3'),
-              child: SvgPicture.asset(
-                Constants.messageIconOutline,
-                width: 22,
-                height: 22,
-                color: Colors.white,
-              ))),
+          onTap: () => _navigateToCamera(),
+          child: SvgPicture.asset(
+            Constants.cameraIconOutline,
+            width: 24,
+            height: 24,
+            color: Colors.white,
+          )),
       GestureDetector(
-          onTap: () => _openSearch(),
+          onTap: () => _navigateToChatScreen(),
           child: Padding(
               padding: const EdgeInsets.only(left: 18),
-              child: SvgPicture.asset(
-                Constants.searchIconOutline,
-                width: 22,
-                height: 22,
-                color: Colors.white,
-              ))),
+              child: Badge(
+                  badgeContent: Text('3'),
+                  child: SvgPicture.asset(
+                    Constants.sharePostIconOutline1,
+                    width: 22,
+                    height: 22,
+                    color: Colors.white,
+                  )))),
     ]);
   }
 

@@ -133,7 +133,6 @@ class AuthenticationBloc
         VerifyUsernameUseCaseParams(event.userId, event.username));
 
     return _either.fold((Failure error) {
-      print(error.message);
       emit(state.copyWith(
         error: error.message,
         currentState: AuthenticationStatus.RegisterUsernameFailure,

@@ -2,33 +2,33 @@ import 'dart:io';
 import 'dart:ui';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:frienderr/core/services/helpers.dart';
-import 'package:frienderr/features/data/models/user/user_model.dart';
-import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/navigation/tab_navigation.dart';
-
-import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/core/services/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:frienderr/features/domain/entities/media_asset.dart';
+import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/timeline/timeline_bloc.dart';
 
 class PostMedia extends StatefulWidget {
   PostMedia({
     Key? key,
-    required this.user,
-    required this.selectedAssets,
+    required this.posts,
+    required this.postBloc,
+    // required this.timelineBloc,
   }) : super(key: key);
 
-  final UserModel user;
-  final List<dynamic> selectedAssets;
+  final PostBloc postBloc;
+  final List<GalleryAsset> posts;
+  // final TimelineBloc timelineBloc;
 
   PostMediaState createState() => PostMediaState();
 }
@@ -36,135 +36,17 @@ class PostMedia extends StatefulWidget {
 class PostMediaState extends State<PostMedia> {
   bool isPrivate = false;
   bool isPosting = false;
-  UserModel get user => widget.user;
-  dynamic get selectedAssets => widget.selectedAssets;
+  PostBloc get _postBloc => widget.postBloc;
+  List<GalleryAsset> get _posts => widget.posts;
   final TextEditingController caption = TextEditingController();
-  final CollectionReference post =
-      FirebaseFirestore.instance.collection('posts');
+
   @override
   initState() {
     super.initState();
   }
 
-  toggleStoryPosting() {
-    setState(() {
-      isPosting = !isPosting;
-    });
-    FocusScope.of(context).unfocus();
-  }
-
-  postStory() async {
-    toggleStoryPosting();
-    final dir = await path_provider.getTemporaryDirectory();
-
-    String thumb = '';
-    List metadata = [];
-
-    final content =
-        await Stream.fromIterable(selectedAssets).asyncMap((item) async {
-      final timestamp = DateTime.now().microsecondsSinceEpoch.toString();
-
-      final Reference storageRef =
-          FirebaseStorage.instance.ref().child('/posts/$timestamp');
-
-      final Reference thumbnailRef =
-          FirebaseStorage.instance.ref().child('/thumbnail/$timestamp');
-      final targetPath = dir.absolute.path + "/temp.jpg";
-      return item['asset'].file.then((File value) async {
-        var fileClone;
-        /* final result = await FlutterImageCompress.compressAndGetFile(
-          value.absolute.path,
-          targetPath,
-          quality: 30,
-          rotate: 0,
-        );*/
-        // if (result == null) {
-        fileClone = value;
-        //  } else {
-        //  fileClone = result;
-        //  }
-
-        await storageRef.putFile(
-          fileClone,
-          SettableMetadata(
-            contentType:
-                item['type'] == AssetType.image ? 'image/jpg' : 'video/mp4',
-          ),
-        );
-
-        final url = await storageRef.getDownloadURL();
-
-        if (item['type'] == AssetType.video) {
-          /* If  String thumbs = await thumbanils.Thumbnails.getThumbnail(
-              // reates the specified path if it doesnt exist
-              videoFile: value.path,
-              imageType: thumbanils.ThumbFormat.PNG,
-              quality: 30);*/
-
-          //  final File file = await new File(thumbs).create(recursive: true);
-
-          /* await thumbnailRef.putFile(
-            file,
-            SettableMetadata(
-              contentType: 'image/jpg',
-            ),
-          );*/
-
-          thumb = await thumbnailRef.getDownloadURL();
-
-          return {
-            'media': url,
-            'thumbnail': thumb,
-            'metadata': metadata,
-            'type': item['type'] == AssetType.image ? 'image' : 'video'
-          };
-        }
-
-        return {
-          'media': url,
-          'thumbnail': thumb,
-          'metadata': metadata,
-          'type': item['type'] == AssetType.image ? 'image' : 'video'
-        };
-      });
-    }).toList();
-
-    print('USERNAME ${user.id}');
-
-    final Map<String, dynamic> posts = {
-      'id': Helpers().generateId(25),
-      'likes': 0,
-      'commentCount': 0,
-      'userLikes': [],
-      'shares': 0,
-      'content': content,
-      'caption': caption.text,
-      'user': {
-        'id': user.id,
-        'username': user.username,
-        'profilePic': user.profilePic
-      },
-      'dateCreated': DateTime.now().microsecondsSinceEpoch,
-    };
-
-    try {
-      await post.doc(posts['id']).set(posts);
-
-      await FirebaseFirestore.instance
-          .collection('postCount')
-          .doc('count')
-          .update({'count': FieldValue.increment(1)});
-
-      toggleStoryPosting();
-
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Center(),
-          ));
-    } catch (err) {
-      toggleStoryPosting();
-    }
+  void _post() async {
+    _postBloc.add(PostEvent.createPost(caption: caption.text, assets: _posts));
   }
 
   @override
@@ -175,16 +57,16 @@ class PostMediaState extends State<PostMedia> {
             child: Scaffold(
                 resizeToAvoidBottomInset: true,
                 body: Column(children: [
-                  headerWidget(),
-                  imageSlider(),
-                  captionFieldWidget(),
-                  switchTileWidget(),
-                  postOptionsWidget(),
-                  loadingWidget()
+                  _headerWidget(),
+                  _imageSlider(),
+                  _captionFieldWidget(),
+                  _switchTileWidget(),
+                  _postOptionsWidget(),
+                  _loadingWidget()
                 ]))));
   }
 
-  Widget loadingWidget() {
+  Widget _loadingWidget() {
     return isPosting
         ? Container(
             margin: const EdgeInsets.only(top: 100),
@@ -192,7 +74,7 @@ class PostMediaState extends State<PostMedia> {
         : Center();
   }
 
-  Widget switchTileWidget() {
+  Widget _switchTileWidget() {
     return Padding(
         padding: const EdgeInsets.all(15),
         child:
@@ -213,7 +95,7 @@ class PostMediaState extends State<PostMedia> {
         ]));
   }
 
-  Widget headerWidget() {
+  Widget _headerWidget() {
     return Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(top: 30, bottom: 25),
@@ -234,12 +116,12 @@ class PostMediaState extends State<PostMedia> {
         ));
   }
 
-  Widget imageSlider() {
+  Widget _imageSlider() {
     return SizedBox(
         height: 70,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: selectedAssets.length,
+            itemCount: _posts.length,
             itemBuilder: (context, index) {
               return Container(
                 height: 40,
@@ -248,28 +130,37 @@ class PostMediaState extends State<PostMedia> {
                     BoxDecoration(borderRadius: BorderRadius.circular(5)),
                 child: Card(
                   child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.amber.shade900, width: 1.5),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: FutureBuilder<Uint8List>(
-                      future: selectedAssets[index]['asset'].thumbData
-                          as Future<Uint8List>,
-                      builder: (_, snapshot) {
-                        final bytes = snapshot.data;
-                        if (bytes == null) return Container();
-                        return Image.memory(bytes, fit: BoxFit.cover);
-                      },
-                    ),
-                  ),
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.amber.shade900, width: 1.5),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: ConditionalRenderDelegate(
+                        condition: _posts[index].asset.type == AssetType.image,
+                        renderWidget: FutureBuilder<File?>(
+                          future: _posts[index].asset.file,
+                          builder: (_, snapshot) {
+                            final file = snapshot.data;
+                            if (file == null) return Container();
+                            return Image.file(file, fit: BoxFit.cover);
+                          },
+                        ),
+                        fallbackWidget: FutureBuilder<Uint8List?>(
+                          future: _posts[index].asset.thumbnailData,
+                          builder: (_, snapshot) {
+                            final bytes = snapshot.data;
+                            if (bytes == null) return Container();
+                            return Image.memory(bytes, fit: BoxFit.cover);
+                          },
+                        ),
+                      )),
                 ),
               );
             }));
   }
 
-  Widget captionFieldWidget() {
+  Widget _captionFieldWidget() {
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       child: Padding(
@@ -299,13 +190,13 @@ class PostMediaState extends State<PostMedia> {
     );
   }
 
-  Widget postOptionsWidget() {
+  Widget _postOptionsWidget() {
     final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
 
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
-          onTap: () => isPosting ? null : postStory(),
+          onTap: () => _post(),
           child: Container(
               height: 60,
               width: MediaQuery.of(context).size.width - 20,

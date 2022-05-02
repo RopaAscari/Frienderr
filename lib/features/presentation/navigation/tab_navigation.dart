@@ -1,31 +1,17 @@
 import 'package:badges/badges.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frienderr/core/injection/injection.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
+import 'package:frienderr/features/presentation/screens/account.dart';
+import 'package:frienderr/features/presentation/screens/timeline.dart';
+import 'package:frienderr/features/presentation/screens/snap_feed.dart';
+import 'package:frienderr/features/presentation/screens/find_friends.dart';
+import 'package:frienderr/features/presentation/screens/notifications.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account.dart';
-import 'package:frienderr/features/presentation/screens/camera.dart';
-import 'package:frienderr/features/presentation/screens/notifications.dart';
-import 'package:frienderr/features/presentation/screens/snap_feed.dart';
-import 'package:frienderr/features/presentation/screens/timeline.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttericon/entypo_icons.dart';
-import 'package:fluttericon/elusive_icons.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-
-import 'package:frienderr/core/constants/constants.dart';
-
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MainScreen extends StatefulWidget {
   final BlocGroup blocGroup;
@@ -43,9 +29,25 @@ class MainScreenState extends State<MainScreen>
   int _selectedIndex = 0;
   BlocGroup get _blocGroup => widget.blocGroup;
   late PageController _pageController;
-  final GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
 
-  List<BottomNavigationBarItem> buildItems(bool isDarkTheme) {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance!.removeObserver(this);
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {}
+
+  List<BottomNavigationBarItem> _buildItems(bool isDarkTheme) {
     return [
       BottomNavigationBarItem(
         label: '',
@@ -84,61 +86,22 @@ class MainScreenState extends State<MainScreen>
               color: Colors.white,
             )),
       ),
-      /*   BottomNavigationBarItem(
-        label: '',
-        backgroundColor: Colors.white,
-        icon: Opacity(
-          opacity: 0.4,
-          child: SvgPicture.asset(
-            Constants.commentIconOutline,
-            width: 26,
-            height: 26,
-            color: Colors.white,
-          ),
-        ),
-        activeIcon: SvgPicture.asset(
-          Constants.commentIconFill,
-          width: 25,
-          height: 25,
-          color: Colors.white,
-        ),
-      ),
       BottomNavigationBarItem(
         label: '',
         backgroundColor: Colors.white,
         icon: Opacity(
           opacity: 0.4,
           child: SvgPicture.asset(
-            Constants.notificationIconOutline,
-            width: 24,
-            height: 24,
+            Constants.discoverOutlineIcon,
+            width: 28,
+            height: 28,
             color: Colors.white,
           ),
         ),
         activeIcon: SvgPicture.asset(
-          Constants.notificationIconFill,
-          width: 24,
-          height: 24,
-          color: Colors.white,
-        ),
-      ),*/
-
-      BottomNavigationBarItem(
-        label: '',
-        backgroundColor: Colors.white,
-        icon: Opacity(
-          opacity: 0.4,
-          child: SvgPicture.asset(
-            Constants.cameraIconOutline,
-            width: 24,
-            height: 24,
-            color: Colors.white,
-          ),
-        ),
-        activeIcon: SvgPicture.asset(
-          Constants.cameraIconFill,
-          width: 24,
-          height: 24,
+          Constants.discoverFillIcon,
+          width: 28,
+          height: 28,
           color: Colors.white,
         ),
       ),
@@ -185,30 +148,12 @@ class MainScreenState extends State<MainScreen>
     ];
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance!.removeObserver(this);
-    _pageController = PageController(initialPage: _selectedIndex);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {}
-
-  List<Widget> buildScreens() {
+  List<Widget> _buildScreens() {
     User? user = FirebaseAuth.instance.currentUser;
     return [
       Timeline(blocGroup: _blocGroup),
       SnapFeed(quickBloc: _blocGroup.quickBloc),
-      //ChatDashboard(),
-
-      CameraScreen(),
+      FindFriends(),
       Notifications(),
       Account(
         isProfileOwnerViewing: true,
@@ -248,27 +193,27 @@ class MainScreenState extends State<MainScreen>
         body: PageView(
           controller: _pageController,
           physics: NeverScrollableScrollPhysics(),
-          children: buildScreens(),
+          children: _buildScreens(),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             border: Border(
                 top: BorderSide(
-              color: Colors.grey[900]!,
               width: 1.0,
+              color: Colors.grey[900]!,
             )),
           ),
           child: BottomNavigationBar(
-              iconSize: 23,
-              elevation: 10,
-              enableFeedback: false,
-              backgroundColor:
-                  isDarkTheme ? Colors.black.withOpacity(0.5) : Colors.white,
-              type: BottomNavigationBarType.fixed,
-              items: buildItems(isDarkTheme),
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.white,
-              onTap: _onItemTapped),
+            iconSize: 23,
+            elevation: 10,
+            onTap: _onItemTapped,
+            enableFeedback: false,
+            currentIndex: _selectedIndex,
+            items: _buildItems(isDarkTheme),
+            selectedItemColor: Colors.white,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.black.withOpacity(0.5),
+          ),
         ));
   }
 }

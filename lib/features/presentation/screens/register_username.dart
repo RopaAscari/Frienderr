@@ -51,7 +51,7 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
   }
 
   Future<dynamic> _navigateToTimeline(AuthenticationState state) async {
-    getIt<UserBloc>().add(UserEvent.setUser(state.user as UserModel));
+    _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
     return getIt<AppRouter>().push(MainRoute(blocGroup: _blocGroup));
   }
 

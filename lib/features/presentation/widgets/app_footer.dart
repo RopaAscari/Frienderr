@@ -7,7 +7,7 @@ class AppFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        //  margin: const EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.only(top: 120),
         child: Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -24,7 +24,7 @@ class AppFooter extends StatelessWidget {
                   )
                 ],
                 border: Border(
-                  top: BorderSide(width: 0.5, color: Colors.grey[800]!),
+                  top: BorderSide(width: 0.5, color: Colors.grey[900]!),
                 ),
               ),
               child: child,

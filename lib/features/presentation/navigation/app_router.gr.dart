@@ -22,8 +22,8 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: MainScreen(key: args.key, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -35,8 +35,29 @@ class _$AppRouter extends RootStackRouter {
               key: args.key,
               blocGroup: args.blocGroup,
               shouldRenderUI: args.shouldRenderUI),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    CameraRoute.name: (routeData) {
+      final args = routeData.argsAs<CameraRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: CameraScreen(
+              key: args.key, mode: args.mode, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    CommentRoute.name: (routeData) {
+      final args = routeData.argsAs<CommentRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: CommentScreen(key: args.key, postId: args.postId),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -45,8 +66,8 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: RegisterScreen(key: args.key, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -56,8 +77,8 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: ChatDashboardScreen(key: args.key),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -66,8 +87,8 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: ForgotPasswordScreen(key: args.key, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -75,8 +96,8 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: const UnauthenticatedScreen(),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -86,8 +107,8 @@ class _$AppRouter extends RootStackRouter {
           routeData: routeData,
           child: RegisterUsernameScreen(
               key: args.key, userId: args.userId, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -97,8 +118,8 @@ class _$AppRouter extends RootStackRouter {
           routeData: routeData,
           child:
               RecoveryEmailSentScreen(key: args.key, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
@@ -106,8 +127,8 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: const SplashScreen(),
-          transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-          durationInMilliseconds: 200,
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     }
@@ -117,6 +138,8 @@ class _$AppRouter extends RootStackRouter {
   List<RouteConfig> get routes => [
         RouteConfig(MainRoute.name, path: '/main-screen'),
         RouteConfig(LoginRoute.name, path: '/login-screen'),
+        RouteConfig(CameraRoute.name, path: '/camera-screen'),
+        RouteConfig(CommentRoute.name, path: '/comment-screen'),
         RouteConfig(RegisterRoute.name, path: '/register-screen'),
         RouteConfig(ChatDashboardRoute.name, path: '/chat-dashboard-screen'),
         RouteConfig(ForgotPasswordRoute.name, path: '/forgot-password-screen'),
@@ -181,6 +204,60 @@ class LoginRouteArgs {
   @override
   String toString() {
     return 'LoginRouteArgs{key: $key, blocGroup: $blocGroup, shouldRenderUI: $shouldRenderUI}';
+  }
+}
+
+/// generated route for
+/// [CameraScreen]
+class CameraRoute extends PageRouteInfo<CameraRouteArgs> {
+  CameraRoute(
+      {Key? key,
+      required CameraSelectionMode mode,
+      required BlocGroup blocGroup})
+      : super(CameraRoute.name,
+            path: '/camera-screen',
+            args: CameraRouteArgs(key: key, mode: mode, blocGroup: blocGroup));
+
+  static const String name = 'CameraRoute';
+}
+
+class CameraRouteArgs {
+  const CameraRouteArgs(
+      {this.key, required this.mode, required this.blocGroup});
+
+  final Key? key;
+
+  final CameraSelectionMode mode;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'CameraRouteArgs{key: $key, mode: $mode, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [CommentScreen]
+class CommentRoute extends PageRouteInfo<CommentRouteArgs> {
+  CommentRoute({Key? key, required String postId})
+      : super(CommentRoute.name,
+            path: '/comment-screen',
+            args: CommentRouteArgs(key: key, postId: postId));
+
+  static const String name = 'CommentRoute';
+}
+
+class CommentRouteArgs {
+  const CommentRouteArgs({this.key, required this.postId});
+
+  final Key? key;
+
+  final String postId;
+
+  @override
+  String toString() {
+    return 'CommentRouteArgs{key: $key, postId: $postId}';
   }
 }
 

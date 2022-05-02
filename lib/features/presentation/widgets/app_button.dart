@@ -7,12 +7,16 @@ import 'package:frienderr/features/presentation/widgets/conditional_render_deleg
 
 class AppButton extends StatefulWidget {
   final String label;
+  final bool disabled;
   final bool isLoading;
+  final double borderRadius;
   final Function onPressed;
   final EdgeInsetsGeometry margin;
   const AppButton(
       {Key? key,
       required this.label,
+      this.disabled = false,
+      this.borderRadius = 6.0,
       required this.isLoading,
       required this.onPressed,
       this.margin = const EdgeInsets.only(top: 20)})
@@ -30,13 +34,15 @@ class _AppButtonState extends State<AppButton> {
       decoration: BoxDecoration(
         border: Border.all(
             color: widget.isLoading ? Colors.grey[900]! : Colors.transparent),
-        borderRadius: BorderRadius.circular(6.5),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
         gradient: LinearGradient(
           begin: const Alignment(-0.95, 0.0),
           end: const Alignment(1.0, 0.0),
           colors: widget.isLoading
               ? [Colors.black, Colors.black]
-              : [HexColor('#E09810'), HexColor('#FEDA43')],
+              : widget.disabled
+                  ? [Colors.grey[500]!, Colors.grey[500]!]
+                  : [HexColor('#E09810'), HexColor('#FEDA43')],
           stops: const [0.0, 1.0],
         ),
       ),

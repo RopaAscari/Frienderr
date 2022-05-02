@@ -4,31 +4,26 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:frienderr/core/injection/injection.dart';
-import 'package:frienderr/core/services/helpers.dart';
-import 'package:frienderr/core/services/services.dart';
-import 'package:frienderr/features/data/models/user/user_model.dart';
-import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account.dart';
-import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
-import 'package:provider/provider.dart';
 import 'package:location/location.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:fluttericon/elusive_icons.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:frienderr/core/services/helpers.dart';
+import 'package:frienderr/core/services/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
 import 'package:frienderr/core/constants/constants.dart';
-
-//import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:frienderr/core/injection/injection.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/presentation/screens/account.dart';
+import 'package:permission_handler/permission_handler.dart' as permission;
+import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class FindFriends extends StatefulWidget {
   FindFriends({Key? key}) : super(key: key);
@@ -39,69 +34,46 @@ class FindFriends extends StatefulWidget {
 
 class FindFriendsState extends State<FindFriends>
     with AutomaticKeepAliveClientMixin<FindFriends> {
-  @override
-  bool get wantKeepAlive => true;
-
   //late Marker marker;
   bool showMap = true;
   bool _lights = false;
-  late final UserModel user;
   int currentIndex = 0;
   dynamic searched = [];
   bool isSearching = false;
   bool areUsersLoaded = false;
-
+  late final UserModel user;
   Location location = Location();
-  late String _address, _dateTime;
-  //List<Marker> customMarkers = [];
   List<dynamic> globalMapUsers = [];
   FocusNode _focus = new FocusNode();
   late LocationData _currentPosition;
-  //late GoogleMapController mapController;
-  late UserBloc _userBloc = getIt<UserBloc>();
-  //LatLng _initialcameraposition = LatLng(0.5937, 0.9629);
-  //final LatLng _center = const LatLng(45.521563, -122.677433);
+  late GoogleMapController _mapController;
+  LatLng _initialcameraposition = LatLng(0.5937, 0.9629);
   final TextEditingController searchController = TextEditingController();
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
-
   late StreamSubscription<LocationData> locationSubscription;
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
 
-  /*void _onMapCreated(GoogleMapController controller) {
-    // mapController = controller;
-    _loadMapStyles();
-    // locationSubscription = location.onLocationChanged.listen((l) {
-    //  animateToPosition(l.latitude ?? 0, l.longitude ?? 0);
-    //});
-  }*/
-
-  animateToPosition(double latitude, double longitude) {
-    /* mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(latitude, longitude), zoom: 15),
-      ),
-    );*/
+  @override
+  void initState() {
+    _askPermissions();
+    super.initState();
   }
 
   @override
   void dispose() {
     _focus.dispose();
-    //mapController.dispose();
+    _mapController.dispose();
     searchController.dispose();
     // locationSubscription.cancel();
     super.dispose();
   }
 
   @override
-  void initState() {
-    //getLoc();
-    super.initState();
-
-    //_focus.addListener(() => !_focus.hasFocus ? toggleMapVisibility() : null);
-
-    WidgetsBinding.instance!.addPostFrameCallback((_) =>
-        user = BlocProvider.of<UserBloc>(context, listen: false).state.user);
-  }
+  bool get wantKeepAlive => true;
 
   void toggleMapVisibility() {
     setState(() {
@@ -109,7 +81,45 @@ class FindFriendsState extends State<FindFriends>
     });
   }
 
-  Future<void> fetchUsers(String term) async {
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+    _loadMapStyles();
+    // locationSubscription = location.onLocationChanged.listen((l) {
+    //  animateToPosition(l.latitude ?? 0, l.longitude ?? 0);
+    //});
+  }
+
+  Future<void> animateToPosition(double latitude, double longitude) async {
+    /* mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(latitude, longitude), zoom: 15),
+      ),
+    );*/
+  }
+
+  void _askPermissions() async {
+    Map<permission.Permission, permission.PermissionStatus> statuses = await [
+      permission.Permission.location,
+    ].request();
+  }
+
+  Future _loadMapStyles() async {
+    final theme = context.read<ThemeBloc>().state.theme;
+
+    if (theme == Constants.darkTheme) {
+      final _darkMapStyle =
+          await rootBundle.loadString('assets/map_styles/dark.json');
+
+      _mapController.setMapStyle(_darkMapStyle);
+    } else {
+      final _lightMapStyle =
+          await rootBundle.loadString('assets/map_styles/light.json');
+
+      _mapController.setMapStyle(_lightMapStyle);
+    }
+  }
+
+  Future<void> _fetchUsers(String term) async {
     setState(() {
       isSearching = true;
     });
@@ -123,82 +133,6 @@ class FindFriendsState extends State<FindFriends>
       isSearching = false;
       searched = searchedUsers.docs;
     });
-  }
-
-  Future<Uint8List> cacheMarkers(String imageUrl) async {
-    final int targetWidth = 150;
-    final File markerImageFile =
-        await DefaultCacheManager().getSingleFile(imageUrl);
-    final Uint8List markerImageBytes = await markerImageFile.readAsBytes();
-    final Codec markerImageCodec = await instantiateImageCodec(
-      markerImageBytes,
-      targetWidth: targetWidth,
-    );
-    final FrameInfo frameInfo = await markerImageCodec.getNextFrame();
-    final ByteData byteData = await frameInfo.image.toByteData(
-      format: ImageByteFormat.png,
-    ) as ByteData;
-    return byteData.buffer.asUint8List();
-  }
-
- /* Future<void> appUserToMarkers(UserModel user) async {
-    try {
-      final appUser = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.id)
-          .get();
-
-      final bytes = await cacheMarkers(appUser['bitmapImage']);
-      print('executing...');
-      customMarkers.add(Marker(
-          markerId: MarkerId(user.id),
-          position: new LatLng(_initialcameraposition.latitude,
-              _initialcameraposition.longitude),
-          icon: BitmapDescriptor.fromBytes(bytes)));
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  Future<void> appUsersToMarkers(UserModel user) async {
-    final mapUsers = await users
-        .where('isLocationEnabled', isEqualTo: true)
-        // .where('id', isNotEqualTo: user.id)
-        .get();
-
-    setState(() {
-      areUsersLoaded = true;
-      globalMapUsers = mapUsers.docs;
-    });
-
-    for (dynamic mapUser in mapUsers.docs) {
-      final id = mapUser['id'];
-      final bitMapImage = mapUser['bitmapImage'];
-      final latitude = mapUser['location']['latitude'];
-      final longitude = mapUser['location']['longitude'];
-
-      final bytes = await cacheMarkers(bitMapImage);
-      customMarkers.add(Marker(
-          markerId: MarkerId(id),
-          position: new LatLng(latitude, longitude),
-          icon: BitmapDescriptor.fromBytes(bytes)));
-    }
-  }
-
-  Future _loadMapStyles() async {
-    final theme = context.read<ThemeBloc>().state.theme;
-
-    if (theme == Constants.darkTheme) {
-      final _darkMapStyle =
-          await rootBundle.loadString('assets/map_styles/dark.json');
-
-      //  mapController.setMapStyle(_darkMapStyle);
-    } else {
-      final _lightMapStyle =
-          await rootBundle.loadString('assets/map_styles/light.json');
-
-      // mapController.setMapStyle(_lightMapStyle);
-    }
   }
 
   Future<void> getLoc() async {
@@ -228,7 +162,7 @@ class FindFriendsState extends State<FindFriends>
         _currentPosition.latitude ?? 0.0, _currentPosition.longitude ?? 0.0);
     animateToPosition(
         _currentPosition.latitude ?? 0.0, _currentPosition.longitude ?? 0.0);
-    /* location.onLocationChanged.listen((LocationData currentLocation) {
+    location.onLocationChanged.listen((LocationData currentLocation) {
       //   print("${currentLocation.longitude} : ${currentLocation.longitude}");
       setState(() {
         _currentPosition = currentLocation;
@@ -236,23 +170,23 @@ class FindFriendsState extends State<FindFriends>
             _currentPosition.longitude ?? 0.0);
 
         DateTime now = DateTime.now();
-        _dateTime = DateFormat('EEE d MMM kk:mm:ss ').format(now);
-        _getAddress(_currentPosition.latitude ?? 0.0,
+        //   _dateTime = DateFormat('EEE d MMM kk:mm:ss ').format(now);
+        /*_getAddress(_currentPosition.latitude ?? 0.0,
                 _currentPosition.longitude ?? 0.0)
             .then((value) {
           setState(() {
             _address = "${value.first.addressLine}";
           });
-        });
+        });*/
       });
-    });*/
-    final UserModel user =
+    });
+    /* final UserModel user =
         BlocProvider.of<UserBloc>(context, listen: false).state.user;
-    await appUserToMarkers(user);
-    await appUsersToMarkers(user);
-  }*/
+   / await appUserToMarkers(user);
+    //await appUsersToMarkers(user);*/
+  }
 
-  Future<void> showMapActionSheet() async {
+  Future<void> _showMapActionSheet() async {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -325,7 +259,7 @@ class FindFriendsState extends State<FindFriends>
       'isLocationEnabled': value,
       'location': {
         //'latitude': _initialcameraposition.latitude,
-      //  'longitude': _initialcameraposition.longitude
+        //  'longitude': _initialcameraposition.longitude
       }
     });
     setState(() {
@@ -348,8 +282,9 @@ class FindFriendsState extends State<FindFriends>
             resizeToAvoidBottomInset: false,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniEndFloat,
-            floatingActionButton: _mapButton(),
-            body: Container(
+            // floatingActionButton: _mapButton(),
+            body:
+                _discoverMap() /*Container(
               margin: const EdgeInsets.only(top: 15),
               height: MediaQuery.of(context).size.height,
               child: Flex(direction: Axis.vertical, children: [
@@ -366,7 +301,22 @@ class FindFriendsState extends State<FindFriends>
                         child: Center(child: CupertinoActivityIndicator())),
                     fallbackWidget: searchResults())
               ]),
-            )));
+            )*/
+            ));
+  }
+
+  Widget _discoverMap() {
+    return ClipRRect(
+      child: GoogleMap(
+        mapType: MapType.normal,
+        myLocationEnabled: false,
+        zoomControlsEnabled: false,
+        onMapCreated: _onMapCreated,
+        myLocationButtonEnabled: false,
+        initialCameraPosition: _kGooglePlex,
+      ),
+      borderRadius: BorderRadius.circular(25),
+    );
   }
 
   Widget _searchBar() {
@@ -381,7 +331,7 @@ class FindFriendsState extends State<FindFriends>
             obscureText: false,
             controller: searchController,
             //   style: TextStyle(color: Colors.white),
-            onChanged: (term) => fetchUsers(term),
+            onChanged: (term) => _fetchUsers(term),
             decoration: new InputDecoration(
                 labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
                 enabledBorder: OutlineInputBorder(
@@ -450,7 +400,7 @@ class FindFriendsState extends State<FindFriends>
                         heroTag: null,
                         backgroundColor: HexColor('#EE6115'),
                         child: Icon(Elusive.location, color: Colors.white),
-                        onPressed: () => showMapActionSheet())))),
+                        onPressed: () => _showMapActionSheet())))),
         fallbackWidget: Center());
   }
 
@@ -486,7 +436,7 @@ class FindFriendsState extends State<FindFriends>
               final longitutde =
                   globalMapUsers[itemIndex]['location']['longitude'];
               final bitmapImage = globalMapUsers[itemIndex]['bitmapImage'];
-             /*final distance = (Geolocator.distanceBetween(
+              /*final distance = (Geolocator.distanceBetween(
                         latitude,
                         longitutde,
                     //    _initialcameraposition.latitude,
@@ -522,18 +472,6 @@ class FindFriendsState extends State<FindFriends>
                               onPressed: () => null))));
             }));
   }
-
- /* Widget mapWidget() {
-    return GoogleMap(
-      myLocationEnabled: false,
-      myLocationButtonEnabled: false,
-      zoomControlsEnabled: false,
-      markers: customMarkers.toSet(),
-      onMapCreated: _onMapCreated,
-      initialCameraPosition:
-          CameraPosition(target: _initialcameraposition, zoom: 15),
-    );
-  }*/
 
   Widget headerWidget() {
     return Padding(

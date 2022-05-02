@@ -24,24 +24,22 @@ class _$PostModelTearOff {
 
   _PostModel call(
       {String id = '',
-      int shares = 0,
-      dynamic user = const {},
-      List<dynamic> userLikes = const [],
       String caption = '',
       int dateCreated = 0,
       int commentCount = 0,
-      int likes = 0,
-      List<ContentModel> content = const []}) {
+      List<String> shares = const [],
+      List<String> likes = const [],
+      List<ContentModel> content = const [],
+      UserModel user = const UserModel(id: '')}) {
     return _PostModel(
       id: id,
-      shares: shares,
-      user: user,
-      userLikes: userLikes,
       caption: caption,
       dateCreated: dateCreated,
       commentCount: commentCount,
+      shares: shares,
       likes: likes,
       content: content,
+      user: user,
     );
   }
 
@@ -56,14 +54,13 @@ const $PostModel = _$PostModelTearOff();
 /// @nodoc
 mixin _$PostModel {
   String get id => throw _privateConstructorUsedError;
-  int get shares => throw _privateConstructorUsedError;
-  dynamic get user => throw _privateConstructorUsedError;
-  List<dynamic> get userLikes => throw _privateConstructorUsedError;
   String get caption => throw _privateConstructorUsedError;
   int get dateCreated => throw _privateConstructorUsedError;
   int get commentCount => throw _privateConstructorUsedError;
-  int get likes => throw _privateConstructorUsedError;
+  List<String> get shares => throw _privateConstructorUsedError;
+  List<String> get likes => throw _privateConstructorUsedError;
   List<ContentModel> get content => throw _privateConstructorUsedError;
+  UserModel get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -77,14 +74,15 @@ abstract class $PostModelCopyWith<$Res> {
       _$PostModelCopyWithImpl<$Res>;
   $Res call(
       {String id,
-      int shares,
-      dynamic user,
-      List<dynamic> userLikes,
       String caption,
       int dateCreated,
       int commentCount,
-      int likes,
-      List<ContentModel> content});
+      List<String> shares,
+      List<String> likes,
+      List<ContentModel> content,
+      UserModel user});
+
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -98,32 +96,19 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? shares = freezed,
-    Object? user = freezed,
-    Object? userLikes = freezed,
     Object? caption = freezed,
     Object? dateCreated = freezed,
     Object? commentCount = freezed,
+    Object? shares = freezed,
     Object? likes = freezed,
     Object? content = freezed,
+    Object? user = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      shares: shares == freezed
-          ? _value.shares
-          : shares // ignore: cast_nullable_to_non_nullable
-              as int,
-      user: user == freezed
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      userLikes: userLikes == freezed
-          ? _value.userLikes
-          : userLikes // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
       caption: caption == freezed
           ? _value.caption
           : caption // ignore: cast_nullable_to_non_nullable
@@ -136,15 +121,30 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _value.commentCount
           : commentCount // ignore: cast_nullable_to_non_nullable
               as int,
+      shares: shares == freezed
+          ? _value.shares
+          : shares // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       likes: likes == freezed
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
-              as int,
+              as List<String>,
       content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as List<ContentModel>,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
+  }
+
+  @override
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
   }
 }
 
@@ -156,14 +156,16 @@ abstract class _$PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
   @override
   $Res call(
       {String id,
-      int shares,
-      dynamic user,
-      List<dynamic> userLikes,
       String caption,
       int dateCreated,
       int commentCount,
-      int likes,
-      List<ContentModel> content});
+      List<String> shares,
+      List<String> likes,
+      List<ContentModel> content,
+      UserModel user});
+
+  @override
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -178,32 +180,19 @@ class __$PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? shares = freezed,
-    Object? user = freezed,
-    Object? userLikes = freezed,
     Object? caption = freezed,
     Object? dateCreated = freezed,
     Object? commentCount = freezed,
+    Object? shares = freezed,
     Object? likes = freezed,
     Object? content = freezed,
+    Object? user = freezed,
   }) {
     return _then(_PostModel(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      shares: shares == freezed
-          ? _value.shares
-          : shares // ignore: cast_nullable_to_non_nullable
-              as int,
-      user: user == freezed
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      userLikes: userLikes == freezed
-          ? _value.userLikes
-          : userLikes // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
       caption: caption == freezed
           ? _value.caption
           : caption // ignore: cast_nullable_to_non_nullable
@@ -216,14 +205,22 @@ class __$PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
           ? _value.commentCount
           : commentCount // ignore: cast_nullable_to_non_nullable
               as int,
+      shares: shares == freezed
+          ? _value.shares
+          : shares // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       likes: likes == freezed
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
-              as int,
+              as List<String>,
       content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as List<ContentModel>,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
   }
 }
@@ -233,14 +230,13 @@ class __$PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
 class _$_PostModel implements _PostModel {
   const _$_PostModel(
       {this.id = '',
-      this.shares = 0,
-      this.user = const {},
-      this.userLikes = const [],
       this.caption = '',
       this.dateCreated = 0,
       this.commentCount = 0,
-      this.likes = 0,
-      this.content = const []});
+      this.shares = const [],
+      this.likes = const [],
+      this.content = const [],
+      this.user = const UserModel(id: '')});
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
       _$$_PostModelFromJson(json);
@@ -248,15 +244,6 @@ class _$_PostModel implements _PostModel {
   @JsonKey()
   @override
   final String id;
-  @JsonKey()
-  @override
-  final int shares;
-  @JsonKey()
-  @override
-  final dynamic user;
-  @JsonKey()
-  @override
-  final List<dynamic> userLikes;
   @JsonKey()
   @override
   final String caption;
@@ -268,14 +255,20 @@ class _$_PostModel implements _PostModel {
   final int commentCount;
   @JsonKey()
   @override
-  final int likes;
+  final List<String> shares;
+  @JsonKey()
+  @override
+  final List<String> likes;
   @JsonKey()
   @override
   final List<ContentModel> content;
+  @JsonKey()
+  @override
+  final UserModel user;
 
   @override
   String toString() {
-    return 'PostModel(id: $id, shares: $shares, user: $user, userLikes: $userLikes, caption: $caption, dateCreated: $dateCreated, commentCount: $commentCount, likes: $likes, content: $content)';
+    return 'PostModel(id: $id, caption: $caption, dateCreated: $dateCreated, commentCount: $commentCount, shares: $shares, likes: $likes, content: $content, user: $user)';
   }
 
   @override
@@ -284,30 +277,28 @@ class _$_PostModel implements _PostModel {
         (other.runtimeType == runtimeType &&
             other is _PostModel &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.shares, shares) &&
-            const DeepCollectionEquality().equals(other.user, user) &&
-            const DeepCollectionEquality().equals(other.userLikes, userLikes) &&
             const DeepCollectionEquality().equals(other.caption, caption) &&
             const DeepCollectionEquality()
                 .equals(other.dateCreated, dateCreated) &&
             const DeepCollectionEquality()
                 .equals(other.commentCount, commentCount) &&
+            const DeepCollectionEquality().equals(other.shares, shares) &&
             const DeepCollectionEquality().equals(other.likes, likes) &&
-            const DeepCollectionEquality().equals(other.content, content));
+            const DeepCollectionEquality().equals(other.content, content) &&
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(shares),
-      const DeepCollectionEquality().hash(user),
-      const DeepCollectionEquality().hash(userLikes),
       const DeepCollectionEquality().hash(caption),
       const DeepCollectionEquality().hash(dateCreated),
       const DeepCollectionEquality().hash(commentCount),
+      const DeepCollectionEquality().hash(shares),
       const DeepCollectionEquality().hash(likes),
-      const DeepCollectionEquality().hash(content));
+      const DeepCollectionEquality().hash(content),
+      const DeepCollectionEquality().hash(user));
 
   @JsonKey(ignore: true)
   @override
@@ -323,14 +314,13 @@ class _$_PostModel implements _PostModel {
 abstract class _PostModel implements PostModel {
   const factory _PostModel(
       {String id,
-      int shares,
-      dynamic user,
-      List<dynamic> userLikes,
       String caption,
       int dateCreated,
       int commentCount,
-      int likes,
-      List<ContentModel> content}) = _$_PostModel;
+      List<String> shares,
+      List<String> likes,
+      List<ContentModel> content,
+      UserModel user}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
@@ -338,21 +328,19 @@ abstract class _PostModel implements PostModel {
   @override
   String get id;
   @override
-  int get shares;
-  @override
-  dynamic get user;
-  @override
-  List<dynamic> get userLikes;
-  @override
   String get caption;
   @override
   int get dateCreated;
   @override
   int get commentCount;
   @override
-  int get likes;
+  List<String> get shares;
+  @override
+  List<String> get likes;
   @override
   List<ContentModel> get content;
+  @override
+  UserModel get user;
   @override
   @JsonKey(ignore: true)
   _$PostModelCopyWith<_PostModel> get copyWith =>

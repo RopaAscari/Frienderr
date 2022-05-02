@@ -13,7 +13,7 @@ class _AppLogoState extends State<AppLogo> {
   final Widget appLogo = // Align(
       // alignment: Alignment.topCenter,
       // child:
-      Image.asset(Constants.appLogo, width: 180); //);
+      Image.asset(Constants.appLogo, width: 200); //);
   @override
   Widget build(BuildContext context) {
     return Hero(

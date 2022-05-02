@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frienderr/app/handler_delegate.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,6 +17,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //await dotenv.load();
 
   await Firebase.initializeApp();
 

@@ -9,19 +9,21 @@ part of 'comment_model.dart';
 _$_CommentModel _$$_CommentModelFromJson(Map<String, dynamic> json) =>
     _$_CommentModel(
       id: json['id'] as String? ?? '',
-      userId: json['userId'] as String? ?? '',
+      postId: json['postId'] as String? ?? '',
+      user: json['user'] ?? const {},
       comment: json['comment'] as String? ?? '',
-      username: json['username'] as String? ?? '',
       dateCreated: json['dateCreated'] as int? ?? 0,
-      profilePic: json['profilePic'] as String? ?? '',
+      likes:
+          (json['likes'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
     );
 
 Map<String, dynamic> _$$_CommentModelToJson(_$_CommentModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'userId': instance.userId,
+      'postId': instance.postId,
+      'user': instance.user,
       'comment': instance.comment,
-      'username': instance.username,
       'dateCreated': instance.dateCreated,
-      'profilePic': instance.profilePic,
+      'likes': instance.likes,
     };

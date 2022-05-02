@@ -25,12 +25,10 @@ class _$ContentModelTearOff {
   _ContentModel call(
       {String type = '',
       String media = '',
-      String thumbnail = '',
-      List<dynamic> metadata = const []}) {
+      PostMetadataModel metadata = const PostMetadataModel()}) {
     return _ContentModel(
       type: type,
       media: media,
-      thumbnail: thumbnail,
       metadata: metadata,
     );
   }
@@ -47,8 +45,7 @@ const $ContentModel = _$ContentModelTearOff();
 mixin _$ContentModel {
   String get type => throw _privateConstructorUsedError;
   String get media => throw _privateConstructorUsedError;
-  String get thumbnail => throw _privateConstructorUsedError;
-  List<dynamic> get metadata => throw _privateConstructorUsedError;
+  PostMetadataModel get metadata => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -61,8 +58,9 @@ abstract class $ContentModelCopyWith<$Res> {
   factory $ContentModelCopyWith(
           ContentModel value, $Res Function(ContentModel) then) =
       _$ContentModelCopyWithImpl<$Res>;
-  $Res call(
-      {String type, String media, String thumbnail, List<dynamic> metadata});
+  $Res call({String type, String media, PostMetadataModel metadata});
+
+  $PostMetadataModelCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -77,7 +75,6 @@ class _$ContentModelCopyWithImpl<$Res> implements $ContentModelCopyWith<$Res> {
   $Res call({
     Object? type = freezed,
     Object? media = freezed,
-    Object? thumbnail = freezed,
     Object? metadata = freezed,
   }) {
     return _then(_value.copyWith(
@@ -89,15 +86,18 @@ class _$ContentModelCopyWithImpl<$Res> implements $ContentModelCopyWith<$Res> {
           ? _value.media
           : media // ignore: cast_nullable_to_non_nullable
               as String,
-      thumbnail: thumbnail == freezed
-          ? _value.thumbnail
-          : thumbnail // ignore: cast_nullable_to_non_nullable
-              as String,
       metadata: metadata == freezed
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as PostMetadataModel,
     ));
+  }
+
+  @override
+  $PostMetadataModelCopyWith<$Res> get metadata {
+    return $PostMetadataModelCopyWith<$Res>(_value.metadata, (value) {
+      return _then(_value.copyWith(metadata: value));
+    });
   }
 }
 
@@ -108,8 +108,10 @@ abstract class _$ContentModelCopyWith<$Res>
           _ContentModel value, $Res Function(_ContentModel) then) =
       __$ContentModelCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String type, String media, String thumbnail, List<dynamic> metadata});
+  $Res call({String type, String media, PostMetadataModel metadata});
+
+  @override
+  $PostMetadataModelCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -126,7 +128,6 @@ class __$ContentModelCopyWithImpl<$Res> extends _$ContentModelCopyWithImpl<$Res>
   $Res call({
     Object? type = freezed,
     Object? media = freezed,
-    Object? thumbnail = freezed,
     Object? metadata = freezed,
   }) {
     return _then(_ContentModel(
@@ -138,14 +139,10 @@ class __$ContentModelCopyWithImpl<$Res> extends _$ContentModelCopyWithImpl<$Res>
           ? _value.media
           : media // ignore: cast_nullable_to_non_nullable
               as String,
-      thumbnail: thumbnail == freezed
-          ? _value.thumbnail
-          : thumbnail // ignore: cast_nullable_to_non_nullable
-              as String,
       metadata: metadata == freezed
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as PostMetadataModel,
     ));
   }
 }
@@ -156,8 +153,7 @@ class _$_ContentModel implements _ContentModel {
   const _$_ContentModel(
       {this.type = '',
       this.media = '',
-      this.thumbnail = '',
-      this.metadata = const []});
+      this.metadata = const PostMetadataModel()});
 
   factory _$_ContentModel.fromJson(Map<String, dynamic> json) =>
       _$$_ContentModelFromJson(json);
@@ -170,14 +166,11 @@ class _$_ContentModel implements _ContentModel {
   final String media;
   @JsonKey()
   @override
-  final String thumbnail;
-  @JsonKey()
-  @override
-  final List<dynamic> metadata;
+  final PostMetadataModel metadata;
 
   @override
   String toString() {
-    return 'ContentModel(type: $type, media: $media, thumbnail: $thumbnail, metadata: $metadata)';
+    return 'ContentModel(type: $type, media: $media, metadata: $metadata)';
   }
 
   @override
@@ -187,7 +180,6 @@ class _$_ContentModel implements _ContentModel {
             other is _ContentModel &&
             const DeepCollectionEquality().equals(other.type, type) &&
             const DeepCollectionEquality().equals(other.media, media) &&
-            const DeepCollectionEquality().equals(other.thumbnail, thumbnail) &&
             const DeepCollectionEquality().equals(other.metadata, metadata));
   }
 
@@ -196,7 +188,6 @@ class _$_ContentModel implements _ContentModel {
       runtimeType,
       const DeepCollectionEquality().hash(type),
       const DeepCollectionEquality().hash(media),
-      const DeepCollectionEquality().hash(thumbnail),
       const DeepCollectionEquality().hash(metadata));
 
   @JsonKey(ignore: true)
@@ -214,8 +205,7 @@ abstract class _ContentModel implements ContentModel {
   const factory _ContentModel(
       {String type,
       String media,
-      String thumbnail,
-      List<dynamic> metadata}) = _$_ContentModel;
+      PostMetadataModel metadata}) = _$_ContentModel;
 
   factory _ContentModel.fromJson(Map<String, dynamic> json) =
       _$_ContentModel.fromJson;
@@ -225,9 +215,7 @@ abstract class _ContentModel implements ContentModel {
   @override
   String get media;
   @override
-  String get thumbnail;
-  @override
-  List<dynamic> get metadata;
+  PostMetadataModel get metadata;
   @override
   @JsonKey(ignore: true)
   _$ContentModelCopyWith<_ContentModel> get copyWith =>

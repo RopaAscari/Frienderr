@@ -272,11 +272,8 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
                                 fontSize: AdaptiveTextSize()
                                     .getAdaptiveTextSize(context, 5)))
                       ]),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Comment(post: fetchedPost)))),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Center()))),
                   GestureDetector(
                       onTap: () => sharePost(postId),
                       child: Row(children: [

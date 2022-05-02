@@ -8,11 +8,11 @@ part 'comment_model.freezed.dart';
 class CommentModel with _$CommentModel implements CommentEntity {
   const factory CommentModel({
     @Default('') final String id,
-    @Default('') final String userId,
+    @Default('') final String postId,
+    @Default({}) final dynamic user,
     @Default('') final String comment,
-    @Default('') final String username,
     @Default(0) final int dateCreated,
-    @Default('') final String profilePic,
+    @Default([]) final List<String> likes,
   }) = _CommentModel;
 
   factory CommentModel.fromJson(Map<String, dynamic> json) =>

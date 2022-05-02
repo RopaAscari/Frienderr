@@ -23,7 +23,7 @@ class GetPaginatedPostsUseCase
 }
 
 class GetPaginatedPostsParams {
-  final List<PostModel> posts;
+  final List<Map<String, dynamic>> posts;
   GetPaginatedPostsParams({
     required this.posts,
   });

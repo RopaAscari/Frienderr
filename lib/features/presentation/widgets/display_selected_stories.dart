@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +9,10 @@ import 'package:frienderr/core/services/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/video_screen.dart';
+import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/tab_navigation.dart';
 
@@ -18,10 +21,12 @@ final helpers = new Helpers();
 class DisplaySelectedStories extends StatefulWidget {
   DisplaySelectedStories({
     Key? key,
+    required this.storyBloc,
     required this.selectedAssets,
   }) : super(key: key);
 
-  final List<dynamic> selectedAssets;
+  final StoryBloc storyBloc;
+  final List<GalleryAsset> selectedAssets;
 
   DisplaySelectedStoriesState createState() => DisplaySelectedStoriesState();
 }
@@ -30,28 +35,28 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
   int currentIndex = 0;
   bool isPreviewReady = false;
   late Map currentMediaItem = {};
-  dynamic get selectedAssets => widget.selectedAssets;
-  final CollectionReference story =
-      FirebaseFirestore.instance.collection('stories');
+  StoryBloc get _storyBloc => widget.storyBloc;
+  List<GalleryAsset> get _selectedAssets => widget.selectedAssets;
+
   late UserState userState =
       Provider.of<UserBloc>(context, listen: false).state;
 
   @override
   initState() {
-    getImageFromFuture();
+    _getImageFromFuture();
     super.initState();
   }
 
-  getImageFromFuture() async {
-    selectedAssets[0]['asset'].file.then((value) {
+  Future<void> _getImageFromFuture() async {
+    _selectedAssets[0].asset.file.then((value) {
       setState(() {
-        currentMediaItem = {'file': value, 'type': selectedAssets[0]['type']};
+        currentMediaItem = {'file': value, 'type': _selectedAssets[0].type};
         isPreviewReady = true;
       });
     });
   }
 
-  selectAsset(dynamic asset, int index) {
+  void _selectAsset(dynamic asset, int index) {
     asset['asset'].file.then((value) {
       setState(() {
         currentIndex = index;
@@ -60,38 +65,14 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
     });
   }
 
-  showActionSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext actionSheet) {
-        return Container(
-          height: 200,
-          color: Theme.of(context).canvasColor,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Uploading  ',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    CupertinoActivityIndicator(radius: 10)
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+  void _determineStoryAction() {
+    if (_storyBloc.state.stories.userStory.doesUserHaveStories) {
+      _storyBloc.add(StoryEvent.updateStory(assets: _selectedAssets));
+    } else {
+      _storyBloc.add(StoryEvent.createStory(assets: _selectedAssets));
+    }
   }
-
-  determineStoryAction() async {
+  /*determineStoryAction() async {
     List metadata = [];
 
     showActionSheet();
@@ -102,14 +83,14 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
       final Reference storageRef =
           FirebaseStorage.instance.ref().child('/stories/$timestamp');
 
-      return item['asset'].file.then((value) async {
-        if (item['type'] == AssetType.video) {}
+      return item.asset.file.then((value) async {
+        if (item.type == AssetType.video) {}
         // print('value $value');
         await storageRef.putFile(
-          value,
+          value as File,
           SettableMetadata(
             contentType:
-                item['type'] == AssetType.image ? 'image/jpg' : 'video/mp4',
+                item.type == AssetType.image ? 'image/jpg' : 'video/mp4',
           ),
         );
 
@@ -120,7 +101,7 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
           'views': [],
           'metadata': metadata,
           'dateCreated': DateTime.now().microsecondsSinceEpoch,
-          'type': item['type'] == AssetType.image ? 'image' : 'video'
+          'type': item.type == AssetType.image ? 'image' : 'video'
         };
       });
     }).toList();
@@ -164,16 +145,7 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
             builder: (context) => Center(),
           ));
     } catch (err) {}
-  }
-
-  Future<bool> checkIfDocExists(String docId) async {
-    try {
-      var doc = await story.doc(docId).get();
-      return doc.exists;
-    } catch (e) {
-      throw e;
-    }
-  }
+  }*/
 
   Widget build(BuildContext context) {
     final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
@@ -195,7 +167,7 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
         Align(
             alignment: Alignment.topRight,
             child: GestureDetector(
-                onTap: () => determineStoryAction(),
+                onTap: () => _determineStoryAction(),
                 child: Container(
                     height: 35,
                     width: 65,
@@ -230,7 +202,7 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
                           itemExtent: 90.0,
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: selectedAssets.length,
+                          itemCount: _selectedAssets.length,
                           itemBuilder: (context, index) {
                             return Container(
                               height: 40,
@@ -247,18 +219,17 @@ class DisplaySelectedStoriesState extends State<DisplaySelectedStories> {
                                               : Colors.transparent,
                                           width: 2),
                                       borderRadius: BorderRadius.circular(5)),
-                                  child: FutureBuilder<Uint8List>(
-                                    future: selectedAssets[index]['asset']
-                                        .thumbData as Future<Uint8List>,
+                                  child: FutureBuilder<File?>(
+                                    future: _selectedAssets[index].asset.file,
                                     builder: (_, snapshot) {
                                       final bytes = snapshot.data;
                                       if (bytes == null) return Container();
                                       return GestureDetector(
                                           onTap: () {
-                                            selectAsset(
-                                                selectedAssets[index], index);
+                                            _selectAsset(
+                                                _selectedAssets[index], index);
                                           },
-                                          child: Image.memory(bytes,
+                                          child: Image.file(bytes,
                                               fit: BoxFit.cover));
                                     },
                                   ),

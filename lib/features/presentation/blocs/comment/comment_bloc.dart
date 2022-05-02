@@ -21,33 +21,52 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       : super(CommentState(comments: [])) {
     on<_GetComments>(_getComment);
     on<_PostComment>(_postComment);
+    on<_GetPaginatedComments>(_getPaginatedComments);
   }
 
   Future<void> _getComment(
       _GetComments event, Emitter<CommentState> emit) async {
-    emit(state.copyWith(currentState: CommentStatus.Loading));
+    emit(state.copyWith(
+      currentState: CommentStatus.loading,
+      action: CommentListenableAction.idle,
+    ));
     final Either<Failure, List<CommentEntity>> _either =
         await _getCommentsUsecase(GetCommentsParams(event.postId));
+
     return _either.fold((Failure error) {
       emit(state.copyWith(
-          currentState: CommentStatus.Faliure, error: error.message));
+          currentState: CommentStatus.faliure, error: error.message));
     }, (List<CommentEntity> comments) {
       emit(state.copyWith(
-          comments: comments, currentState: CommentStatus.Loaded));
+          comments: comments, currentState: CommentStatus.loaded));
+    });
+  }
+
+  Future<void> _getPaginatedComments(
+      _GetPaginatedComments event, Emitter<CommentState> emit) async {
+    final Either<Failure, List<CommentEntity>> _either =
+        await _getCommentsUsecase(GetCommentsParams(event.postId));
+
+    return _either.fold((Failure error) {
+      emit(state.copyWith(
+          currentState: CommentStatus.faliure, error: error.message));
+    }, (List<CommentEntity> comments) {
+      emit(state.copyWith(
+          comments: comments, currentState: CommentStatus.loaded));
     });
   }
 
   Future<void> _postComment(
       _PostComment event, Emitter<CommentState> emit) async {
-    emit(state.copyWith(currentState: CommentStatus.Loading));
     final Either<Failure, bool> _either = await _postCommentUsecase(
         PostCommentUseCaseParams(event.comment, event.postId));
     return _either.fold((Failure error) {
       emit(state.copyWith(
-          currentState: CommentStatus.Faliure, error: error.message));
+          currentState: CommentStatus.faliure, error: error.message));
     }, (bool success) {
-      // emit(state.copyWith(
-      //     comments: comments, currentState: CommentStatus.Loaded));
+      // final List<CommentEntity> clone = List.from(state.comments);
+      //clone.add(event.comment);
+      emit(state.copyWith(action: CommentListenableAction.created));
     });
   }
 }

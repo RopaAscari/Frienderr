@@ -1,24 +1,25 @@
 import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
-import 'package:frienderr/core/injection/injection.dart';
-import 'package:frienderr/features/data/models/post/content_model.dart';
-import 'package:frienderr/features/domain/entities/post.dart';
-import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/failure/failure.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/data/models/post/post_model.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
 import 'package:frienderr/features/data/providers/post_provider.dart';
+import 'package:frienderr/features/data/providers/user_provider.dart';
+import 'package:frienderr/features/data/models/post/content_model.dart';
+import 'package:frienderr/features/data/models/post/metadata_model.dart';
 import 'package:frienderr/features/domain/repositiories/post_repository.dart';
 
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {
   final IPostRemoteDataProvider _postRemoteDataProvider;
-
-  const PostRepository(this._postRemoteDataProvider);
+  final IUserDataRemoteProvider _userRemoteDataProvider;
+  const PostRepository(
+      this._postRemoteDataProvider, this._userRemoteDataProvider);
 
   @override
   Either<Failure, Stream<QuerySnapshot<Map<String, dynamic>>>>
@@ -31,48 +32,33 @@ class PostRepository implements IPostRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> createPost({
+    required String caption,
+    required List<GalleryAsset> assets,
+  }) async {
+    try {
+      final bool postCreated = await _postRemoteDataProvider.createPost(
+          caption: caption, assets: assets);
+
+      return Right(postCreated);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, TimelineResponse>> getPosts() async {
     try {
-      final userBloc = getIt<UserBloc>();
-      final platformUsers = userBloc.state.platformUsers;
-
-      final QuerySnapshot<Object?> response =
+      final QuerySnapshot<Object?> rawPosts =
           await _postRemoteDataProvider.getPosts();
 
-      final List<PostModel> posts = response.docs.map((post) {
-        final data = post.data() as Map<String, dynamic>;
+      final QuerySnapshot<Object?> users =
+          await _userRemoteDataProvider.getPlatformUsers();
 
-        List<ContentModel> contentItems = [];
+      final List<Map<String, dynamic>> postMap =
+          rawPosts.docs.map((e) => e.data() as Map<String, dynamic>).toList();
 
-        final content = data['content'].map((content) {
-          contentItems.add(ContentModel(
-              type: content['type'],
-              media: content['media'],
-              metadata: content['metadata'],
-              thumbnail: content['thumbnail']));
-          return ContentModel(
-              type: content['type'],
-              media: content['media'],
-              metadata: content['metadata'],
-              thumbnail: content['thumbnail']);
-        }).toList();
-
-        return PostModel(
-          id: data['id'],
-          shares: data['shares'],
-          user: UserEntity(
-            id: data['user']['id'],
-            username: data['user']['username'],
-            profilePic: data['user']['profilePic'],
-          ),
-          likes: data['likes'],
-          caption: data['caption'],
-          content: contentItems,
-          userLikes: data['userLikes'],
-          dateCreated: data['dateCreated'],
-          commentCount: data['commentCount'],
-        );
-      }).toList();
+      final List<PostModel> posts = postsFromJson(postMap, users.docs);
 
       return Right(TimelineResponse(userCaughtUp: false, posts: posts));
     } catch (e) {
@@ -82,56 +68,27 @@ class PostRepository implements IPostRepository {
 
   @override
   Future<Either<Failure, TimelineResponse>> getPaginatedPosts(
-      List<PostModel> postList) async {
+      List<Map<String, dynamic>> previousList) async {
     try {
       bool userCaughtUp = false;
-      Map<String, dynamic> postsMap = json.decode(postList.toString());
 
       final QuerySnapshot<Object?> response =
-          await _postRemoteDataProvider.getPaginatedPosts(postsMap);
+          await _postRemoteDataProvider.getPaginatedPosts(previousList);
 
-      final List<Map<String, dynamic>> posts = response.docs
+      final QuerySnapshot<Object?> users =
+          await _userRemoteDataProvider.getPlatformUsers();
+
+      final List<Map<String, dynamic>> currentList = response.docs
           .map((post) => post.data() as Map<String, dynamic>)
           .toList();
 
       final List<Map<String, dynamic>> newPosts = []
-        ..addAll(posts)
-        ..addAll([postsMap]);
+        ..addAll(previousList)
+        ..addAll(currentList);
 
-      final List<PostModel> finalPosts = posts.map((post) {
-        List<ContentModel> contentItems = [];
+      final List<PostModel> finalPosts = postsFromJson(newPosts, users.docs);
 
-        final content = post['content'].map((content) {
-          contentItems.add(ContentModel(
-              type: content['type'],
-              media: content['media'],
-              metadata: content['metadata'],
-              thumbnail: content['thumbnail']));
-          return ContentModel(
-              type: content['type'],
-              media: content['media'],
-              metadata: content['metadata'],
-              thumbnail: content['thumbnail']);
-        }).toList();
-
-        return PostModel(
-          id: post['id'],
-          shares: post['shares'],
-          user: UserEntity(
-            id: post['user']['id'],
-            username: post['user']['username'],
-            profilePic: post['user']['profilePic'],
-          ),
-          likes: post['likes'],
-          caption: post['caption'],
-          content: contentItems,
-          userLikes: post['userLikes'],
-          dateCreated: post['dateCreated'],
-          commentCount: post['commentCount'],
-        );
-      }).toList();
-
-      if (newPosts.length == postsMap.length) {
+      if (newPosts.length == currentList.length) {
         userCaughtUp = true;
       }
 
@@ -143,7 +100,8 @@ class PostRepository implements IPostRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> likePost(dynamic post, UserEntity user) async {
+  Future<Either<Failure, bool>> likePost(
+      PostEntity post, UserEntity user) async {
     try {
       return Right(await _postRemoteDataProvider.likePost(post, user));
     } catch (e) {
@@ -167,5 +125,36 @@ class PostRepository implements IPostRepository {
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }
+  }
+
+  List<PostModel> postsFromJson(
+      List<dynamic> posts, List<QueryDocumentSnapshot<Object?>> users) {
+    return posts.map((post) {
+      final List<ContentModel> content = post['content']
+          .map((content) {
+            return ContentModel(
+              type: content['type'],
+              media: content['media'],
+              metadata: PostMetadataModel(thumbnail: content['thumbnail']),
+            );
+          })
+          .toList()
+          .cast<ContentModel>();
+
+      final UserModel user = UserModel.fromJson(users.firstWhere((user) {
+        return (user.data() as Map)['id'] == post['user']['id'];
+      }).data() as Map<String, dynamic>);
+
+      return PostModel(
+        user: user,
+        id: post['id'],
+        content: content,
+        caption: post['caption'],
+        dateCreated: post['dateCreated'],
+        commentCount: post['commentCount'],
+        likes: post['likes'].cast<String>(),
+        shares: post['shares'].cast<String>(),
+      );
+    }).toList();
   }
 }

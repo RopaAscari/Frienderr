@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
@@ -65,7 +66,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<dynamic> _navigateToTimeline(AuthenticationState state) async {
-    getIt<UserBloc>().add(UserEvent.setUser(state.user as UserModel));
+    _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
     return getIt<AppRouter>().push(MainRoute(blocGroup: _blocGroup));
   }
 
@@ -84,7 +85,6 @@ class LoginScreenState extends State<LoginScreen> {
             backgroundColor: Theme.of(context).canvasColor,
             resizeToAvoidBottomInset: false,
             body: SingleChildScrollView(
-              reverse: true,
               child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
                   bloc: _blocGroup.authenticationBloc,
                   listener: (
@@ -122,22 +122,18 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget _registerAccountText() {
     return Center(
-        child: Text.rich(TextSpan(
+        child: AutoSizeText.rich(TextSpan(
             text: "\nDon't have an account. Register",
             style: TextStyle(
-              color: Colors.grey[400],
-              fontSize:
-                  const AdaptiveTextSize().getAdaptiveTextSize(context, 9.5),
+              color: Colors.grey[400]!.withOpacity(0.9),
+              fontSize: 14.5,
             ),
             children: <InlineSpan>[
           TextSpan(
               text: ' here',
               recognizer: new TapGestureRecognizer()
                 ..onTap = () => _navigateToRegisterScreen(),
-              style: TextStyle(
-                  fontSize: const AdaptiveTextSize()
-                      .getAdaptiveTextSize(context, 9.5),
-                  color: HexColor('#FFB126')))
+              style: TextStyle(fontSize: 14.5, color: HexColor('#FFB126')))
         ])));
   }
 
@@ -146,22 +142,19 @@ class LoginScreenState extends State<LoginScreen> {
         margin: const EdgeInsets.only(top: 10),
         child: Align(
             alignment: Alignment.center,
-            child: Text.rich(TextSpan(
+            child: AutoSizeText.rich(TextSpan(
                 text: "Forgot password? Click",
                 style: TextStyle(
-                  color: Colors.grey[400],
-                  fontSize: const AdaptiveTextSize()
-                      .getAdaptiveTextSize(context, 9.5),
+                  color: Colors.grey[400]!.withOpacity(0.9),
+                  fontSize: 14,
                 ),
                 children: <InlineSpan>[
                   TextSpan(
                       text: ' here',
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () => _navigateToForgotScreen(),
-                      style: TextStyle(
-                          fontSize: const AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 9.5),
-                          color: HexColor('#FFB126')))
+                      style:
+                          TextStyle(fontSize: 14.5, color: HexColor('#FFB126')))
                 ]))));
   }
 
@@ -174,8 +167,9 @@ class LoginScreenState extends State<LoginScreen> {
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
                     child: Column(children: [
+                  SocialVector(vector: Constants.authVector),
                   Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(children: [
                         AppTextField(
                             label: "Email",
@@ -198,20 +192,19 @@ class LoginScreenState extends State<LoginScreen> {
                               color: Colors.grey,
                             ),
                             controller: _passwordController,
-                            padding: const EdgeInsets.only(top: 15),
+                            padding: const EdgeInsets.only(top: 10),
                             errorText: state.currentState ==
                                     AuthenticationStatus.AuthenticationFailure
                                 ? state.error
                                 : null),
                         AppButton(
                           label: "Login",
-                          margin: const EdgeInsets.only(top: 20),
+                          margin: const EdgeInsets.only(top: 24),
                           onPressed: () => _onAuthenticate(context),
                           isLoading: state.currentState ==
                               AuthenticationStatus.AuthenticationLoading,
                         ),
                         _registerAccountText(),
-                        SocialVector(vector: Constants.authVector),
                       ])),
                   AppFooter(child: _forgotPassword()),
                 ])))));

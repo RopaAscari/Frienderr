@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoScreen extends StatefulWidget {
   final String video;
@@ -37,6 +38,7 @@ class VideoScreenState extends State<VideoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Key key = Key('video');
     return Scaffold(
       body: FutureBuilder(
         future: _initializeVideoPlayerFuture,
@@ -45,7 +47,19 @@ class VideoScreenState extends State<VideoScreen> {
             //_controller.play();
             return Stack(fit: StackFit.loose, children: [
               GestureDetector(
-                  child: VideoPlayer(_controller),
+                  child: VisibilityDetector(
+                      key: key,
+                      onVisibilityChanged: (visibilityInfo) {
+                        var visiblePercentage =
+                            visibilityInfo.visibleFraction * 100;
+                        print(visiblePercentage);
+                        if (visiblePercentage > 50) {
+                          _controller.play();
+                        } else {
+                          _controller.pause();
+                        }
+                      },
+                      child: VideoPlayer(_controller)),
                   onTap: () => setState(() {
                         if (_controller.value.isPlaying) {
                           _controller.pause();

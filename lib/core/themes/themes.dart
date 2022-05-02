@@ -12,7 +12,6 @@ final appThemeData = {
     primaryColor: HexColor('#F5F5F5'),
     canvasColor: HexColor('#FFFFFF'),
     fontFamily: 'Inter',
-    buttonColor: HexColor('#13111A'),
     textTheme: TextTheme(
       bodyText1: TextStyle(color: HexColor('#262527')),
       bodyText2: TextStyle(color: HexColor('#E4E3E3')),
@@ -23,7 +22,6 @@ final appThemeData = {
   ),
   AppTheme.Dark: ThemeData(
     brightness: Brightness.dark,
-    buttonColor: Colors.white,
     canvasColor: HexColor('#000000'),
     primaryColor: Colors.black,
     fontFamily: 'Inter',

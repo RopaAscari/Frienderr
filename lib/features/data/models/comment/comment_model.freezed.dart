@@ -24,18 +24,18 @@ class _$CommentModelTearOff {
 
   _CommentModel call(
       {String id = '',
-      String userId = '',
+      String postId = '',
+      dynamic user = const {},
       String comment = '',
-      String username = '',
       int dateCreated = 0,
-      String profilePic = ''}) {
+      List<String> likes = const []}) {
     return _CommentModel(
       id: id,
-      userId: userId,
+      postId: postId,
+      user: user,
       comment: comment,
-      username: username,
       dateCreated: dateCreated,
-      profilePic: profilePic,
+      likes: likes,
     );
   }
 
@@ -50,11 +50,11 @@ const $CommentModel = _$CommentModelTearOff();
 /// @nodoc
 mixin _$CommentModel {
   String get id => throw _privateConstructorUsedError;
-  String get userId => throw _privateConstructorUsedError;
+  String get postId => throw _privateConstructorUsedError;
+  dynamic get user => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
   int get dateCreated => throw _privateConstructorUsedError;
-  String get profilePic => throw _privateConstructorUsedError;
+  List<String> get likes => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -69,11 +69,11 @@ abstract class $CommentModelCopyWith<$Res> {
       _$CommentModelCopyWithImpl<$Res>;
   $Res call(
       {String id,
-      String userId,
+      String postId,
+      dynamic user,
       String comment,
-      String username,
       int dateCreated,
-      String profilePic});
+      List<String> likes});
 }
 
 /// @nodoc
@@ -87,37 +87,37 @@ class _$CommentModelCopyWithImpl<$Res> implements $CommentModelCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = freezed,
+    Object? postId = freezed,
+    Object? user = freezed,
     Object? comment = freezed,
-    Object? username = freezed,
     Object? dateCreated = freezed,
-    Object? profilePic = freezed,
+    Object? likes = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: userId == freezed
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
               as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as String,
-      username: username == freezed
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
               as String,
       dateCreated: dateCreated == freezed
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as int,
-      profilePic: profilePic == freezed
-          ? _value.profilePic
-          : profilePic // ignore: cast_nullable_to_non_nullable
-              as String,
+      likes: likes == freezed
+          ? _value.likes
+          : likes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -131,11 +131,11 @@ abstract class _$CommentModelCopyWith<$Res>
   @override
   $Res call(
       {String id,
-      String userId,
+      String postId,
+      dynamic user,
       String comment,
-      String username,
       int dateCreated,
-      String profilePic});
+      List<String> likes});
 }
 
 /// @nodoc
@@ -151,37 +151,37 @@ class __$CommentModelCopyWithImpl<$Res> extends _$CommentModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = freezed,
+    Object? postId = freezed,
+    Object? user = freezed,
     Object? comment = freezed,
-    Object? username = freezed,
     Object? dateCreated = freezed,
-    Object? profilePic = freezed,
+    Object? likes = freezed,
   }) {
     return _then(_CommentModel(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: userId == freezed
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
               as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as String,
-      username: username == freezed
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
               as String,
       dateCreated: dateCreated == freezed
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as int,
-      profilePic: profilePic == freezed
-          ? _value.profilePic
-          : profilePic // ignore: cast_nullable_to_non_nullable
-              as String,
+      likes: likes == freezed
+          ? _value.likes
+          : likes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -191,11 +191,11 @@ class __$CommentModelCopyWithImpl<$Res> extends _$CommentModelCopyWithImpl<$Res>
 class _$_CommentModel implements _CommentModel {
   const _$_CommentModel(
       {this.id = '',
-      this.userId = '',
+      this.postId = '',
+      this.user = const {},
       this.comment = '',
-      this.username = '',
       this.dateCreated = 0,
-      this.profilePic = ''});
+      this.likes = const []});
 
   factory _$_CommentModel.fromJson(Map<String, dynamic> json) =>
       _$$_CommentModelFromJson(json);
@@ -205,23 +205,23 @@ class _$_CommentModel implements _CommentModel {
   final String id;
   @JsonKey()
   @override
-  final String userId;
+  final String postId;
+  @JsonKey()
+  @override
+  final dynamic user;
   @JsonKey()
   @override
   final String comment;
   @JsonKey()
   @override
-  final String username;
-  @JsonKey()
-  @override
   final int dateCreated;
   @JsonKey()
   @override
-  final String profilePic;
+  final List<String> likes;
 
   @override
   String toString() {
-    return 'CommentModel(id: $id, userId: $userId, comment: $comment, username: $username, dateCreated: $dateCreated, profilePic: $profilePic)';
+    return 'CommentModel(id: $id, postId: $postId, user: $user, comment: $comment, dateCreated: $dateCreated, likes: $likes)';
   }
 
   @override
@@ -230,24 +230,23 @@ class _$_CommentModel implements _CommentModel {
         (other.runtimeType == runtimeType &&
             other is _CommentModel &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.postId, postId) &&
+            const DeepCollectionEquality().equals(other.user, user) &&
             const DeepCollectionEquality().equals(other.comment, comment) &&
-            const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality()
                 .equals(other.dateCreated, dateCreated) &&
-            const DeepCollectionEquality()
-                .equals(other.profilePic, profilePic));
+            const DeepCollectionEquality().equals(other.likes, likes));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(postId),
+      const DeepCollectionEquality().hash(user),
       const DeepCollectionEquality().hash(comment),
-      const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(dateCreated),
-      const DeepCollectionEquality().hash(profilePic));
+      const DeepCollectionEquality().hash(likes));
 
   @JsonKey(ignore: true)
   @override
@@ -263,11 +262,11 @@ class _$_CommentModel implements _CommentModel {
 abstract class _CommentModel implements CommentModel {
   const factory _CommentModel(
       {String id,
-      String userId,
+      String postId,
+      dynamic user,
       String comment,
-      String username,
       int dateCreated,
-      String profilePic}) = _$_CommentModel;
+      List<String> likes}) = _$_CommentModel;
 
   factory _CommentModel.fromJson(Map<String, dynamic> json) =
       _$_CommentModel.fromJson;
@@ -275,15 +274,15 @@ abstract class _CommentModel implements CommentModel {
   @override
   String get id;
   @override
-  String get userId;
+  String get postId;
+  @override
+  dynamic get user;
   @override
   String get comment;
   @override
-  String get username;
-  @override
   int get dateCreated;
   @override
-  String get profilePic;
+  List<String> get likes;
   @override
   @JsonKey(ignore: true)
   _$CommentModelCopyWith<_CommentModel> get copyWith =>

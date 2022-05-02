@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:frienderr/core/services/services.dart';
@@ -57,8 +58,14 @@ class _QuicksState extends State<Quicks> {
     });
   }
 
-  void _openCamera() => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => CameraScreen()));
+  void _openCamera() {
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CameraScreen(
+                mode: CameraSelectionMode.Post,
+              )))*/
+  }
 
   void _toggleVideoPlayerState() {
     if (widget.controller.value.isPlaying) {
@@ -177,6 +184,7 @@ class _QuicksState extends State<Quicks> {
             child: AppLikeButton(
                 size: 40,
                 likeCount: 0,
+                hideCount: false,
                 color: Colors.grey[100]!,
                 onLike: () => _determineLikeAction()),
           ),
