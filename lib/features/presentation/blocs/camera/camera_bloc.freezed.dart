@@ -645,12 +645,20 @@ class _$CameraStateTearOff {
   _CameraState call(
       {required CameraController? controller,
       List<CameraDescription> cameras = const [],
+      required CameraDeepArController? deepArController,
       CameraStatus currentState = CameraStatus.idle,
+      List<FeatureListItem> cameraFeatureList = featureList,
+      List<FeatureListItem> cameraSubFeatureList = subFeatureList,
+      List<SelectionModeItem> cameraSelectionModes = selectionModes,
       CameraListenableAction action = CameraListenableAction.idle}) {
     return _CameraState(
       controller: controller,
       cameras: cameras,
+      deepArController: deepArController,
       currentState: currentState,
+      cameraFeatureList: cameraFeatureList,
+      cameraSubFeatureList: cameraSubFeatureList,
+      cameraSelectionModes: cameraSelectionModes,
       action: action,
     );
   }
@@ -663,7 +671,15 @@ const $CameraState = _$CameraStateTearOff();
 mixin _$CameraState {
   CameraController? get controller => throw _privateConstructorUsedError;
   List<CameraDescription> get cameras => throw _privateConstructorUsedError;
+  CameraDeepArController? get deepArController =>
+      throw _privateConstructorUsedError;
   CameraStatus get currentState => throw _privateConstructorUsedError;
+  List<FeatureListItem> get cameraFeatureList =>
+      throw _privateConstructorUsedError;
+  List<FeatureListItem> get cameraSubFeatureList =>
+      throw _privateConstructorUsedError;
+  List<SelectionModeItem> get cameraSelectionModes =>
+      throw _privateConstructorUsedError;
   CameraListenableAction get action => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -679,7 +695,11 @@ abstract class $CameraStateCopyWith<$Res> {
   $Res call(
       {CameraController? controller,
       List<CameraDescription> cameras,
+      CameraDeepArController? deepArController,
       CameraStatus currentState,
+      List<FeatureListItem> cameraFeatureList,
+      List<FeatureListItem> cameraSubFeatureList,
+      List<SelectionModeItem> cameraSelectionModes,
       CameraListenableAction action});
 }
 
@@ -695,7 +715,11 @@ class _$CameraStateCopyWithImpl<$Res> implements $CameraStateCopyWith<$Res> {
   $Res call({
     Object? controller = freezed,
     Object? cameras = freezed,
+    Object? deepArController = freezed,
     Object? currentState = freezed,
+    Object? cameraFeatureList = freezed,
+    Object? cameraSubFeatureList = freezed,
+    Object? cameraSelectionModes = freezed,
     Object? action = freezed,
   }) {
     return _then(_value.copyWith(
@@ -707,10 +731,26 @@ class _$CameraStateCopyWithImpl<$Res> implements $CameraStateCopyWith<$Res> {
           ? _value.cameras
           : cameras // ignore: cast_nullable_to_non_nullable
               as List<CameraDescription>,
+      deepArController: deepArController == freezed
+          ? _value.deepArController
+          : deepArController // ignore: cast_nullable_to_non_nullable
+              as CameraDeepArController?,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
               as CameraStatus,
+      cameraFeatureList: cameraFeatureList == freezed
+          ? _value.cameraFeatureList
+          : cameraFeatureList // ignore: cast_nullable_to_non_nullable
+              as List<FeatureListItem>,
+      cameraSubFeatureList: cameraSubFeatureList == freezed
+          ? _value.cameraSubFeatureList
+          : cameraSubFeatureList // ignore: cast_nullable_to_non_nullable
+              as List<FeatureListItem>,
+      cameraSelectionModes: cameraSelectionModes == freezed
+          ? _value.cameraSelectionModes
+          : cameraSelectionModes // ignore: cast_nullable_to_non_nullable
+              as List<SelectionModeItem>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -729,7 +769,11 @@ abstract class _$CameraStateCopyWith<$Res>
   $Res call(
       {CameraController? controller,
       List<CameraDescription> cameras,
+      CameraDeepArController? deepArController,
       CameraStatus currentState,
+      List<FeatureListItem> cameraFeatureList,
+      List<FeatureListItem> cameraSubFeatureList,
+      List<SelectionModeItem> cameraSelectionModes,
       CameraListenableAction action});
 }
 
@@ -747,7 +791,11 @@ class __$CameraStateCopyWithImpl<$Res> extends _$CameraStateCopyWithImpl<$Res>
   $Res call({
     Object? controller = freezed,
     Object? cameras = freezed,
+    Object? deepArController = freezed,
     Object? currentState = freezed,
+    Object? cameraFeatureList = freezed,
+    Object? cameraSubFeatureList = freezed,
+    Object? cameraSelectionModes = freezed,
     Object? action = freezed,
   }) {
     return _then(_CameraState(
@@ -759,10 +807,26 @@ class __$CameraStateCopyWithImpl<$Res> extends _$CameraStateCopyWithImpl<$Res>
           ? _value.cameras
           : cameras // ignore: cast_nullable_to_non_nullable
               as List<CameraDescription>,
+      deepArController: deepArController == freezed
+          ? _value.deepArController
+          : deepArController // ignore: cast_nullable_to_non_nullable
+              as CameraDeepArController?,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
               as CameraStatus,
+      cameraFeatureList: cameraFeatureList == freezed
+          ? _value.cameraFeatureList
+          : cameraFeatureList // ignore: cast_nullable_to_non_nullable
+              as List<FeatureListItem>,
+      cameraSubFeatureList: cameraSubFeatureList == freezed
+          ? _value.cameraSubFeatureList
+          : cameraSubFeatureList // ignore: cast_nullable_to_non_nullable
+              as List<FeatureListItem>,
+      cameraSelectionModes: cameraSelectionModes == freezed
+          ? _value.cameraSelectionModes
+          : cameraSelectionModes // ignore: cast_nullable_to_non_nullable
+              as List<SelectionModeItem>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -777,7 +841,11 @@ class _$_CameraState implements _CameraState {
   const _$_CameraState(
       {required this.controller,
       this.cameras = const [],
+      required this.deepArController,
       this.currentState = CameraStatus.idle,
+      this.cameraFeatureList = featureList,
+      this.cameraSubFeatureList = subFeatureList,
+      this.cameraSelectionModes = selectionModes,
       this.action = CameraListenableAction.idle});
 
   @override
@@ -785,16 +853,27 @@ class _$_CameraState implements _CameraState {
   @JsonKey()
   @override
   final List<CameraDescription> cameras;
+  @override
+  final CameraDeepArController? deepArController;
   @JsonKey()
   @override
   final CameraStatus currentState;
+  @JsonKey()
+  @override
+  final List<FeatureListItem> cameraFeatureList;
+  @JsonKey()
+  @override
+  final List<FeatureListItem> cameraSubFeatureList;
+  @JsonKey()
+  @override
+  final List<SelectionModeItem> cameraSelectionModes;
   @JsonKey()
   @override
   final CameraListenableAction action;
 
   @override
   String toString() {
-    return 'CameraState(controller: $controller, cameras: $cameras, currentState: $currentState, action: $action)';
+    return 'CameraState(controller: $controller, cameras: $cameras, deepArController: $deepArController, currentState: $currentState, cameraFeatureList: $cameraFeatureList, cameraSubFeatureList: $cameraSubFeatureList, cameraSelectionModes: $cameraSelectionModes, action: $action)';
   }
 
   @override
@@ -806,7 +885,15 @@ class _$_CameraState implements _CameraState {
                 .equals(other.controller, controller) &&
             const DeepCollectionEquality().equals(other.cameras, cameras) &&
             const DeepCollectionEquality()
+                .equals(other.deepArController, deepArController) &&
+            const DeepCollectionEquality()
                 .equals(other.currentState, currentState) &&
+            const DeepCollectionEquality()
+                .equals(other.cameraFeatureList, cameraFeatureList) &&
+            const DeepCollectionEquality()
+                .equals(other.cameraSubFeatureList, cameraSubFeatureList) &&
+            const DeepCollectionEquality()
+                .equals(other.cameraSelectionModes, cameraSelectionModes) &&
             const DeepCollectionEquality().equals(other.action, action));
   }
 
@@ -815,7 +902,11 @@ class _$_CameraState implements _CameraState {
       runtimeType,
       const DeepCollectionEquality().hash(controller),
       const DeepCollectionEquality().hash(cameras),
+      const DeepCollectionEquality().hash(deepArController),
       const DeepCollectionEquality().hash(currentState),
+      const DeepCollectionEquality().hash(cameraFeatureList),
+      const DeepCollectionEquality().hash(cameraSubFeatureList),
+      const DeepCollectionEquality().hash(cameraSelectionModes),
       const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
@@ -828,7 +919,11 @@ abstract class _CameraState implements CameraState {
   const factory _CameraState(
       {required CameraController? controller,
       List<CameraDescription> cameras,
+      required CameraDeepArController? deepArController,
       CameraStatus currentState,
+      List<FeatureListItem> cameraFeatureList,
+      List<FeatureListItem> cameraSubFeatureList,
+      List<SelectionModeItem> cameraSelectionModes,
       CameraListenableAction action}) = _$_CameraState;
 
   @override
@@ -836,7 +931,15 @@ abstract class _CameraState implements CameraState {
   @override
   List<CameraDescription> get cameras;
   @override
+  CameraDeepArController? get deepArController;
+  @override
   CameraStatus get currentState;
+  @override
+  List<FeatureListItem> get cameraFeatureList;
+  @override
+  List<FeatureListItem> get cameraSubFeatureList;
+  @override
+  List<SelectionModeItem> get cameraSelectionModes;
   @override
   CameraListenableAction get action;
   @override

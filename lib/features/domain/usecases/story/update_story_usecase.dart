@@ -14,11 +14,12 @@ class UpdateStoryUseCase extends UseCase<bool, UpdateStoryParams> {
 
   @override
   Future<Either<Failure, bool>> call(UpdateStoryParams params) {
-    return repository.updateStory(assets: params.assets);
+    return repository.updateStory(userId: params.userId, assets: params.assets);
   }
 }
 
 class UpdateStoryParams {
+  final String userId;
   final List<GalleryAsset> assets;
-  UpdateStoryParams(this.assets);
+  UpdateStoryParams(this.userId, this.assets);
 }

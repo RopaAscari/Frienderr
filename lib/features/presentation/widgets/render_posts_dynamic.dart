@@ -17,12 +17,12 @@ import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/constants/constants.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:frienderr/features/presentation/screens/account.dart';
+import 'package:frienderr/features/presentation/screens/account/account.dart';
 import 'package:frienderr/features/presentation/widgets/video_screen.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/screens/comment_screen.dart';
+import 'package:frienderr/features/presentation/screens/comment/comment_screen.dart';
 
 class RenderPostDynamic extends StatefulWidget {
   final String postId;
@@ -424,13 +424,6 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
       Padding(
           padding: const EdgeInsets.all(5),
           child: GestureDetector(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Account(
-                            isProfileOwnerViewing: false,
-                            profileUserId: id,
-                          ))),
               child: CircleAvatar(
                   radius: 15,
                   backgroundImage: CachedNetworkImageProvider(profilePic)))),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:frienderr/core/constants/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingIndicator extends StatefulWidget {
   final Size size;
@@ -13,12 +12,6 @@ class LoadingIndicator extends StatefulWidget {
 class _LoadingIndicatorState extends State<LoadingIndicator> {
   @override
   Widget build(BuildContext context) {
-    return new SizedBox(
-        height: widget.size.height,
-        width: widget.size.width,
-        child: FlareActor(Constants.loadingAnimation,
-            alignment: Alignment.center,
-            fit: BoxFit.contain,
-            animation: "loading"));
+    return SpinKitChasingDots(size: widget.size.height, color: Colors.amber);
   }
 }

@@ -55,7 +55,16 @@ class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<CommentRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: CommentScreen(key: args.key, postId: args.postId),
+          child: CommentScreen(key: args.key, post: args.post),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    ArtboardRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const ArtboardScreen(),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -66,6 +75,65 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: RegisterScreen(key: args.key, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    PostQuickRoute.name: (routeData) {
+      final args = routeData.argsAs<PostQuickRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: PostQuickScreen(
+              key: args.key, file: args.file, quickBloc: args.quickBloc),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    PostMediaRoute.name: (routeData) {
+      final args = routeData.argsAs<PostMediaRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: PostMediaScreen(
+              key: args.key, posts: args.posts, postBloc: args.postBloc),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    PreviewPostRoute.name: (routeData) {
+      final args = routeData.argsAs<PreviewPostRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: PreviewPostScreen(
+              key: args.key,
+              postBloc: args.postBloc,
+              selectedAssets: args.selectedAssets),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    PreviewQuickRoute.name: (routeData) {
+      final args = routeData.argsAs<PreviewQuickRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: PreviewQuickScreen(
+              key: args.key, quickBloc: args.quickBloc, file: args.file),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    PreviewStoryRoute.name: (routeData) {
+      final args = routeData.argsAs<PreviewStoryRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: PreviewStoryScreen(
+              key: args.key,
+              storyBloc: args.storyBloc,
+              selectedAssets: args.selectedAssets),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -140,7 +208,13 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(LoginRoute.name, path: '/login-screen'),
         RouteConfig(CameraRoute.name, path: '/camera-screen'),
         RouteConfig(CommentRoute.name, path: '/comment-screen'),
+        RouteConfig(ArtboardRoute.name, path: '/artboard-screen'),
         RouteConfig(RegisterRoute.name, path: '/register-screen'),
+        RouteConfig(PostQuickRoute.name, path: '/post-quick-screen'),
+        RouteConfig(PostMediaRoute.name, path: '/post-media-screen'),
+        RouteConfig(PreviewPostRoute.name, path: '/preview-post-screen'),
+        RouteConfig(PreviewQuickRoute.name, path: '/preview-quick-screen'),
+        RouteConfig(PreviewStoryRoute.name, path: '/preview-story-screen'),
         RouteConfig(ChatDashboardRoute.name, path: '/chat-dashboard-screen'),
         RouteConfig(ForgotPasswordRoute.name, path: '/forgot-password-screen'),
         RouteConfig(UnauthenticatedRoute.name, path: '/unauthenticated-screen'),
@@ -180,7 +254,7 @@ class MainRouteArgs {
 /// [LoginScreen]
 class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
   LoginRoute(
-      {Key? key, required BlocGroup blocGroup, bool shouldRenderUI = false})
+      {Key? key, required BlocGroup blocGroup, bool shouldRenderUI = true})
       : super(LoginRoute.name,
             path: '/login-screen',
             args: LoginRouteArgs(
@@ -193,7 +267,7 @@ class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
 
 class LoginRouteArgs {
   const LoginRouteArgs(
-      {this.key, required this.blocGroup, this.shouldRenderUI = false});
+      {this.key, required this.blocGroup, this.shouldRenderUI = true});
 
   final Key? key;
 
@@ -240,25 +314,33 @@ class CameraRouteArgs {
 /// generated route for
 /// [CommentScreen]
 class CommentRoute extends PageRouteInfo<CommentRouteArgs> {
-  CommentRoute({Key? key, required String postId})
+  CommentRoute({Key? key, required PostEntity post})
       : super(CommentRoute.name,
             path: '/comment-screen',
-            args: CommentRouteArgs(key: key, postId: postId));
+            args: CommentRouteArgs(key: key, post: post));
 
   static const String name = 'CommentRoute';
 }
 
 class CommentRouteArgs {
-  const CommentRouteArgs({this.key, required this.postId});
+  const CommentRouteArgs({this.key, required this.post});
 
   final Key? key;
 
-  final String postId;
+  final PostEntity post;
 
   @override
   String toString() {
-    return 'CommentRouteArgs{key: $key, postId: $postId}';
+    return 'CommentRouteArgs{key: $key, post: $post}';
   }
+}
+
+/// generated route for
+/// [ArtboardScreen]
+class ArtboardRoute extends PageRouteInfo<void> {
+  const ArtboardRoute() : super(ArtboardRoute.name, path: '/artboard-screen');
+
+  static const String name = 'ArtboardRoute';
 }
 
 /// generated route for
@@ -282,6 +364,156 @@ class RegisterRouteArgs {
   @override
   String toString() {
     return 'RegisterRouteArgs{key: $key, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [PostQuickScreen]
+class PostQuickRoute extends PageRouteInfo<PostQuickRouteArgs> {
+  PostQuickRoute({Key? key, required File file, required QuickBloc quickBloc})
+      : super(PostQuickRoute.name,
+            path: '/post-quick-screen',
+            args:
+                PostQuickRouteArgs(key: key, file: file, quickBloc: quickBloc));
+
+  static const String name = 'PostQuickRoute';
+}
+
+class PostQuickRouteArgs {
+  const PostQuickRouteArgs(
+      {this.key, required this.file, required this.quickBloc});
+
+  final Key? key;
+
+  final File file;
+
+  final QuickBloc quickBloc;
+
+  @override
+  String toString() {
+    return 'PostQuickRouteArgs{key: $key, file: $file, quickBloc: $quickBloc}';
+  }
+}
+
+/// generated route for
+/// [PostMediaScreen]
+class PostMediaRoute extends PageRouteInfo<PostMediaRouteArgs> {
+  PostMediaRoute(
+      {Key? key, required List<GalleryAsset> posts, required PostBloc postBloc})
+      : super(PostMediaRoute.name,
+            path: '/post-media-screen',
+            args:
+                PostMediaRouteArgs(key: key, posts: posts, postBloc: postBloc));
+
+  static const String name = 'PostMediaRoute';
+}
+
+class PostMediaRouteArgs {
+  const PostMediaRouteArgs(
+      {this.key, required this.posts, required this.postBloc});
+
+  final Key? key;
+
+  final List<GalleryAsset> posts;
+
+  final PostBloc postBloc;
+
+  @override
+  String toString() {
+    return 'PostMediaRouteArgs{key: $key, posts: $posts, postBloc: $postBloc}';
+  }
+}
+
+/// generated route for
+/// [PreviewPostScreen]
+class PreviewPostRoute extends PageRouteInfo<PreviewPostRouteArgs> {
+  PreviewPostRoute(
+      {Key? key,
+      required PostBloc postBloc,
+      required List<GalleryAsset> selectedAssets})
+      : super(PreviewPostRoute.name,
+            path: '/preview-post-screen',
+            args: PreviewPostRouteArgs(
+                key: key, postBloc: postBloc, selectedAssets: selectedAssets));
+
+  static const String name = 'PreviewPostRoute';
+}
+
+class PreviewPostRouteArgs {
+  const PreviewPostRouteArgs(
+      {this.key, required this.postBloc, required this.selectedAssets});
+
+  final Key? key;
+
+  final PostBloc postBloc;
+
+  final List<GalleryAsset> selectedAssets;
+
+  @override
+  String toString() {
+    return 'PreviewPostRouteArgs{key: $key, postBloc: $postBloc, selectedAssets: $selectedAssets}';
+  }
+}
+
+/// generated route for
+/// [PreviewQuickScreen]
+class PreviewQuickRoute extends PageRouteInfo<PreviewQuickRouteArgs> {
+  PreviewQuickRoute(
+      {Key? key, required QuickBloc quickBloc, required File file})
+      : super(PreviewQuickRoute.name,
+            path: '/preview-quick-screen',
+            args: PreviewQuickRouteArgs(
+                key: key, quickBloc: quickBloc, file: file));
+
+  static const String name = 'PreviewQuickRoute';
+}
+
+class PreviewQuickRouteArgs {
+  const PreviewQuickRouteArgs(
+      {this.key, required this.quickBloc, required this.file});
+
+  final Key? key;
+
+  final QuickBloc quickBloc;
+
+  final File file;
+
+  @override
+  String toString() {
+    return 'PreviewQuickRouteArgs{key: $key, quickBloc: $quickBloc, file: $file}';
+  }
+}
+
+/// generated route for
+/// [PreviewStoryScreen]
+class PreviewStoryRoute extends PageRouteInfo<PreviewStoryRouteArgs> {
+  PreviewStoryRoute(
+      {Key? key,
+      required StoryBloc storyBloc,
+      required List<GalleryAsset> selectedAssets})
+      : super(PreviewStoryRoute.name,
+            path: '/preview-story-screen',
+            args: PreviewStoryRouteArgs(
+                key: key,
+                storyBloc: storyBloc,
+                selectedAssets: selectedAssets));
+
+  static const String name = 'PreviewStoryRoute';
+}
+
+class PreviewStoryRouteArgs {
+  const PreviewStoryRouteArgs(
+      {this.key, required this.storyBloc, required this.selectedAssets});
+
+  final Key? key;
+
+  final StoryBloc storyBloc;
+
+  final List<GalleryAsset> selectedAssets;
+
+  @override
+  String toString() {
+    return 'PreviewStoryRouteArgs{key: $key, storyBloc: $storyBloc, selectedAssets: $selectedAssets}';
   }
 }
 

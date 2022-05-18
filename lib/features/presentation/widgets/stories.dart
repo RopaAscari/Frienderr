@@ -1,3 +1,4 @@
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,7 @@ import 'package:frienderr/features/data/models/story/story_media.dart';
 import 'package:frienderr/features/data/models/story/story_model.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/screens/view_stories.dart';
+import 'package:frienderr/features/presentation/screens/view_stories/view_stories.dart';
 import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/view_user_story.dart';
 
@@ -41,49 +42,60 @@ class _StoriesState extends State<Stories> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<StoryBloc, StoryState>(
-        bloc: _blocGroup.storyBloc,
-        listener: (
-          BuildContext context,
-          StoryState state,
-        ) {
-          if (state.action == StoryListenableAction.created) {
-            _blocGroup.storyBloc
-                .add(StoryEvent.loadStories(userId: user?.uid as String));
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          BlocConsumer<StoryBloc, StoryState>(
+              bloc: _blocGroup.storyBloc,
+              listener: (
+                BuildContext context,
+                StoryState state,
+              ) {
+                if (state.action == StoryListenableAction.created) {
+                  _blocGroup.storyBloc
+                      .add(StoryEvent.loadStories(userId: user?.uid as String));
 
-            getIt<AppRouter>().context.dismissToast();
-          }
-        },
-        builder: (
-          BuildContext context,
-          StoryState state,
-        ) {
-          switch (state.status) {
-            case StoryStatus.loading:
-              return _storyLoading();
-            case StoryStatus.error:
-              return _storyError(state.error);
-            case StoryStatus.loaded:
-              return _storyCarousel(state.stories);
-            default:
-              return Center();
-          }
-        });
+                  getIt<AppRouter>().context.dismissToast();
+                }
+              },
+              builder: (
+                BuildContext context,
+                StoryState state,
+              ) {
+                switch (state.status) {
+                  case StoryStatus.loading:
+                    return _storyLoading();
+                  case StoryStatus.error:
+                    return _storyError(state.error);
+                  case StoryStatus.loaded:
+                    return _storyCarousel(state.stories);
+                  default:
+                    return const Center();
+                }
+              })
+        ]);
   }
 
   Widget _storyCarousel(StoryResponse stories) {
-    print(' STORIES LeNGTH${stories.stories.length}');
-    if (stories.stories.length == 0) {
-      return GestureDetector(
-          child: Align(
-            child: _renderAddUserStory(),
-            alignment: Alignment.centerLeft,
+    if (stories.stories.isEmpty) {
+      return Padding(
+        child: Align(
+          child: ConditionalRenderDelegate(
+            condition: !stories.userStory.doesUserHaveStories,
+            renderWidget: GestureDetector(
+                child: _renderAddUserStory(), onTap: _navigateToCamera),
+            fallbackWidget: SizedBox(
+                height: 200, child: _renderUserStory(stories.userStory)),
           ),
-          onTap: _navigateToCamera);
+          alignment: Alignment.centerLeft,
+        ),
+        padding: const EdgeInsets.only(left: 10),
+      );
     }
 
     return SizedBox(
-        height: 130,
+        height: 200,
         child: ListView.builder(
             primary: false,
             shrinkWrap: true,
@@ -93,13 +105,13 @@ class _StoriesState extends State<Stories> {
               if (index == 0) {
                 return Row(children: [
                   SizedBox(
-                      height: 150, child: _renderUserStory(stories.userStory)),
-                  SizedBox(height: 150, child: _storyTemplate(stories, index))
+                      height: 200, child: _renderUserStory(stories.userStory)),
+                  SizedBox(height: 200, child: _storyTemplate(stories, index))
                 ]);
               }
 
               return SizedBox(
-                  height: 150, child: _storyTemplate(stories, index));
+                  height: 200, child: _storyTemplate(stories, index));
             }));
   }
 
@@ -111,9 +123,9 @@ class _StoriesState extends State<Stories> {
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * .80,
-        child: Center(
+        child: const Center(
             child: Padding(
-                padding: const EdgeInsets.only(left: 50, right: 50),
+                padding: EdgeInsets.only(left: 50, right: 50),
                 child: LoadingIndicator(size: Size(40, 40)))));
   }
 
@@ -126,65 +138,85 @@ class _StoriesState extends State<Stories> {
   }
 
   Widget _renderAddUserStory() {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: Column(children: [
-        Container(
-            width: 75,
-            height: 75,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Colors.grey.withOpacity(0.6),
-                      Colors.grey.withOpacity(0.6)
-                    ])),
-            child: Container(
-                width: 70,
-                height: 70,
-                padding: const EdgeInsets.all(2.5),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                ),
-                child: Stack(alignment: Alignment.center, children: [
-                  Opacity(
-                      opacity: 0.7,
-                      child: CachedNetworkImage(
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(255, 0, 0, 0.5),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                          ),
-                        ),
-                        imageUrl: userState.user.profilePic ?? '',
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      )),
-                  Container(
-                    padding: const EdgeInsets.all(2),
+    return Container(
+        height: 200,
+        width: 130,
+        margin: const EdgeInsets.only(left: 10),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                  _blocGroup.userBloc.state.user.profilePic as String),
+              fit: BoxFit.cover,
+            ),
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(7)),
+        child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Container(
+                    width: 75,
+                    height: 75,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.white.withOpacity(0.7)),
-                    child:
-                        Icon(CupertinoIcons.plus_app_fill, color: Colors.black),
-                  )
-                ]))),
-        Padding(
-          child: AutoSizeText(' You',
-              overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14)),
-          padding: const EdgeInsets.only(top: 3),
-        )
-      ]),
-    );
+                        borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                        gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.grey.withOpacity(0.6),
+                              Colors.grey.withOpacity(0.6)
+                            ])),
+                    child: Container(
+                        width: 70,
+                        height: 70,
+                        padding: const EdgeInsets.all(2.5),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(100.0)),
+                        ),
+                        child: Stack(alignment: Alignment.center, children: [
+                          Opacity(
+                              opacity: 0.7,
+                              child: CachedNetworkImage(
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(255, 0, 0, 0.5),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(100.0)),
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                imageUrl: userState.user.profilePic ?? '',
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              )),
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.white.withOpacity(0.7)),
+                            child: const Icon(CupertinoIcons.plus_app_fill,
+                                color: Colors.black),
+                          )
+                        ]))),
+                const Padding(
+                  child: AutoSizeText(' You',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 14)),
+                  padding: EdgeInsets.only(top: 3),
+                )
+              ]),
+            )));
   }
 
   Widget _storyTemplate(StoryResponse story, int index) {
@@ -194,12 +226,12 @@ class _StoriesState extends State<Stories> {
     final bool isStoryOwner = storyUserId == user?.uid;
 
     if (isStoryOwner) {
-      return Center();
+      return const Center();
     }
 
     return SizedBox(
-        height: 80,
-        width: 100,
+        height: 150,
+        width: 130,
         child: OpenContainer(
             openElevation: 0,
             closedElevation: 0,
@@ -211,6 +243,7 @@ class _StoriesState extends State<Stories> {
                 currentPosition: index,
                 timeElasped: dateCreated,
                 isOwnerViewing: isStoryOwner,
+                storyBloc: _blocGroup.storyBloc,
                 storyUser: story.stories[index].user,
               );
             },
@@ -226,8 +259,8 @@ class _StoriesState extends State<Stories> {
     final bool isStoryOwner = storyUserId == user?.uid;
 
     return SizedBox(
-        height: 80,
-        width: 100,
+        height: 200,
+        width: 130,
         child: OpenContainer(
             openElevation: 0,
             closedElevation: 0,
@@ -238,6 +271,7 @@ class _StoriesState extends State<Stories> {
                 userStory: userStory,
                 timeElasped: dateCreated,
                 isOwnerViewing: isStoryOwner,
+                storyBloc: _blocGroup.storyBloc,
               );
             },
             closedBuilder: (BuildContext context, VoidCallback openContainer) {
@@ -247,10 +281,10 @@ class _StoriesState extends State<Stories> {
 
   Widget _storyDisplay(StoryModel story) {
     final String username = story.user.username;
-    final StoryMedia media = story.content[0].media;
     final bool isStoryOwner = story.user.id == user!.uid;
     final String profilePic = story.user.profilePic ?? '';
     final String displayName = isStoryOwner ? 'You' : username;
+    final StoryMedia media = story.content[story.content.length - 1].media;
 
     final List<Color> colors = isStoryOwner
         ? [Colors.grey.withOpacity(0.7), Colors.grey.withOpacity(0.7)]
@@ -259,48 +293,81 @@ class _StoriesState extends State<Stories> {
             HexColor('#FCA28E').withOpacity(0.7)
           ];
 
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: Column(children: [
-        Container(
-            width: 75,
-            height: 75,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: colors)),
+    final double _opacity =
+        story.content[story.content.length - 1].views.contains(user!.uid)
+            ? 0.5
+            : 1;
+
+    return Opacity(
+        opacity: _opacity,
+        child: Material(
+            elevation: 20,
             child: Container(
-                width: 70,
-                height: 70,
-                padding: const EdgeInsets.all(2.5),
+                height: 200,
+                width: 130,
+                margin: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                ),
-                child: CachedNetworkImage(
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 0, 0, 0.5),
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover),
+                    image: DecorationImage(
+                      image: NetworkImage(media.url),
+                      fit: BoxFit.cover,
                     ),
-                  ),
-                  imageUrl: profilePic,
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ))),
-        Padding(
-          child: AutoSizeText(' $displayName',
-              overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14)),
-          padding: const EdgeInsets.only(top: 3),
-        )
-      ]),
-    );
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(7)),
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                                width: 75,
+                                height: 75,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(100.0)),
+                                    gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: colors)),
+                                child: Container(
+                                    width: 70,
+                                    height: 70,
+                                    padding: const EdgeInsets.all(2.5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100.0)),
+                                    ),
+                                    child: CachedNetworkImage(
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          color: Color.fromRGBO(255, 0, 0, 0.5),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(100.0)),
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover),
+                                        ),
+                                      ),
+                                      imageUrl: profilePic,
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ))),
+                            Padding(
+                              child: AutoSizeText(' $displayName',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold)),
+                              padding: const EdgeInsets.only(top: 3),
+                            )
+                          ]),
+                    )))));
   }
 }

@@ -52,15 +52,14 @@ class _TimelinePostsState extends State<TimelinePosts> {
   }
 
   void fetchPaginatedPosts() async {
-    print(isUserCaughtUp);
     if (isUserCaughtUp == true) {
       return;
     }
-    _postBloc.add(PostEvent.fetchPaginatedTimelinePosts());
+    _postBloc.add(const PostEvent.fetchPaginatedTimelinePosts());
   }
 
   void listenToTimelineUpdates() => _postBloc.timeline.listen((event) {
-        this.setState(() => null);
+        setState(() {});
       });
 
   @override
@@ -72,19 +71,19 @@ class _TimelinePostsState extends State<TimelinePosts> {
           PostState state,
         ) {
           if (state.currentState == PostStatus.loaded) {
-            print(state.timelinePosts.userCaughtUp);
             setState(() {
               isUserCaughtUp = state.timelinePosts.userCaughtUp;
             });
           }
           if (state.action == PostListenableAction.created) {
-            _postBloc.add(PostEvent.fetchTimelinePosts(shouldLoad: false));
+            _postBloc
+                .add(const PostEvent.fetchTimelinePosts(shouldLoad: false));
             getIt<AppRouter>().context.dismissToast();
           }
 
           if (state.action == PostListenableAction.failure) {
             getIt<AppRouter>().context.showToast(
-                content: Text('Upload failed',
+                content: const Text('Post failed',
                     style: TextStyle(color: Colors.white)),
                 type: SnackBarType.error);
           }
@@ -101,7 +100,7 @@ class _TimelinePostsState extends State<TimelinePosts> {
             case PostStatus.loaded:
               return _timelinePostList(state.timelinePosts);
             default:
-              return Center();
+              return const Center();
           }
         });
   }
@@ -114,14 +113,14 @@ class _TimelinePostsState extends State<TimelinePosts> {
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * .80,
-        child: Center(
+        child: const Center(
             child: Padding(
-                padding: const EdgeInsets.only(left: 50, right: 50),
+                padding: EdgeInsets.only(left: 50, right: 50),
                 child: LoadingIndicator(size: Size(40, 40)))));
   }
 
   Widget _timelinePostList(TimelineResponse timelineResponse) {
-    if (timelineResponse.posts.length == 0) {
+    if (timelineResponse.posts.isEmpty) {
       return _emptyTimeline();
     }
 
@@ -131,7 +130,7 @@ class _TimelinePostsState extends State<TimelinePosts> {
       itemCount: timelineResponse.posts.length,
       scrollDirection: Axis.vertical,
       separatorBuilder: (context, index) {
-        return Divider();
+        return const Center();
       },
       itemBuilder: (BuildContext context, int index) {
         final postUserId = timelineResponse.posts[index].user.id;
@@ -160,8 +159,8 @@ class _TimelinePostsState extends State<TimelinePosts> {
   }
 
   Widget _userCaughtUp(TimelineResponse timeline) {
-    final Key key = Key('user-caught-up');
-    return Container(
+    Key key = const Key('user-caught-up');
+    return SizedBox(
         height: 400,
         key: key,
         child: Center(
@@ -184,12 +183,12 @@ class _TimelinePostsState extends State<TimelinePosts> {
                       )),
                   Text('You are at the end of your journey',
                       style: TextStyle(
-                          fontSize: AdaptiveTextSize()
+                          fontSize: const AdaptiveTextSize()
                               .getAdaptiveTextSize(context, 10))),
                   GestureDetector(
                       onTap: () {
                         _scrollController.animateTo(0.0,
-                            duration: Duration(milliseconds: 1000),
+                            duration: const Duration(milliseconds: 1000),
                             curve: Curves.easeIn);
                         fetchPaginatedPosts();
                       },
@@ -197,14 +196,14 @@ class _TimelinePostsState extends State<TimelinePosts> {
                           style: TextStyle(
                               color: Colors.blue[700],
                               fontWeight: FontWeight.bold,
-                              fontSize: AdaptiveTextSize()
+                              fontSize: const AdaptiveTextSize()
                                   .getAdaptiveTextSize(context, 10))))
                 ]))));
   }
 
   Widget _emptyTimeline() {
     return SizedBox(
-      child: Center(
+      child: const Center(
         child: Text(
           "No new posts on your feed",
           style: TextStyle(fontSize: 13),

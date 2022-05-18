@@ -28,11 +28,10 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
           .where('id', isEqualTo: item)
           .get();
 
-      return new UserModel(
+      return UserModel(
         id: following.docs[0]['id'],
         chats: following.docs[0]['chats'],
         status: following.docs[0]['status'],
-        stories: following.docs[0]['stories'],
         location: following.docs[0]['location'],
         presence: following.docs[0]['presence'],
         username: following.docs[0]['username'],
@@ -40,8 +39,6 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
         followers: following.docs[0]['followers'],
         profilePic: following.docs[0]['profilePic'],
         coverPhoto: following.docs[0]['coverPhoto'],
-        bitmapImage: following.docs[0]['bitmapImage'],
-        isLocationEnabled: following.docs[0]['isLocationEnabled'],
       );
     }).toList();
   }

@@ -12,12 +12,13 @@ class SendCommentNotificationUseCase
   final INotificationRepository repository;
   @override
   Future<Either<Failure, bool>> call(SendCommentNotificationParams params) {
-    return repository.sendCommentNotification(params.notification);
+    return repository.sendCommentNotification(
+        notification: params.notification);
   }
 }
 
 class SendCommentNotificationParams {
-  final CommentNotificationEntity notification;
+  final NotificationEntity notification;
 
   const SendCommentNotificationParams(this.notification);
 }

@@ -56,6 +56,11 @@ class Constants {
   static String postIcon = 'assets/icons/post_icon.svg';
   static String quickIcon = 'assets/icons/quick_icon.svg';
 
+  static String shareCircleIconOutline = 'assets/icons/share_circle.svg';
+  static String bookmarkOutlineIconOutline =
+      'assets/icons/bookmark_outline.svg';
+  static String bookmarkFillIconOutline = 'assets/icons/bookmark_fill.svg';
+
   static String postLikeIconOutline = 'assets/icons/like_post_icon.svg';
   static String postLikeIconFill = 'assets/icons/like_post_icon_fill.svg';
   static String sharePostIconOutline = 'assets/icons/share_post_icon.svg';

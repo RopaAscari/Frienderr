@@ -19,8 +19,10 @@ final appThemeData = {
       bodyColor: HexColor('#262527'),
       displayColor: HexColor('#262527'),
     ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
   ),
   AppTheme.Dark: ThemeData(
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.dark,
     canvasColor: HexColor('#000000'),
     primaryColor: Colors.black,

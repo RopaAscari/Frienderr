@@ -28,20 +28,18 @@ class FollowingRemoteDataProvider implements IFollowingRemoteDataProvider {
           .where('id', isEqualTo: item)
           .get();
 
-      return new UserModel(
-          id: follower.docs[0]['id'],
-          chats: follower.docs[0]['chats'],
-          status: follower.docs[0]['status'],
-          stories: follower.docs[0]['stories'],
-          username: follower.docs[0]['username'],
-          location: follower.docs[0]['location'],
-          presence: follower.docs[0]['presence'],
-          following: follower.docs[0]['following'],
-          followers: follower.docs[0]['followers'],
-          profilePic: follower.docs[0]['profilePic'],
-          coverPhoto: follower.docs[0]['coverPhoto'],
-          bitmapImage: follower.docs[0]['bitmapImage'],
-          isLocationEnabled: follower.docs[0]['isLocationEnabled']);
+      return UserModel(
+        id: follower.docs[0]['id'],
+        chats: follower.docs[0]['chats'],
+        status: follower.docs[0]['status'],
+        username: follower.docs[0]['username'],
+        location: follower.docs[0]['location'],
+        presence: follower.docs[0]['presence'],
+        following: follower.docs[0]['following'],
+        followers: follower.docs[0]['followers'],
+        profilePic: follower.docs[0]['profilePic'],
+        coverPhoto: follower.docs[0]['coverPhoto'],
+      );
     }).toList();
   }
 }

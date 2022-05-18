@@ -24,32 +24,28 @@ class _$UserModelTearOff {
 
   _UserModel call(
       {String? status,
-      bool? presence,
-      List<dynamic>? chats,
+      String? deviceToken,
       String id = '',
-      List<dynamic>? stories,
-      bool? isLocationEnabled,
-      List<dynamic>? following,
-      List<dynamic>? followers,
+      bool? presence = true,
+      List<dynamic>? chats = const [],
       String username = '',
+      List<dynamic>? following = const [],
+      List<dynamic>? followers = const [],
+      UserLocationModel? location = null,
       String? profilePic = defaultProfilePic,
-      String? coverPhoto = defaultCoverPhoto,
-      String? bitmapImage = defaultBitmapImage,
-      Map<String, dynamic>? location = defautLocation}) {
+      String? coverPhoto = defaultCoverPhoto}) {
     return _UserModel(
       status: status,
+      deviceToken: deviceToken,
+      id: id,
       presence: presence,
       chats: chats,
-      id: id,
-      stories: stories,
-      isLocationEnabled: isLocationEnabled,
+      username: username,
       following: following,
       followers: followers,
-      username: username,
+      location: location,
       profilePic: profilePic,
       coverPhoto: coverPhoto,
-      bitmapImage: bitmapImage,
-      location: location,
     );
   }
 
@@ -64,18 +60,16 @@ const $UserModel = _$UserModelTearOff();
 /// @nodoc
 mixin _$UserModel {
   String? get status => throw _privateConstructorUsedError;
+  String? get deviceToken => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   bool? get presence => throw _privateConstructorUsedError;
   List<dynamic>? get chats => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
-  List<dynamic>? get stories => throw _privateConstructorUsedError;
-  bool? get isLocationEnabled => throw _privateConstructorUsedError;
+  String get username => throw _privateConstructorUsedError;
   List<dynamic>? get following => throw _privateConstructorUsedError;
   List<dynamic>? get followers => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
+  UserLocationModel? get location => throw _privateConstructorUsedError;
   String? get profilePic => throw _privateConstructorUsedError;
   String? get coverPhoto => throw _privateConstructorUsedError;
-  String? get bitmapImage => throw _privateConstructorUsedError;
-  Map<String, dynamic>? get location => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -89,18 +83,18 @@ abstract class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl<$Res>;
   $Res call(
       {String? status,
+      String? deviceToken,
+      String id,
       bool? presence,
       List<dynamic>? chats,
-      String id,
-      List<dynamic>? stories,
-      bool? isLocationEnabled,
+      String username,
       List<dynamic>? following,
       List<dynamic>? followers,
-      String username,
+      UserLocationModel? location,
       String? profilePic,
-      String? coverPhoto,
-      String? bitmapImage,
-      Map<String, dynamic>? location});
+      String? coverPhoto});
+
+  $UserLocationModelCopyWith<$Res>? get location;
 }
 
 /// @nodoc
@@ -114,24 +108,30 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   @override
   $Res call({
     Object? status = freezed,
+    Object? deviceToken = freezed,
+    Object? id = freezed,
     Object? presence = freezed,
     Object? chats = freezed,
-    Object? id = freezed,
-    Object? stories = freezed,
-    Object? isLocationEnabled = freezed,
+    Object? username = freezed,
     Object? following = freezed,
     Object? followers = freezed,
-    Object? username = freezed,
+    Object? location = freezed,
     Object? profilePic = freezed,
     Object? coverPhoto = freezed,
-    Object? bitmapImage = freezed,
-    Object? location = freezed,
   }) {
     return _then(_value.copyWith(
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as String?,
+      deviceToken: deviceToken == freezed
+          ? _value.deviceToken
+          : deviceToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       presence: presence == freezed
           ? _value.presence
           : presence // ignore: cast_nullable_to_non_nullable
@@ -140,18 +140,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.chats
           : chats // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      username: username == freezed
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String,
-      stories: stories == freezed
-          ? _value.stories
-          : stories // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
-      isLocationEnabled: isLocationEnabled == freezed
-          ? _value.isLocationEnabled
-          : isLocationEnabled // ignore: cast_nullable_to_non_nullable
-              as bool?,
       following: following == freezed
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
@@ -160,10 +152,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
-      username: username == freezed
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as UserLocationModel?,
       profilePic: profilePic == freezed
           ? _value.profilePic
           : profilePic // ignore: cast_nullable_to_non_nullable
@@ -172,15 +164,18 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.coverPhoto
           : coverPhoto // ignore: cast_nullable_to_non_nullable
               as String?,
-      bitmapImage: bitmapImage == freezed
-          ? _value.bitmapImage
-          : bitmapImage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      location: location == freezed
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
     ));
+  }
+
+  @override
+  $UserLocationModelCopyWith<$Res>? get location {
+    if (_value.location == null) {
+      return null;
+    }
+
+    return $UserLocationModelCopyWith<$Res>(_value.location!, (value) {
+      return _then(_value.copyWith(location: value));
+    });
   }
 }
 
@@ -192,18 +187,19 @@ abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
   @override
   $Res call(
       {String? status,
+      String? deviceToken,
+      String id,
       bool? presence,
       List<dynamic>? chats,
-      String id,
-      List<dynamic>? stories,
-      bool? isLocationEnabled,
+      String username,
       List<dynamic>? following,
       List<dynamic>? followers,
-      String username,
+      UserLocationModel? location,
       String? profilePic,
-      String? coverPhoto,
-      String? bitmapImage,
-      Map<String, dynamic>? location});
+      String? coverPhoto});
+
+  @override
+  $UserLocationModelCopyWith<$Res>? get location;
 }
 
 /// @nodoc
@@ -218,24 +214,30 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? deviceToken = freezed,
+    Object? id = freezed,
     Object? presence = freezed,
     Object? chats = freezed,
-    Object? id = freezed,
-    Object? stories = freezed,
-    Object? isLocationEnabled = freezed,
+    Object? username = freezed,
     Object? following = freezed,
     Object? followers = freezed,
-    Object? username = freezed,
+    Object? location = freezed,
     Object? profilePic = freezed,
     Object? coverPhoto = freezed,
-    Object? bitmapImage = freezed,
-    Object? location = freezed,
   }) {
     return _then(_UserModel(
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as String?,
+      deviceToken: deviceToken == freezed
+          ? _value.deviceToken
+          : deviceToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       presence: presence == freezed
           ? _value.presence
           : presence // ignore: cast_nullable_to_non_nullable
@@ -244,18 +246,10 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.chats
           : chats // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      username: username == freezed
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String,
-      stories: stories == freezed
-          ? _value.stories
-          : stories // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
-      isLocationEnabled: isLocationEnabled == freezed
-          ? _value.isLocationEnabled
-          : isLocationEnabled // ignore: cast_nullable_to_non_nullable
-              as bool?,
       following: following == freezed
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
@@ -264,10 +258,10 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
               as List<dynamic>?,
-      username: username == freezed
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as UserLocationModel?,
       profilePic: profilePic == freezed
           ? _value.profilePic
           : profilePic // ignore: cast_nullable_to_non_nullable
@@ -276,14 +270,6 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.coverPhoto
           : coverPhoto // ignore: cast_nullable_to_non_nullable
               as String?,
-      bitmapImage: bitmapImage == freezed
-          ? _value.bitmapImage
-          : bitmapImage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      location: location == freezed
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
     ));
   }
 }
@@ -293,18 +279,16 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 class _$_UserModel implements _UserModel {
   const _$_UserModel(
       {this.status,
-      this.presence,
-      this.chats,
+      this.deviceToken,
       this.id = '',
-      this.stories,
-      this.isLocationEnabled,
-      this.following,
-      this.followers,
+      this.presence = true,
+      this.chats = const [],
       this.username = '',
+      this.following = const [],
+      this.followers = const [],
+      this.location = null,
       this.profilePic = defaultProfilePic,
-      this.coverPhoto = defaultCoverPhoto,
-      this.bitmapImage = defaultBitmapImage,
-      this.location = defautLocation});
+      this.coverPhoto = defaultCoverPhoto});
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -312,39 +296,38 @@ class _$_UserModel implements _UserModel {
   @override
   final String? status;
   @override
+  final String? deviceToken;
+  @JsonKey()
+  @override
+  final String id;
+  @JsonKey()
+  @override
   final bool? presence;
+  @JsonKey()
   @override
   final List<dynamic>? chats;
   @JsonKey()
   @override
-  final String id;
-  @override
-  final List<dynamic>? stories;
-  @override
-  final bool? isLocationEnabled;
+  final String username;
+  @JsonKey()
   @override
   final List<dynamic>? following;
+  @JsonKey()
   @override
   final List<dynamic>? followers;
   @JsonKey()
   @override
-  final String username;
+  final UserLocationModel? location;
   @JsonKey()
   @override
   final String? profilePic;
   @JsonKey()
   @override
   final String? coverPhoto;
-  @JsonKey()
-  @override
-  final String? bitmapImage;
-  @JsonKey()
-  @override
-  final Map<String, dynamic>? location;
 
   @override
   String toString() {
-    return 'UserModel(status: $status, presence: $presence, chats: $chats, id: $id, stories: $stories, isLocationEnabled: $isLocationEnabled, following: $following, followers: $followers, username: $username, profilePic: $profilePic, coverPhoto: $coverPhoto, bitmapImage: $bitmapImage, location: $location)';
+    return 'UserModel(status: $status, deviceToken: $deviceToken, id: $id, presence: $presence, chats: $chats, username: $username, following: $following, followers: $followers, location: $location, profilePic: $profilePic, coverPhoto: $coverPhoto)';
   }
 
   @override
@@ -353,40 +336,35 @@ class _$_UserModel implements _UserModel {
         (other.runtimeType == runtimeType &&
             other is _UserModel &&
             const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality()
+                .equals(other.deviceToken, deviceToken) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.presence, presence) &&
             const DeepCollectionEquality().equals(other.chats, chats) &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.stories, stories) &&
-            const DeepCollectionEquality()
-                .equals(other.isLocationEnabled, isLocationEnabled) &&
+            const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality().equals(other.following, following) &&
             const DeepCollectionEquality().equals(other.followers, followers) &&
-            const DeepCollectionEquality().equals(other.username, username) &&
+            const DeepCollectionEquality().equals(other.location, location) &&
             const DeepCollectionEquality()
                 .equals(other.profilePic, profilePic) &&
             const DeepCollectionEquality()
-                .equals(other.coverPhoto, coverPhoto) &&
-            const DeepCollectionEquality()
-                .equals(other.bitmapImage, bitmapImage) &&
-            const DeepCollectionEquality().equals(other.location, location));
+                .equals(other.coverPhoto, coverPhoto));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(deviceToken),
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(presence),
       const DeepCollectionEquality().hash(chats),
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(stories),
-      const DeepCollectionEquality().hash(isLocationEnabled),
+      const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(following),
       const DeepCollectionEquality().hash(followers),
-      const DeepCollectionEquality().hash(username),
+      const DeepCollectionEquality().hash(location),
       const DeepCollectionEquality().hash(profilePic),
-      const DeepCollectionEquality().hash(coverPhoto),
-      const DeepCollectionEquality().hash(bitmapImage),
-      const DeepCollectionEquality().hash(location));
+      const DeepCollectionEquality().hash(coverPhoto));
 
   @JsonKey(ignore: true)
   @override
@@ -402,18 +380,16 @@ class _$_UserModel implements _UserModel {
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {String? status,
+      String? deviceToken,
+      String id,
       bool? presence,
       List<dynamic>? chats,
-      String id,
-      List<dynamic>? stories,
-      bool? isLocationEnabled,
+      String username,
       List<dynamic>? following,
       List<dynamic>? followers,
-      String username,
+      UserLocationModel? location,
       String? profilePic,
-      String? coverPhoto,
-      String? bitmapImage,
-      Map<String, dynamic>? location}) = _$_UserModel;
+      String? coverPhoto}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
@@ -421,29 +397,25 @@ abstract class _UserModel implements UserModel {
   @override
   String? get status;
   @override
+  String? get deviceToken;
+  @override
+  String get id;
+  @override
   bool? get presence;
   @override
   List<dynamic>? get chats;
   @override
-  String get id;
-  @override
-  List<dynamic>? get stories;
-  @override
-  bool? get isLocationEnabled;
+  String get username;
   @override
   List<dynamic>? get following;
   @override
   List<dynamic>? get followers;
   @override
-  String get username;
+  UserLocationModel? get location;
   @override
   String? get profilePic;
   @override
   String? get coverPhoto;
-  @override
-  String? get bitmapImage;
-  @override
-  Map<String, dynamic>? get location;
   @override
   @JsonKey(ignore: true)
   _$UserModelCopyWith<_UserModel> get copyWith =>

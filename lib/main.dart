@@ -10,21 +10,25 @@ import 'package:frienderr/app/handler_delegate.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:frienderr/features/presentation/blocs/bloc_observer.dart';
+import 'package:frienderr/core/providers/local_notiifcation_provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.data}");
+  print("Handling a background message: ${message.toString()}");
+  LocalNotificationProvider.instance.showNotification(remoteMessage: message);
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //await dotenv.load();
-
   await Firebase.initializeApp();
 
   final HydratedStorage storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
+
+  final token = await FirebaseMessaging.instance.getToken();
+  print(token);
 
   await configureInjection(kReleaseMode ? Environment.prod : Environment.dev);
 

@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:frienderr/features/data/models/story/story_content.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
+import 'package:frienderr/features/domain/usecases/story/delete_story_usecase.dart';
+import 'package:frienderr/features/domain/usecases/story/view_story_usecase.dart';
 import 'package:injectable/injectable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -18,18 +21,27 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
   final GetStoryUseCase _getStoryUseCase;
   final CreateStoryUseCase _createStoryUseCase;
   final UpdateStoryUseCase _updateStoryUseCase;
+  final DeleteStoryUseCase _deleteStoryUseCase;
+  final ViewStoryUseCase _viewStoryStreamUseCase;
   final GetStoryStreamUseCase _getStoryStreamUseCase;
 
-  StoryBloc(this._getStoryStreamUseCase, this._getStoryUseCase,
-      this._updateStoryUseCase, this._createStoryUseCase)
-      : super(StoryState(
+  StoryBloc(
+    this._getStoryUseCase,
+    this._updateStoryUseCase,
+    this._createStoryUseCase,
+    this._deleteStoryUseCase,
+    this._getStoryStreamUseCase,
+    this._viewStoryStreamUseCase,
+  ) : super(StoryState(
             stories: StoryResponse(
                 stories: [],
                 userStory:
                     UserStory(story: null, doesUserHaveStories: false)))) {
+    on<_ViewStory>(_viewStory);
     on<_LoadStories>(_loadStories);
     on<_CreateStory>(_createStory);
     on<_UpdateStory>(_updateStory);
+    on<_DeleteStory>(_deleteStory);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> get stories {
@@ -66,7 +78,8 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
 
   Future<void> _updateStory(
       _UpdateStory event, Emitter<StoryState> emit) async {
-    final either = await _updateStoryUseCase(UpdateStoryParams(event.assets));
+    final either = await _updateStoryUseCase(
+        UpdateStoryParams(event.userId, event.assets));
 
     return either.fold((error) {
       emit(state.copyWith(action: StoryListenableAction.updateFailure));
@@ -76,6 +89,39 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
         return;
       }
       emit(state.copyWith(action: StoryListenableAction.updated));
+    });
+  }
+
+  Future<void> _viewStory(_ViewStory event, Emitter<StoryState> emit) async {
+    final either = await _viewStoryStreamUseCase(
+        ViewStoryParams(event.userId, event.storyId, event.stories));
+
+    return either.fold((error) {
+      print(error.message);
+      emit(state.copyWith(action: StoryListenableAction.viewFailure));
+    }, (bool response) {
+      if (!response) {
+        emit(state.copyWith(action: StoryListenableAction.viewFailure));
+        return;
+      }
+      emit(state.copyWith(action: StoryListenableAction.viewed));
+    });
+  }
+
+  Future<void> _deleteStory(
+      _DeleteStory event, Emitter<StoryState> emit) async {
+    final either = await _deleteStoryUseCase(
+        DeleteStoryParams(event.isLast, event.userId, event.story));
+
+    return either.fold((error) {
+      print(error.message);
+      emit(state.copyWith(action: StoryListenableAction.deteleFailure));
+    }, (bool response) {
+      if (!response) {
+        emit(state.copyWith(action: StoryListenableAction.deteleFailure));
+        return;
+      }
+      emit(state.copyWith(action: StoryListenableAction.deleted));
     });
   }
 

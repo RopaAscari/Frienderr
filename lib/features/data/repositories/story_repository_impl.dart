@@ -32,26 +32,6 @@ class StoryRepository implements IStoryRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createStory(
-      {required List<GalleryAsset> assets}) async {
-    try {
-      return Right(await _storyDataProvider.createStory(assets: assets));
-    } catch (e) {
-      return Left(Failure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateStory(
-      {required List<GalleryAsset> assets}) async {
-    try {
-      return Right(await _storyDataProvider.updateStory(assets: assets));
-    } catch (e) {
-      return Left(Failure(message: e.toString()));
-    }
-  }
-
-  @override
   Future<Either<Failure, StoryResponse>> fetchStories(String userId) async {
     try {
       final _rawStories = await _storyDataProvider.fetchStories(userId);
@@ -65,6 +45,7 @@ class StoryRepository implements IStoryRepository {
       final _userStory = _stories.firstWhereOrNull((story) {
         return story.user.id == userId;
       });
+
       _stories.removeWhere((item) => item.id == userId);
 
       final _storyResponse = StoryResponse(
@@ -75,6 +56,53 @@ class StoryRepository implements IStoryRepository {
           ));
 
       return Right(_storyResponse);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> createStory(
+      {required List<GalleryAsset> assets}) async {
+    try {
+      return Right(await _storyDataProvider.createStory(assets: assets));
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateStory(
+      {required String userId, required List<GalleryAsset> assets}) async {
+    try {
+      return Right(
+          await _storyDataProvider.updateStory(userId: userId, assets: assets));
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> viewStory(
+      {required String userId,
+      required String storyId,
+      required List<StoryContent> stories}) async {
+    try {
+      return Right(await _storyDataProvider.viewStory(
+          userId: userId, storyId: storyId, stories: stories));
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteStory(
+      {required bool isLast,
+      required String userId,
+      required StoryContent story}) async {
+    try {
+      return Right(await _storyDataProvider.deleteStory(
+          userId: userId, isLast: isLast, story: story));
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }

@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:frienderr/features/domain/entities/post.dart';
+import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/failure/failure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -18,7 +20,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
   final PostCommentUseCase _postCommentUsecase;
 
   CommentBloc(this._getCommentsUsecase, this._postCommentUsecase)
-      : super(CommentState(comments: [])) {
+      : super(const CommentState(comments: [])) {
     on<_GetComments>(_getComment);
     on<_PostComment>(_postComment);
     on<_GetPaginatedComments>(_getPaginatedComments);
@@ -59,7 +61,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
   Future<void> _postComment(
       _PostComment event, Emitter<CommentState> emit) async {
     final Either<Failure, bool> _either = await _postCommentUsecase(
-        PostCommentUseCaseParams(event.comment, event.postId));
+        PostCommentUseCaseParams(event.comment, event.post, event.user));
     return _either.fold((Failure error) {
       emit(state.copyWith(
           currentState: CommentStatus.faliure, error: error.message));

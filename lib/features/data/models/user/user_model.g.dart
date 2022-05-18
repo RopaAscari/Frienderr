@@ -8,33 +8,32 @@ part of 'user_model.dart';
 
 _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       status: json['status'] as String?,
-      presence: json['presence'] as bool?,
-      chats: json['chats'] as List<dynamic>?,
+      deviceToken: json['deviceToken'] as String?,
       id: json['id'] as String? ?? '',
-      stories: json['stories'] as List<dynamic>?,
-      isLocationEnabled: json['isLocationEnabled'] as bool?,
-      following: json['following'] as List<dynamic>?,
-      followers: json['followers'] as List<dynamic>?,
+      presence: json['presence'] as bool? ?? true,
+      chats: json['chats'] as List<dynamic>? ?? const [],
       username: json['username'] as String? ?? '',
+      following: json['following'] as List<dynamic>? ?? const [],
+      followers: json['followers'] as List<dynamic>? ?? const [],
+      location: json['location'] == null
+          ? null
+          : UserLocationModel.fromJson(
+              json['location'] as Map<String, dynamic>),
       profilePic: json['profilePic'] as String? ?? defaultProfilePic,
       coverPhoto: json['coverPhoto'] as String? ?? defaultCoverPhoto,
-      bitmapImage: json['bitmapImage'] as String? ?? defaultBitmapImage,
-      location: json['location'] as Map<String, dynamic>? ?? defautLocation,
     );
 
 Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
     <String, dynamic>{
       'status': instance.status,
+      'deviceToken': instance.deviceToken,
+      'id': instance.id,
       'presence': instance.presence,
       'chats': instance.chats,
-      'id': instance.id,
-      'stories': instance.stories,
-      'isLocationEnabled': instance.isLocationEnabled,
+      'username': instance.username,
       'following': instance.following,
       'followers': instance.followers,
-      'username': instance.username,
+      'location': instance.location,
       'profilePic': instance.profilePic,
       'coverPhoto': instance.coverPhoto,
-      'bitmapImage': instance.bitmapImage,
-      'location': instance.location,
     };

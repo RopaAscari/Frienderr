@@ -40,8 +40,8 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
 
       getIt<AppRouter>().popUntil((route) => route.isFirst);
 
-      if (assets[_index].asset.type == AssetType.video) {
-        final File? value = await assets[_index].asset.file;
+      if (assets[_index].type == AssetType.video) {
+        final File? value = assets[_index].asset;
         final File thumbnailFile = await VideoCompress.getFileThumbnail(
             value?.path as String,
             quality: 50,
@@ -50,7 +50,7 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
         _initialThumbnailFile.value = thumbnailFile;
         _uploadProgressThumnail.value = _initialThumbnailFile.value;
       } else {
-        _uploadProgressThumnail.value = await assets[_index].asset.file;
+        _uploadProgressThumnail.value = assets[_index].asset;
       }
 
       getIt<AppRouter>().context.showToast(
@@ -70,66 +70,64 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
         final Reference thumbnailRef =
             FirebaseStorage.instance.ref().child('/thumbnail/$timestamp');
 
-        return item.asset.file.then((File? value) async {
-          late File? _asset;
+        late File? _asset;
 
-          if (item.asset.type == AssetType.video) {
-            MediaInfo? mediaInfo = await VideoCompress.compressVideo(
-              value?.path as String,
-              deleteOrigin: false,
-              quality: VideoQuality.LowQuality,
-            );
-            _asset = mediaInfo?.file;
+        if (item.type == AssetType.video) {
+          MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+            item.asset.path,
+            deleteOrigin: false,
+            quality: VideoQuality.LowQuality,
+          );
+          _asset = mediaInfo?.file;
+        } else {
+          _asset = item.asset;
+        }
+
+        await storageRef.putFile(
+          _asset as File,
+          SettableMetadata(
+            contentType:
+                item.type == AssetType.image ? 'image/jpg' : 'video/mp4',
+          ),
+        );
+        // .snapshotEvents
+        //   .listen((taskSnapshot) {
+        // final _progress = taskSnapshot.bytesTransferred.toDouble() /
+        //       taskSnapshot.totalBytes.toDouble();
+        //    print(_progress);
+        //    });
+
+        final String url = await storageRef.getDownloadURL();
+
+        if (item.type == AssetType.video) {
+          File _thumbnailFile;
+          if (_mapInterator == 0 && _initialThumbnailFile.isInitialized) {
+            _thumbnailFile = _initialThumbnailFile.value as File;
           } else {
-            _asset = value;
+            final File thumbnailFile = await VideoCompress.getFileThumbnail(
+                item.asset.path,
+                quality: 50,
+                position: -1);
+
+            _thumbnailFile = thumbnailFile;
           }
 
-          await storageRef.putFile(
-            _asset as File,
+          await thumbnailRef.putFile(
+            _thumbnailFile,
             SettableMetadata(
-              contentType:
-                  item.type == AssetType.image ? 'image/jpg' : 'video/mp4',
+              contentType: 'image/jpg',
             ),
           );
-          // .snapshotEvents
-          //   .listen((taskSnapshot) {
-          // final _progress = taskSnapshot.bytesTransferred.toDouble() /
-          //       taskSnapshot.totalBytes.toDouble();
-          //    print(_progress);
-          //    });
+          _thumbnail = await thumbnailRef.getDownloadURL();
+        }
 
-          final String url = await storageRef.getDownloadURL();
+        _mapInterator++;
 
-          if (item.type == AssetType.video) {
-            File _thumbnailFile;
-            if (_mapInterator == 0 && _initialThumbnailFile.isInitialized) {
-              _thumbnailFile = _initialThumbnailFile.value as File;
-            } else {
-              final File thumbnailFile = await VideoCompress.getFileThumbnail(
-                  value?.path as String,
-                  quality: 50,
-                  position: -1);
-
-              _thumbnailFile = thumbnailFile;
-            }
-
-            await thumbnailRef.putFile(
-              _thumbnailFile,
-              SettableMetadata(
-                contentType: 'image/jpg',
-              ),
-            );
-            _thumbnail = await thumbnailRef.getDownloadURL();
-          }
-
-          _mapInterator++;
-
-          return Content(
-            media: url,
-            metadata: PostMetadata(thumbnail: _thumbnail),
-            type: item.type == AssetType.image ? 'image' : 'video',
-          );
-        });
+        return Content(
+          media: url,
+          metadata: PostMetadata(thumbnail: _thumbnail),
+          type: item.type == AssetType.image ? 'image' : 'video',
+        );
       }).toList();
 
       final PostEntity posts = PostEntity(
@@ -203,28 +201,6 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
         'likes': FieldValue.arrayUnion([userId])
       });
 
-      /*  final postUserId = post['user']['id'];
-
-      if (userId != postUserId) {
-        final senderUsername = user.username;
-        final senderProfilePic = user.profilePic;
-        final media = post['content'][0]['media'];
-        final mediaType = post['content'][0]['type'];
-
-        final notification = new LikeNotificationModel(
-          type: 'Like',
-          postId: postId,
-          senderId: userId,
-          mediaType: mediaType,
-          postThumbnail: media,
-          recipient: postUserId,
-          senderUsername: senderUsername,
-          senderProfilePic: senderProfilePic as String,
-          dateCreated: DateTime.now().microsecondsSinceEpoch,
-        );
-
-        notificationBloc.add(SendLikeNotification(notification: notification));
-      }*/
       return true;
     } catch (err) {
       return false;

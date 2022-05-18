@@ -26,7 +26,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
   late Timer _timerLink;
   Connectivity connectivity = Connectivity();
   late final StreamSubscription<ConnectivityResult> subscription;
-  final FirebaseServices firebaseServices = new FirebaseServices();
+  final FirebaseServices firebaseServices = FirebaseServices();
 
   UserBloc userBloc = getIt<UserBloc>();
   ThemeBloc themeBloc = getIt<ThemeBloc>();
@@ -35,14 +35,14 @@ class HandlerDelegateState extends State<HandlerDelegate>
   @override
   void initState() {
     super.initState();
-    this.connectivitySubscriber();
+    connectivitySubscriber();
     WidgetsBinding.instance?.addObserver(this);
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _timerLink = new Timer(
+      _timerLink = Timer(
         const Duration(milliseconds: 1000),
         () async {
           firebaseServices.retrieveDynamicLink(context);
@@ -50,8 +50,8 @@ class HandlerDelegateState extends State<HandlerDelegate>
       );
     }
 
-    final String userId =
-        BlocProvider.of<UserBloc>(context, listen: false).state.user.id;
+    final String userId = userBloc.state.user.id;
+
     bool isOnline = true;
     switch (state) {
       case AppLifecycleState.resumed:

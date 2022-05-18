@@ -12,12 +12,12 @@ class SendFollowNotificationUseCase
   final INotificationRepository repository;
   @override
   Future<Either<Failure, bool>> call(SendFollowNotificationParams params) {
-    return repository.sendFollowNotification(params.notification);
+    return repository.sendFollowNotification(notification: params.notification);
   }
 }
 
 class SendFollowNotificationParams {
-  final FollowNotificationEntity notification;
+  final NotificationEntity notification;
 
   const SendFollowNotificationParams(this.notification);
 }

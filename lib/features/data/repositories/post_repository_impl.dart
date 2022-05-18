@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/failure/failure.dart';
+import 'package:frienderr/core/services/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/features/domain/entities/notification.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/data/models/post/post_model.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
@@ -13,13 +15,15 @@ import 'package:frienderr/features/data/providers/user_provider.dart';
 import 'package:frienderr/features/data/models/post/content_model.dart';
 import 'package:frienderr/features/data/models/post/metadata_model.dart';
 import 'package:frienderr/features/domain/repositiories/post_repository.dart';
+import 'package:frienderr/features/domain/repositiories/notification_repository.dart';
 
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {
+  final INotificationRepository _notificationRepository;
   final IPostRemoteDataProvider _postRemoteDataProvider;
   final IUserDataRemoteProvider _userRemoteDataProvider;
-  const PostRepository(
-      this._postRemoteDataProvider, this._userRemoteDataProvider);
+  const PostRepository(this._postRemoteDataProvider,
+      this._userRemoteDataProvider, this._notificationRepository);
 
   @override
   Either<Failure, Stream<QuerySnapshot<Map<String, dynamic>>>>
@@ -103,7 +107,34 @@ class PostRepository implements IPostRepository {
   Future<Either<Failure, bool>> likePost(
       PostEntity post, UserEntity user) async {
     try {
-      return Right(await _postRemoteDataProvider.likePost(post, user));
+      final _result = await _postRemoteDataProvider.likePost(post, user);
+
+      print(post.user.id != user.id);
+      if (post.user.id != user.id) {
+        late final String display;
+
+        if (post.content.first.type == 'video') {
+          display = post.content.first.metadata.thumbnail as String;
+        } else {
+          display = post.content.first.media;
+        }
+
+        final NotificationEntity notification = NotificationEntity(
+          type: 1,
+          mediaType: 1,
+          recipientId: post.user.id,
+          id: Helpers().generateId(25),
+          metadata: NotificationMetadataEntity(),
+          dateCreated: DateTime.now().microsecondsSinceEpoch,
+          post: PartialPostEntity(id: post.id, display: display),
+          user: UserEntity(id: user.id, username: user.username),
+        );
+
+        await _notificationRepository.sendLikeNotification(
+            notification: notification);
+      }
+
+      return Right(_result);
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }

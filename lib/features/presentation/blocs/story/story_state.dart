@@ -4,8 +4,13 @@ enum StoryListenableAction {
   idle,
   updated,
   created,
+  deleted,
+  viewed,
+  viewFailure,
   updateFailure,
-  creationFailure
+  deteleFailure,
+
+  creationFailure,
 }
 enum StoryStatus { idle, loaded, loading, error }
 

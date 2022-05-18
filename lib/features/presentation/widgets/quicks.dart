@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frienderr/core/enums/enums.dart';
+import 'package:frienderr/features/domain/entities/quick.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:frienderr/core/services/services.dart';
-import 'package:frienderr/features/presentation/screens/camera.dart';
+import 'package:frienderr/features/presentation/screens/camera/camera.dart';
 import 'package:frienderr/features/presentation/widgets/like_button.dart';
 import 'package:frienderr/features/presentation/widgets/share_button.dart';
 import 'package:frienderr/features/presentation/widgets/like_animation.dart';
@@ -20,16 +21,19 @@ const placeholder =
 const caption = 'This is an exmaple of my quick caption...Neat huh!';
 
 class Quicks extends StatefulWidget {
+  final QuickEntity quick;
   final VideoPlayerController controller;
-  const Quicks({Key? key, required this.controller}) : super(key: key);
+  const Quicks({Key? key, required this.controller, required this.quick})
+      : super(key: key);
 
   @override
   State<Quicks> createState() => _QuicksState();
 }
 
 class _QuicksState extends State<Quicks> {
+  QuickEntity get _quick => widget.quick;
   FlareControls flareControls = FlareControls();
-  final AnimationBloc animationBloc = new AnimationBloc();
+  final AnimationBloc animationBloc = AnimationBloc();
   @override
   void initState() {
     super.initState();
@@ -81,7 +85,7 @@ class _QuicksState extends State<Quicks> {
 
   void _determineLikeAction() {
     flareControls.play("Like");
-    Timer(Duration(milliseconds: 1200), () {
+    Timer(const Duration(milliseconds: 1200), () {
       flareControls.play("IdleUnlike");
     });
   }
@@ -96,7 +100,7 @@ class _QuicksState extends State<Quicks> {
         child: ConditionalRenderDelegate(
             condition: widget.controller.value.isInitialized,
             renderWidget: _quickPlayer(),
-            fallbackWidget: Center(child: CircularProgressIndicator())));
+            fallbackWidget: const Center(child: CircularProgressIndicator())));
   }
 
   Widget _quickPlayer() {
@@ -109,7 +113,6 @@ class _QuicksState extends State<Quicks> {
             onLongPressEnd: (gestureDetails) => _playVideo(),
             child: Stack(children: [
               _videoPlayer(),
-              _headerWidget(),
               _interactionHelper(),
               _userAvatar()
             ])));
@@ -132,18 +135,22 @@ class _QuicksState extends State<Quicks> {
             color: HexColor(
               '#141413',
             ),
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30), topRight: Radius.circular(30))),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * .5,
         child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text('Comments', style: TextStyle(fontSize: 17))])));
+                children: const [
+                  Text('Comments', style: TextStyle(fontSize: 17))
+                ])));
   }
 
   Widget _userAvatar() {
+    ;
+    _quick.user.username;
     return Positioned(
         bottom: 30,
         left: 20,
@@ -152,11 +159,11 @@ class _QuicksState extends State<Quicks> {
               height: 60,
               width: MediaQuery.of(context).size.width,
               child: ListTile(
-                  leading:
-                      CircleAvatar(backgroundImage: NetworkImage(placeholder)),
-                  title: Text('John Blake'),
-                  subtitle: Text('Public'))),
-          Text('\n$caption')
+                  leading: CircleAvatar(
+                      backgroundImage: NetworkImage(_quick.user.profilePic)),
+                  title: Text('${_quick.user.username} '),
+                  subtitle: const Text('Public'))),
+          Text('\n${_quick.caption}')
         ]));
   }
 
@@ -168,8 +175,9 @@ class _QuicksState extends State<Quicks> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           IconButton(
               onPressed: () => _openCamera(),
-              icon: Icon(CupertinoIcons.camera, color: Colors.white, size: 25)),
-          Text('Quicks',
+              icon: const Icon(CupertinoIcons.camera,
+                  color: Colors.white, size: 25)),
+          const Text('Snaps',
               style: TextStyle(fontSize: 23, fontWeight: FontWeight.normal))
         ]));
   }

@@ -3,51 +3,47 @@ import 'dart:convert';
 import 'package:frienderr/core/data/data.dart';
 
 class UserEntity implements PartialUser {
+  @override
   final String id;
   final String? status;
   final bool? presence;
+  @override
   final String? username;
   final String? profilePic;
   final String? coverPhoto;
-  final String? bitmapImage;
+  final String? deviceToken;
   final List<dynamic>? chats;
-  final List<dynamic>? stories;
-  final bool? isLocationEnabled;
   final List<dynamic>? following;
   final List<dynamic>? followers;
-  final Map<String, dynamic>? location;
+  final UserLocationEntity? location;
 
   UserEntity({
+    this.location,
     required this.id,
     this.status = '',
     this.username = '',
+    this.deviceToken = ' ',
     this.presence = false,
     this.chats = const [],
-    this.stories = const [],
     this.followers = const [],
     this.following = const [],
-    this.location = defautLocation,
-    this.isLocationEnabled = false,
     this.profilePic = defaultProfilePic,
     this.coverPhoto = defaultCoverPhoto,
-    this.bitmapImage = defaultBitmapImage,
   }) : super();
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'chats': chats,
       'status': status,
       'presence': presence,
       'username': username,
-      'profilePic': profilePic,
-      'coverPhoto': coverPhoto,
-      'bitmapImage': bitmapImage,
-      'chats': chats,
-      'stories': stories,
-      'isLocationEnabled': isLocationEnabled,
+      'location': location,
       'following': following,
       'followers': followers,
-      'location': location,
+      'profilePic': profilePic,
+      'coverPhoto': coverPhoto,
+      'deviceToken': deviceToken,
     };
   }
 
@@ -59,30 +55,57 @@ class UserEntity implements PartialUser {
       username: map['username'],
       profilePic: map['profilePic'],
       coverPhoto: map['coverPhoto'],
-      bitmapImage: map['bitmapImage'],
+      deviceToken: map['deviceToken'],
       chats: List<dynamic>.from(map['chats'] ?? []),
-      stories: List<dynamic>.from(map['stories'] ?? []),
-      isLocationEnabled: map['isLocationEnabled'],
       following: List<dynamic>.from(map['following'] ?? []),
       followers: List<dynamic>.from(map['followers'] ?? []),
-      location: Map<String, dynamic>.from(map['location'] ?? {}),
+      location: UserLocationEntity.fromJson(map['location']),
     );
   }
 }
 
 class PartialUser {
   final String id;
-  PartialUser({required this.id});
+  final String? username;
+  PartialUser({required this.id, this.username});
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-    };
+    return {'id': id, 'username': username};
   }
 
   factory PartialUser.fromJson(Map<String, dynamic> map) {
-    return PartialUser(
-      id: map['id'] ?? '',
+    return PartialUser(id: map['id'] ?? '', username: map['username'] ?? '');
+  }
+}
+
+class UserLocationEntity {
+  final bool? latitude;
+  final String? longitude;
+  final String? bitmapImage;
+  final bool isLocationEnabled;
+
+  UserLocationEntity({
+    this.latitude,
+    this.longitude,
+    this.bitmapImage,
+    required this.isLocationEnabled,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'latitude': latitude,
+      'longitude': longitude,
+      'bitmapImage': bitmapImage,
+      'isLocationEnabled': isLocationEnabled,
+    };
+  }
+
+  factory UserLocationEntity.fromJson(Map<String, dynamic> map) {
+    return UserLocationEntity(
+      latitude: map['latitude'],
+      longitude: map['longitude'],
+      bitmapImage: map['bitmapImage'],
+      isLocationEnabled: map['isLocationEnabled'] ?? false,
     );
   }
 }

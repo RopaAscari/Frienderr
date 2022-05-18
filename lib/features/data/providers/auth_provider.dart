@@ -1,26 +1,28 @@
-import 'package:frienderr/core/constants/constants.dart';
+import '../../../core/enums/enums.dart';
 import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:frienderr/features/data/models/auth/auth_model.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/exceptions/exceptions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:frienderr/features/data/models/auth/auth_model.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
-
-import '../../../core/enums/enums.dart';
 
 @LazySingleton(as: IAuthRemoteDataProvider)
 class AuthRemoteDataProvider implements IAuthRemoteDataProvider {
   final FirebaseAuth authInstance;
+  final FirebaseMessaging messagingInstance;
   final FirebaseFirestore firestoreInstance;
 
-  const AuthRemoteDataProvider(this.authInstance, this.firestoreInstance);
+  const AuthRemoteDataProvider(
+      this.authInstance, this.firestoreInstance, this.messagingInstance);
 
   @override
   Future<AuthResponse> recoverPassword({required String email}) async {
     try {
       await authInstance.sendPasswordResetEmail(email: email);
 
-      return AuthResponse(user: null, hasError: false, error: null);
+      return const AuthResponse(user: null, hasError: false, error: null);
     } on FirebaseAuthException catch (e) {
       return AuthResponse(user: null, hasError: true, error: e.toString());
     }
@@ -39,9 +41,9 @@ class AuthRemoteDataProvider implements IAuthRemoteDataProvider {
       final String id = userCredential.user!.uid;
 
       final UserModel user = UserModel(
-        id: id,
-        username: '',
-      );
+          id: id,
+          username: '',
+          deviceToken: await messagingInstance.getToken());
 
       await firestoreInstance
           .collection(Constants.collections[Collections.Users]!)

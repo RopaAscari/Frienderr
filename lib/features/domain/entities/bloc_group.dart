@@ -1,3 +1,4 @@
+import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
@@ -12,22 +13,26 @@ class BlocGroup {
   QuickBloc quickBloc;
   StoryBloc storyBloc;
   CameraBloc cameraBloc;
+  NotificationBloc notificationBloc;
   AuthenticationBloc authenticationBloc;
+
   BlocGroup({
     required this.userBloc,
     required this.postBloc,
     required this.storyBloc,
     required this.quickBloc,
     required this.cameraBloc,
+    required this.notificationBloc,
     required this.authenticationBloc,
   });
 
   BlocGroup copyWith({
+    PostBloc? postBloc,
     UserBloc? userBloc,
     QuickBloc? quickBloc,
     StoryBloc? storyBloc,
     CameraBloc? cameraBloc,
-    PostBloc? postBloc,
+    NotificationBloc? notificationBloc,
     AuthenticationBloc? authenticationBloc,
   }) {
     return BlocGroup(
@@ -36,6 +41,7 @@ class BlocGroup {
       storyBloc: storyBloc ?? this.storyBloc,
       quickBloc: quickBloc ?? this.quickBloc,
       cameraBloc: cameraBloc ?? this.cameraBloc,
+      notificationBloc: notificationBloc ?? this.notificationBloc,
       authenticationBloc: authenticationBloc ?? this.authenticationBloc,
     );
   }

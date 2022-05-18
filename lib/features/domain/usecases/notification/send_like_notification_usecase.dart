@@ -12,12 +12,12 @@ class SendLikeNotificationUseCase
   final INotificationRepository repository;
   @override
   Future<Either<Failure, bool>> call(SendLikeNotificationParams params) {
-    return repository.sendLikeNotification(params.notification);
+    return repository.sendLikeNotification(notification: params.notification);
   }
 }
 
 class SendLikeNotificationParams {
-  final LikeNotificationEntity notification;
+  final NotificationEntity notification;
 
   const SendLikeNotificationParams(this.notification);
 }

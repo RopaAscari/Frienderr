@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:frienderr/core/enums/enums.dart';
@@ -28,6 +29,7 @@ class AssetThumbnail extends StatefulWidget {
   final ValueSetter<GalleryAsset> fetchSelectedAssets;
   final ValueSetter<GalleryAsset> removeSelectedAssets;
 
+  @override
   AssetThumbnailState createState() => AssetThumbnailState();
 }
 
@@ -49,19 +51,31 @@ class AssetThumbnailState extends State<AssetThumbnail> {
     super.didChangeDependencies();
   }
 
-  void _selectAsset() {
+  void _selectAsset() async {
+    final _asset = await asset.file as File;
+    final _thumbnail = await asset.thumbnailData as Uint8List;
     if (isMutliSelecting) {
       if (selectedAsset != index) {
         setState(() {
           selectedAsset = index;
-          fetchSelectedAssets(
-              GalleryAsset(id: index, asset: asset, type: asset.type));
+          fetchSelectedAssets(GalleryAsset(
+            id: index,
+            asset: _asset,
+            type: asset.type,
+            thumbnail: _thumbnail,
+            duration: asset.duration,
+          ));
         });
       } else {
         setState(() {
           selectedAsset = null;
-          removeSelectedAssets(
-              GalleryAsset(id: index, asset: asset, type: asset.type));
+          removeSelectedAssets(GalleryAsset(
+            id: index,
+            asset: _asset,
+            type: asset.type,
+            thumbnail: _thumbnail,
+            duration: asset.duration,
+          ));
         });
       }
     }
