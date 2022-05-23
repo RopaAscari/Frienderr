@@ -11,6 +11,7 @@ import 'package:frienderr/features/presentation/screens/chat/chat.dart';
 import 'package:frienderr/features/presentation/screens/login/login.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/screens/camera/camera.dart';
+import 'package:frienderr/features/presentation/screens/notifications/notifications.dart';
 import 'package:frienderr/features/presentation/screens/post/post_media.dart';
 import 'package:frienderr/features/presentation/screens/post/post_quick.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
@@ -49,6 +50,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: PreviewPostScreen),
     AutoRoute(page: PreviewQuickScreen),
     AutoRoute(page: PreviewStoryScreen),
+    AutoRoute(page: NotificationScreen),
     AutoRoute(page: ChatDashboardScreen),
     AutoRoute(page: ForgotPasswordScreen),
     AutoRoute(page: UnauthenticatedScreen),

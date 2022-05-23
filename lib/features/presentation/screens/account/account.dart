@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/services/helpers.dart';
@@ -170,11 +171,11 @@ class FullScreenImage extends StatelessWidget {
   }
 }
 
-class Account extends StatefulWidget {
+class AccountScreen extends StatefulWidget {
   final String profileUserId;
   final bool isProfileOwnerViewing;
   final BlocGroup blocGroup;
-  const Account(
+  const AccountScreen(
       {Key? key,
       required this.blocGroup,
       required this.profileUserId,
@@ -182,11 +183,11 @@ class Account extends StatefulWidget {
       : super(key: key);
 
   @override
-  AccountState createState() => AccountState();
+  AccountScreenState createState() => AccountScreenState();
 }
 
-class AccountState extends State<Account>
-    with AutomaticKeepAliveClientMixin<Account> {
+class AccountScreenState extends State<AccountScreen>
+    with AutomaticKeepAliveClientMixin<AccountScreen> {
   @override
   bool get wantKeepAlive => true;
 
@@ -496,163 +497,6 @@ class AccountState extends State<Account>
                         _mediaTabView()
                       ]))))
     ])));
-
-    /*final dynamic appUser =
-        BlocProvider.of<UserBloc>(context, listen: true).state.user;
-
-    return Scaffold(
-        body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection("users")
-                .doc(profileUserId)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
-                return Center(child: CircularProgressIndicator());
-              }
-              dynamic user = snapshot.data!;
-
-              return SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: false,
-                  header: ClassicHeader(
-                    idleText: '',
-                    releaseText: '',
-                    completeText: '',
-                    refreshingText: '',
-                    idleIcon: CupertinoActivityIndicator(radius: 10),
-                    completeIcon: CupertinoActivityIndicator(radius: 10),
-                    releaseIcon: CupertinoActivityIndicator(radius: 10),
-                  ),
-                  footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus? mode) {
-                      return Center();
-                    },
-                  ),
-                  controller: _refreshController,
-                  onRefresh: () => _onRefresh(),
-                  onLoading: () => _onLoading(),
-                  child: SingleChildScrollView(
-                      child: Stack(
-                    children: <Widget>[
-                      new Column(
-                        children: <Widget>[
-                          new Container(
-                              height: MediaQuery.of(context).size.height * .20,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                  color: HexColor('#6D6D70'),
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(15),
-                                      bottomRight: Radius.circular(15))),
-                              child: GestureDetector(
-                                  onTap: () => {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (_) {
-                                          return FullScreenImage(
-                                            tag: "coverPic",
-                                            userId: user['id'],
-                                            isProfileChanging: false,
-                                            imageUrl: user['coverPhoto'],
-                                            isProfileOwnerViewing:
-                                                isProfileOwnerViewing,
-                                          );
-                                        }))
-                                      },
-                                  child: Hero(
-                                    tag: "coverPic",
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          Shimmer.fromColors(
-                                              period:
-                                                  Duration(milliseconds: 1000),
-                                              baseColor: Colors.grey[300]!,
-                                              highlightColor: Colors.grey[100]!,
-                                              enabled: true,
-                                              child: Container(
-                                                //height: 220,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                // width: MediaQuery.of(context).size.width,
-                                              )),
-                                      imageUrl: user['coverPhoto'],
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                    ),
-                                  ))),
-                          new Container(
-                              height: MediaQuery.of(context).size.height * .35,
-                              //  color: Colors.white,
-                              child: Column(
-                                children: [],
-                              ))
-                        ],
-                      ),
-                      new Container(
-                        alignment: Alignment.topCenter,
-                        padding: new EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * .13,
-                            right: 20.0,
-                            left: 20.0),
-                        child: new Container(
-                          //height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    alignment: FractionalOffset.center,
-                                    child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 100),
-                                              child: !isProfileOwnerViewing
-                                                  ? followBottomWidget(
-                                                      user, appUser)
-                                                  : Container()),
-                                          Spacer(),
-                                          profilePictureWidget(user),
-                                          Spacer(),
-                                          Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 100),
-                                              child: isProfileOwnerViewing
-                                                  ? accountIconWidget()
-                                                  : Container()),
-                                          Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 100),
-                                              child: !isProfileOwnerViewing
-                                                  ? messageButtonWidget(
-                                                      appUser, user)
-                                                  : Container()),
-                                        ])),
-                                usernameDisplayWidget(user),
-                                accountMetadatatWidget(user),
-                                userStories.length > 0
-                                    ? postGridWidget(user)
-                                    : Center(
-                                        child: Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 200),
-                                            child: Text('You have no posts')))
-                              ]),
-                        ),
-                      ),
-                    ],
-                  )));
-            }));*/
   }
 
   Widget _mediaTabView() {
@@ -670,7 +514,7 @@ class AccountState extends State<Account>
                     indicatorPadding: EdgeInsets.symmetric(horizontal: 30),
                     indicator: BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(color: Colors.amber, width: 3),
+                        bottom: BorderSide(color: Colors.white, width: 2),
                       ),
                     ),
                     tabs: [
@@ -692,59 +536,34 @@ class AccountState extends State<Account>
   }
 
   Widget accountIconWidget() {
-    final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
-    final dotIcon = theme == Constants.darkTheme
-        ? 'assets/images/dot_menu_light.png'
-        : 'assets/images/dot_menu_dark.png';
-    return GestureDetector(
-        onTap: () => showActionSheet(context),
-        child: Image.asset(dotIcon, height: 20, width: 20));
-  }
-
-  Widget followBottomWidget(user, appUser) {
-    bool isFollowing = user['followers'].contains(user.id);
-
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: Colors.transparent))),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                isFollowing ? Colors.amber[800] as Color : HexColor('#2E293C')),
-            minimumSize: MaterialStateProperty.all<Size>(Size(60, 22))),
-        child: isFollowing
-            ? Text('Unfollow', style: TextStyle(fontSize: 11))
-            : Text('Follow', style: TextStyle(fontSize: 11)),
-        onPressed: () =>
-            isFollowing ? unFollowUser() : followUser(user, appUser),
+    return Row(children: [
+      Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            end: const Alignment(1.0, 0.0),
+            begin: const Alignment(-0.95, 0.0),
+            colors: [HexColor('#E09810'), HexColor('#FEDA43')],
+            stops: const [0.0, 1.0],
+          ),
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        child: const MaterialButton(
+            height: 40,
+            onPressed: null,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            // shape: const StadiumBorder(),
+            child: Text('Follow',
+                style: TextStyle(fontSize: 14, color: Colors.white))),
       ),
-    );
-  }
-
-  Widget messageButtonWidget(appUser, user) {
-    return Align(
-        alignment: Alignment.topRight,
-        child: ElevatedButton(
-          style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.transparent))),
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(HexColor('#2E293C')),
-              minimumSize: MaterialStateProperty.all<Size>(Size(60, 22))),
-          child: Text('Message', style: TextStyle(fontSize: 11)),
-          onPressed: () => messageUser(appUser, user),
-        ));
-  }
-
-  Widget usernameDisplayWidget(dynamic user) {
-    return Text('\n${user['username']}\n',
-        style: TextStyle(
-            fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10)));
+      Padding(
+          child: SvgPicture.asset(
+            Constants.messageIconOutline,
+            width: 30,
+            height: 30,
+            color: Colors.white,
+          ),
+          padding: const EdgeInsets.only(left: 15))
+    ]);
   }
 
   Widget profilePictureWidget() {
@@ -807,24 +626,24 @@ class AccountState extends State<Account>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                      padding: const EdgeInsets.only(left: 30),
+                      padding: const EdgeInsets.only(left: 35),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('${userStories.length}',
                                 style: TextStyle(
-                                  fontSize: AdaptiveTextSize()
-                                      .getAdaptiveTextSize(context, 15),
+                                  fontSize: const AdaptiveTextSize()
+                                      .getAdaptiveTextSize(context, 14),
                                 )),
                             Text('Posts',
                                 style: TextStyle(
-                                    fontSize: AdaptiveTextSize()
-                                        .getAdaptiveTextSize(context, 10),
+                                    fontSize: const AdaptiveTextSize()
+                                        .getAdaptiveTextSize(context, 8),
                                     color: Colors.grey,
                                     fontWeight: FontWeight.bold))
                           ])),
                   Padding(
-                      padding: const EdgeInsets.only(left: 30),
+                      padding: const EdgeInsets.only(left: 35),
                       child: GestureDetector(
                           onTap: () => Navigator.push(
                               context,
@@ -835,16 +654,16 @@ class AccountState extends State<Account>
                             Text('${_user.followers!.length}',
                                 style: TextStyle(
                                     fontSize: AdaptiveTextSize()
-                                        .getAdaptiveTextSize(context, 15))),
+                                        .getAdaptiveTextSize(context, 14))),
                             Text('Followers',
                                 style: TextStyle(
                                     fontSize: AdaptiveTextSize()
-                                        .getAdaptiveTextSize(context, 10),
+                                        .getAdaptiveTextSize(context, 8),
                                     color: Colors.grey,
                                     fontWeight: FontWeight.bold))
                           ]))),
                   Padding(
-                      padding: const EdgeInsets.only(left: 30),
+                      padding: const EdgeInsets.only(left: 35),
                       child: GestureDetector(
                           onTap: () => Navigator.push(
                               context,
@@ -856,16 +675,16 @@ class AccountState extends State<Account>
                             Text('${_user.following!.length}',
                                 style: TextStyle(
                                     fontSize: AdaptiveTextSize()
-                                        .getAdaptiveTextSize(context, 15))),
+                                        .getAdaptiveTextSize(context, 14))),
                             Text('Following',
                                 style: TextStyle(
                                     fontSize: AdaptiveTextSize()
-                                        .getAdaptiveTextSize(context, 10),
+                                        .getAdaptiveTextSize(context, 8),
                                     color: Colors.grey,
                                     fontWeight: FontWeight.bold))
                           ]))),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 30),
+                  const Padding(
+                      padding: EdgeInsets.only(left: 35),
                       child: Icon(Icons.keyboard_arrow_down_rounded))
                 ]),
           ],
@@ -876,21 +695,22 @@ class AccountState extends State<Account>
     return Container(
         margin: const EdgeInsets.only(top: 30),
         padding: const EdgeInsets.all(5),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('Posts',
-              style: TextStyle(
-                fontSize: 16.5,
-              )),
-        ]));
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Posts',
+                  style: TextStyle(
+                    fontSize: 16.5,
+                  )),
+            ]));
   }
 
   Widget postGridWidget() {
-    return new MasonryGridView.count(
+    return MasonryGridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,
       primary: true,
-      physics: new NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: userStories.length,
       itemBuilder: (BuildContext context, int index) {
         final thumbnail = userStories[index]['content'][0]['type'] == 'video'
@@ -898,47 +718,6 @@ class AccountState extends State<Account>
             : userStories[index]['content'][0]['media'];
 
         return Image.network(thumbnail);
-
-        /* OpenContainer(
-            openElevation: 0,
-            closedElevation: 0,
-            closedColor: Colors.transparent,
-            transitionType: ContainerTransitionType.fade,
-            openBuilder: (BuildContext context, VoidCallback _) {
-              return RenderPost(
-                items: userStories,
-                index: index,
-                shoudlPlayParent: true,
-                isPostOwner: true,
-              );
-            },
-            closedBuilder: (BuildContext context, VoidCallback openContainer) {*/
-        return CachedNetworkImage(
-          fit: BoxFit.cover,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[300]!,
-                  enabled: true,
-                  child: Container(
-                    width: 200,
-                    //height: 220,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                  )),
-          imageBuilder: (context, imageProvider) => Container(
-            width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              color: Colors.redAccent,
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-            ),
-          ),
-          imageUrl: thumbnail,
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        );
-        //  });
       },
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,

@@ -139,6 +139,16 @@ class _$AppRouter extends RootStackRouter {
           opaque: false,
           barrierDismissible: false);
     },
+    NotificationRoute.name: (routeData) {
+      final args = routeData.argsAs<NotificationRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: NotificationScreen(key: args.key, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
     ChatDashboardRoute.name: (routeData) {
       final args = routeData.argsAs<ChatDashboardRouteArgs>(
           orElse: () => const ChatDashboardRouteArgs());
@@ -215,6 +225,7 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(PreviewPostRoute.name, path: '/preview-post-screen'),
         RouteConfig(PreviewQuickRoute.name, path: '/preview-quick-screen'),
         RouteConfig(PreviewStoryRoute.name, path: '/preview-story-screen'),
+        RouteConfig(NotificationRoute.name, path: '/notification-screen'),
         RouteConfig(ChatDashboardRoute.name, path: '/chat-dashboard-screen'),
         RouteConfig(ForgotPasswordRoute.name, path: '/forgot-password-screen'),
         RouteConfig(UnauthenticatedRoute.name, path: '/unauthenticated-screen'),
@@ -514,6 +525,30 @@ class PreviewStoryRouteArgs {
   @override
   String toString() {
     return 'PreviewStoryRouteArgs{key: $key, storyBloc: $storyBloc, selectedAssets: $selectedAssets}';
+  }
+}
+
+/// generated route for
+/// [NotificationScreen]
+class NotificationRoute extends PageRouteInfo<NotificationRouteArgs> {
+  NotificationRoute({Key? key, required BlocGroup blocGroup})
+      : super(NotificationRoute.name,
+            path: '/notification-screen',
+            args: NotificationRouteArgs(key: key, blocGroup: blocGroup));
+
+  static const String name = 'NotificationRoute';
+}
+
+class NotificationRouteArgs {
+  const NotificationRouteArgs({this.key, required this.blocGroup});
+
+  final Key? key;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'NotificationRouteArgs{key: $key, blocGroup: $blocGroup}';
   }
 }
 

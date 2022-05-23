@@ -53,7 +53,7 @@ class _AppButtonState extends State<AppButton> {
         onPressed: () => widget.onPressed(),
         child: ConditionalRenderDelegate(
             condition: widget.isLoading,
-            renderWidget: SizedBox(
+            renderWidget: const SizedBox(
                 height: 25,
                 width: 25,
                 child: CircularProgressIndicator(

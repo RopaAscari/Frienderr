@@ -20,16 +20,17 @@ import 'package:frienderr/features/presentation/screens/account/account.dart';
 import 'package:frienderr/features/presentation/widgets/render_posts_dynamic.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 
-class Notifications extends StatefulWidget {
+class NotificationScreen extends StatefulWidget {
   final BlocGroup blocGroup;
-  const Notifications({Key? key, required this.blocGroup}) : super(key: key);
+  const NotificationScreen({Key? key, required this.blocGroup})
+      : super(key: key);
 
   @override
   NotificationScreenState createState() => NotificationScreenState();
 }
 
-class NotificationScreenState extends State<Notifications>
-    with AutomaticKeepAliveClientMixin<Notifications> {
+class NotificationScreenState extends State<NotificationScreen>
+    with AutomaticKeepAliveClientMixin<NotificationScreen> {
   BlocGroup get blocGroup => widget.blocGroup;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -161,7 +162,7 @@ class NotificationScreenState extends State<Notifications>
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Account(
+                      builder: (context) => AccountScreen(
                             blocGroup: blocGroup,
                             isProfileOwnerViewing: false,
                             profileUserId: senderId,
@@ -235,7 +236,7 @@ class NotificationScreenState extends State<Notifications>
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Account(
+                      builder: (context) => AccountScreen(
                             blocGroup: blocGroup,
                             profileUserId: senderId,
                             isProfileOwnerViewing: false,
@@ -310,7 +311,7 @@ class NotificationScreenState extends State<Notifications>
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Account(
+                      builder: (context) => AccountScreen(
                             blocGroup: blocGroup,
                             profileUserId: senderId,
                             isProfileOwnerViewing: false,

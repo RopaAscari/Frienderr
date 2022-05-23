@@ -38,7 +38,7 @@ class AuthenticationBloc
     this._authenticateUserUsecase,
     this._verifyAutheticationUsecase,
     this._verifyAndUpdateUsernameUsecase,
-  ) : super(AuthenticationState()) {
+  ) : super(const AuthenticationState()) {
     on<_LogOut>(_logOut);
     on<_Authenticate>(_authenticate);
     on<_CreateAccount>(_createAccount);

@@ -15,7 +15,7 @@ class Constants {
   static String dashboardIconFill = 'assets/icons/dashboard_fill_icon.svg';
   static String dashboardIconOutline =
       'assets/icons/dashboard_icon_outline.svg';
-
+  static String homeIconOutline = 'assets/icons/home_icon_outline.svg';
   static String multiSelectIcon = 'assets/icons/multi_select_icon.svg';
   static String caughtUpAnimation = 'assets/animations/caught_up_animation.flr';
   static String quickIconFill = 'assets/icons/quick_icon_fill.svg';
@@ -41,7 +41,6 @@ class Constants {
       'assets/icons/timeline_message_icon_outline.svg';
 
   static String homeIconFill = 'assets/icons/home_icon_fill.svg';
-  static String homeIconOutline = 'assets/icons/home_icon_outline.svg';
 
   static String messageIconOutline = 'assets/icons/message_icon_outline.svg';
 
@@ -75,6 +74,8 @@ class Constants {
 
   static String authVector = 'assets/images/auth_vector.png';
 
+  static String snapIconOutline = 'assets/icons/snap_icon_outline.svg';
+  static String addIcon = 'assets/icons/add_icon.svg';
   static String registerVector = 'assets/images/register_vector.png';
   static String resetPasswordVector = 'assets/images/reset_password.png';
 

@@ -1,18 +1,23 @@
 import 'package:badges/badges.dart';
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/core/enums/enums.dart';
+import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
 import 'package:frienderr/features/presentation/screens/account/account.dart';
-import 'package:frienderr/features/presentation/screens/timeline/timeline.dart';
-import 'package:frienderr/features/presentation/screens/snapfeed/snap_feed.dart';
+import 'package:frienderr/features/presentation/screens/camera/camera.dart';
+import 'package:frienderr/features/presentation/screens/chat/chat.dart';
 import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
 import 'package:frienderr/features/presentation/screens/notifications/notifications.dart';
+import 'package:frienderr/features/presentation/screens/snapfeed/snap_feed.dart';
+import 'package:frienderr/features/presentation/screens/timeline/timeline.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class MainScreen extends StatefulWidget {
@@ -26,33 +31,31 @@ class MainScreen extends StatefulWidget {
   MainScreenState createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
-  late TabController _tabController;
+  late PageController _pageController;
   BlocGroup get _blocGroup => widget.blocGroup;
   User? user = FirebaseAuth.instance.currentUser;
 
-  final List<TabIcon> tabIcons = [
-    TabIcon(icon: Constants.dashboardIconOutline, size: 23),
-    TabIcon(icon: Constants.quickIconOutline, size: 25),
-    TabIcon(icon: Constants.discoverOutlineIcon, size: 25),
-    TabIcon(icon: Constants.notificationIconOutline, size: 26),
-    TabIcon(icon: Constants.profileIconOutline, size: 24),
+  final List<TabIcon?> tabIcons = [
+    TabIcon(icon: Constants.homeIconOutline, size: const Size(30, 30)),
+    TabIcon(icon: Constants.snapIconOutline, size: const Size(27, 27)),
+    null,
+    TabIcon(icon: Constants.messageIconOutline, size: const Size(27, 27)),
+    TabIcon(icon: Constants.profileIconOutline, size: const Size(27, 27)),
   ];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.removeObserver(this);
 
     _blocGroup.notificationBloc.notificationStream.listen((event) {
       _blocGroup.notificationBloc
           .add(NotificationEvent.getNotifications(uid: user!.uid));
     });
 
-    WidgetsBinding.instance!.removeObserver(this);
-    _tabController =
-        TabController(initialIndex: _selectedIndex, length: 5, vsync: this);
+    _pageController = PageController(initialPage: 0, keepPage: true);
   }
 
   @override
@@ -62,71 +65,6 @@ class MainScreenState extends State<MainScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {}
-
-  Widget _bottomNavigationBar() {
-    return DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.0),
-          border: Border(
-              top: BorderSide(
-                  color: Colors.grey[800]!.withOpacity(0.8), width: 0.7)),
-        ),
-        child: TabBar(
-            enableFeedback: true,
-            onTap: (idx) {
-              _onItemTapped(idx);
-            },
-            controller: _tabController,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 30),
-            indicator: const BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.white, width: 2),
-              ),
-            ),
-            tabs: tabIcons
-                .mapIndexed((index, element) => _buildTabs(element, index))
-                .toList()));
-  }
-
-  Widget _buildTabs(TabIcon tab, int idx) {
-    return ConditionalRenderDelegate(
-        condition: idx == 3,
-        renderWidget: Tab(
-          icon: SvgPicture.asset(
-            tab.icon,
-            width: tab.size,
-            height: tab.size,
-            color: _determineIconRender(idx),
-          ),
-        ),
-        fallbackWidget: Tab(
-          icon: SvgPicture.asset(
-            tab.icon,
-            width: tab.size,
-            height: tab.size,
-            color: _determineIconRender(idx),
-          ),
-        ));
-  }
-
-  Color _determineIconRender(int idx) {
-    return _selectedIndex == idx ? Colors.white : Colors.grey[600]!;
-  }
-
-  List<Widget> _buildScreens() {
-    User? user = FirebaseAuth.instance.currentUser;
-    return [
-      Timeline(blocGroup: _blocGroup),
-      SnapFeed(blocGroup: _blocGroup),
-      FindFriends(),
-      Notifications(blocGroup: _blocGroup),
-      Account(
-        blocGroup: _blocGroup,
-        isProfileOwnerViewing: true,
-        profileUserId: user?.uid as String,
-      ),
-    ];
-  }
 
   void _onItemTapped(int index) {
     if (index == 1) {
@@ -146,27 +84,138 @@ class MainScreenState extends State<MainScreen>
         }
       }
     }
+
     setState(() {
       _selectedIndex = index;
-      _tabController.animateTo(index);
     });
+    _pageController.jumpToPage(index);
+  }
+
+  Future<dynamic> _openCamera() {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return CameraScreen(
+            mode: CameraSelectionMode.post, blocGroup: _blocGroup);
+      },
+    );
+  }
+
+  List<Widget> _buildTabIcons() {
+    return tabIcons.mapIndexed((index, tabIcon) {
+      if (tabIcon == null) {
+        return const Expanded(child: Center());
+      }
+
+      return Expanded(
+          child: GestureDetector(
+              child: Padding(
+                  child: SvgPicture.asset(
+                    tabIcon.icon,
+                    width: tabIcon.size.width,
+                    height: tabIcon.size.height,
+                    color: _determineIconRender(index),
+                  ),
+                  padding: const EdgeInsets.only(top: 0)),
+              onTap: () {
+                _onItemTapped(index);
+              }));
+    }).toList();
+  }
+
+  Color _determineIconRender(int idx) {
+    return _selectedIndex == idx ? Colors.white : Colors.grey[700]!;
+  }
+
+  List<Widget> _buildScreens() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return [
+      Timeline(blocGroup: _blocGroup),
+      SnapFeed(blocGroup: _blocGroup),
+      const Center(),
+      ChatDashboardScreen(),
+      AccountScreen(
+        blocGroup: _blocGroup,
+        isProfileOwnerViewing: true,
+        profileUserId: user?.uid as String,
+      ),
+    ];
+  }
+
+  Widget _buildNotchButton() {
+    return Padding(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            end: Alignment(1.0, 0.0),
+            begin: Alignment(-0.95, 0.0),
+            colors: [Colors.white, Colors.white],
+            stops: [0.0, 1.0],
+          ),
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        child: MaterialButton(
+            height: 50,
+            minWidth: 50,
+            onPressed: () {
+              _openCamera();
+              // final int index = (tabIcons.length / 2).round() - 1;
+              // _pageController.jumpToPage(index);
+            },
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            // shape: const StadiumBorder(),
+            child: SvgPicture.asset(
+              Constants.addIcon,
+              width: 22,
+              height: 22,
+              color: Colors.black,
+            )),
+      ),
+      padding: const EdgeInsets.only(top: 25),
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return BottomAppBar(
+        elevation: 10,
+        notchMargin: 10,
+        color: Colors.black,
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.0),
+              border:
+                  Border(top: BorderSide(color: Colors.grey[500]!, width: 0.7)),
+            ),
+            child: SizedBox(
+              height: 50,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: _buildTabIcons()),
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TabBarView(
+      body: PageView(
+        onPageChanged: (page) {
+          if (page == 3) {}
+        },
         children: _buildScreens(),
-        controller: _tabController,
+        controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
       ),
-      bottomNavigationBar: _bottomNavigationBar(),
+      floatingActionButton: _buildNotchButton(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
     );
   }
 }
 
 class TabIcon {
-  double size;
+  Size size;
   String icon;
   TabIcon({
     required this.size,

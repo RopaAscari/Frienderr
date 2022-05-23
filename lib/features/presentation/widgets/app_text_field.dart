@@ -34,7 +34,7 @@ class _AppTextFieldState extends State<AppTextField> {
         padding: widget.padding,
         child: TextField(
           controller: widget.controller,
-          decoration: new InputDecoration(
+          decoration: InputDecoration(
             filled: true,
             labelText: widget.label,
             errorText: widget.errorText,
@@ -42,15 +42,15 @@ class _AppTextFieldState extends State<AppTextField> {
             suffixIcon: widget.isObscure ? passswordIcon() : widget.suffixIcon,
             labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
             enabledBorder: OutlineInputBorder(
-              borderSide: new BorderSide(color: Colors.grey[800]!),
+              borderSide: BorderSide(color: Colors.grey[800]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
+              borderSide: const BorderSide(color: Colors.transparent),
               borderRadius: BorderRadius.circular(8.0),
             ),
-            border: new OutlineInputBorder(
-              borderSide: new BorderSide(color: Colors.grey[800]!),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[800]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             fillColor: HexColor('#9C9C9C').withOpacity(0.1),
