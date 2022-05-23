@@ -54,7 +54,7 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
       }
 
       getIt<AppRouter>().context.showToast(
-            duration: Duration(days: 365),
+            duration: const Duration(days: 365),
             content:
                 UploadProgress(file: _uploadProgressThumnail.value as File),
           );
