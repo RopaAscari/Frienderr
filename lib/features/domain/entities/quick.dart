@@ -55,4 +55,30 @@ class QuickEntity {
       shares: List<String>.from(map['shares'] ?? []),
     );
   }
+
+  QuickEntity copyWith({
+    String? id,
+    String? url,
+    String? audio,
+    dynamic? user,
+    String? caption,
+    int? dateCreated,
+    int? commentCount,
+    String? thumbnail,
+    List<String>? likes,
+    List<String>? shares,
+  }) {
+    return QuickEntity(
+      id: id ?? this.id,
+      url: url ?? this.url,
+      audio: audio ?? this.audio,
+      user: user ?? this.user,
+      caption: caption ?? this.caption,
+      dateCreated: dateCreated ?? this.dateCreated,
+      commentCount: commentCount ?? this.commentCount,
+      thumbnail: thumbnail ?? this.thumbnail,
+      likes: likes ?? this.likes,
+      shares: shares ?? this.shares,
+    );
+  }
 }

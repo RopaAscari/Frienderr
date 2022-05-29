@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frienderr/core/enums/enums.dart';
-import 'package:frienderr/features/domain/entities/quick.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
+
 import 'package:video_player/video_player.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:frienderr/core/services/services.dart';
+import 'package:frienderr/features/domain/entities/quick.dart';
 import 'package:frienderr/features/presentation/screens/camera/camera.dart';
 import 'package:frienderr/features/presentation/widgets/like_button.dart';
 import 'package:frienderr/features/presentation/widgets/share_button.dart';
@@ -37,7 +39,9 @@ class _QuicksState extends State<Quicks> {
   @override
   void initState() {
     super.initState();
-    if (widget.controller.value.isInitialized) {
+    if (!widget.controller.value.isInitialized) {
+      print('test');
+      widget.controller.initialize();
       // NOTE TO INVESTIGATE FEASIBILITY OF EXECUTING SOME LOGIC TO FACILITATE THE IMPLEMNTATION OF A FUTURE BUILDER
     }
   }
@@ -62,14 +66,7 @@ class _QuicksState extends State<Quicks> {
     });
   }
 
-  void _openCamera() {
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CameraScreen(
-                mode: CameraSelectionMode.Post,
-              )))*/
-  }
+  void _openCamera() {}
 
   void _toggleVideoPlayerState() {
     if (widget.controller.value.isPlaying) {
@@ -98,9 +95,10 @@ class _QuicksState extends State<Quicks> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: ConditionalRenderDelegate(
-            condition: widget.controller.value.isInitialized,
             renderWidget: _quickPlayer(),
-            fallbackWidget: const Center(child: CircularProgressIndicator())));
+            condition: widget.controller.value.isInitialized,
+            fallbackWidget:
+                const Center(child: LoadingIndicator(size: Size(40, 40)))));
   }
 
   Widget _quickPlayer() {

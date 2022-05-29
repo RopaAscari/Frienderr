@@ -7,12 +7,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
-import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 import 'package:frienderr/features/presentation/widgets/error.dart';
 import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:frienderr/features/presentation/widgets/quicks.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class SnapFeed extends StatefulWidget {
   final BlocGroup blocGroup;
@@ -162,9 +162,9 @@ class _SnapFeedState extends State<SnapFeed>
               height: 24,
               color: Colors.white,
             )),
-        Center(
+        const Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 7),
+            padding: EdgeInsets.only(top: 7),
             child: Text("Be the first to post a snap",
                 style: TextStyle(fontSize: 13)),
           ),
@@ -181,9 +181,9 @@ class _SnapFeedState extends State<SnapFeed>
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * .80,
-        child: Center(
+        child: const Center(
             child: Padding(
-                padding: const EdgeInsets.only(left: 50, right: 50),
+                padding: EdgeInsets.only(left: 50, right: 50),
                 child: LoadingIndicator(size: Size(40, 40)))));
   }
 }

@@ -73,7 +73,7 @@ class Constants {
       'assets/icons/notification_icon_outline.svg';
 
   static String authVector = 'assets/images/auth_vector.png';
-
+  static String moreIcon = 'assets/icons/more_icon.svg';
   static String snapIconOutline = 'assets/icons/snap_icon_outline.svg';
   static String addIcon = 'assets/icons/add_icon.svg';
   static String registerVector = 'assets/images/register_vector.png';

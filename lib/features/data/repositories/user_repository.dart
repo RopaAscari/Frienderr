@@ -1,12 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:frienderr/core/failure/failure.dart';
-import 'package:frienderr/features/data/providers/user_provider.dart';
-import 'package:frienderr/features/data/providers/user_provider.dart';
-import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:injectable/injectable.dart';
-import 'package:frienderr/core/services/helpers.dart';
+import 'package:frienderr/core/failure/failure.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/features/data/providers/user_provider.dart';
 import 'package:frienderr/features/domain/repositiories/user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
@@ -29,6 +26,21 @@ class UserRepository implements IUserRepository {
       }).toList();
 
       return Right(users);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUser({required String uid}) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await _userDataRemoteProvider.getUser(uid: uid);
+
+      final UserEntity user =
+          UserEntity.fromJson(userSnapshot.data() as Map<String, dynamic>);
+
+      return Right(user);
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }

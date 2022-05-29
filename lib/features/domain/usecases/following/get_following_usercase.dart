@@ -6,14 +6,13 @@ import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/repositiories/following_repository.dart';
 
 @lazySingleton
-class GetFollowingUseCase
-    extends UseCase<List<UserEntity>, GetFollowingParams> {
+class GetFollowingUseCase extends UseCase<List<String>, GetFollowingParams> {
   GetFollowingUseCase(this.repository);
 
   final IFollowingRepository repository;
 
   @override
-  Future<Either<Failure, List<UserEntity>>> call(GetFollowingParams params) {
+  Future<Either<Failure, List<String>>> call(GetFollowingParams params) {
     return repository.getFollowing(params.id);
   }
 }

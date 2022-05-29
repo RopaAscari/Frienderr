@@ -52,7 +52,7 @@ class ViewStoriesState extends State<ViewStories> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
         //  _pageController.jumpToPage(
         //    widget.currentPosition,

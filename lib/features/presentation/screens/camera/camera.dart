@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:camera_deep_ar/camera_deep_ar.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -86,7 +86,7 @@ class CameraScreenState extends State<CameraScreen>
     _cameraMode = widget.mode;
 
     _cameraBloc.add(const CameraEvent.initializeCamera());
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchAssetThumbnail();
     });
 
@@ -560,14 +560,16 @@ class CameraScreenState extends State<CameraScreen>
             ),
             child: AspectRatio(
                 aspectRatio: 1,
-                child: ConditionalRenderDelegate(
+                child: CameraPreview(state.controller
+                    as CameraController) /*ConditionalRenderDelegate(
                     condition:
                         selectedFeatures.contains(CameraFeatureMode.filter),
                     renderWidget: DeepArCamera(
                         controller:
                             state.deepArController as CameraDeepArController),
                     fallbackWidget:
-                        CameraPreview(state.controller as CameraController)))));
+                        CameraPreview(state.controller as CameraController))))*/
+                )));
   }
 
   Widget _headerWidget(CameraController controller) {

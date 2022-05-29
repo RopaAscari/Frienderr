@@ -9,6 +9,7 @@ enum CameraFeatureMode {
 }
 
 enum CameraStatus { idle, error, initialized, initializing }
+
 enum CameraListenableAction {
   idle,
   lensChanged,
@@ -21,7 +22,7 @@ class CameraState with _$CameraState {
   const factory CameraState({
     required CameraController? controller,
     @Default([]) List<CameraDescription> cameras,
-    required CameraDeepArController? deepArController,
+    //required CameraDeepArController? deepArController,
     @Default(CameraStatus.idle) CameraStatus currentState,
     @Default(featureList) List<FeatureListItem> cameraFeatureList,
     @Default(subFeatureList) List<FeatureListItem> cameraSubFeatureList,

@@ -59,7 +59,8 @@ class UserEntity implements PartialUser {
       chats: List<dynamic>.from(map['chats'] ?? []),
       following: List<dynamic>.from(map['following'] ?? []),
       followers: List<dynamic>.from(map['followers'] ?? []),
-      location: UserLocationEntity.fromJson(map['location']),
+      location: UserLocationEntity.fromJson(
+          map['location'] ?? {'isLocationEnabled': false}),
     );
   }
 }

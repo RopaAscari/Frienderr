@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frienderr/features/domain/entities/bloc_group.dart';
+import 'package:frienderr/features/presentation/screens/account/profile_account.dart';
 import 'package:location/location.dart';
 import 'package:fluttericon/elusive_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +21,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
-import 'package:frienderr/features/presentation/screens/account/account.dart';
+import 'package:frienderr/features/presentation/screens/account/user_account.dart';
 import 'package:permission_handler/permission_handler.dart' as permission;
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class FindFriends extends StatefulWidget {
-  FindFriends({Key? key}) : super(key: key);
+  final BlocGroup blocGroup;
+  FindFriends({Key? key, required this.blocGroup}) : super(key: key);
 
   @override
   FindFriendsState createState() => FindFriendsState();
@@ -283,8 +286,7 @@ class FindFriendsState extends State<FindFriends>
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniEndFloat,
             // floatingActionButton: _mapButton(),
-            body:
-                _discoverMap() /*Container(
+            body: Container(
               margin: const EdgeInsets.only(top: 15),
               height: MediaQuery.of(context).size.height,
               child: Flex(direction: Axis.vertical, children: [
@@ -298,11 +300,11 @@ class FindFriendsState extends State<FindFriends>
                     renderWidget: Container(
                         margin: EdgeInsets.only(
                             top: (MediaQuery.of(context).size.height * .30)),
-                        child: Center(child: CupertinoActivityIndicator())),
+                        child:
+                            const Center(child: CupertinoActivityIndicator())),
                     fallbackWidget: searchResults())
               ]),
-            )*/
-            ));
+            )));
   }
 
   Widget _discoverMap() {
@@ -566,7 +568,16 @@ class FindFriendsState extends State<FindFriends>
                 )
                 // To show light text with the dark variants...
                 ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfileAccountScreen(
+                            blocGroup: widget.blocGroup,
+                            isProfileOwnerViewing: false,
+                            profileUserId: searched[index]['id'],
+                          )));
+            },
           ),
         );
       },

@@ -12,9 +12,13 @@ class FollowersRepository implements IFollowersRepository {
   FollowersRepository(this._followersRemoteDataProvider);
 
   @override
-  Future<Either<Failure, List<UserEntity>>> getFollowers(String postId) async {
+  Future<Either<Failure, List<String>>> getFollowers(String uid) async {
+    final rawFollowers = await _followersRemoteDataProvider.getFollowers(uid);
+
+    final followers =
+        rawFollowers.docs.map((e) => e.data()['id']).cast<String>().toList();
     try {
-      return Right(await _followersRemoteDataProvider.getFollowers(postId));
+      return Right(followers);
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }

@@ -36,6 +36,21 @@ class PostRepository implements IPostRepository {
   }
 
   @override
+  Future<Either<Failure, List<PostEntity>>> getUserPosts(
+      {required String uid}) async {
+    try {
+      final userPosts = await _postRemoteDataProvider.getUserPosts(uid: uid);
+      final posts = userPosts.docs
+          .map((post) => PostEntity.fromJson(post.data()))
+          .toList();
+
+      return Right(posts);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> createPost({
     required String caption,
     required List<GalleryAsset> assets,
@@ -62,9 +77,10 @@ class PostRepository implements IPostRepository {
       final List<Map<String, dynamic>> postMap =
           rawPosts.docs.map((e) => e.data() as Map<String, dynamic>).toList();
 
-      final List<PostModel> posts = postsFromJson(postMap, users.docs);
+      final List<PostEntity> posts = postsFromJson(postMap, users.docs);
 
-      return Right(TimelineResponse(userCaughtUp: false, posts: posts));
+      return Right(TimelineResponse(
+          userCaughtUp: false, posts: posts.cast<PostEntity>()));
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }
@@ -90,14 +106,14 @@ class PostRepository implements IPostRepository {
         ..addAll(previousList)
         ..addAll(currentList);
 
-      final List<PostModel> finalPosts = postsFromJson(newPosts, users.docs);
+      final List<PostEntity> finalPosts = postsFromJson(newPosts, users.docs);
 
       if (newPosts.length == currentList.length) {
         userCaughtUp = true;
       }
 
-      return Right(
-          TimelineResponse(userCaughtUp: userCaughtUp, posts: finalPosts));
+      return Right(TimelineResponse(
+          userCaughtUp: userCaughtUp, posts: finalPosts.cast<PostEntity>()));
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }
@@ -158,7 +174,7 @@ class PostRepository implements IPostRepository {
     }
   }
 
-  List<PostModel> postsFromJson(
+  List<PostEntity> postsFromJson(
       List<dynamic> posts, List<QueryDocumentSnapshot<Object?>> users) {
     return posts.map((post) {
       final List<ContentModel> content = post['content']
@@ -176,7 +192,7 @@ class PostRepository implements IPostRepository {
         return (user.data() as Map)['id'] == post['user']['id'];
       }).data() as Map<String, dynamic>);
 
-      return PostModel(
+      return PostEntity(
         user: user,
         id: post['id'],
         content: content,

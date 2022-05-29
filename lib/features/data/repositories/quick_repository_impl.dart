@@ -56,6 +56,37 @@ class QuickRepository implements IQuickRepository {
   }
 
   @override
+  Future<Either<Failure, List<QuickEntity>>> getUserSnaps({
+    required String uid,
+  }) async {
+    try {
+      final QuerySnapshot<Object?> rawQuicks =
+          await _quickRemoteDataProvider.getUserSnaps(uid: uid);
+
+      final List<QuickEntity> quicks = rawQuicks.docs.map((e) {
+        final quickData = e.data() as Map<String, dynamic>;
+
+        return QuickEntity(
+          id: quickData['id'],
+          url: quickData['url'],
+          audio: quickData['audio'],
+          user: UserEntity(id: uid),
+          caption: quickData['caption'],
+          thumbnail: quickData['thumbnail'],
+          dateCreated: quickData['dateCreated'],
+          commentCount: quickData['commentCount'],
+          likes: quickData['likes'].cast<String>(),
+          shares: quickData['shares'].cast<String>(),
+        );
+      }).toList();
+
+      return Right(quicks);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> likeQuick({
     required String userId,
     required String quickId,

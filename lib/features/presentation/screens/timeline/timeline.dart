@@ -11,6 +11,7 @@ import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/screens/camera/camera.dart';
+import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
 import 'package:frienderr/features/presentation/screens/notifications/notifications.dart';
 import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:frienderr/features/presentation/widgets/stories.dart';
@@ -57,6 +58,16 @@ class _TimelineState extends State<Timeline>
   Future<Object?> _navigateToNotificationsScreen() async {
     return await getIt<AppRouter>()
         .push(NotificationRoute(blocGroup: _blocGroup));
+  }
+
+  Future<dynamic> _openDiscover() {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return FindFriends(blocGroup: _blocGroup);
+      },
+    );
   }
 
   @override
@@ -134,11 +145,14 @@ class _TimelineState extends State<Timeline>
     return Row(children: [
       GestureDetector(
           child: SvgPicture.asset(
-        Constants.searchIconOutline,
-        width: 27,
-        height: 27,
-        color: Colors.white,
-      )),
+            Constants.searchIconOutline,
+            width: 27,
+            height: 27,
+            color: Colors.white,
+          ),
+          onTap: () {
+            _openDiscover();
+          }),
       GestureDetector(
         child: Padding(
             padding: const EdgeInsets.only(left: 18),
@@ -150,7 +164,9 @@ class _TimelineState extends State<Timeline>
                   height: 31,
                   color: Colors.white,
                 ))),
-        onTap: () => _navigateToNotificationsScreen(),
+        onTap: () {
+          _navigateToNotificationsScreen();
+        },
       ),
     ]);
   }

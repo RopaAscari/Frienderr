@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/features/presentation/blocs/account/profile/profile_account_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/account/user/user_account_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/screens/login/login.dart';
@@ -35,8 +37,10 @@ class _SplashScreenState extends State<SplashScreen> {
   final StoryBloc _storyBloc = getIt<StoryBloc>();
   final CameraBloc _cameraBloc = getIt<CameraBloc>();
   final User? _user = FirebaseAuth.instance.currentUser;
+  final UserAccountBloc _userAccountBloc = getIt<UserAccountBloc>();
   final NotificationBloc _notificationBloc = getIt<NotificationBloc>();
   final AuthenticationBloc _authenticationBloc = getIt<AuthenticationBloc>();
+  final ProfileAccountBloc _profileAccountBloc = getIt<ProfileAccountBloc>();
 
   @override
   void initState() {
@@ -52,7 +56,9 @@ class _SplashScreenState extends State<SplashScreen> {
       storyBloc: _storyBloc,
       quickBloc: _quickBloc,
       cameraBloc: _cameraBloc,
+      userAccountBloc: _userAccountBloc,
       notificationBloc: _notificationBloc,
+      profileAccountBloc: _profileAccountBloc,
       authenticationBloc: getIt<AuthenticationBloc>(),
     );
 

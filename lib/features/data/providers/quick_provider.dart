@@ -28,6 +28,15 @@ class QuickRemoteDataProvider implements IQuickRemoteDataProvider {
   }
 
   @override
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserSnaps(
+      {required String uid}) async {
+    return await firestoreInstance
+        .collection('quicks')
+        .where('user.id', isEqualTo: uid)
+        .get();
+  }
+
+  @override
   Future<bool> createQuick(
       {required String caption, required File file}) async {
     try {
@@ -178,5 +187,9 @@ abstract class IQuickRemoteDataProvider {
   Future<bool> unLikeQuick({
     required String userId,
     required String quickId,
+  });
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserSnaps({
+    required String uid,
   });
 }

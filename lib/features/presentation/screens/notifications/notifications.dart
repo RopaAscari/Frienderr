@@ -16,7 +16,7 @@ import 'package:frienderr/core/constants/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account/account.dart';
+import 'package:frienderr/features/presentation/screens/account/user_account.dart';
 import 'package:frienderr/features/presentation/widgets/render_posts_dynamic.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 
@@ -162,7 +162,7 @@ class NotificationScreenState extends State<NotificationScreen>
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AccountScreen(
+                      builder: (context) => UserAccountScreen(
                             blocGroup: blocGroup,
                             isProfileOwnerViewing: false,
                             profileUserId: senderId,
@@ -236,7 +236,7 @@ class NotificationScreenState extends State<NotificationScreen>
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AccountScreen(
+                      builder: (context) => UserAccountScreen(
                             blocGroup: blocGroup,
                             profileUserId: senderId,
                             isProfileOwnerViewing: false,
@@ -311,7 +311,7 @@ class NotificationScreenState extends State<NotificationScreen>
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AccountScreen(
+                      builder: (context) => UserAccountScreen(
                             blocGroup: blocGroup,
                             profileUserId: senderId,
                             isProfileOwnerViewing: false,

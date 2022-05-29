@@ -20,8 +20,8 @@ class FollowersBloc extends Bloc<FollowersEvent, FollowersState> {
 
   Future<void> _getFollowers(
       _GetFollowers event, Emitter<FollowersState> emit) async {
-    emit(state.copyWith(currentState: FollowerStatus.Loaded));
-    final Either<Failure, List<UserEntity>> _either =
+    /*  emit(state.copyWith(currentState: FollowerStatus.Loaded));
+   final Either<Failure, List<UserEntity>> _either =
         await _getFollowersUseCase(GetFollowersParams(event.userId));
     return _either.fold((error) {
       emit(state.copyWith(
@@ -29,5 +29,6 @@ class FollowersBloc extends Bloc<FollowersEvent, FollowersState> {
     },
         (List<UserEntity> followers) => emit(state.copyWith(
             currentState: FollowerStatus.Faliure, followers: followers)));
+  }*/
   }
 }

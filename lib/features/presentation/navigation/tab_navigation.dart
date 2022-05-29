@@ -11,7 +11,7 @@ import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account/account.dart';
+import 'package:frienderr/features/presentation/screens/account/user_account.dart';
 import 'package:frienderr/features/presentation/screens/camera/camera.dart';
 import 'package:frienderr/features/presentation/screens/chat/chat.dart';
 import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
@@ -48,7 +48,7 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     _blocGroup.notificationBloc.notificationStream.listen((event) {
       _blocGroup.notificationBloc
@@ -135,7 +135,7 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       SnapFeed(blocGroup: _blocGroup),
       const Center(),
       ChatDashboardScreen(),
-      AccountScreen(
+      UserAccountScreen(
         blocGroup: _blocGroup,
         isProfileOwnerViewing: true,
         profileUserId: user?.uid as String,
@@ -147,30 +147,28 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     return Padding(
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            end: Alignment(1.0, 0.0),
-            begin: Alignment(-0.95, 0.0),
-            colors: [Colors.white, Colors.white],
-            stops: [0.0, 1.0],
+          gradient: LinearGradient(
+            stops: const [0.0, 1.0],
+            end: const Alignment(1.0, 0.0),
+            begin: const Alignment(-0.95, 0.0),
+            colors: [HexColor('#FA5B8E'), HexColor('#FCA28E')],
           ),
           borderRadius: BorderRadius.circular(100.0),
         ),
         child: MaterialButton(
-            height: 50,
-            minWidth: 50,
-            onPressed: () {
-              _openCamera();
-              // final int index = (tabIcons.length / 2).round() - 1;
-              // _pageController.jumpToPage(index);
-            },
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            // shape: const StadiumBorder(),
-            child: SvgPicture.asset(
-              Constants.addIcon,
-              width: 22,
-              height: 22,
-              color: Colors.black,
-            )),
+          height: 65,
+          minWidth: 65,
+          onPressed: () {
+            _openCamera();
+          },
+          child: SvgPicture.asset(
+            Constants.cameraIconFill,
+            width: 25,
+            height: 25,
+            color: Colors.white,
+          ),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
       ),
       padding: const EdgeInsets.only(top: 25),
     );

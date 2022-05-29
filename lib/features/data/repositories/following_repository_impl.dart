@@ -12,9 +12,13 @@ class FollowingRepository implements IFollowingRepository {
   FollowingRepository(this._followingRemoteDataProvider);
 
   @override
-  Future<Either<Failure, List<UserEntity>>> getFollowing(String postId) async {
+  Future<Either<Failure, List<String>>> getFollowing(String uid) async {
+    final rawFollowing = await _followingRemoteDataProvider.getFollowing(uid);
+
+    final following =
+        rawFollowing.docs.map((e) => e.data()['id']).cast<String>().toList();
     try {
-      return Right(await _followingRemoteDataProvider.getFollowing(postId));
+      return Right(following);
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }

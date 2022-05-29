@@ -48,7 +48,7 @@ class ViewUserStoryState extends State<ViewUserStory> {
   @override
   void initState() {
     print(_userStory);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
         //  _pageController.jumpToPage(
         //    widget.currentPosition,

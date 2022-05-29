@@ -19,4 +19,6 @@ abstract class IPostRepository {
       List<Map<String, dynamic>> posts);
   Either<Failure, Stream<QuerySnapshot<Map<String, dynamic>>>>
       delegateTimelineStream();
+
+  Future<Either<Failure, List<PostEntity>>> getUserPosts({required String uid});
 }

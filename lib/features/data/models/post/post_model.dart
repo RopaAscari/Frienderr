@@ -7,7 +7,7 @@ part 'post_model.g.dart';
 part 'post_model.freezed.dart';
 
 @freezed
-class PostModel with _$PostModel implements PostEntity {
+class PostModel with _$PostModel {
   const factory PostModel({
     @Default('') final String id,
     @Default('') final String caption,

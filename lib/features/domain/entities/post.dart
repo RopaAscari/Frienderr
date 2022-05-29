@@ -49,6 +49,28 @@ class PostEntity {
           List<Content>.from(map['content']?.map((x) => Content.fromJson(x))),
     );
   }
+
+  PostEntity copyWith({
+    String? id,
+    dynamic? user,
+    String? caption,
+    int? dateCreated,
+    int? commentCount,
+    List<String>? shares,
+    List<String>? likes,
+    List<Content>? content,
+  }) {
+    return PostEntity(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      caption: caption ?? this.caption,
+      dateCreated: dateCreated ?? this.dateCreated,
+      commentCount: commentCount ?? this.commentCount,
+      shares: shares ?? this.shares,
+      likes: likes ?? this.likes,
+      content: content ?? this.content,
+    );
+  }
 }
 
 class Content {
@@ -73,7 +95,7 @@ class Content {
     return Content(
       type: map['type'] ?? '',
       media: map['media'] ?? '',
-      metadata: map['metadata'] ?? {},
+      metadata: PostMetadata.fromJson(map['metadata']),
     );
   }
 }
@@ -92,7 +114,7 @@ class PostMetadata {
 
   factory PostMetadata.fromJson(Map<String, dynamic> map) {
     return PostMetadata(
-      thumbnail: map['thumbnail'],
+      thumbnail: map['thumbnail'] ?? '',
     );
   }
 }

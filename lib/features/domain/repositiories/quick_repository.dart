@@ -24,4 +24,8 @@ abstract class IQuickRepository {
     required String userId,
     required String quickId,
   });
+
+  Future<Either<Failure, List<QuickEntity>>> getUserSnaps({
+    required String uid,
+  });
 }

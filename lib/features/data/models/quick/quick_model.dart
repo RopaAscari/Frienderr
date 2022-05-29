@@ -6,7 +6,7 @@ part 'quick_model.g.dart';
 part 'quick_model.freezed.dart';
 
 @freezed
-class QuickModel with _$QuickModel implements QuickEntity {
+class QuickModel with _$QuickModel {
   const factory QuickModel({
     @Default('') final String id,
     @Default('') final String url,

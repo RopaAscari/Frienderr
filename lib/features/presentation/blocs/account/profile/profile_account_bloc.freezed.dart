@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'account_bloc.dart';
+part of 'profile_account_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,19 +15,18 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$AccountStateTearOff {
-  const _$AccountStateTearOff();
+class _$ProfileAccountStateTearOff {
+  const _$ProfileAccountStateTearOff();
 
-  _AccountState call(
+  _ProfileAccountState call(
       {String? error = null,
-      Account? userAccount = null,
-      Account? profileAccount = null,
-      AccountStatus currentState = AccountStatus.idle,
-      AccountListendableAction action = AccountListendableAction.idle}) {
-    return _AccountState(
+      Account? account = null,
+      ProfileAccountStatus currentState = ProfileAccountStatus.idle,
+      ProfileAccountListenableAction action =
+          ProfileAccountListenableAction.idle}) {
+    return _ProfileAccountState(
       error: error,
-      userAccount: userAccount,
-      profileAccount: profileAccount,
+      account: account,
       currentState: currentState,
       action: action,
     );
@@ -35,47 +34,46 @@ class _$AccountStateTearOff {
 }
 
 /// @nodoc
-const $AccountState = _$AccountStateTearOff();
+const $ProfileAccountState = _$ProfileAccountStateTearOff();
 
 /// @nodoc
-mixin _$AccountState {
+mixin _$ProfileAccountState {
   String? get error => throw _privateConstructorUsedError;
-  Account? get userAccount => throw _privateConstructorUsedError;
-  Account? get profileAccount => throw _privateConstructorUsedError;
-  AccountStatus get currentState => throw _privateConstructorUsedError;
-  AccountListendableAction get action => throw _privateConstructorUsedError;
+  Account? get account => throw _privateConstructorUsedError;
+  ProfileAccountStatus get currentState => throw _privateConstructorUsedError;
+  ProfileAccountListenableAction get action =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $AccountStateCopyWith<AccountState> get copyWith =>
+  $ProfileAccountStateCopyWith<ProfileAccountState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AccountStateCopyWith<$Res> {
-  factory $AccountStateCopyWith(
-          AccountState value, $Res Function(AccountState) then) =
-      _$AccountStateCopyWithImpl<$Res>;
+abstract class $ProfileAccountStateCopyWith<$Res> {
+  factory $ProfileAccountStateCopyWith(
+          ProfileAccountState value, $Res Function(ProfileAccountState) then) =
+      _$ProfileAccountStateCopyWithImpl<$Res>;
   $Res call(
       {String? error,
-      Account? userAccount,
-      Account? profileAccount,
-      AccountStatus currentState,
-      AccountListendableAction action});
+      Account? account,
+      ProfileAccountStatus currentState,
+      ProfileAccountListenableAction action});
 }
 
 /// @nodoc
-class _$AccountStateCopyWithImpl<$Res> implements $AccountStateCopyWith<$Res> {
-  _$AccountStateCopyWithImpl(this._value, this._then);
+class _$ProfileAccountStateCopyWithImpl<$Res>
+    implements $ProfileAccountStateCopyWith<$Res> {
+  _$ProfileAccountStateCopyWithImpl(this._value, this._then);
 
-  final AccountState _value;
+  final ProfileAccountState _value;
   // ignore: unused_field
-  final $Res Function(AccountState) _then;
+  final $Res Function(ProfileAccountState) _then;
 
   @override
   $Res call({
     Object? error = freezed,
-    Object? userAccount = freezed,
-    Object? profileAccount = freezed,
+    Object? account = freezed,
     Object? currentState = freezed,
     Object? action = freezed,
   }) {
@@ -84,125 +82,109 @@ class _$AccountStateCopyWithImpl<$Res> implements $AccountStateCopyWith<$Res> {
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      userAccount: userAccount == freezed
-          ? _value.userAccount
-          : userAccount // ignore: cast_nullable_to_non_nullable
-              as Account?,
-      profileAccount: profileAccount == freezed
-          ? _value.profileAccount
-          : profileAccount // ignore: cast_nullable_to_non_nullable
+      account: account == freezed
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
               as Account?,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
-              as AccountStatus,
+              as ProfileAccountStatus,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
-              as AccountListendableAction,
+              as ProfileAccountListenableAction,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$AccountStateCopyWith<$Res>
-    implements $AccountStateCopyWith<$Res> {
-  factory _$AccountStateCopyWith(
-          _AccountState value, $Res Function(_AccountState) then) =
-      __$AccountStateCopyWithImpl<$Res>;
+abstract class _$ProfileAccountStateCopyWith<$Res>
+    implements $ProfileAccountStateCopyWith<$Res> {
+  factory _$ProfileAccountStateCopyWith(_ProfileAccountState value,
+          $Res Function(_ProfileAccountState) then) =
+      __$ProfileAccountStateCopyWithImpl<$Res>;
   @override
   $Res call(
       {String? error,
-      Account? userAccount,
-      Account? profileAccount,
-      AccountStatus currentState,
-      AccountListendableAction action});
+      Account? account,
+      ProfileAccountStatus currentState,
+      ProfileAccountListenableAction action});
 }
 
 /// @nodoc
-class __$AccountStateCopyWithImpl<$Res> extends _$AccountStateCopyWithImpl<$Res>
-    implements _$AccountStateCopyWith<$Res> {
-  __$AccountStateCopyWithImpl(
-      _AccountState _value, $Res Function(_AccountState) _then)
-      : super(_value, (v) => _then(v as _AccountState));
+class __$ProfileAccountStateCopyWithImpl<$Res>
+    extends _$ProfileAccountStateCopyWithImpl<$Res>
+    implements _$ProfileAccountStateCopyWith<$Res> {
+  __$ProfileAccountStateCopyWithImpl(
+      _ProfileAccountState _value, $Res Function(_ProfileAccountState) _then)
+      : super(_value, (v) => _then(v as _ProfileAccountState));
 
   @override
-  _AccountState get _value => super._value as _AccountState;
+  _ProfileAccountState get _value => super._value as _ProfileAccountState;
 
   @override
   $Res call({
     Object? error = freezed,
-    Object? userAccount = freezed,
-    Object? profileAccount = freezed,
+    Object? account = freezed,
     Object? currentState = freezed,
     Object? action = freezed,
   }) {
-    return _then(_AccountState(
+    return _then(_ProfileAccountState(
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      userAccount: userAccount == freezed
-          ? _value.userAccount
-          : userAccount // ignore: cast_nullable_to_non_nullable
-              as Account?,
-      profileAccount: profileAccount == freezed
-          ? _value.profileAccount
-          : profileAccount // ignore: cast_nullable_to_non_nullable
+      account: account == freezed
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
               as Account?,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
-              as AccountStatus,
+              as ProfileAccountStatus,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
-              as AccountListendableAction,
+              as ProfileAccountListenableAction,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_AccountState implements _AccountState {
-  const _$_AccountState(
+class _$_ProfileAccountState implements _ProfileAccountState {
+  const _$_ProfileAccountState(
       {this.error = null,
-      this.userAccount = null,
-      this.profileAccount = null,
-      this.currentState = AccountStatus.idle,
-      this.action = AccountListendableAction.idle});
+      this.account = null,
+      this.currentState = ProfileAccountStatus.idle,
+      this.action = ProfileAccountListenableAction.idle});
 
   @JsonKey()
   @override
   final String? error;
   @JsonKey()
   @override
-  final Account? userAccount;
+  final Account? account;
   @JsonKey()
   @override
-  final Account? profileAccount;
+  final ProfileAccountStatus currentState;
   @JsonKey()
   @override
-  final AccountStatus currentState;
-  @JsonKey()
-  @override
-  final AccountListendableAction action;
+  final ProfileAccountListenableAction action;
 
   @override
   String toString() {
-    return 'AccountState(error: $error, userAccount: $userAccount, profileAccount: $profileAccount, currentState: $currentState, action: $action)';
+    return 'ProfileAccountState(error: $error, account: $account, currentState: $currentState, action: $action)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AccountState &&
+            other is _ProfileAccountState &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            const DeepCollectionEquality()
-                .equals(other.userAccount, userAccount) &&
-            const DeepCollectionEquality()
-                .equals(other.profileAccount, profileAccount) &&
+            const DeepCollectionEquality().equals(other.account, account) &&
             const DeepCollectionEquality()
                 .equals(other.currentState, currentState) &&
             const DeepCollectionEquality().equals(other.action, action));
@@ -212,63 +194,60 @@ class _$_AccountState implements _AccountState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(userAccount),
-      const DeepCollectionEquality().hash(profileAccount),
+      const DeepCollectionEquality().hash(account),
       const DeepCollectionEquality().hash(currentState),
       const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
   @override
-  _$AccountStateCopyWith<_AccountState> get copyWith =>
-      __$AccountStateCopyWithImpl<_AccountState>(this, _$identity);
+  _$ProfileAccountStateCopyWith<_ProfileAccountState> get copyWith =>
+      __$ProfileAccountStateCopyWithImpl<_ProfileAccountState>(
+          this, _$identity);
 }
 
-abstract class _AccountState implements AccountState {
-  const factory _AccountState(
+abstract class _ProfileAccountState implements ProfileAccountState {
+  const factory _ProfileAccountState(
       {String? error,
-      Account? userAccount,
-      Account? profileAccount,
-      AccountStatus currentState,
-      AccountListendableAction action}) = _$_AccountState;
+      Account? account,
+      ProfileAccountStatus currentState,
+      ProfileAccountListenableAction action}) = _$_ProfileAccountState;
 
   @override
   String? get error;
   @override
-  Account? get userAccount;
+  Account? get account;
   @override
-  Account? get profileAccount;
+  ProfileAccountStatus get currentState;
   @override
-  AccountStatus get currentState;
-  @override
-  AccountListendableAction get action;
+  ProfileAccountListenableAction get action;
   @override
   @JsonKey(ignore: true)
-  _$AccountStateCopyWith<_AccountState> get copyWith =>
+  _$ProfileAccountStateCopyWith<_ProfileAccountState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-class _$AccountEventTearOff {
-  const _$AccountEventTearOff();
+class _$ProfileAccountEventTearOff {
+  const _$ProfileAccountEventTearOff();
 
-  _GetUserAccount getUserAccount({required String uid}) {
-    return _GetUserAccount(
+  _GetProfileAccount getUserAccount({required String uid}) {
+    return _GetProfileAccount(
       uid: uid,
     );
   }
 
-  _GetProfileAccount getProfileAccount({required String uid}) {
-    return _GetProfileAccount(
+  _ProfileAccountEvent getProfileAccount({required String uid}) {
+    return _ProfileAccountEvent(
       uid: uid,
     );
   }
 }
 
 /// @nodoc
-const $AccountEvent = _$AccountEventTearOff();
+const $ProfileAccountEvent = _$ProfileAccountEventTearOff();
 
 /// @nodoc
-mixin _$AccountEvent {
+mixin _$ProfileAccountEvent {
   String get uid => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
@@ -292,44 +271,45 @@ mixin _$AccountEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetUserAccount value) getUserAccount,
-    required TResult Function(_GetProfileAccount value) getProfileAccount,
+    required TResult Function(_GetProfileAccount value) getUserAccount,
+    required TResult Function(_ProfileAccountEvent value) getProfileAccount,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_GetUserAccount value)? getUserAccount,
-    TResult Function(_GetProfileAccount value)? getProfileAccount,
+    TResult Function(_GetProfileAccount value)? getUserAccount,
+    TResult Function(_ProfileAccountEvent value)? getProfileAccount,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetUserAccount value)? getUserAccount,
-    TResult Function(_GetProfileAccount value)? getProfileAccount,
+    TResult Function(_GetProfileAccount value)? getUserAccount,
+    TResult Function(_ProfileAccountEvent value)? getProfileAccount,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $AccountEventCopyWith<AccountEvent> get copyWith =>
+  $ProfileAccountEventCopyWith<ProfileAccountEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AccountEventCopyWith<$Res> {
-  factory $AccountEventCopyWith(
-          AccountEvent value, $Res Function(AccountEvent) then) =
-      _$AccountEventCopyWithImpl<$Res>;
+abstract class $ProfileAccountEventCopyWith<$Res> {
+  factory $ProfileAccountEventCopyWith(
+          ProfileAccountEvent value, $Res Function(ProfileAccountEvent) then) =
+      _$ProfileAccountEventCopyWithImpl<$Res>;
   $Res call({String uid});
 }
 
 /// @nodoc
-class _$AccountEventCopyWithImpl<$Res> implements $AccountEventCopyWith<$Res> {
-  _$AccountEventCopyWithImpl(this._value, this._then);
+class _$ProfileAccountEventCopyWithImpl<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  _$ProfileAccountEventCopyWithImpl(this._value, this._then);
 
-  final AccountEvent _value;
+  final ProfileAccountEvent _value;
   // ignore: unused_field
-  final $Res Function(AccountEvent) _then;
+  final $Res Function(ProfileAccountEvent) _then;
 
   @override
   $Res call({
@@ -345,31 +325,31 @@ class _$AccountEventCopyWithImpl<$Res> implements $AccountEventCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$GetUserAccountCopyWith<$Res>
-    implements $AccountEventCopyWith<$Res> {
-  factory _$GetUserAccountCopyWith(
-          _GetUserAccount value, $Res Function(_GetUserAccount) then) =
-      __$GetUserAccountCopyWithImpl<$Res>;
+abstract class _$GetProfileAccountCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$GetProfileAccountCopyWith(
+          _GetProfileAccount value, $Res Function(_GetProfileAccount) then) =
+      __$GetProfileAccountCopyWithImpl<$Res>;
   @override
   $Res call({String uid});
 }
 
 /// @nodoc
-class __$GetUserAccountCopyWithImpl<$Res>
-    extends _$AccountEventCopyWithImpl<$Res>
-    implements _$GetUserAccountCopyWith<$Res> {
-  __$GetUserAccountCopyWithImpl(
-      _GetUserAccount _value, $Res Function(_GetUserAccount) _then)
-      : super(_value, (v) => _then(v as _GetUserAccount));
+class __$GetProfileAccountCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$GetProfileAccountCopyWith<$Res> {
+  __$GetProfileAccountCopyWithImpl(
+      _GetProfileAccount _value, $Res Function(_GetProfileAccount) _then)
+      : super(_value, (v) => _then(v as _GetProfileAccount));
 
   @override
-  _GetUserAccount get _value => super._value as _GetUserAccount;
+  _GetProfileAccount get _value => super._value as _GetProfileAccount;
 
   @override
   $Res call({
     Object? uid = freezed,
   }) {
-    return _then(_GetUserAccount(
+    return _then(_GetProfileAccount(
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
@@ -380,22 +360,22 @@ class __$GetUserAccountCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GetUserAccount implements _GetUserAccount {
-  const _$_GetUserAccount({required this.uid});
+class _$_GetProfileAccount implements _GetProfileAccount {
+  const _$_GetProfileAccount({required this.uid});
 
   @override
   final String uid;
 
   @override
   String toString() {
-    return 'AccountEvent.getUserAccount(uid: $uid)';
+    return 'ProfileAccountEvent.getUserAccount(uid: $uid)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _GetUserAccount &&
+            other is _GetProfileAccount &&
             const DeepCollectionEquality().equals(other.uid, uid));
   }
 
@@ -405,8 +385,8 @@ class _$_GetUserAccount implements _GetUserAccount {
 
   @JsonKey(ignore: true)
   @override
-  _$GetUserAccountCopyWith<_GetUserAccount> get copyWith =>
-      __$GetUserAccountCopyWithImpl<_GetUserAccount>(this, _$identity);
+  _$GetProfileAccountCopyWith<_GetProfileAccount> get copyWith =>
+      __$GetProfileAccountCopyWithImpl<_GetProfileAccount>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -442,8 +422,8 @@ class _$_GetUserAccount implements _GetUserAccount {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetUserAccount value) getUserAccount,
-    required TResult Function(_GetProfileAccount value) getProfileAccount,
+    required TResult Function(_GetProfileAccount value) getUserAccount,
+    required TResult Function(_ProfileAccountEvent value) getProfileAccount,
   }) {
     return getUserAccount(this);
   }
@@ -451,8 +431,8 @@ class _$_GetUserAccount implements _GetUserAccount {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_GetUserAccount value)? getUserAccount,
-    TResult Function(_GetProfileAccount value)? getProfileAccount,
+    TResult Function(_GetProfileAccount value)? getUserAccount,
+    TResult Function(_ProfileAccountEvent value)? getProfileAccount,
   }) {
     return getUserAccount?.call(this);
   }
@@ -460,8 +440,8 @@ class _$_GetUserAccount implements _GetUserAccount {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetUserAccount value)? getUserAccount,
-    TResult Function(_GetProfileAccount value)? getProfileAccount,
+    TResult Function(_GetProfileAccount value)? getUserAccount,
+    TResult Function(_ProfileAccountEvent value)? getProfileAccount,
     required TResult orElse(),
   }) {
     if (getUserAccount != null) {
@@ -471,43 +451,44 @@ class _$_GetUserAccount implements _GetUserAccount {
   }
 }
 
-abstract class _GetUserAccount implements AccountEvent {
-  const factory _GetUserAccount({required String uid}) = _$_GetUserAccount;
+abstract class _GetProfileAccount implements ProfileAccountEvent {
+  const factory _GetProfileAccount({required String uid}) =
+      _$_GetProfileAccount;
 
   @override
   String get uid;
   @override
   @JsonKey(ignore: true)
-  _$GetUserAccountCopyWith<_GetUserAccount> get copyWith =>
+  _$GetProfileAccountCopyWith<_GetProfileAccount> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$GetProfileAccountCopyWith<$Res>
-    implements $AccountEventCopyWith<$Res> {
-  factory _$GetProfileAccountCopyWith(
-          _GetProfileAccount value, $Res Function(_GetProfileAccount) then) =
-      __$GetProfileAccountCopyWithImpl<$Res>;
+abstract class _$ProfileAccountEventCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$ProfileAccountEventCopyWith(_ProfileAccountEvent value,
+          $Res Function(_ProfileAccountEvent) then) =
+      __$ProfileAccountEventCopyWithImpl<$Res>;
   @override
   $Res call({String uid});
 }
 
 /// @nodoc
-class __$GetProfileAccountCopyWithImpl<$Res>
-    extends _$AccountEventCopyWithImpl<$Res>
-    implements _$GetProfileAccountCopyWith<$Res> {
-  __$GetProfileAccountCopyWithImpl(
-      _GetProfileAccount _value, $Res Function(_GetProfileAccount) _then)
-      : super(_value, (v) => _then(v as _GetProfileAccount));
+class __$ProfileAccountEventCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$ProfileAccountEventCopyWith<$Res> {
+  __$ProfileAccountEventCopyWithImpl(
+      _ProfileAccountEvent _value, $Res Function(_ProfileAccountEvent) _then)
+      : super(_value, (v) => _then(v as _ProfileAccountEvent));
 
   @override
-  _GetProfileAccount get _value => super._value as _GetProfileAccount;
+  _ProfileAccountEvent get _value => super._value as _ProfileAccountEvent;
 
   @override
   $Res call({
     Object? uid = freezed,
   }) {
-    return _then(_GetProfileAccount(
+    return _then(_ProfileAccountEvent(
       uid: uid == freezed
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
@@ -518,22 +499,22 @@ class __$GetProfileAccountCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GetProfileAccount implements _GetProfileAccount {
-  const _$_GetProfileAccount({required this.uid});
+class _$_ProfileAccountEvent implements _ProfileAccountEvent {
+  const _$_ProfileAccountEvent({required this.uid});
 
   @override
   final String uid;
 
   @override
   String toString() {
-    return 'AccountEvent.getProfileAccount(uid: $uid)';
+    return 'ProfileAccountEvent.getProfileAccount(uid: $uid)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _GetProfileAccount &&
+            other is _ProfileAccountEvent &&
             const DeepCollectionEquality().equals(other.uid, uid));
   }
 
@@ -543,8 +524,9 @@ class _$_GetProfileAccount implements _GetProfileAccount {
 
   @JsonKey(ignore: true)
   @override
-  _$GetProfileAccountCopyWith<_GetProfileAccount> get copyWith =>
-      __$GetProfileAccountCopyWithImpl<_GetProfileAccount>(this, _$identity);
+  _$ProfileAccountEventCopyWith<_ProfileAccountEvent> get copyWith =>
+      __$ProfileAccountEventCopyWithImpl<_ProfileAccountEvent>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -580,8 +562,8 @@ class _$_GetProfileAccount implements _GetProfileAccount {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetUserAccount value) getUserAccount,
-    required TResult Function(_GetProfileAccount value) getProfileAccount,
+    required TResult Function(_GetProfileAccount value) getUserAccount,
+    required TResult Function(_ProfileAccountEvent value) getProfileAccount,
   }) {
     return getProfileAccount(this);
   }
@@ -589,8 +571,8 @@ class _$_GetProfileAccount implements _GetProfileAccount {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_GetUserAccount value)? getUserAccount,
-    TResult Function(_GetProfileAccount value)? getProfileAccount,
+    TResult Function(_GetProfileAccount value)? getUserAccount,
+    TResult Function(_ProfileAccountEvent value)? getProfileAccount,
   }) {
     return getProfileAccount?.call(this);
   }
@@ -598,8 +580,8 @@ class _$_GetProfileAccount implements _GetProfileAccount {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetUserAccount value)? getUserAccount,
-    TResult Function(_GetProfileAccount value)? getProfileAccount,
+    TResult Function(_GetProfileAccount value)? getUserAccount,
+    TResult Function(_ProfileAccountEvent value)? getProfileAccount,
     required TResult orElse(),
   }) {
     if (getProfileAccount != null) {
@@ -609,14 +591,14 @@ class _$_GetProfileAccount implements _GetProfileAccount {
   }
 }
 
-abstract class _GetProfileAccount implements AccountEvent {
-  const factory _GetProfileAccount({required String uid}) =
-      _$_GetProfileAccount;
+abstract class _ProfileAccountEvent implements ProfileAccountEvent {
+  const factory _ProfileAccountEvent({required String uid}) =
+      _$_ProfileAccountEvent;
 
   @override
   String get uid;
   @override
   @JsonKey(ignore: true)
-  _$GetProfileAccountCopyWith<_GetProfileAccount> get copyWith =>
+  _$ProfileAccountEventCopyWith<_ProfileAccountEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }

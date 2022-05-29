@@ -36,7 +36,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
   void initState() {
     super.initState();
     connectivitySubscriber();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -76,7 +76,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
   void dispose() {
     super.dispose();
 
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     if (_timerLink != null) {
       _timerLink.cancel();
     }

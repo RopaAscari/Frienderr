@@ -23,7 +23,7 @@ class VideoScreenState extends State<VideoScreen> {
     _controller.setLooping(true);
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ///_controller.play();
     });
   }

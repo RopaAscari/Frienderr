@@ -5,5 +5,5 @@ import 'package:frienderr/features/data/models/comment/comment_model.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
 
 abstract class IFollowersRepository {
-  Future<Either<Failure, List<UserEntity>>> getFollowers(String userId);
+  Future<Either<Failure, List<String>>> getFollowers(String userId);
 }

@@ -163,6 +163,16 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   }
 
   @override
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserPosts(
+      {required String uid}) async {
+    return await firestoreInstance
+        .collection('posts')
+        .orderBy('dateCreated', descending: true)
+        .where('user.id', isEqualTo: uid)
+        .get();
+  }
+
+  @override
   Future<QuerySnapshot<Object?>> getPosts() async {
     return await firestoreInstance
         .collection('posts')
@@ -248,4 +258,7 @@ abstract class IPostRemoteDataProvider {
       List<Map<String, dynamic>> posts);
 
   Future<DocumentSnapshot<Map<String, dynamic>>> fetchTimelinelinePostCount();
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserPosts(
+      {required String uid});
 }
