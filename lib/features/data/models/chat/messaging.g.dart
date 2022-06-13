@@ -9,14 +9,15 @@ part of 'messaging.dart';
 _$_MessagingMetaData _$$_MessagingMetaDataFromJson(Map<String, dynamic> json) =>
     _$_MessagingMetaData(
       chatId: json['chatId'] as String? ?? '',
-      chatRecipient: json['chatRecipient'] ?? const {},
-      chatUser: json['chatUser'] ?? const {},
+      chatUser: UserModel.fromJson(json['chatUser'] as Map<String, dynamic>),
+      chatRecipient:
+          UserModel.fromJson(json['chatRecipient'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_MessagingMetaDataToJson(
         _$_MessagingMetaData instance) =>
     <String, dynamic>{
       'chatId': instance.chatId,
-      'chatRecipient': instance.chatRecipient,
       'chatUser': instance.chatUser,
+      'chatRecipient': instance.chatRecipient,
     };

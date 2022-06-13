@@ -24,12 +24,12 @@ class _$MessagingMetaDataTearOff {
 
   _MessagingMetaData call(
       {String chatId = '',
-      dynamic chatRecipient = const {},
-      dynamic chatUser = const {}}) {
+      required UserModel chatUser,
+      required UserModel chatRecipient}) {
     return _MessagingMetaData(
       chatId: chatId,
-      chatRecipient: chatRecipient,
       chatUser: chatUser,
+      chatRecipient: chatRecipient,
     );
   }
 
@@ -44,8 +44,8 @@ const $MessagingMetaData = _$MessagingMetaDataTearOff();
 /// @nodoc
 mixin _$MessagingMetaData {
   String get chatId => throw _privateConstructorUsedError;
-  dynamic get chatRecipient => throw _privateConstructorUsedError;
-  dynamic get chatUser => throw _privateConstructorUsedError;
+  UserModel get chatUser => throw _privateConstructorUsedError;
+  UserModel get chatRecipient => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,7 +58,10 @@ abstract class $MessagingMetaDataCopyWith<$Res> {
   factory $MessagingMetaDataCopyWith(
           MessagingMetaData value, $Res Function(MessagingMetaData) then) =
       _$MessagingMetaDataCopyWithImpl<$Res>;
-  $Res call({String chatId, dynamic chatRecipient, dynamic chatUser});
+  $Res call({String chatId, UserModel chatUser, UserModel chatRecipient});
+
+  $UserModelCopyWith<$Res> get chatUser;
+  $UserModelCopyWith<$Res> get chatRecipient;
 }
 
 /// @nodoc
@@ -73,23 +76,37 @@ class _$MessagingMetaDataCopyWithImpl<$Res>
   @override
   $Res call({
     Object? chatId = freezed,
-    Object? chatRecipient = freezed,
     Object? chatUser = freezed,
+    Object? chatRecipient = freezed,
   }) {
     return _then(_value.copyWith(
       chatId: chatId == freezed
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
               as String,
-      chatRecipient: chatRecipient == freezed
-          ? _value.chatRecipient
-          : chatRecipient // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       chatUser: chatUser == freezed
           ? _value.chatUser
           : chatUser // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as UserModel,
+      chatRecipient: chatRecipient == freezed
+          ? _value.chatRecipient
+          : chatRecipient // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
+  }
+
+  @override
+  $UserModelCopyWith<$Res> get chatUser {
+    return $UserModelCopyWith<$Res>(_value.chatUser, (value) {
+      return _then(_value.copyWith(chatUser: value));
+    });
+  }
+
+  @override
+  $UserModelCopyWith<$Res> get chatRecipient {
+    return $UserModelCopyWith<$Res>(_value.chatRecipient, (value) {
+      return _then(_value.copyWith(chatRecipient: value));
+    });
   }
 }
 
@@ -100,7 +117,12 @@ abstract class _$MessagingMetaDataCopyWith<$Res>
           _MessagingMetaData value, $Res Function(_MessagingMetaData) then) =
       __$MessagingMetaDataCopyWithImpl<$Res>;
   @override
-  $Res call({String chatId, dynamic chatRecipient, dynamic chatUser});
+  $Res call({String chatId, UserModel chatUser, UserModel chatRecipient});
+
+  @override
+  $UserModelCopyWith<$Res> get chatUser;
+  @override
+  $UserModelCopyWith<$Res> get chatRecipient;
 }
 
 /// @nodoc
@@ -117,22 +139,22 @@ class __$MessagingMetaDataCopyWithImpl<$Res>
   @override
   $Res call({
     Object? chatId = freezed,
-    Object? chatRecipient = freezed,
     Object? chatUser = freezed,
+    Object? chatRecipient = freezed,
   }) {
     return _then(_MessagingMetaData(
       chatId: chatId == freezed
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
               as String,
-      chatRecipient: chatRecipient == freezed
-          ? _value.chatRecipient
-          : chatRecipient // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       chatUser: chatUser == freezed
           ? _value.chatUser
           : chatUser // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as UserModel,
+      chatRecipient: chatRecipient == freezed
+          ? _value.chatRecipient
+          : chatRecipient // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
   }
 }
@@ -141,9 +163,7 @@ class __$MessagingMetaDataCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_MessagingMetaData implements _MessagingMetaData {
   const _$_MessagingMetaData(
-      {this.chatId = '',
-      this.chatRecipient = const {},
-      this.chatUser = const {}});
+      {this.chatId = '', required this.chatUser, required this.chatRecipient});
 
   factory _$_MessagingMetaData.fromJson(Map<String, dynamic> json) =>
       _$$_MessagingMetaDataFromJson(json);
@@ -151,16 +171,14 @@ class _$_MessagingMetaData implements _MessagingMetaData {
   @JsonKey()
   @override
   final String chatId;
-  @JsonKey()
   @override
-  final dynamic chatRecipient;
-  @JsonKey()
+  final UserModel chatUser;
   @override
-  final dynamic chatUser;
+  final UserModel chatRecipient;
 
   @override
   String toString() {
-    return 'MessagingMetaData(chatId: $chatId, chatRecipient: $chatRecipient, chatUser: $chatUser)';
+    return 'MessagingMetaData(chatId: $chatId, chatUser: $chatUser, chatRecipient: $chatRecipient)';
   }
 
   @override
@@ -169,17 +187,17 @@ class _$_MessagingMetaData implements _MessagingMetaData {
         (other.runtimeType == runtimeType &&
             other is _MessagingMetaData &&
             const DeepCollectionEquality().equals(other.chatId, chatId) &&
+            const DeepCollectionEquality().equals(other.chatUser, chatUser) &&
             const DeepCollectionEquality()
-                .equals(other.chatRecipient, chatRecipient) &&
-            const DeepCollectionEquality().equals(other.chatUser, chatUser));
+                .equals(other.chatRecipient, chatRecipient));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(chatId),
-      const DeepCollectionEquality().hash(chatRecipient),
-      const DeepCollectionEquality().hash(chatUser));
+      const DeepCollectionEquality().hash(chatUser),
+      const DeepCollectionEquality().hash(chatRecipient));
 
   @JsonKey(ignore: true)
   @override
@@ -195,8 +213,8 @@ class _$_MessagingMetaData implements _MessagingMetaData {
 abstract class _MessagingMetaData implements MessagingMetaData {
   const factory _MessagingMetaData(
       {String chatId,
-      dynamic chatRecipient,
-      dynamic chatUser}) = _$_MessagingMetaData;
+      required UserModel chatUser,
+      required UserModel chatRecipient}) = _$_MessagingMetaData;
 
   factory _MessagingMetaData.fromJson(Map<String, dynamic> json) =
       _$_MessagingMetaData.fromJson;
@@ -204,9 +222,9 @@ abstract class _MessagingMetaData implements MessagingMetaData {
   @override
   String get chatId;
   @override
-  dynamic get chatRecipient;
+  UserModel get chatUser;
   @override
-  dynamic get chatUser;
+  UserModel get chatRecipient;
   @override
   @JsonKey(ignore: true)
   _$MessagingMetaDataCopyWith<_MessagingMetaData> get copyWith =>

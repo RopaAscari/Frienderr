@@ -6,6 +6,9 @@ import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/presentation/blocs/account/profile/profile_account_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/account/user/user_account_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/followers/followers_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/screens/login/login.dart';
@@ -33,10 +36,13 @@ class _SplashScreenState extends State<SplashScreen> {
   final AppRouter _router = getIt<AppRouter>();
   final UserBloc _userBloc = getIt<UserBloc>();
   final PostBloc _postBloc = getIt<PostBloc>();
+  final ChatBloc _chatBloc = getIt<ChatBloc>();
   final QuickBloc _quickBloc = getIt<QuickBloc>();
   final StoryBloc _storyBloc = getIt<StoryBloc>();
   final CameraBloc _cameraBloc = getIt<CameraBloc>();
+  final MessageBloc _messageBloc = getIt<MessageBloc>();
   final User? _user = FirebaseAuth.instance.currentUser;
+  final FollowersBloc _followersBloc = getIt<FollowersBloc>();
   final UserAccountBloc _userAccountBloc = getIt<UserAccountBloc>();
   final NotificationBloc _notificationBloc = getIt<NotificationBloc>();
   final AuthenticationBloc _authenticationBloc = getIt<AuthenticationBloc>();
@@ -53,9 +59,12 @@ class _SplashScreenState extends State<SplashScreen> {
     final BlocGroup _blocGroup = BlocGroup(
       userBloc: _userBloc,
       postBloc: _postBloc,
+      chatBloc: _chatBloc,
       storyBloc: _storyBloc,
       quickBloc: _quickBloc,
       cameraBloc: _cameraBloc,
+      messageBloc: _messageBloc,
+      followersBloc: _followersBloc,
       userAccountBloc: _userAccountBloc,
       notificationBloc: _notificationBloc,
       profileAccountBloc: _profileAccountBloc,

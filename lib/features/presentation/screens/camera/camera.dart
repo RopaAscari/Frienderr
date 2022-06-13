@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:cool_dropdown/cool_dropdown.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/screens/camera/widgets/deep_ar/deep_ar_camera.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -194,11 +195,29 @@ class CameraScreenState extends State<CameraScreen>
   }
 
   void _openGallery() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: ((context) => Gallery(
-                cameraMode: _cameraMode, blocGroup: widget.blocGroup))));
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Gallery(
+          onPicked: (BuildContext context, List<GalleryAsset> assets) {
+            Navigator.pop(context);
+            if (_cameraMode == CameraSelectionMode.post) {
+              getIt<AppRouter>().push(PreviewPostRoute(
+                  selectedAssets: assets, postBloc: widget.blocGroup.postBloc));
+            } else if (_cameraMode == CameraSelectionMode.story) {
+              getIt<AppRouter>().push(PreviewStoryRoute(
+                  selectedAssets: assets,
+                  storyBloc: widget.blocGroup.storyBloc));
+            } else if (_cameraMode == CameraSelectionMode.snap) {
+              final File file = assets.first.asset;
+              getIt<AppRouter>().push(PreviewQuickRoute(
+                  file: file, quickBloc: widget.blocGroup.quickBloc));
+            }
+          },
+        );
+      },
+    );
   }
 
   Future<void> _determineFeatureAction(CameraFeatureMode mode) async {

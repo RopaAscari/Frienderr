@@ -23,13 +23,19 @@ class _$ChatModelTearOff {
   const _$ChatModelTearOff();
 
   _ChatModel call(
-      {String id = '',
-      LatestMessage? latestMessage,
-      List<ChatParticipant>? participants}) {
+      {required String id,
+      required int dateUpdated,
+      required List<String> typing,
+      required Map<String, dynamic> unread,
+      required List<dynamic> participants,
+      LatestMessage? latestMessage = null}) {
     return _ChatModel(
       id: id,
-      latestMessage: latestMessage,
+      dateUpdated: dateUpdated,
+      typing: typing,
+      unread: unread,
       participants: participants,
+      latestMessage: latestMessage,
     );
   }
 
@@ -44,8 +50,11 @@ const $ChatModel = _$ChatModelTearOff();
 /// @nodoc
 mixin _$ChatModel {
   String get id => throw _privateConstructorUsedError;
+  int get dateUpdated => throw _privateConstructorUsedError;
+  List<String> get typing => throw _privateConstructorUsedError;
+  Map<String, dynamic> get unread => throw _privateConstructorUsedError;
+  List<dynamic> get participants => throw _privateConstructorUsedError;
   LatestMessage? get latestMessage => throw _privateConstructorUsedError;
-  List<ChatParticipant>? get participants => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,8 +68,11 @@ abstract class $ChatModelCopyWith<$Res> {
       _$ChatModelCopyWithImpl<$Res>;
   $Res call(
       {String id,
-      LatestMessage? latestMessage,
-      List<ChatParticipant>? participants});
+      int dateUpdated,
+      List<String> typing,
+      Map<String, dynamic> unread,
+      List<dynamic> participants,
+      LatestMessage? latestMessage});
 
   $LatestMessageCopyWith<$Res>? get latestMessage;
 }
@@ -76,22 +88,37 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? latestMessage = freezed,
+    Object? dateUpdated = freezed,
+    Object? typing = freezed,
+    Object? unread = freezed,
     Object? participants = freezed,
+    Object? latestMessage = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      dateUpdated: dateUpdated == freezed
+          ? _value.dateUpdated
+          : dateUpdated // ignore: cast_nullable_to_non_nullable
+              as int,
+      typing: typing == freezed
+          ? _value.typing
+          : typing // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      unread: unread == freezed
+          ? _value.unread
+          : unread // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+      participants: participants == freezed
+          ? _value.participants
+          : participants // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
       latestMessage: latestMessage == freezed
           ? _value.latestMessage
           : latestMessage // ignore: cast_nullable_to_non_nullable
               as LatestMessage?,
-      participants: participants == freezed
-          ? _value.participants
-          : participants // ignore: cast_nullable_to_non_nullable
-              as List<ChatParticipant>?,
     ));
   }
 
@@ -115,8 +142,11 @@ abstract class _$ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
   @override
   $Res call(
       {String id,
-      LatestMessage? latestMessage,
-      List<ChatParticipant>? participants});
+      int dateUpdated,
+      List<String> typing,
+      Map<String, dynamic> unread,
+      List<dynamic> participants,
+      LatestMessage? latestMessage});
 
   @override
   $LatestMessageCopyWith<$Res>? get latestMessage;
@@ -134,22 +164,37 @@ class __$ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? latestMessage = freezed,
+    Object? dateUpdated = freezed,
+    Object? typing = freezed,
+    Object? unread = freezed,
     Object? participants = freezed,
+    Object? latestMessage = freezed,
   }) {
     return _then(_ChatModel(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      dateUpdated: dateUpdated == freezed
+          ? _value.dateUpdated
+          : dateUpdated // ignore: cast_nullable_to_non_nullable
+              as int,
+      typing: typing == freezed
+          ? _value.typing
+          : typing // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      unread: unread == freezed
+          ? _value.unread
+          : unread // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+      participants: participants == freezed
+          ? _value.participants
+          : participants // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
       latestMessage: latestMessage == freezed
           ? _value.latestMessage
           : latestMessage // ignore: cast_nullable_to_non_nullable
               as LatestMessage?,
-      participants: participants == freezed
-          ? _value.participants
-          : participants // ignore: cast_nullable_to_non_nullable
-              as List<ChatParticipant>?,
     ));
   }
 }
@@ -157,22 +202,34 @@ class __$ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ChatModel implements _ChatModel {
-  const _$_ChatModel({this.id = '', this.latestMessage, this.participants});
+  const _$_ChatModel(
+      {required this.id,
+      required this.dateUpdated,
+      required this.typing,
+      required this.unread,
+      required this.participants,
+      this.latestMessage = null});
 
   factory _$_ChatModel.fromJson(Map<String, dynamic> json) =>
       _$$_ChatModelFromJson(json);
 
-  @JsonKey()
   @override
   final String id;
   @override
-  final LatestMessage? latestMessage;
+  final int dateUpdated;
   @override
-  final List<ChatParticipant>? participants;
+  final List<String> typing;
+  @override
+  final Map<String, dynamic> unread;
+  @override
+  final List<dynamic> participants;
+  @JsonKey()
+  @override
+  final LatestMessage? latestMessage;
 
   @override
   String toString() {
-    return 'ChatModel(id: $id, latestMessage: $latestMessage, participants: $participants)';
+    return 'ChatModel(id: $id, dateUpdated: $dateUpdated, typing: $typing, unread: $unread, participants: $participants, latestMessage: $latestMessage)';
   }
 
   @override
@@ -182,17 +239,24 @@ class _$_ChatModel implements _ChatModel {
             other is _ChatModel &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
-                .equals(other.latestMessage, latestMessage) &&
+                .equals(other.dateUpdated, dateUpdated) &&
+            const DeepCollectionEquality().equals(other.typing, typing) &&
+            const DeepCollectionEquality().equals(other.unread, unread) &&
             const DeepCollectionEquality()
-                .equals(other.participants, participants));
+                .equals(other.participants, participants) &&
+            const DeepCollectionEquality()
+                .equals(other.latestMessage, latestMessage));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(latestMessage),
-      const DeepCollectionEquality().hash(participants));
+      const DeepCollectionEquality().hash(dateUpdated),
+      const DeepCollectionEquality().hash(typing),
+      const DeepCollectionEquality().hash(unread),
+      const DeepCollectionEquality().hash(participants),
+      const DeepCollectionEquality().hash(latestMessage));
 
   @JsonKey(ignore: true)
   @override
@@ -207,9 +271,12 @@ class _$_ChatModel implements _ChatModel {
 
 abstract class _ChatModel implements ChatModel {
   const factory _ChatModel(
-      {String id,
-      LatestMessage? latestMessage,
-      List<ChatParticipant>? participants}) = _$_ChatModel;
+      {required String id,
+      required int dateUpdated,
+      required List<String> typing,
+      required Map<String, dynamic> unread,
+      required List<dynamic> participants,
+      LatestMessage? latestMessage}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$_ChatModel.fromJson;
@@ -217,9 +284,15 @@ abstract class _ChatModel implements ChatModel {
   @override
   String get id;
   @override
-  LatestMessage? get latestMessage;
+  int get dateUpdated;
   @override
-  List<ChatParticipant>? get participants;
+  List<String> get typing;
+  @override
+  Map<String, dynamic> get unread;
+  @override
+  List<dynamic> get participants;
+  @override
+  LatestMessage? get latestMessage;
   @override
   @JsonKey(ignore: true)
   _$ChatModelCopyWith<_ChatModel> get copyWith =>

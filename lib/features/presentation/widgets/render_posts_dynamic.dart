@@ -17,7 +17,7 @@ import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/constants/constants.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:frienderr/features/presentation/screens/account/user_account.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:frienderr/features/presentation/widgets/video_screen.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
@@ -45,7 +45,7 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
   late DocumentSnapshot<Object?> fetchedPost;
   final FirebaseServices firebaseServices = new FirebaseServices();
   late final UserState userState = context.read<UserBloc>().state;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final CollectionReference posts =
       FirebaseFirestore.instance.collection('postCount');

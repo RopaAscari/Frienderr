@@ -1,10 +1,15 @@
 part of 'followers_bloc.dart';
 
 enum FollowerStatus {
-  Initial,
-  Loaded,
-  Loading,
-  Faliure,
+  intial,
+}
+
+enum FollowerListenableAction {
+  idle,
+  followSuccess,
+  followFailure,
+  unfollowSuccess,
+  unfollowFailure
 }
 
 @freezed
@@ -12,6 +17,7 @@ class FollowersState with _$FollowersState {
   const factory FollowersState({
     @Default('') String error,
     required List<UserEntity> followers,
-    @Default(FollowerStatus.Initial) FollowerStatus currentState,
+    @Default(FollowerStatus.intial) FollowerStatus currentState,
+    @Default(FollowerListenableAction.idle) FollowerListenableAction action,
   }) = _FollowersState;
 }

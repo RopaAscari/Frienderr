@@ -1,13 +1,11 @@
-import 'dart:io'; //InternetAddress utility
 import 'dart:math';
-import 'dart:async'; //For StreamController/Stream
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
-//import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Helpers {
-  String generateId(int length) {
+  static String generateId(int length) {
     const chars =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     final rnd = Random(DateTime.now().millisecondsSinceEpoch);
@@ -20,12 +18,12 @@ class Helpers {
   }
 }
 
-class Connection {
-  isConnected() async {
+class ConnectionDelegate {
+  static Future<bool> isConnected() async {
     try {
       await FirebaseFirestore.instance
           .runTransaction((Transaction tx) {} as dynamic)
-          .timeout(Duration(seconds: 5));
+          .timeout(const Duration(seconds: 5));
       return true;
 // ignore: nullable_type_in_catch_clause
     } on PlatformException catch (_) {

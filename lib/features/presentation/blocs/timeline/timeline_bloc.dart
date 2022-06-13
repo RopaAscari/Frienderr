@@ -28,7 +28,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
   Stream<QuerySnapshot<Map<String, dynamic>>> get timeline {
     final either = _getTimelineStreamUseCase(GetTimelineStreamParams());
     return either.fold(
-        (l) => defaultStream(Duration(seconds: 5), 10), (r) => r);
+        (l) => defaultStream(const Duration(seconds: 5), 10), (r) => r);
   }
 
   Future<void> _fetchTimelinePosts(

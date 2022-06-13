@@ -1,11 +1,11 @@
-import 'package:frienderr/features/presentation/mixins/gql_mixin.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/features/presentation/mixins/gql_mixin.dart';
 import 'package:frienderr/features/domain/entities/notification.dart';
+import 'package:frienderr/core/enums/collections/notifications/order_fields.dart';
 
 @LazySingleton(as: INotificationRemoteDataProvider)
 class NotificationRemoteDataProvider
@@ -24,29 +24,29 @@ class NotificationRemoteDataProvider
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateNotificationStream() {
     final uid = auth.currentUser!.uid;
     return firestoreInstance
-        .collection(Constants.collections[Collections.Activity]!)
+        .collection(Collections.activity.name)
         .doc(uid)
-        .collection('notifications')
-        .orderBy('dateCreated', descending: true)
+        .collection(Collections.notifications.name)
+        .orderBy(NotificationOrderFields.dateCreated.name, descending: true)
         .snapshots();
   }
 
   @override
   Future<QuerySnapshot<Object?>> getNotifications({required String uid}) async {
     return firestoreInstance
-        .collection(Constants.collections[Collections.Activity]!)
+        .collection(Collections.activity.name)
         .doc(uid)
-        .collection('notifications')
-        .orderBy('dateCreated', descending: true)
+        .collection(Collections.notifications.name)
+        .orderBy(NotificationOrderFields.dateCreated.name, descending: true)
         .get();
   }
 
   @override
   Future<bool> sendFollowNotification(NotificationEntity notification) {
     return firestoreInstance
-        .collection(Constants.collections[Collections.Activity]!)
+        .collection(Collections.activity.name)
         .doc(notification.recipientId)
-        .collection('notifications')
+        .collection(Collections.notifications.name)
         .add(notification.toJson())
         .then((value) => true)
         .catchError((error) => false);
@@ -55,9 +55,9 @@ class NotificationRemoteDataProvider
   @override
   Future<bool> sendLikeNotification(NotificationEntity notification) {
     return firestoreInstance
-        .collection(Constants.collections[Collections.Activity]!)
+        .collection(Collections.activity.name)
         .doc(notification.recipientId)
-        .collection('notifications')
+        .collection(Collections.notifications.name)
         .add(notification.toJson())
         .then((value) => true)
         .catchError((error) => false);
@@ -66,9 +66,9 @@ class NotificationRemoteDataProvider
   @override
   Future<bool> sendCommentNotification(NotificationEntity notification) async {
     return firestoreInstance
-        .collection(Constants.collections[Collections.Activity]!)
+        .collection(Collections.activity.name)
         .doc(notification.recipientId)
-        .collection('notifications')
+        .collection(Collections.notifications.name)
         .add(notification.toJson())
         .then((value) => true)
         .catchError((error) => false);

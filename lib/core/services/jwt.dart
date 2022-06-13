@@ -2,12 +2,11 @@ import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:frienderr/core/services/helpers.dart';
 
 class TokenHandler {
-  final Helpers helpers = new Helpers();
   final String sharedSecret = 'yungd3v3loprs';
 
   Future<String> createToken(dynamic user) async {
     final claimSet = JwtClaim(
-      jwtId: helpers.generateId(32),
+      jwtId: Helpers.generateId(32),
       payload: user,
     );
     // Generate a JWT from the claim set

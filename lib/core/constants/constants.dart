@@ -15,20 +15,28 @@ class Constants {
   static String dashboardIconFill = 'assets/icons/dashboard_fill_icon.svg';
   static String dashboardIconOutline =
       'assets/icons/dashboard_icon_outline.svg';
-  static String homeIconOutline = 'assets/icons/home_icon_outline.svg';
-  static String multiSelectIcon = 'assets/icons/multi_select_icon.svg';
-  static String caughtUpAnimation = 'assets/animations/caught_up_animation.flr';
+
   static String quickIconFill = 'assets/icons/quick_icon_fill.svg';
-  static String quickIconOutline = 'assets/icons/quick_icon_outline.svg';
 
   static String cameraIconFill = 'assets/icons/camera_icon_fill.svg';
-  static String cameraIconOutline = 'assets/icons/camera_icon_outline.svg';
-
-  static String commentIconFill = 'assets/icons/comment_icon_fill.svg';
-  static String commentIconOutline = 'assets/icons/comment_icon_outline.svg';
-
   static String searchIconFill = 'assets/icons/search_icon_fill.svg';
+  static String commentIconFill = 'assets/icons/comment_icon_fill.svg';
+  static String homeIconOutline = 'assets/icons/home_icon_outline.svg';
+  static String multiSelectIcon = 'assets/icons/multi_select_icon.svg';
+  static String quickIconOutline = 'assets/icons/quick_icon_outline.svg';
   static String searchIconOutline = 'assets/icons/search_icon_outline.svg';
+
+  static String cameraIconOutline = 'assets/icons/camera_icon_outline.svg';
+  static String commentIconOutline = 'assets/icons/comment_icon_outline.svg';
+  static String messageImageIconFill = 'assets/icons/message_image_icon.svg';
+  static String messageSendIconFill = 'assets/icons/message_send_icon.svg';
+  static String messageDeleteIconFill = 'assets/icons/message_delete_icon.svg';
+  static String messageReportIconFill = 'assets/icons/message_report_icon.svg';
+  static String messageSeenIconFill = 'assets/icons/message_seen_icon.svg';
+  static String messageLockIcon = 'assets/icons/message_lock_icon.svg';
+  static String messageDeleteIcon = 'assets/icons/message_delete_icon.svg';
+  static String messageUnlockIcon = 'assets/icons/message_unlock_icon.svg';
+  static String caughtUpAnimation = 'assets/animations/caught_up_animation.flr';
 
   static String filterIconOutline = 'assets/icons/filter_icon.svg';
   static String noFlashIconOutline = 'assets/icons/no_flash_icon.svg';
@@ -96,35 +104,25 @@ class Constants {
     'ProfilePhoto': 'ProfilePhoto'
   };
 
-  static Map<Collections, String> collections = {
-    Collections.Posts: 'posts',
-    Collections.Users: 'users',
-    Collections.Chats: 'chats',
-    Collections.Stories: 'stories',
-    Collections.Comments: 'comments',
-    Collections.Activity: 'activity',
-    Collections.Notifications: 'notifications',
-  };
-
   static Map<MediaContainerType, String> mediaContainerTypes = {
     MediaContainerType.Image: 'image',
     MediaContainerType.Video: 'video',
   };
 
-  static Map<MediaType, String> mediaTypes = {
-    MediaType.Posts: 'Posts',
-    MediaType.Live: 'Live',
-    MediaType.Stories: 'Stories'
+  static Map<MediaTypes, String> mediaTypes = {
+    MediaTypes.Posts: 'Posts',
+    MediaTypes.Live: 'Live',
+    MediaTypes.Stories: 'Stories'
   };
 
   static Map<ErrorType, String> errorTypes = {
     ErrorType.NetworkError: 'No network connection'
   };
 
-  static Map<MediaType, int> mediaIndexes = {
-    MediaType.Posts: 0,
-    MediaType.Stories: 1,
-    MediaType.Live: 2
+  static Map<MediaTypes, int> mediaIndexes = {
+    MediaTypes.Posts: 0,
+    MediaTypes.Stories: 1,
+    MediaTypes.Live: 2
   };
 
   static Map<PostType, String> postTypes = {

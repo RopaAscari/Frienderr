@@ -102,6 +102,19 @@ class _$AppRouter extends RootStackRouter {
           opaque: false,
           barrierDismissible: false);
     },
+    MessagingRoute.name: (routeData) {
+      final args = routeData.argsAs<MessagingRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: MessagingScreen(
+              metadata: args.metadata,
+              blocGroup: args.blocGroup,
+              key: args.key),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
     PreviewPostRoute.name: (routeData) {
       final args = routeData.argsAs<PreviewPostRouteArgs>();
       return CustomPage<dynamic>(
@@ -150,11 +163,10 @@ class _$AppRouter extends RootStackRouter {
           barrierDismissible: false);
     },
     ChatDashboardRoute.name: (routeData) {
-      final args = routeData.argsAs<ChatDashboardRouteArgs>(
-          orElse: () => const ChatDashboardRouteArgs());
+      final args = routeData.argsAs<ChatDashboardRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: ChatDashboardScreen(key: args.key),
+          child: ChatDashboardScreen(key: args.key, blocGroup: args.blocGroup),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -222,6 +234,7 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(RegisterRoute.name, path: '/register-screen'),
         RouteConfig(PostQuickRoute.name, path: '/post-quick-screen'),
         RouteConfig(PostMediaRoute.name, path: '/post-media-screen'),
+        RouteConfig(MessagingRoute.name, path: '/messaging-screen'),
         RouteConfig(PreviewPostRoute.name, path: '/preview-post-screen'),
         RouteConfig(PreviewQuickRoute.name, path: '/preview-quick-screen'),
         RouteConfig(PreviewStoryRoute.name, path: '/preview-story-screen'),
@@ -436,6 +449,37 @@ class PostMediaRouteArgs {
 }
 
 /// generated route for
+/// [MessagingScreen]
+class MessagingRoute extends PageRouteInfo<MessagingRouteArgs> {
+  MessagingRoute(
+      {required MessagingMetaDataEntity metadata,
+      required BlocGroup blocGroup,
+      Key? key})
+      : super(MessagingRoute.name,
+            path: '/messaging-screen',
+            args: MessagingRouteArgs(
+                metadata: metadata, blocGroup: blocGroup, key: key));
+
+  static const String name = 'MessagingRoute';
+}
+
+class MessagingRouteArgs {
+  const MessagingRouteArgs(
+      {required this.metadata, required this.blocGroup, this.key});
+
+  final MessagingMetaDataEntity metadata;
+
+  final BlocGroup blocGroup;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'MessagingRouteArgs{metadata: $metadata, blocGroup: $blocGroup, key: $key}';
+  }
+}
+
+/// generated route for
 /// [PreviewPostScreen]
 class PreviewPostRoute extends PageRouteInfo<PreviewPostRouteArgs> {
   PreviewPostRoute(
@@ -555,22 +599,24 @@ class NotificationRouteArgs {
 /// generated route for
 /// [ChatDashboardScreen]
 class ChatDashboardRoute extends PageRouteInfo<ChatDashboardRouteArgs> {
-  ChatDashboardRoute({Key? key})
+  ChatDashboardRoute({Key? key, required BlocGroup blocGroup})
       : super(ChatDashboardRoute.name,
             path: '/chat-dashboard-screen',
-            args: ChatDashboardRouteArgs(key: key));
+            args: ChatDashboardRouteArgs(key: key, blocGroup: blocGroup));
 
   static const String name = 'ChatDashboardRoute';
 }
 
 class ChatDashboardRouteArgs {
-  const ChatDashboardRouteArgs({this.key});
+  const ChatDashboardRouteArgs({this.key, required this.blocGroup});
 
   final Key? key;
 
+  final BlocGroup blocGroup;
+
   @override
   String toString() {
-    return 'ChatDashboardRouteArgs{key: $key}';
+    return 'ChatDashboardRouteArgs{key: $key, blocGroup: $blocGroup}';
   }
 }
 

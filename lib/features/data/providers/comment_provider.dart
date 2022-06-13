@@ -14,13 +14,9 @@ class CommentRemoteDataProvider implements ICommentRemoteDataProvider {
   Future<bool> postComment(String postId, CommentEntity comment) async {
     try {
       await firestoreInstance
-          .collection(Constants.collections[Collections.Comments]!)
+          .collection(Collections.comments.name)
           .add(comment.toJson());
 
-      /*  await firestoreInstance
-        .collection(Constants.collections[Collections.Posts]!)
-        .doc(postId)
-        .update({'commentCount': FieldValue.increment(1)});*/
       return true;
     } catch (err) {
       return false;
@@ -30,7 +26,7 @@ class CommentRemoteDataProvider implements ICommentRemoteDataProvider {
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getComments(String postId) async {
     return await firestoreInstance
-        .collection(Constants.collections[Collections.Comments]!)
+        .collection(Collections.comments.name)
         .where('postId', isEqualTo: postId)
         .orderBy('dateCreated', descending: true)
         .get();

@@ -121,7 +121,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
           create: (context) => getIt<AuthenticationBloc>()),
       BlocProvider<QuickBloc>(
           create: (context) =>
-              getIt<QuickBloc>()..add(QuickEvent.initialize())),
+              getIt<QuickBloc>()..add(const QuickEvent.initialize())),
     ];
   }
 

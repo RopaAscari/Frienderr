@@ -6,4 +6,6 @@ import 'package:frienderr/features/domain/entities/user.dart';
 
 abstract class IFollowersRepository {
   Future<Either<Failure, List<String>>> getFollowers(String userId);
+  Future<Either<Failure, bool>> registerFollwoing(
+      {required String uid, required String fid});
 }

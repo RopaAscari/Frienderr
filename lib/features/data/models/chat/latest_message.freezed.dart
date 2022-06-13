@@ -22,11 +22,9 @@ LatestMessage _$LatestMessageFromJson(Map<String, dynamic> json) {
 class _$LatestMessageTearOff {
   const _$LatestMessageTearOff();
 
-  _LatestMessage call(
-      {int date = 0, int count = 0, dynamic message = const {}}) {
+  _LatestMessage call({int date = 0, required ChatMessage? message}) {
     return _LatestMessage(
       date: date,
-      count: count,
       message: message,
     );
   }
@@ -42,8 +40,7 @@ const $LatestMessage = _$LatestMessageTearOff();
 /// @nodoc
 mixin _$LatestMessage {
   int get date => throw _privateConstructorUsedError;
-  int get count => throw _privateConstructorUsedError;
-  dynamic get message => throw _privateConstructorUsedError;
+  ChatMessage? get message => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,7 +53,7 @@ abstract class $LatestMessageCopyWith<$Res> {
   factory $LatestMessageCopyWith(
           LatestMessage value, $Res Function(LatestMessage) then) =
       _$LatestMessageCopyWithImpl<$Res>;
-  $Res call({int date, int count, dynamic message});
+  $Res call({int date, ChatMessage? message});
 }
 
 /// @nodoc
@@ -71,7 +68,6 @@ class _$LatestMessageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? date = freezed,
-    Object? count = freezed,
     Object? message = freezed,
   }) {
     return _then(_value.copyWith(
@@ -79,14 +75,10 @@ class _$LatestMessageCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as int,
-      count: count == freezed
-          ? _value.count
-          : count // ignore: cast_nullable_to_non_nullable
-              as int,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as ChatMessage?,
     ));
   }
 }
@@ -98,7 +90,7 @@ abstract class _$LatestMessageCopyWith<$Res>
           _LatestMessage value, $Res Function(_LatestMessage) then) =
       __$LatestMessageCopyWithImpl<$Res>;
   @override
-  $Res call({int date, int count, dynamic message});
+  $Res call({int date, ChatMessage? message});
 }
 
 /// @nodoc
@@ -115,7 +107,6 @@ class __$LatestMessageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? date = freezed,
-    Object? count = freezed,
     Object? message = freezed,
   }) {
     return _then(_LatestMessage(
@@ -123,14 +114,10 @@ class __$LatestMessageCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as int,
-      count: count == freezed
-          ? _value.count
-          : count // ignore: cast_nullable_to_non_nullable
-              as int,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as ChatMessage?,
     ));
   }
 }
@@ -138,8 +125,7 @@ class __$LatestMessageCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_LatestMessage implements _LatestMessage {
-  const _$_LatestMessage(
-      {this.date = 0, this.count = 0, this.message = const {}});
+  const _$_LatestMessage({this.date = 0, required this.message});
 
   factory _$_LatestMessage.fromJson(Map<String, dynamic> json) =>
       _$$_LatestMessageFromJson(json);
@@ -147,16 +133,12 @@ class _$_LatestMessage implements _LatestMessage {
   @JsonKey()
   @override
   final int date;
-  @JsonKey()
   @override
-  final int count;
-  @JsonKey()
-  @override
-  final dynamic message;
+  final ChatMessage? message;
 
   @override
   String toString() {
-    return 'LatestMessage(date: $date, count: $count, message: $message)';
+    return 'LatestMessage(date: $date, message: $message)';
   }
 
   @override
@@ -165,7 +147,6 @@ class _$_LatestMessage implements _LatestMessage {
         (other.runtimeType == runtimeType &&
             other is _LatestMessage &&
             const DeepCollectionEquality().equals(other.date, date) &&
-            const DeepCollectionEquality().equals(other.count, count) &&
             const DeepCollectionEquality().equals(other.message, message));
   }
 
@@ -173,7 +154,6 @@ class _$_LatestMessage implements _LatestMessage {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(date),
-      const DeepCollectionEquality().hash(count),
       const DeepCollectionEquality().hash(message));
 
   @JsonKey(ignore: true)
@@ -188,7 +168,7 @@ class _$_LatestMessage implements _LatestMessage {
 }
 
 abstract class _LatestMessage implements LatestMessage {
-  const factory _LatestMessage({int date, int count, dynamic message}) =
+  const factory _LatestMessage({int date, required ChatMessage? message}) =
       _$_LatestMessage;
 
   factory _LatestMessage.fromJson(Map<String, dynamic> json) =
@@ -197,9 +177,7 @@ abstract class _LatestMessage implements LatestMessage {
   @override
   int get date;
   @override
-  int get count;
-  @override
-  dynamic get message;
+  ChatMessage? get message;
   @override
   @JsonKey(ignore: true)
   _$LatestMessageCopyWith<_LatestMessage> get copyWith =>

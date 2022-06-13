@@ -7,19 +7,24 @@ part of 'chat_model.dart';
 // **************************************************************************
 
 _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
-      id: json['id'] as String? ?? '',
+      id: json['id'] as String,
+      dateUpdated: json['dateUpdated'] as int,
+      typing:
+          (json['typing'] as List<dynamic>).map((e) => e as String).toList(),
+      unread: json['unread'] as Map<String, dynamic>,
+      participants: json['participants'] as List<dynamic>,
       latestMessage: json['latestMessage'] == null
           ? null
           : LatestMessage.fromJson(
               json['latestMessage'] as Map<String, dynamic>),
-      participants: (json['participants'] as List<dynamic>?)
-          ?.map((e) => ChatParticipant.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'latestMessage': instance.latestMessage,
+      'dateUpdated': instance.dateUpdated,
+      'typing': instance.typing,
+      'unread': instance.unread,
       'participants': instance.participants,
+      'latestMessage': instance.latestMessage,
     };

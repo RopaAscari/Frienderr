@@ -23,4 +23,15 @@ class FollowersRepository implements IFollowersRepository {
       return Left(Failure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> registerFollwoing(
+      {required String uid, required String fid}) async {
+    try {
+      return Right(await _followersRemoteDataProvider.registerFollowing(
+          uid: uid, fid: fid));
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
 }

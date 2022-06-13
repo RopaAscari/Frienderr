@@ -14,7 +14,6 @@ class AssetThumbnail extends StatefulWidget {
       {Key? key,
       required this.asset,
       required this.index,
-      required this.cameraMode,
       required this.isMutliSelecting,
       required this.fetchSelectedAssets,
       required this.currentSelectedIndex,
@@ -25,7 +24,6 @@ class AssetThumbnail extends StatefulWidget {
   final AssetEntity asset;
   final bool isMutliSelecting;
   final int currentSelectedIndex;
-  final CameraSelectionMode cameraMode;
   final ValueSetter<GalleryAsset> fetchSelectedAssets;
   final ValueSetter<GalleryAsset> removeSelectedAssets;
 
@@ -39,7 +37,6 @@ class AssetThumbnailState extends State<AssetThumbnail> {
   List<dynamic> selectedAssets = [];
   AssetEntity get asset => widget.asset;
   bool get isMutliSelecting => widget.isMutliSelecting;
-  CameraSelectionMode get _cameraMode => widget.cameraMode;
   int get currentSelectedIndex => widget.currentSelectedIndex;
   ValueSetter<GalleryAsset> get fetchSelectedAssets =>
       widget.fetchSelectedAssets;

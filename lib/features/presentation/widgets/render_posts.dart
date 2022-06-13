@@ -18,7 +18,7 @@ import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:frienderr/features/presentation/screens/account/user_account.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:frienderr/features/presentation/widgets/video_screen.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';

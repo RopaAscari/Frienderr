@@ -16,7 +16,7 @@ import 'package:frienderr/core/constants/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account/user_account.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:frienderr/features/presentation/widgets/render_posts_dynamic.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 

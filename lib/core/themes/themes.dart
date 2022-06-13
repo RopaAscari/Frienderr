@@ -25,8 +25,12 @@ final appThemeData = {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.dark,
     canvasColor: HexColor('#000000'),
+    cardColor: HexColor('#0D0E0E').withOpacity(0.9),
     primaryColor: Colors.black,
     fontFamily: 'Inter',
+    popupMenuTheme: PopupMenuThemeData(
+        elevation: 10,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
     textTheme: TextTheme(
       bodyText1: TextStyle(color: HexColor('#E4E3E3')),
       bodyText2: TextStyle(color: HexColor('#262527')),

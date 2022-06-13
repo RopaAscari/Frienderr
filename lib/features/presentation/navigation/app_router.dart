@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:frienderr/core/enums/enums.dart';
+import 'package:frienderr/features/domain/entities/chat.dart';
 import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
@@ -11,6 +12,7 @@ import 'package:frienderr/features/presentation/screens/chat/chat.dart';
 import 'package:frienderr/features/presentation/screens/login/login.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/screens/camera/camera.dart';
+import 'package:frienderr/features/presentation/screens/messaging/messaging.dart';
 import 'package:frienderr/features/presentation/screens/notifications/notifications.dart';
 import 'package:frienderr/features/presentation/screens/post/post_media.dart';
 import 'package:frienderr/features/presentation/screens/post/post_quick.dart';
@@ -47,6 +49,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: RegisterScreen),
     AutoRoute(page: PostQuickScreen),
     AutoRoute(page: PostMediaScreen),
+    AutoRoute(page: MessagingScreen),
     AutoRoute(page: PreviewPostScreen),
     AutoRoute(page: PreviewQuickScreen),
     AutoRoute(page: PreviewStoryScreen),

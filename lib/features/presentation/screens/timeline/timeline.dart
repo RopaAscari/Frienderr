@@ -23,7 +23,7 @@ import 'package:frienderr/features/presentation/widgets/conditional_render_deleg
 class Timeline extends StatefulWidget {
   final BlocGroup blocGroup;
 
-  Timeline({Key? key, required this.blocGroup}) : super(key: key);
+  const Timeline({Key? key, required this.blocGroup}) : super(key: key);
 
   @override
   _TimelineState createState() => _TimelineState();

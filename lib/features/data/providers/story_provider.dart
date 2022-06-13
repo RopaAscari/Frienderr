@@ -1,5 +1,7 @@
 import 'dart:io';
+import '../models/story/story_content.dart';
 import 'package:injectable/injectable.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_compress/video_compress.dart';
@@ -11,10 +13,9 @@ import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/entities/story.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
+import 'package:frienderr/core/enums/collections/story/query_fields.dart';
+import 'package:frienderr/core/enums/collections/story/order_fields.dart';
 import 'package:frienderr/features/presentation/widgets/upload_progress.dart';
-import 'package:frienderr/features/presentation/extensions/late_handler.dart';
-
-import '../models/story/story_content.dart';
 
 @LazySingleton(as: IStoryDataRemoteProvider)
 class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
@@ -29,23 +30,28 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateStoryStream(
       String userId) {
     return FirebaseFirestore.instance
-        .collection('stories')
-        .where('id', isNotEqualTo: userId)
-        .orderBy('id', descending: true)
+        .collection(Collections.stories.name)
+        .where(StoryQueryFields.id.name, isNotEqualTo: userId)
+        .orderBy(StoryOrderFields.id.name, descending: true)
         .snapshots();
   }
 
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> fetchStories(String userId) {
-    return FirebaseFirestore.instance.collection('stories').get();
+    return FirebaseFirestore.instance
+        .collection(Collections.stories.name)
+        .get();
   }
 
   Future<bool> checkIfDocExists(String docId) async {
     try {
-      var doc = await firestoreInstance.collection('stories').doc(docId).get();
+      var doc = await firestoreInstance
+          .collection(Collections.stories.name)
+          .doc(docId)
+          .get();
       return doc.exists;
     } catch (e) {
-      throw e;
+      return false;
     }
   }
 
@@ -65,13 +71,12 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
       );
 
       await firestoreInstance
-          .collection('stories')
+          .collection(Collections.stories.name)
           .doc(stories.id)
           .set(stories.toJson());
 
       return true;
     } catch (err) {
-      print(err);
       return false;
     }
   }
@@ -83,14 +88,16 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
       final List<StoryContentEntity> content =
           await generateStoryContent(assets: assets);
 
-      await firestoreInstance.collection('stories').doc(userId).update({
-        'content':
+      await firestoreInstance
+          .collection(Collections.stories.name)
+          .doc(userId)
+          .update({
+        StoryQueryFields.content.name:
             FieldValue.arrayUnion(content.map((x) => x.toJson()).toList())
       });
 
       return true;
     } catch (err) {
-      print(err);
       return false;
     }
   }
@@ -125,12 +132,12 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
       }).toList();
 
       await firestoreInstance
-          .collection('stories')
+          .collection(Collections.stories.name)
           .doc(userId)
-          .update({'content': FieldValue.arrayUnion(storyMap)});
+          .update(
+              {StoryQueryFields.content.name: FieldValue.arrayUnion(storyMap)});
       return true;
     } catch (err) {
-      print(err);
       return false;
     }
   }
@@ -142,11 +149,17 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
       required StoryContent story}) async {
     try {
       if (isLast) {
-        await firestoreInstance.collection('stories').doc(userId).delete();
+        await firestoreInstance
+            .collection(Collections.stories.name)
+            .doc(userId)
+            .delete();
       } else {
         // final Map<String, dynamic> content = story.toJson();
-        await firestoreInstance.collection('stories').doc(userId).update({
-          'content': FieldValue.arrayRemove([
+        await firestoreInstance
+            .collection(Collections.stories.name)
+            .doc(userId)
+            .update({
+          StoryQueryFields.content.name: FieldValue.arrayRemove([
             {
               'id': story.id,
               'views': story.views,
@@ -167,7 +180,6 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
 
       return true;
     } catch (err) {
-      print(err.toString());
       return false;
     }
   }
@@ -193,7 +205,7 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
         _initialThumbnailFile.value = thumbnailFile;
         _uploadProgressThumnail.value = _initialThumbnailFile.value;
       } else {
-        _uploadProgressThumnail.value = await assets[_index].asset;
+        _uploadProgressThumnail.value = assets[_index].asset;
       }
 
       getIt<AppRouter>().context.showToast(
@@ -237,7 +249,7 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
             _thumbnailFile = _initialThumbnailFile.value as File;
           } else {
             final File thumbnailFile = await VideoCompress.getFileThumbnail(
-                item.asset.path as String,
+                item.asset.path,
                 quality: 50,
                 position: -1);
 
@@ -266,7 +278,7 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
             ),
             type: item.type == AssetType.image ? 'image' : 'video',
           ),
-          id: Helpers().generateId(25),
+          id: Helpers.generateId(25),
           dateCreated: DateTime.now().microsecondsSinceEpoch,
         );
       }).toList();

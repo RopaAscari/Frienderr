@@ -10,7 +10,7 @@ import 'package:frienderr/features/domain/entities/account.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
 import 'package:frienderr/features/domain/usecases/quick/get_user_snaps.dart';
 import 'package:frienderr/features/domain/usecases/user/get_user_usecase.dart';
-import 'package:frienderr/features/presentation/screens/account/user_account.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:frienderr/features/domain/usecases/post/get_user_posts_usecase.dart';
 import 'package:frienderr/features/domain/usecases/following/get_following_usercase.dart';
 import 'package:frienderr/features/domain/usecases/followers/get_account_followers_usecase.dart';
@@ -30,63 +30,94 @@ class ProfileAccountBloc
 
   ProfileAccountBloc(this._getPostsUseCase, this._getFollowersUseCase,
       this._getFollowingUseCase, this._getSnapsUseCase, this._getUserUseCase)
-      : super(const ProfileAccountState()) {
-    on<_GetProfileAccount>(_getProfileAccount);
+      : super(ProfileAccountState(user: UserEntity(id: ""))) {
+    on<_GetUser>(_getUser);
+    on<_GetPosts>(_getPosts);
+    on<_GetSnaps>(_getSnaps);
+    on<_GetFollowers>(_getFollowers);
+    on<_GetFollowing>(_getFollowing);
   }
 
-  Future<void> _getProfileAccount(
-      _GetProfileAccount event, Emitter<ProfileAccountState> emit) async {
-    try {
-      emit(state.copyWith(currentState: ProfileAccountStatus.loading));
-      final Account account = await _getAccount(uid: event.uid);
-
-      emit(state.copyWith(
-          account: account, currentState: ProfileAccountStatus.loaded));
-    } catch (e) {
-      emit(state.copyWith(currentState: ProfileAccountStatus.error));
-    }
-  }
-
-  Future<Account> _getAccount({required String uid}) async {
+  Future<void> _getUser(
+      _GetUser event, Emitter<ProfileAccountState> emit) async {
+    emit(state.copyWith(userState: ProfileAccountUserStatus.loading));
     final Either<Failure, UserEntity> _etiherAccountUser =
-        await _getUserUseCase(GetUserParams(uid: uid));
+        await _getUserUseCase(GetUserParams(uid: event.uid));
 
-    final _user = _etiherAccountUser.fold((l) => const UserModel(), (r) => r);
+    _etiherAccountUser.fold((error) {
+      emit(state.copyWith(
+          userState: ProfileAccountUserStatus.error, error: error.message));
+    }, (user) {
+      emit(state.copyWith(
+          userState: ProfileAccountUserStatus.loaded, user: user));
+    });
+  }
 
-    final Either<Failure, List<PostEntity>> _etiherPosts =
-        await _getPostsUseCase(GetUserPostsParams(uid));
-
-    List<PostEntity> _posts =
-        _etiherPosts.fold((l) => [].cast<PostEntity>(), (r) => r);
-
-    _posts = _posts.map((post) => post.copyWith(user: _user)).toList();
-
-    final Either<Failure, List<QuickEntity>> _etiherSnaps =
-        await _getSnapsUseCase(GetUserSnapsParams(uid: uid));
-
-    List<QuickEntity> _snaps =
-        _etiherSnaps.fold((l) => [].cast<QuickEntity>(), (r) => r);
-
-    _snaps = _snaps.map((snap) => snap.copyWith(user: _user)).toList();
-
-    final Either<Failure, List<String>> _etiherFollowing =
-        await _getFollowingUseCase(GetFollowingParams(uid));
-
-    final _following =
-        _etiherFollowing.fold((l) => [].cast<String>(), (r) => r);
-
+  Future<void> _getFollowers(
+      _GetFollowers event, Emitter<ProfileAccountState> emit) async {
+    emit(state.copyWith(followerState: ProfileAccountFollowersStatus.loading));
     final Either<Failure, List<String>> _etiherFollowers =
-        await _getFollowersUseCase(GetAccountFollowersParams(uid));
+        await _getFollowersUseCase(GetAccountFollowersParams(event.uid));
 
-    final _followers =
-        _etiherFollowers.fold((l) => [].cast<String>(), (r) => r);
+    _etiherFollowers.fold((error) {
+      emit(state.copyWith(
+          followerState: ProfileAccountFollowersStatus.error,
+          error: error.message));
+    }, (followers) {
+      emit(state.copyWith(
+          followerState: ProfileAccountFollowersStatus.loaded,
+          followers: followers));
+    });
+  }
 
-    return Account(
-      user: _user,
-      snaps: _snaps,
-      posts: _posts,
-      followers: _followers,
-      following: _following,
-    );
+  Future<void> _getFollowing(
+      _GetFollowing event, Emitter<ProfileAccountState> emit) async {
+    emit(state.copyWith(followingState: ProfileAccountFollowingStatus.loading));
+    final Either<Failure, List<String>> _etiherFollowing =
+        await _getFollowingUseCase(GetFollowingParams(event.uid));
+
+    _etiherFollowing.fold((error) {
+      emit(state.copyWith(
+          followingState: ProfileAccountFollowingStatus.error,
+          error: error.message));
+    }, (following) {
+      emit(state.copyWith(
+          followingState: ProfileAccountFollowingStatus.loaded,
+          following: following));
+    });
+  }
+
+  Future<void> _getPosts(
+      _GetPosts event, Emitter<ProfileAccountState> emit) async {
+    emit(state.copyWith(postState: ProfileAccountPostStatus.loading));
+    final Either<Failure, List<PostEntity>> _etiherPosts =
+        await _getPostsUseCase(GetUserPostsParams(event.uid));
+
+    _etiherPosts.fold((error) {
+      emit(state.copyWith(
+          postState: ProfileAccountPostStatus.error, error: error.message));
+    }, (posts) {
+      final _posts =
+          posts.map((post) => post.copyWith(user: state.user)).toList();
+      emit(state.copyWith(
+          postState: ProfileAccountPostStatus.loaded, posts: _posts));
+    });
+  }
+
+  Future<void> _getSnaps(
+      _GetSnaps event, Emitter<ProfileAccountState> emit) async {
+    emit(state.copyWith(snapState: ProfileAccountSnapStatus.loading));
+    final Either<Failure, List<QuickEntity>> _etiherSnaps =
+        await _getSnapsUseCase(GetUserSnapsParams(uid: event.uid));
+
+    _etiherSnaps.fold((error) {
+      emit(state.copyWith(
+          snapState: ProfileAccountSnapStatus.error, error: error.message));
+    }, (snaps) {
+      final _snaps =
+          snaps.map((snap) => snap.copyWith(user: state.user)).toList();
+      emit(state.copyWith(
+          snapState: ProfileAccountSnapStatus.loaded, snaps: _snaps));
+    });
   }
 }

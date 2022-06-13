@@ -41,7 +41,7 @@ class _CommentScreenState extends State<CommentScreen> {
     final CommentEntity _comment = CommentEntity(
         likes: [],
         postId: _post.id,
-        id: Helpers().generateId(32),
+        id: Helpers.generateId(32),
         user: PartialUser(id: _user.id),
         comment: _commentController.text,
         dateCreated: DateTime.now().microsecondsSinceEpoch);

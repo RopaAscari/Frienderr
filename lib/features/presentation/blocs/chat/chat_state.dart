@@ -1,17 +1,30 @@
 part of 'chat_bloc.dart';
 
 enum ChatStatus {
-  Initial,
-  ChatsLoaded,
-  ChatsLoading,
-  ChatsFaliure,
+  idle,
+  loaded,
+  loading,
+  error,
+}
+
+enum ChatListenableAction {
+  idle,
+  deleteSuccess,
+  deleteFailure,
+  startTypingFailure,
+  startTypingSucess,
+  stopTypingFailure,
+  stopTypingSucess,
+  instantiationSuccess,
+  instantiationFailure,
 }
 
 @freezed
 class ChatState with _$ChatState {
   const factory ChatState({
-    required List<ChatModel> chats,
-    @Default('') String error,
-    @Default(ChatStatus.Initial) ChatStatus currentState,
+    @Default(null) String? error,
+    required List<ChatEntity> chats,
+    @Default(ChatStatus.idle) ChatStatus currentState,
+    @Default(ChatListenableAction.idle) ChatListenableAction action,
   }) = _ChatState;
 }

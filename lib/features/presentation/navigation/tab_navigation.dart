@@ -8,10 +8,11 @@ import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
+import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account/user_account.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:frienderr/features/presentation/screens/camera/camera.dart';
 import 'package:frienderr/features/presentation/screens/chat/chat.dart';
 import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
@@ -53,6 +54,11 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     _blocGroup.notificationBloc.notificationStream.listen((event) {
       _blocGroup.notificationBloc
           .add(NotificationEvent.getNotifications(uid: user!.uid));
+    });
+
+    _blocGroup.chatBloc.chatStream?.listen((event) {
+      print('snapshot');
+      _blocGroup.chatBloc.add(ChatEvent.getChats(id: user!.uid));
     });
 
     _pageController = PageController(initialPage: 0, keepPage: true);
@@ -134,7 +140,7 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       Timeline(blocGroup: _blocGroup),
       SnapFeed(blocGroup: _blocGroup),
       const Center(),
-      ChatDashboardScreen(),
+      ChatDashboardScreen(blocGroup: _blocGroup),
       UserAccountScreen(
         blocGroup: _blocGroup,
         isProfileOwnerViewing: true,

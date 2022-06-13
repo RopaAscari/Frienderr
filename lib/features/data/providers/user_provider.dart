@@ -11,7 +11,7 @@ class UserDataRemoteProvider implements IUserDataRemoteProvider {
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getPlatformUsers() async {
     return await FirebaseFirestore.instance
-        .collection(Constants.collections[Collections.Users]!)
+        .collection(Collections.users.name)
         .get();
   }
 
@@ -19,7 +19,7 @@ class UserDataRemoteProvider implements IUserDataRemoteProvider {
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser(
       {required String uid}) async {
     return await FirebaseFirestore.instance
-        .collection(Constants.collections[Collections.Users]!)
+        .collection(Collections.users.name)
         .doc(uid)
         .get();
   }

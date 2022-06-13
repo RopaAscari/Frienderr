@@ -13,13 +13,49 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getFollowers(String uid) async {
     return await firestoreInstance
-        .collection('followers')
+        .collection(Collections.follower.name)
         .doc(uid)
-        .collection('list')
+        .collection(Collections.records.name)
         .get();
+  }
+
+  @override
+  Future<bool> registerFollowing(
+      {required String uid, required String fid}) async {
+    try {
+      await firestoreInstance
+          .collection(Collections.follower.name)
+          .doc(fid)
+          .collection(Collections.records.name)
+          .doc(fid)
+          .set({'id': uid});
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> registerUnFollowing(
+      {required String uid, required String fid}) async {
+    try {
+      await firestoreInstance
+          .collection(Collections.follower.name)
+          .doc(fid)
+          .collection(Collections.records.name)
+          .doc(fid)
+          .delete();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 
 abstract class IFollowersRemoteDataProvider {
   Future<QuerySnapshot<Map<String, dynamic>>> getFollowers(String id);
+  Future<bool> registerFollowing({required String uid, required String fid});
+  Future<bool> registerUnFollowing({required String uid, required String fid});
 }

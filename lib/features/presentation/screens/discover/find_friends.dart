@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
-import 'package:frienderr/features/presentation/screens/account/profile_account.dart';
+import 'package:frienderr/features/presentation/screens/account/profile/profile_account.dart';
 import 'package:location/location.dart';
 import 'package:fluttericon/elusive_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +21,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
-import 'package:frienderr/features/presentation/screens/account/user_account.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:permission_handler/permission_handler.dart' as permission;
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
@@ -69,7 +69,7 @@ class FindFriendsState extends State<FindFriends>
   @override
   void dispose() {
     _focus.dispose();
-    _mapController.dispose();
+    // _mapController.dispose();
     searchController.dispose();
     // locationSubscription.cancel();
     super.dispose();

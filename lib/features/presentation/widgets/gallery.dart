@@ -11,15 +11,13 @@ import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/widgets/asset_thumbnail.dart';
 
 class Gallery extends StatefulWidget {
-  final BlocGroup blocGroup;
-  final CameraSelectionMode cameraMode;
-
-  Gallery({
+  final Function(BuildContext, List<GalleryAsset>) onPicked;
+  const Gallery({
     Key? key,
-    required this.cameraMode,
-    required this.blocGroup,
+    required this.onPicked,
   }) : super(key: key);
 
+  @override
   GalleryState createState() => GalleryState();
 }
 
@@ -29,10 +27,8 @@ class GalleryState extends State<Gallery> {
   List<AssetEntity> _assets = [];
   bool _isMutliSelecting = false;
   bool _hasSelectedMultiAssets = false;
-  List<GalleryAsset> _selectedAssets = [];
-  BlocGroup get _blocGroup => widget.blocGroup;
-  ScrollController _scrollController = ScrollController();
-  CameraSelectionMode get _cameraMode => widget.cameraMode;
+  final List<GalleryAsset> _selectedAssets = [];
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -41,7 +37,7 @@ class GalleryState extends State<Gallery> {
   }
 
   bool get areAssetsSelected {
-    return _selectedAssets.length > 0;
+    return _selectedAssets.isNotEmpty;
   }
 
   Future<void> _fetchAssets() async {
@@ -90,11 +86,8 @@ class GalleryState extends State<Gallery> {
     }
   }
 
-  Future<void> _navigateToPreviewScreen() async {
+  Future<void> _pickAssets() async {
     late final List<GalleryAsset> assets;
-
-    print('ex');
-
     if (_selectedAssets.isEmpty) {
       final File _file = await _assets.first.file as File;
       assets = [
@@ -109,17 +102,7 @@ class GalleryState extends State<Gallery> {
       assets = _selectedAssets;
     }
 
-    if (_cameraMode == CameraSelectionMode.post) {
-      getIt<AppRouter>().push(PreviewPostRoute(
-          selectedAssets: assets, postBloc: _blocGroup.postBloc));
-    } else if (_cameraMode == CameraSelectionMode.story) {
-      getIt<AppRouter>().push(PreviewStoryRoute(
-          selectedAssets: assets, storyBloc: _blocGroup.storyBloc));
-    } else if (_cameraMode == CameraSelectionMode.snap) {
-      final File file = assets.first.asset;
-      getIt<AppRouter>()
-          .push(PreviewQuickRoute(file: file, quickBloc: _blocGroup.quickBloc));
-    }
+    widget.onPicked(context, assets);
   }
 
   void _toggleMultiSelection() {
@@ -181,7 +164,7 @@ class GalleryState extends State<Gallery> {
                     side: BorderSide(color: color)),
                 onPressed: () {
                   if (areAssetsSelected) {
-                    _navigateToPreviewScreen();
+                    _pickAssets();
                   } else {
                     return null;
                   }
@@ -206,7 +189,6 @@ class GalleryState extends State<Gallery> {
                 child: AssetThumbnail(
                   index: index,
                   asset: _assets[index],
-                  cameraMode: _cameraMode,
                   isMutliSelecting: _isMutliSelecting,
                   fetchSelectedAssets: _fetchSelectedAssets,
                   removeSelectedAssets: _removeSelectedAssets,

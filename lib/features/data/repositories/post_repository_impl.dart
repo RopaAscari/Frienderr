@@ -139,7 +139,7 @@ class PostRepository implements IPostRepository {
           type: 1,
           mediaType: 1,
           recipientId: post.user.id,
-          id: Helpers().generateId(25),
+          id: Helpers.generateId(25),
           metadata: NotificationMetadataEntity(),
           dateCreated: DateTime.now().microsecondsSinceEpoch,
           post: PartialPostEntity(id: post.id, display: display),

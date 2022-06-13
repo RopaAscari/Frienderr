@@ -1,3 +1,5 @@
+import 'package:frienderr/core/enums/collections/users/query_fields.dart';
+
 import '../../../core/enums/enums.dart';
 import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +48,7 @@ class AuthRemoteDataProvider implements IAuthRemoteDataProvider {
           deviceToken: await messagingInstance.getToken());
 
       await firestoreInstance
-          .collection(Constants.collections[Collections.Users]!)
+          .collection(Collections.users.name)
           .doc(id)
           .set(user.toJson());
 
@@ -76,8 +78,8 @@ class AuthRemoteDataProvider implements IAuthRemoteDataProvider {
           email: email, password: password);
 
       final QuerySnapshot authenticatedUser = await firestoreInstance
-          .collection(Constants.collections[Collections.Users]!)
-          .where('id', isEqualTo: userCredential.user?.uid)
+          .collection(Collections.users.name)
+          .where(UserQueryFields.id.name, isEqualTo: userCredential.user?.uid)
           .limit(1)
           .get();
 
@@ -97,14 +99,14 @@ class AuthRemoteDataProvider implements IAuthRemoteDataProvider {
   Future<bool> verfyAndUpdateUsername(String userId, String username) async {
     try {
       final QuerySnapshot data = await firestoreInstance
-          .collection(Constants.collections[Collections.Users]!)
-          .where('username', isEqualTo: username)
+          .collection(Collections.users.name)
+          .where(UserQueryFields.username.name, isEqualTo: username)
           .limit(1)
           .get();
 
-      if (!(data.docs.toList().length > 0)) {
+      if (data.docs.toList().isEmpty) {
         await firestoreInstance
-            .collection(Constants.collections[Collections.Users]!)
+            .collection(Collections.users.name)
             .doc(userId)
             .update({'username': username});
         return true;
@@ -134,7 +136,7 @@ class AuthRemoteDataProvider implements IAuthRemoteDataProvider {
   @override
   Future<bool> isUsernameSelected() async {
     final DocumentSnapshot<Object?> user = await firestoreInstance
-        .collection(Constants.collections[Collections.Users]!)
+        .collection(Collections.users.name)
         .doc(authInstance.currentUser?.uid)
         .get();
     return user['username'] != '';

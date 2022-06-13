@@ -18,28 +18,35 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$ChatEventTearOff {
   const _$ChatEventTearOff();
 
+  _InstantiateChat instantiateChat({required ChatEntity chat}) {
+    return _InstantiateChat(
+      chat: chat,
+    );
+  }
+
   _GetChats getChats({required String id}) {
     return _GetChats(
       id: id,
     );
   }
 
-  _UpdateChat updateChat({required String chats}) {
-    return _UpdateChat(
-      chats: chats,
+  _DeleteChat deleteChat({required String uid}) {
+    return _DeleteChat(
+      uid: uid,
     );
   }
 
-  _OpenChat openChat(
-      {required dynamic chats,
-      required dynamic index,
-      required dynamic context,
-      required dynamic metaData}) {
-    return _OpenChat(
-      chats: chats,
-      index: index,
-      context: context,
-      metaData: metaData,
+  _StartTyping startTyping({required String uid, required String chatId}) {
+    return _StartTyping(
+      uid: uid,
+      chatId: chatId,
+    );
+  }
+
+  _StopTyping stopTyping({required String uid, required String chatId}) {
+    return _StopTyping(
+      uid: uid,
+      chatId: chatId,
     );
   }
 }
@@ -51,51 +58,57 @@ const $ChatEvent = _$ChatEventTearOff();
 mixin _$ChatEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(ChatEntity chat) instantiateChat,
     required TResult Function(String id) getChats,
-    required TResult Function(String chats) updateChat,
-    required TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)
-        openChat,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
-    required TResult Function(_UpdateChat value) updateChat,
-    required TResult Function(_OpenChat value) openChat,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -114,6 +127,158 @@ class _$ChatEventCopyWithImpl<$Res> implements $ChatEventCopyWith<$Res> {
   final ChatEvent _value;
   // ignore: unused_field
   final $Res Function(ChatEvent) _then;
+}
+
+/// @nodoc
+abstract class _$InstantiateChatCopyWith<$Res> {
+  factory _$InstantiateChatCopyWith(
+          _InstantiateChat value, $Res Function(_InstantiateChat) then) =
+      __$InstantiateChatCopyWithImpl<$Res>;
+  $Res call({ChatEntity chat});
+}
+
+/// @nodoc
+class __$InstantiateChatCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
+    implements _$InstantiateChatCopyWith<$Res> {
+  __$InstantiateChatCopyWithImpl(
+      _InstantiateChat _value, $Res Function(_InstantiateChat) _then)
+      : super(_value, (v) => _then(v as _InstantiateChat));
+
+  @override
+  _InstantiateChat get _value => super._value as _InstantiateChat;
+
+  @override
+  $Res call({
+    Object? chat = freezed,
+  }) {
+    return _then(_InstantiateChat(
+      chat: chat == freezed
+          ? _value.chat
+          : chat // ignore: cast_nullable_to_non_nullable
+              as ChatEntity,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_InstantiateChat implements _InstantiateChat {
+  const _$_InstantiateChat({required this.chat});
+
+  @override
+  final ChatEntity chat;
+
+  @override
+  String toString() {
+    return 'ChatEvent.instantiateChat(chat: $chat)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _InstantiateChat &&
+            const DeepCollectionEquality().equals(other.chat, chat));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(chat));
+
+  @JsonKey(ignore: true)
+  @override
+  _$InstantiateChatCopyWith<_InstantiateChat> get copyWith =>
+      __$InstantiateChatCopyWithImpl<_InstantiateChat>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(String id) getChats,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
+  }) {
+    return instantiateChat(chat);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(String id)? getChats,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
+  }) {
+    return instantiateChat?.call(chat);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(String id)? getChats,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
+    required TResult orElse(),
+  }) {
+    if (instantiateChat != null) {
+      return instantiateChat(chat);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
+    required TResult Function(_GetChats value) getChats,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
+  }) {
+    return instantiateChat(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
+    TResult Function(_GetChats value)? getChats,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
+  }) {
+    return instantiateChat?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
+    TResult Function(_GetChats value)? getChats,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
+    required TResult orElse(),
+  }) {
+    if (instantiateChat != null) {
+      return instantiateChat(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InstantiateChat implements ChatEvent {
+  const factory _InstantiateChat({required ChatEntity chat}) =
+      _$_InstantiateChat;
+
+  ChatEntity get chat;
+  @JsonKey(ignore: true)
+  _$InstantiateChatCopyWith<_InstantiateChat> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -178,11 +343,11 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(ChatEntity chat) instantiateChat,
     required TResult Function(String id) getChats,
-    required TResult Function(String chats) updateChat,
-    required TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)
-        openChat,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
   }) {
     return getChats(id);
   }
@@ -190,11 +355,11 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
   }) {
     return getChats?.call(id);
   }
@@ -202,11 +367,11 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
     required TResult orElse(),
   }) {
     if (getChats != null) {
@@ -218,9 +383,11 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
-    required TResult Function(_UpdateChat value) updateChat,
-    required TResult Function(_OpenChat value) openChat,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
   }) {
     return getChats(this);
   }
@@ -228,9 +395,11 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
   }) {
     return getChats?.call(this);
   }
@@ -238,9 +407,11 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
     required TResult orElse(),
   }) {
     if (getChats != null) {
@@ -260,31 +431,31 @@ abstract class _GetChats implements ChatEvent {
 }
 
 /// @nodoc
-abstract class _$UpdateChatCopyWith<$Res> {
-  factory _$UpdateChatCopyWith(
-          _UpdateChat value, $Res Function(_UpdateChat) then) =
-      __$UpdateChatCopyWithImpl<$Res>;
-  $Res call({String chats});
+abstract class _$DeleteChatCopyWith<$Res> {
+  factory _$DeleteChatCopyWith(
+          _DeleteChat value, $Res Function(_DeleteChat) then) =
+      __$DeleteChatCopyWithImpl<$Res>;
+  $Res call({String uid});
 }
 
 /// @nodoc
-class __$UpdateChatCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
-    implements _$UpdateChatCopyWith<$Res> {
-  __$UpdateChatCopyWithImpl(
-      _UpdateChat _value, $Res Function(_UpdateChat) _then)
-      : super(_value, (v) => _then(v as _UpdateChat));
+class __$DeleteChatCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
+    implements _$DeleteChatCopyWith<$Res> {
+  __$DeleteChatCopyWithImpl(
+      _DeleteChat _value, $Res Function(_DeleteChat) _then)
+      : super(_value, (v) => _then(v as _DeleteChat));
 
   @override
-  _UpdateChat get _value => super._value as _UpdateChat;
+  _DeleteChat get _value => super._value as _DeleteChat;
 
   @override
   $Res call({
-    Object? chats = freezed,
+    Object? uid = freezed,
   }) {
-    return _then(_UpdateChat(
-      chats: chats == freezed
-          ? _value.chats
-          : chats // ignore: cast_nullable_to_non_nullable
+    return _then(_DeleteChat(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -292,70 +463,70 @@ class __$UpdateChatCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UpdateChat implements _UpdateChat {
-  const _$_UpdateChat({required this.chats});
+class _$_DeleteChat implements _DeleteChat {
+  const _$_DeleteChat({required this.uid});
 
   @override
-  final String chats;
+  final String uid;
 
   @override
   String toString() {
-    return 'ChatEvent.updateChat(chats: $chats)';
+    return 'ChatEvent.deleteChat(uid: $uid)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UpdateChat &&
-            const DeepCollectionEquality().equals(other.chats, chats));
+            other is _DeleteChat &&
+            const DeepCollectionEquality().equals(other.uid, uid));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(chats));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(uid));
 
   @JsonKey(ignore: true)
   @override
-  _$UpdateChatCopyWith<_UpdateChat> get copyWith =>
-      __$UpdateChatCopyWithImpl<_UpdateChat>(this, _$identity);
+  _$DeleteChatCopyWith<_DeleteChat> get copyWith =>
+      __$DeleteChatCopyWithImpl<_DeleteChat>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(ChatEntity chat) instantiateChat,
     required TResult Function(String id) getChats,
-    required TResult Function(String chats) updateChat,
-    required TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)
-        openChat,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
   }) {
-    return updateChat(chats);
+    return deleteChat(uid);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
   }) {
-    return updateChat?.call(chats);
+    return deleteChat?.call(uid);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
     required TResult orElse(),
   }) {
-    if (updateChat != null) {
-      return updateChat(chats);
+    if (deleteChat != null) {
+      return deleteChat(uid);
     }
     return orElse();
   }
@@ -363,174 +534,160 @@ class _$_UpdateChat implements _UpdateChat {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
-    required TResult Function(_UpdateChat value) updateChat,
-    required TResult Function(_OpenChat value) openChat,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
   }) {
-    return updateChat(this);
+    return deleteChat(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
   }) {
-    return updateChat?.call(this);
+    return deleteChat?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
     required TResult orElse(),
   }) {
-    if (updateChat != null) {
-      return updateChat(this);
+    if (deleteChat != null) {
+      return deleteChat(this);
     }
     return orElse();
   }
 }
 
-abstract class _UpdateChat implements ChatEvent {
-  const factory _UpdateChat({required String chats}) = _$_UpdateChat;
+abstract class _DeleteChat implements ChatEvent {
+  const factory _DeleteChat({required String uid}) = _$_DeleteChat;
 
-  String get chats;
+  String get uid;
   @JsonKey(ignore: true)
-  _$UpdateChatCopyWith<_UpdateChat> get copyWith =>
+  _$DeleteChatCopyWith<_DeleteChat> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$OpenChatCopyWith<$Res> {
-  factory _$OpenChatCopyWith(_OpenChat value, $Res Function(_OpenChat) then) =
-      __$OpenChatCopyWithImpl<$Res>;
-  $Res call({dynamic chats, dynamic index, dynamic context, dynamic metaData});
+abstract class _$StartTypingCopyWith<$Res> {
+  factory _$StartTypingCopyWith(
+          _StartTyping value, $Res Function(_StartTyping) then) =
+      __$StartTypingCopyWithImpl<$Res>;
+  $Res call({String uid, String chatId});
 }
 
 /// @nodoc
-class __$OpenChatCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
-    implements _$OpenChatCopyWith<$Res> {
-  __$OpenChatCopyWithImpl(_OpenChat _value, $Res Function(_OpenChat) _then)
-      : super(_value, (v) => _then(v as _OpenChat));
+class __$StartTypingCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
+    implements _$StartTypingCopyWith<$Res> {
+  __$StartTypingCopyWithImpl(
+      _StartTyping _value, $Res Function(_StartTyping) _then)
+      : super(_value, (v) => _then(v as _StartTyping));
 
   @override
-  _OpenChat get _value => super._value as _OpenChat;
+  _StartTyping get _value => super._value as _StartTyping;
 
   @override
   $Res call({
-    Object? chats = freezed,
-    Object? index = freezed,
-    Object? context = freezed,
-    Object? metaData = freezed,
+    Object? uid = freezed,
+    Object? chatId = freezed,
   }) {
-    return _then(_OpenChat(
-      chats: chats == freezed
-          ? _value.chats
-          : chats // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      index: index == freezed
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      context: context == freezed
-          ? _value.context
-          : context // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      metaData: metaData == freezed
-          ? _value.metaData
-          : metaData // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+    return _then(_StartTyping(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      chatId: chatId == freezed
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_OpenChat implements _OpenChat {
-  const _$_OpenChat(
-      {required this.chats,
-      required this.index,
-      required this.context,
-      required this.metaData});
+class _$_StartTyping implements _StartTyping {
+  const _$_StartTyping({required this.uid, required this.chatId});
 
   @override
-  final dynamic chats;
+  final String uid;
   @override
-  final dynamic index;
-  @override
-  final dynamic context;
-  @override
-  final dynamic metaData;
+  final String chatId;
 
   @override
   String toString() {
-    return 'ChatEvent.openChat(chats: $chats, index: $index, context: $context, metaData: $metaData)';
+    return 'ChatEvent.startTyping(uid: $uid, chatId: $chatId)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _OpenChat &&
-            const DeepCollectionEquality().equals(other.chats, chats) &&
-            const DeepCollectionEquality().equals(other.index, index) &&
-            const DeepCollectionEquality().equals(other.context, context) &&
-            const DeepCollectionEquality().equals(other.metaData, metaData));
+            other is _StartTyping &&
+            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.chatId, chatId));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(chats),
-      const DeepCollectionEquality().hash(index),
-      const DeepCollectionEquality().hash(context),
-      const DeepCollectionEquality().hash(metaData));
+      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(chatId));
 
   @JsonKey(ignore: true)
   @override
-  _$OpenChatCopyWith<_OpenChat> get copyWith =>
-      __$OpenChatCopyWithImpl<_OpenChat>(this, _$identity);
+  _$StartTypingCopyWith<_StartTyping> get copyWith =>
+      __$StartTypingCopyWithImpl<_StartTyping>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(ChatEntity chat) instantiateChat,
     required TResult Function(String id) getChats,
-    required TResult Function(String chats) updateChat,
-    required TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)
-        openChat,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
   }) {
-    return openChat(chats, index, context, metaData);
+    return startTyping(uid, chatId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
   }) {
-    return openChat?.call(chats, index, context, metaData);
+    return startTyping?.call(uid, chatId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
     TResult Function(String id)? getChats,
-    TResult Function(String chats)? updateChat,
-    TResult Function(
-            dynamic chats, dynamic index, dynamic context, dynamic metaData)?
-        openChat,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
     required TResult orElse(),
   }) {
-    if (openChat != null) {
-      return openChat(chats, index, context, metaData);
+    if (startTyping != null) {
+      return startTyping(uid, chatId);
     }
     return orElse();
   }
@@ -538,51 +695,215 @@ class _$_OpenChat implements _OpenChat {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
-    required TResult Function(_UpdateChat value) updateChat,
-    required TResult Function(_OpenChat value) openChat,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
   }) {
-    return openChat(this);
+    return startTyping(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
   }) {
-    return openChat?.call(this);
+    return startTyping?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
-    TResult Function(_UpdateChat value)? updateChat,
-    TResult Function(_OpenChat value)? openChat,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
     required TResult orElse(),
   }) {
-    if (openChat != null) {
-      return openChat(this);
+    if (startTyping != null) {
+      return startTyping(this);
     }
     return orElse();
   }
 }
 
-abstract class _OpenChat implements ChatEvent {
-  const factory _OpenChat(
-      {required dynamic chats,
-      required dynamic index,
-      required dynamic context,
-      required dynamic metaData}) = _$_OpenChat;
+abstract class _StartTyping implements ChatEvent {
+  const factory _StartTyping({required String uid, required String chatId}) =
+      _$_StartTyping;
 
-  dynamic get chats;
-  dynamic get index;
-  dynamic get context;
-  dynamic get metaData;
+  String get uid;
+  String get chatId;
   @JsonKey(ignore: true)
-  _$OpenChatCopyWith<_OpenChat> get copyWith =>
+  _$StartTypingCopyWith<_StartTyping> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$StopTypingCopyWith<$Res> {
+  factory _$StopTypingCopyWith(
+          _StopTyping value, $Res Function(_StopTyping) then) =
+      __$StopTypingCopyWithImpl<$Res>;
+  $Res call({String uid, String chatId});
+}
+
+/// @nodoc
+class __$StopTypingCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
+    implements _$StopTypingCopyWith<$Res> {
+  __$StopTypingCopyWithImpl(
+      _StopTyping _value, $Res Function(_StopTyping) _then)
+      : super(_value, (v) => _then(v as _StopTyping));
+
+  @override
+  _StopTyping get _value => super._value as _StopTyping;
+
+  @override
+  $Res call({
+    Object? uid = freezed,
+    Object? chatId = freezed,
+  }) {
+    return _then(_StopTyping(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      chatId: chatId == freezed
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_StopTyping implements _StopTyping {
+  const _$_StopTyping({required this.uid, required this.chatId});
+
+  @override
+  final String uid;
+  @override
+  final String chatId;
+
+  @override
+  String toString() {
+    return 'ChatEvent.stopTyping(uid: $uid, chatId: $chatId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _StopTyping &&
+            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.chatId, chatId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(chatId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$StopTypingCopyWith<_StopTyping> get copyWith =>
+      __$StopTypingCopyWithImpl<_StopTyping>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(String id) getChats,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
+  }) {
+    return stopTyping(uid, chatId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(String id)? getChats,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
+  }) {
+    return stopTyping?.call(uid, chatId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(String id)? getChats,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
+    required TResult orElse(),
+  }) {
+    if (stopTyping != null) {
+      return stopTyping(uid, chatId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
+    required TResult Function(_GetChats value) getChats,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
+  }) {
+    return stopTyping(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
+    TResult Function(_GetChats value)? getChats,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
+  }) {
+    return stopTyping?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
+    TResult Function(_GetChats value)? getChats,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
+    required TResult orElse(),
+  }) {
+    if (stopTyping != null) {
+      return stopTyping(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _StopTyping implements ChatEvent {
+  const factory _StopTyping({required String uid, required String chatId}) =
+      _$_StopTyping;
+
+  String get uid;
+  String get chatId;
+  @JsonKey(ignore: true)
+  _$StopTypingCopyWith<_StopTyping> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -591,13 +912,15 @@ class _$ChatStateTearOff {
   const _$ChatStateTearOff();
 
   _ChatState call(
-      {required List<ChatModel> chats,
-      String error = '',
-      ChatStatus currentState = ChatStatus.Initial}) {
+      {String? error = null,
+      required List<ChatEntity> chats,
+      ChatStatus currentState = ChatStatus.idle,
+      ChatListenableAction action = ChatListenableAction.idle}) {
     return _ChatState(
-      chats: chats,
       error: error,
+      chats: chats,
       currentState: currentState,
+      action: action,
     );
   }
 }
@@ -607,9 +930,10 @@ const $ChatState = _$ChatStateTearOff();
 
 /// @nodoc
 mixin _$ChatState {
-  List<ChatModel> get chats => throw _privateConstructorUsedError;
-  String get error => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
+  List<ChatEntity> get chats => throw _privateConstructorUsedError;
   ChatStatus get currentState => throw _privateConstructorUsedError;
+  ChatListenableAction get action => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ChatStateCopyWith<ChatState> get copyWith =>
@@ -620,7 +944,11 @@ mixin _$ChatState {
 abstract class $ChatStateCopyWith<$Res> {
   factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) then) =
       _$ChatStateCopyWithImpl<$Res>;
-  $Res call({List<ChatModel> chats, String error, ChatStatus currentState});
+  $Res call(
+      {String? error,
+      List<ChatEntity> chats,
+      ChatStatus currentState,
+      ChatListenableAction action});
 }
 
 /// @nodoc
@@ -633,23 +961,28 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? chats = freezed,
     Object? error = freezed,
+    Object? chats = freezed,
     Object? currentState = freezed,
+    Object? action = freezed,
   }) {
     return _then(_value.copyWith(
-      chats: chats == freezed
-          ? _value.chats
-          : chats // ignore: cast_nullable_to_non_nullable
-              as List<ChatModel>,
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      chats: chats == freezed
+          ? _value.chats
+          : chats // ignore: cast_nullable_to_non_nullable
+              as List<ChatEntity>,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
               as ChatStatus,
+      action: action == freezed
+          ? _value.action
+          : action // ignore: cast_nullable_to_non_nullable
+              as ChatListenableAction,
     ));
   }
 }
@@ -660,7 +993,11 @@ abstract class _$ChatStateCopyWith<$Res> implements $ChatStateCopyWith<$Res> {
           _ChatState value, $Res Function(_ChatState) then) =
       __$ChatStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<ChatModel> chats, String error, ChatStatus currentState});
+  $Res call(
+      {String? error,
+      List<ChatEntity> chats,
+      ChatStatus currentState,
+      ChatListenableAction action});
 }
 
 /// @nodoc
@@ -674,23 +1011,28 @@ class __$ChatStateCopyWithImpl<$Res> extends _$ChatStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? chats = freezed,
     Object? error = freezed,
+    Object? chats = freezed,
     Object? currentState = freezed,
+    Object? action = freezed,
   }) {
     return _then(_ChatState(
-      chats: chats == freezed
-          ? _value.chats
-          : chats // ignore: cast_nullable_to_non_nullable
-              as List<ChatModel>,
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      chats: chats == freezed
+          ? _value.chats
+          : chats // ignore: cast_nullable_to_non_nullable
+              as List<ChatEntity>,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
               as ChatStatus,
+      action: action == freezed
+          ? _value.action
+          : action // ignore: cast_nullable_to_non_nullable
+              as ChatListenableAction,
     ));
   }
 }
@@ -699,22 +1041,26 @@ class __$ChatStateCopyWithImpl<$Res> extends _$ChatStateCopyWithImpl<$Res>
 
 class _$_ChatState implements _ChatState {
   const _$_ChatState(
-      {required this.chats,
-      this.error = '',
-      this.currentState = ChatStatus.Initial});
+      {this.error = null,
+      required this.chats,
+      this.currentState = ChatStatus.idle,
+      this.action = ChatListenableAction.idle});
 
-  @override
-  final List<ChatModel> chats;
   @JsonKey()
   @override
-  final String error;
+  final String? error;
+  @override
+  final List<ChatEntity> chats;
   @JsonKey()
   @override
   final ChatStatus currentState;
+  @JsonKey()
+  @override
+  final ChatListenableAction action;
 
   @override
   String toString() {
-    return 'ChatState(chats: $chats, error: $error, currentState: $currentState)';
+    return 'ChatState(error: $error, chats: $chats, currentState: $currentState, action: $action)';
   }
 
   @override
@@ -722,18 +1068,20 @@ class _$_ChatState implements _ChatState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ChatState &&
-            const DeepCollectionEquality().equals(other.chats, chats) &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality().equals(other.chats, chats) &&
             const DeepCollectionEquality()
-                .equals(other.currentState, currentState));
+                .equals(other.currentState, currentState) &&
+            const DeepCollectionEquality().equals(other.action, action));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(chats),
       const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(currentState));
+      const DeepCollectionEquality().hash(chats),
+      const DeepCollectionEquality().hash(currentState),
+      const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
   @override
@@ -743,16 +1091,19 @@ class _$_ChatState implements _ChatState {
 
 abstract class _ChatState implements ChatState {
   const factory _ChatState(
-      {required List<ChatModel> chats,
-      String error,
-      ChatStatus currentState}) = _$_ChatState;
+      {String? error,
+      required List<ChatEntity> chats,
+      ChatStatus currentState,
+      ChatListenableAction action}) = _$_ChatState;
 
   @override
-  List<ChatModel> get chats;
+  String? get error;
   @override
-  String get error;
+  List<ChatEntity> get chats;
   @override
   ChatStatus get currentState;
+  @override
+  ChatListenableAction get action;
   @override
   @JsonKey(ignore: true)
   _$ChatStateCopyWith<_ChatState> get copyWith =>

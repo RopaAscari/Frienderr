@@ -1,15 +1,15 @@
 import 'dart:io';
-import 'package:frienderr/core/services/helpers.dart';
-import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/core/enums/collections/snaps/query_fields.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:video_compress/video_compress.dart';
+import 'package:frienderr/core/services/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/entities/quick.dart';
-import 'package:frienderr/features/domain/entities/media_asset.dart';
-import 'package:frienderr/features/presentation/extensions/late_handler.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/widgets/upload_progress.dart';
 
@@ -24,14 +24,14 @@ class QuickRemoteDataProvider implements IQuickRemoteDataProvider {
 
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getQuicks() async {
-    return await firestoreInstance.collection('quicks').get();
+    return await firestoreInstance.collection(Collections.snaps.name).get();
   }
 
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getUserSnaps(
       {required String uid}) async {
     return await firestoreInstance
-        .collection('quicks')
+        .collection(Collections.snaps.name)
         .where('user.id', isEqualTo: uid)
         .get();
   }
@@ -113,19 +113,18 @@ class QuickRemoteDataProvider implements IQuickRemoteDataProvider {
         caption: caption,
         commentCount: 0,
         thumbnail: _thumbnail,
-        id: Helpers().generateId(25),
+        id: Helpers.generateId(25),
         dateCreated: DateTime.now().microsecondsSinceEpoch,
         user: PartialUser(id: FirebaseAuth.instance.currentUser!.uid),
       );
 
       await firestoreInstance
-          .collection('quicks')
+          .collection(Collections.snaps.name)
           .doc(quick.id)
           .set(quick.toJson());
 
       return true;
     } catch (err) {
-      print(err);
       return false;
     }
   }
@@ -136,8 +135,11 @@ class QuickRemoteDataProvider implements IQuickRemoteDataProvider {
     required String quickId,
   }) async {
     try {
-      await firestoreInstance.collection('quicks').doc(quickId).update({
-        'likes': FieldValue.arrayUnion([userId])
+      await firestoreInstance
+          .collection(Collections.snaps.name)
+          .doc(quickId)
+          .update({
+        SnapQueryFields.likes.name: FieldValue.arrayUnion([userId])
       });
       return true;
     } catch (e) {
@@ -151,8 +153,11 @@ class QuickRemoteDataProvider implements IQuickRemoteDataProvider {
     required String quickId,
   }) async {
     try {
-      await firestoreInstance.collection('quicks').doc(quickId).update({
-        'likes': FieldValue.arrayRemove([userId])
+      await firestoreInstance
+          .collection(Collections.snaps.name)
+          .doc(quickId)
+          .update({
+        SnapQueryFields.likes.name: FieldValue.arrayRemove([userId])
       });
       return true;
     } catch (e) {
@@ -165,7 +170,10 @@ class QuickRemoteDataProvider implements IQuickRemoteDataProvider {
     required String quickId,
   }) async {
     try {
-      await firestoreInstance.collection('quicks').doc(quickId).delete();
+      await firestoreInstance
+          .collection(Collections.snaps.name)
+          .doc(quickId)
+          .delete();
       return true;
     } catch (e) {
       return false;

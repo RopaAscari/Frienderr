@@ -75,8 +75,9 @@ class ViewUserStoryState extends State<ViewUserStory> {
         userId: _user?.uid as String,
         story: _story as StoryContent));
 
-    Navigator.pop(context);
-    Navigator.pop(ancestorCtx);
+    for (var context in [context, ancestorCtx]) {
+      Navigator.pop(context);
+    }
   }
 
   void _storySlideUpAction() {

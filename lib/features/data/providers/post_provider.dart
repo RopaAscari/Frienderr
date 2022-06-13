@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:injectable/injectable.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_compress/video_compress.dart';
@@ -13,6 +14,8 @@ import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/data/models/post/post_model.dart';
+import 'package:frienderr/core/enums/collections/posts/order_fields.dart';
+import 'package:frienderr/core/enums/collections/posts/query_fields.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/widgets/upload_progress.dart';
@@ -136,7 +139,7 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
         commentCount: 0,
         content: content,
         caption: caption,
-        id: Helpers().generateId(25),
+        id: Helpers.generateId(25),
         user: PartialUser(
           id: firebaseAuth.currentUser?.uid as String,
         ),
@@ -144,13 +147,12 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
       );
 
       await firestoreInstance
-          .collection('posts')
+          .collection(Collections.posts.name)
           .doc(posts.id)
           .set(posts.toJson());
 
       return true;
     } catch (error) {
-      print(error);
       return false;
     }
   }
@@ -158,16 +160,17 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateTimelineStream() {
     return firestoreInstance
-        .collection('posts')
+        .collection(Collections.posts.name)
         .snapshots(includeMetadataChanges: true);
   }
 
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getUserPosts(
       {required String uid}) async {
+    print(PostQueryFields.userId.name);
     return await firestoreInstance
-        .collection('posts')
-        .orderBy('dateCreated', descending: true)
+        .collection(Collections.posts.name)
+        .orderBy(PostOrderFields.dateCreated.name, descending: true)
         .where('user.id', isEqualTo: uid)
         .get();
   }
@@ -175,8 +178,8 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   @override
   Future<QuerySnapshot<Object?>> getPosts() async {
     return await firestoreInstance
-        .collection('posts')
-        .orderBy('dateCreated', descending: true)
+        .collection(Collections.posts.name)
+        .orderBy(PostOrderFields.dateCreated.name, descending: true)
         .limit(10)
         .get();
   }
@@ -185,19 +188,10 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   Future<QuerySnapshot<Object?>> getPaginatedPosts(
       List<Map<String, dynamic>> posts) async {
     return await firestoreInstance
-        .collection('posts')
-        .orderBy('dateCreated', descending: true)
-        .startAfter([posts[posts.length - 1]['dateCreated']])
+        .collection(Collections.posts.name)
+        .orderBy(PostOrderFields.dateCreated.name, descending: true)
+        .startAfter([posts[posts.length - 1][PostOrderFields.dateCreated.name]])
         .limit(10)
-        .get();
-  }
-
-  @override
-  Future<DocumentSnapshot<Map<String, dynamic>>>
-      fetchTimelinelinePostCount() async {
-    return await FirebaseFirestore.instance
-        .collection('postCount')
-        .doc('count')
         .get();
   }
 
@@ -207,8 +201,11 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
     final String postId = post.id;
 
     try {
-      await firestoreInstance.collection('posts').doc(postId).update({
-        'likes': FieldValue.arrayUnion([userId])
+      await firestoreInstance
+          .collection(Collections.posts.name)
+          .doc(postId)
+          .update({
+        PostQueryFields.likes.name: FieldValue.arrayUnion([userId])
       });
 
       return true;
@@ -220,8 +217,11 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   @override
   Future<bool> unLikePost(String postId, String userId) async {
     try {
-      await firestoreInstance.collection('posts').doc(postId).update({
-        'likes': FieldValue.arrayRemove([userId])
+      await firestoreInstance
+          .collection(Collections.posts.name)
+          .doc(postId)
+          .update({
+        PostQueryFields.likes.name: FieldValue.arrayRemove([userId])
       });
       return true;
     } catch (err) {
@@ -232,7 +232,10 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   @override
   Future<bool> deletePost(String postId) async {
     try {
-      await firestoreInstance.collection('posts').doc(postId).delete();
+      await firestoreInstance
+          .collection(Collections.posts.name)
+          .doc(postId)
+          .delete();
       return true;
     } catch (error) {
       return false;
@@ -256,8 +259,6 @@ abstract class IPostRemoteDataProvider {
 
   Future<QuerySnapshot<Object?>> getPaginatedPosts(
       List<Map<String, dynamic>> posts);
-
-  Future<DocumentSnapshot<Map<String, dynamic>>> fetchTimelinelinePostCount();
 
   Future<QuerySnapshot<Map<String, dynamic>>> getUserPosts(
       {required String uid});
