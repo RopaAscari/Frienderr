@@ -12,6 +12,6 @@ class LoadingIndicator extends StatefulWidget {
 class _LoadingIndicatorState extends State<LoadingIndicator> {
   @override
   Widget build(BuildContext context) {
-    return SpinKitChasingDots(size: widget.size.height, color: Colors.amber);
+    return SpinKitRotatingCircle(size: widget.size.height, color: Colors.amber);
   }
 }

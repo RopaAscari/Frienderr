@@ -13,7 +13,7 @@ class AppDelegate extends StatefulWidget {
   final ThemeBloc themeBloc;
   final AuthenticationBloc authenticationBloc;
 
-  AppDelegate({
+  const AppDelegate({
     Key? key,
     required this.userBloc,
     required this.themeBloc,

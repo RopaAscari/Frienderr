@@ -7,6 +7,7 @@ import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
@@ -15,7 +16,7 @@ import 'package:frienderr/features/presentation/blocs/animation/animation_bloc.d
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 
 class HandlerDelegate extends StatefulWidget {
-  HandlerDelegate({Key? key}) : super(key: key);
+  const HandlerDelegate({Key? key}) : super(key: key);
 
   @override
   HandlerDelegateState createState() => HandlerDelegateState();
@@ -35,7 +36,8 @@ class HandlerDelegateState extends State<HandlerDelegate>
   @override
   void initState() {
     super.initState();
-    connectivitySubscriber();
+    initDynamicLinks();
+    _connectivitySubscriber();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -84,12 +86,12 @@ class HandlerDelegateState extends State<HandlerDelegate>
     subscription.cancel();
   }
 
-  Future<void> connectivitySubscriber() async {
+  Future<void> _connectivitySubscriber() async {
     final ConnectivityResult connectivityResult =
         await (connectivity.checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(statusBarColor: Colors.red));
+          const SystemUiOverlayStyle(statusBarColor: Colors.red));
       // _showBasicsFlash(duration: Duration(days: 365));
     }
 
@@ -99,23 +101,24 @@ class HandlerDelegateState extends State<HandlerDelegate>
 
       if (notConnected) {
         SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(statusBarColor: Colors.red));
+            const SystemUiOverlayStyle(statusBarColor: Colors.red));
         //_showBasicsFlash(duration: Duration(days: 365));
       } else {
         SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+            const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
       }
     });
     //});
   }
 
-  List<BlocProvider<Bloc<dynamic, dynamic>>> combineProviders() {
+  List<BlocProvider<Bloc<dynamic, dynamic>>> _combineProviders() {
     return [
-      BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
       BlocProvider<UserBloc>(
         create: (context) => getIt<UserBloc>(),
       ),
+      BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
       BlocProvider<ThemeBloc>(create: (context) => getIt<ThemeBloc>()),
+      BlocProvider<MessageBloc>(create: (context) => getIt<MessageBloc>()),
       BlocProvider<AnimationBloc>(create: (context) => getIt<AnimationBloc>()),
       BlocProvider<AuthenticationBloc>(
           create: (context) => getIt<AuthenticationBloc>()),
@@ -133,9 +136,43 @@ class HandlerDelegateState extends State<HandlerDelegate>
     ];
   }
 
+  Future<String> createDynamicLink() async {
+    var parameters = DynamicLinkParameters(
+      uriPrefix: 'https://frienderr.page.link',
+      link: Uri.parse('https://frienderr.page.link/posts/1'),
+      androidParameters: const AndroidParameters(
+        packageName: "com.exmple.frienderr",
+      ),
+      iosParameters: const IOSParameters(
+        bundleId: "com.exmple.frienderr",
+        // appStoreId: '1498909115',
+      ),
+    );
+
+    final dynamicLink =
+        await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+
+    print(dynamicLink.shortUrl.toString());
+
+    return dynamicLink.shortUrl.toString();
+    ;
+  }
+
+  initDynamicLinks() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+
+    final Uri? deepLink = initialLink?.link;
+
+    print(deepLink);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: combineProviders(),
+        providers: _combineProviders(),
         child: MultiBlocListener(
             listeners: combineListeners(),
             child: AppDelegate(
