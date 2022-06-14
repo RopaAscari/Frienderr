@@ -529,7 +529,7 @@ class _UserAccountScreenState extends State<UserAccountScreen>
         ),
       ),
          actions: <Widget>[
-        TextButton(
+      /*  TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           }, Widget: const Text('Cancel'),
@@ -537,8 +537,8 @@ class _UserAccountScreenState extends State<UserAccountScreen>
         TextButton(
           onPressed: () {
             _logOut(context, hlc);
-          },Widget: const Text('Ok'),
-        ),
+          },Widget: const Text('Ok'),*
+        ),*/
       ],
     );
     ;

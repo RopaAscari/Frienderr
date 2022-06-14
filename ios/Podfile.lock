@@ -596,6 +596,8 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - audio_session (0.0.1):
+    - Flutter
   - bitmap (0.0.1):
     - Flutter
   - BoringSSL-GRPC (0.0.24):
@@ -606,9 +608,7 @@ PODS:
   - BoringSSL-GRPC/Interface (0.0.24)
   - camera (0.0.1):
     - Flutter
-  - camera_deep_ar (0.0.1):
-    - Flutter
-  - cloud_firestore (3.1.13):
+  - cloud_firestore (3.1.17):
     - Firebase/Firestore (= 8.15.0)
     - firebase_core
     - Flutter
@@ -671,26 +671,26 @@ PODS:
   - Firebase/Storage (8.15.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 8.15.0)
-  - firebase_analytics (9.1.6):
+  - firebase_analytics (9.1.9):
     - Firebase/Analytics (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_auth (3.3.16):
+  - firebase_auth (3.3.19):
     - Firebase/Auth (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.15.0):
+  - firebase_core (1.17.1):
     - Firebase/CoreOnly (= 8.15.0)
     - Flutter
-  - firebase_dynamic_links (4.2.1):
+  - firebase_dynamic_links (4.2.5):
     - Firebase/DynamicLinks (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (11.2.15):
+  - firebase_messaging (11.4.1):
     - Firebase/Messaging (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_storage (10.2.14):
+  - firebase_storage (10.2.17):
     - Firebase/Storage (= 8.15.0)
     - firebase_core
     - Flutter
@@ -761,6 +761,10 @@ PODS:
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_sound (9.2.13):
+    - Flutter
+    - flutter_sound_core (= 9.2.13)
+  - flutter_sound_core (9.2.13)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -769,6 +773,13 @@ PODS:
   - google_maps_flutter (0.0.1):
     - Flutter
     - GoogleMaps
+  - google_mlkit_commons (0.2.0):
+    - Flutter
+    - MLKitVision
+  - google_mlkit_smart_reply (0.3.0):
+    - Flutter
+    - google_mlkit_commons
+    - GoogleMLKit/SmartReply (~> 2.6.0)
   - GoogleAppMeasurement (8.15.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
@@ -793,11 +804,30 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleMaps (4.2.0):
-    - GoogleMaps/Maps (= 4.2.0)
-  - GoogleMaps/Base (4.2.0)
-  - GoogleMaps/Maps (4.2.0):
+  - GoogleMaps (5.2.0):
+    - GoogleMaps/Maps (= 5.2.0)
+  - GoogleMaps/Base (5.2.0)
+  - GoogleMaps/Maps (5.2.0):
     - GoogleMaps/Base
+  - GoogleMLKit/MLKitCore (2.6.0):
+    - MLKitCommon (~> 5.0.0)
+  - GoogleMLKit/SmartReply (2.6.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitSmartReply (~> 1.5.0)
+  - GoogleToolboxForMac/DebugUtils (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - GoogleToolboxForMac/Defines (2.3.2)
+  - GoogleToolboxForMac/Logger (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSData+zlib (2.3.2)":
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.3.2)":
+    - GoogleToolboxForMac/DebugUtils (= 2.3.2)
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.3.2)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.3.2)"
+  - GoogleToolboxForMac/StringEncoding (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -816,6 +846,8 @@ PODS:
   - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilitiesComponents (1.1.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
@@ -871,6 +903,11 @@ PODS:
   - GTMSessionFetcher/Core (1.7.2)
   - image_picker_ios (0.0.1):
     - Flutter
+  - just_audio (0.0.1):
+    - Flutter
+  - learning_smart_reply (0.0.1):
+    - Flutter
+    - GoogleMLKit/SmartReply
   - leveldb-library (1.22.1)
   - Libuv-gRPC (0.0.10):
     - Libuv-gRPC/Implementation (= 0.0.10)
@@ -878,19 +915,40 @@ PODS:
   - Libuv-gRPC/Implementation (0.0.10):
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
-  - libwebp (1.2.1):
-    - libwebp/demux (= 1.2.1)
-    - libwebp/mux (= 1.2.1)
-    - libwebp/webp (= 1.2.1)
-  - libwebp/demux (1.2.1):
-    - libwebp/webp
-  - libwebp/mux (1.2.1):
-    - libwebp/demux
-  - libwebp/webp (1.2.1)
   - location (0.0.1):
     - Flutter
   - media_gallery (0.0.1):
     - Flutter
+  - MLImage (1.0.0-beta2)
+  - MLKitCommon (5.0.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - GoogleUtilities/UserDefaults (~> 7.0)
+    - GoogleUtilitiesComponents (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+    - Protobuf (~> 3.12)
+  - MLKitLanguageID (2.0.0):
+    - MLKitNaturalLanguage (~> 3.0)
+  - MLKitNaturalLanguage (3.0.0):
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - GoogleToolboxForMac/StringEncoding (~> 2.1)
+    - GTMSessionFetcher/Core (~> 1.1)
+    - MLKitCommon (~> 5.0)
+    - Protobuf (~> 3.12)
+  - MLKitSmartReply (1.5.0):
+    - MLKitLanguageID (~> 2.0)
+    - MLKitNaturalLanguage (~> 3.0)
+  - MLKitVision (3.0.0):
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GTMSessionFetcher/Core (~> 1.1)
+    - MLImage (= 1.0.0-beta2)
+    - MLKitCommon (~> 5.0)
+    - Protobuf (~> 3.12)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -904,6 +962,7 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.1.0)
+  - Protobuf (3.21.1)
   - ReachabilitySwift (5.0.0)
   - SDWebImage (5.12.5):
     - SDWebImage/Core (= 5.12.5)
@@ -916,18 +975,17 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.3)
+  - url_launcher_ios (0.0.1):
+    - Flutter
   - video_compress (0.3.0):
     - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
-  - video_thumbnail (0.0.1):
-    - Flutter
-    - libwebp
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - bitmap (from `.symlinks/plugins/bitmap/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
-  - camera_deep_ar (from `.symlinks/plugins/camera_deep_ar/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -939,9 +997,14 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+  - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
+  - google_mlkit_smart_reply (from `.symlinks/plugins/google_mlkit_smart_reply/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/ios`)
+  - learning_smart_reply (from `.symlinks/plugins/learning_smart_reply/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - media_gallery (from `.symlinks/plugins/media_gallery/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -950,9 +1013,9 @@ DEPENDENCIES:
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_compress (from `.symlinks/plugins/video_compress/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
-  - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
 
 SPEC REPOS:
   trunk:
@@ -970,30 +1033,40 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseMessaging
     - FirebaseStorage
+    - flutter_sound_core
     - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleMaps
+    - GoogleMLKit
+    - GoogleToolboxForMac
     - GoogleUtilities
+    - GoogleUtilitiesComponents
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
     - Libuv-gRPC
-    - libwebp
+    - MLImage
+    - MLKitCommon
+    - MLKitLanguageID
+    - MLKitNaturalLanguage
+    - MLKitSmartReply
+    - MLKitVision
     - nanopb
     - PromisesObjC
+    - Protobuf
     - ReachabilitySwift
     - SDWebImage
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   bitmap:
     :path: ".symlinks/plugins/bitmap/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
-  camera_deep_ar:
-    :path: ".symlinks/plugins/camera_deep_ar/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   connectivity_plus:
@@ -1016,12 +1089,22 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_sound:
+    :path: ".symlinks/plugins/flutter_sound/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
+  google_mlkit_commons:
+    :path: ".symlinks/plugins/google_mlkit_commons/ios"
+  google_mlkit_smart_reply:
+    :path: ".symlinks/plugins/google_mlkit_smart_reply/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  just_audio:
+    :path: ".symlinks/plugins/just_audio/ios"
+  learning_smart_reply:
+    :path: ".symlinks/plugins/learning_smart_reply/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   media_gallery:
@@ -1038,31 +1121,31 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
   video_compress:
     :path: ".symlinks/plugins/video_compress/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
-  video_thumbnail:
-    :path: ".symlinks/plugins/video_thumbnail/ios"
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   bitmap: 591b0556efe6e811a263b8dfdc511fe1faa72315
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   camera: 9993f92f2c793e87b65e35f3a23c70582afb05b1
-  camera_deep_ar: 2a6843f97304f77c3af80cdd3d4c67e5d48909d2
-  cloud_firestore: a7a94d8f25b77b84533eb8bd5627437a0cdb49f0
+  cloud_firestore: 936969669b510f2affd43583582d7b117c5f08d1
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   DKImagePickerController: 72fd378f244cef3d27288e0aebf217a4467e4012
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
+  file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_analytics: 79e91b70c5698a941bdc8b813f40d3c444a58034
-  firebase_auth: 4f80bfd9e8814edc0dc6a135f9c4d5e1b1d67347
-  firebase_core: fa19947d8db1c0a62d8872c45039b3113829cd2e
-  firebase_dynamic_links: 81c625df5b132efdfef57ba46b2cba12e86ee5b8
-  firebase_messaging: 20522334f609978f782cff8c141f294bb2ca39c7
-  firebase_storage: 4a44819c634c80214d685192033925c220e429dd
+  firebase_analytics: 99eefffcacf3ab694db7926dd1291833e1300853
+  firebase_auth: a6470a6974d42f83117932c913aecb926182f907
+  firebase_core: 318de541b0e61d3f24262982a3f0b54afe72439b
+  firebase_dynamic_links: 9091e315c78410ee8da9d9edb9372a672bf0713c
+  firebase_messaging: 943cfe65e0b3f457240489ce67655e40da1d270c
+  firebase_storage: b079dbfa7ef016051b6f95315a7002012fda9984
   FirebaseAnalytics: 7761cbadb00a717d8d0939363eb46041526474fa
   FirebaseAuth: 3e73bf8abf4fbb40f8b421f361f4cc48ee57388c
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
@@ -1072,39 +1155,54 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
   FirebaseMessaging: 5e5118a2383b3531e730d974680954c679ca0a13
   FirebaseStorage: 8019af461599b2c3bc61c6a5dbdfa3d2de66a4d9
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_sound: c60effa2a350fb977885f0db2fbc4c1ad5160900
+  flutter_sound_core: 26c10e5832e76aaacfae252d8925232281c486ae
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   google_maps_flutter: c59fc576c0d0c7f4dc4bd63832c862d22d5a7c6d
+  google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
+  google_mlkit_smart_reply: fc9ba6a5c97e491c9b326ef9313768cfc30bbe6b
   GoogleAppMeasurement: 4c19f031220c72464d460c9daa1fb5d1acce958e
   GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
-  GoogleMaps: eb03e327edfd70b06de1e6e321653f73712df7ad
+  GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
+  GoogleMLKit: 755661c46990a85e42278015f26400286d98ad95
+  GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  learning_smart_reply: ad05814662ca30c71a501c578664b7890a3463d1
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
-  libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   media_gallery: 834a04455a476b975c280aa1f24ed2853dfe36de
+  MLImage: a454f9f8ecfd537783a12f9488f5be1a68820829
+  MLKitCommon: 3bc17c6f7d25ce3660f030350b46ae7ec9ebca6e
+  MLKitLanguageID: 0f6eb73b437c84aa32268c9916edbc34357c0dfa
+  MLKitNaturalLanguage: effd1e1268a5e6c734f769dd988b5d293bdc564b
+  MLKitSmartReply: 24772da43866b321953701899d73de09a54ff3ea
+  MLKitVision: e87dc3f2e456a6ab32361ebd985e078dd2746143
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
+  Protobuf: 9e88c1e667d75aa2491d211f26ccddde4e8ad4cf
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SDWebImage: 0905f1b7760fc8ac4198cae0036600d67478751e
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   video_compress: fce97e4fb1dfd88175aa07d2ffc8a2f297f87fbe
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
-  video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
 
-PODFILE CHECKSUM: d7aba3abac50c26bdc581e03570256e2f49e8d42
+PODFILE CHECKSUM: 281527da222c55c82bdcf6e2b2e047fc9cade92b
 
 COCOAPODS: 1.11.2

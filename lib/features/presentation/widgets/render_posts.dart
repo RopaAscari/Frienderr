@@ -474,7 +474,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
         ),
       ),
       actions: <Widget>[
-        TextButton(
+       /* TextButton(
        
           onPressed: () {
             Navigator.of(alertContext).pop();
@@ -484,7 +484,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
           onPressed: () {
             _deletePost(alertContext);
           },Widget: const Text('Delete') ,
-        ),
+        ),*/
       ],
     );
     ;

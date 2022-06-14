@@ -149,7 +149,7 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
             ),
           ),
         actions: <Widget>[
-        TextButton(
+       /* TextButton(
        
           onPressed: () {
             Navigator.of(alertContext).pop();
@@ -159,7 +159,7 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
           onPressed: () {
           //  _deletePost(alertContext);
           },Widget: const Text('Delete') ,
-        ),
+        ),*/
       ],
         );
       },
