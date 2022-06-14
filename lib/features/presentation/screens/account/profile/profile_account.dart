@@ -122,8 +122,8 @@ class _ProfileAccountScreenState extends State<ProfileAccountScreen> {
   void _showActionSheet(BuildContext hlc) {
     showModalBottomSheet<void>(
       context: context,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
+      shape:  RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       builder: (BuildContext btx) {
         return _accountOptions(btx, hlc);
@@ -536,11 +536,11 @@ class _ProfileAccountScreenState extends State<ProfileAccountScreen> {
                 renderWidget: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width: 1),
-                    gradient: const LinearGradient(
-                      end: Alignment(1.0, 0.0),
-                      begin: Alignment(-0.95, 0.0),
-                      colors: [Colors.transparent, Colors.transparent],
-                      stops: [0.0, 1.0],
+                    gradient:  LinearGradient(
+                      end: const Alignment(1.0, 0.0),
+                      begin: const Alignment(-0.95, 0.0),
+                      colors: const [Colors.transparent, Colors.transparent],
+                      stops: const [0.0, 1.0],
                     ),
                     borderRadius: BorderRadius.circular(100.0),
                   ),
@@ -624,16 +624,14 @@ class _ProfileAccountScreenState extends State<ProfileAccountScreen> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
-          },
+          }, Widget: const Text('Cancel'),
         ),
         TextButton(
-          child: const Text('Ok'),
           onPressed: () {
             _logOut(context, hlc);
-          },
+          },Widget: const Text('Ok'),
         ),
       ],
     );

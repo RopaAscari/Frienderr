@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 @immutable
 class BubbleBackground extends StatelessWidget {
   const BubbleBackground({
-    super.key,
+    Key? key,
     required this.colors,
     this.child,
   });

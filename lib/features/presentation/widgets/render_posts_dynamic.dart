@@ -148,20 +148,19 @@ class RenderPostDynamicState extends State<RenderPostDynamic>
               ],
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(alertContext).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Delete'),
-              onPressed: () {
-                deletePost(alertContext);
-              },
-            ),
-          ],
+        actions: <Widget>[
+        TextButton(
+       
+          onPressed: () {
+            Navigator.of(alertContext).pop();
+          },Widget: const Text('Cancel') ,
+        ),
+        TextButton(
+          onPressed: () {
+          //  _deletePost(alertContext);
+          },Widget: const Text('Delete') ,
+        ),
+      ],
         );
       },
     );

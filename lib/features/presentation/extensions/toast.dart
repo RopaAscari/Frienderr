@@ -57,7 +57,7 @@ extension ContextEx on BuildContext {
                 contentPadding:
                     const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 24.0),
                 backgroundColor: Colors.transparent,
-                shape: const RoundedRectangleBorder(
+                shape:  RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 content: Builder(builder: (context) {
                   return const LoadingIndicator(

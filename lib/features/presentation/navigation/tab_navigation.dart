@@ -111,7 +111,7 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   List<Widget> _buildTabIcons() {
     return tabIcons.mapIndexed((index, tabIcon) {
       if (tabIcon == null) {
-        return const Expanded(child: Center());
+        return  Expanded(child: Center());
       }
 
       return Expanded(

@@ -49,7 +49,7 @@ class _AppButtonState extends State<AppButton> {
       child: MaterialButton(
         height: 60,
         minWidth: double.infinity,
-        shape: const StadiumBorder(),
+        shape:  StadiumBorder(),
         onPressed: () => widget.onPressed(),
         child: ConditionalRenderDelegate(
             condition: widget.isLoading,

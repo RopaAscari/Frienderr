@@ -87,8 +87,8 @@ class _UserAccountScreenState extends State<UserAccountScreen>
   void _showActionSheet(BuildContext hlc) {
     showModalBottomSheet<void>(
       context: context,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
+      shape:  RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       builder: (BuildContext btx) {
         return _accountOptions(btx, hlc);
@@ -528,18 +528,16 @@ class _UserAccountScreenState extends State<UserAccountScreen>
           ],
         ),
       ),
-      actions: <Widget>[
+         actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
-          },
+          }, Widget: const Text('Cancel'),
         ),
         TextButton(
-          child: const Text('Ok'),
           onPressed: () {
             _logOut(context, hlc);
-          },
+          },Widget: const Text('Ok'),
         ),
       ],
     );
