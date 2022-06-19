@@ -47,7 +47,7 @@ class AppTheme {
       textTheme: TextTheme(
         bodyText1: TextStyle(
             color: Colors.grey[500],
-            fontSize: _flutterResponsive.fontSize(1.5)),
+            fontSize: _flutterResponsive.fontSize(1.55)),
         bodyText2: const TextStyle(color: Colors.white),
       ),
     ),

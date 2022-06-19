@@ -44,7 +44,7 @@ class _AppTextFieldState extends State<AppTextField> {
             suffixIcon: widget.isObscure ? passswordIcon() : widget.suffixIcon,
             labelStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.55)),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),

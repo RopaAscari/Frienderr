@@ -71,22 +71,12 @@ class _SplashScreenState extends State<SplashScreen> {
       authenticationBloc: getIt<AuthenticationBloc>(),
     );
 
-    switch (state.currentState) {
-      case AuthenticationStatus.Authenticated:
-        _storyBloc.add(StoryEvent.loadStories(userId: _user!.uid));
-        _postBloc.add(const PostEvent.fetchTimelinePosts(shouldLoad: true));
 
-        _quickBloc.add(const QuickEvent.initialize());
-
-        return MainRoute(
-          blocGroup: _blocGroup,
-        );
-      default:
         return LoginRoute(
           blocGroup: _blocGroup,
         );
     }
-  }
+  
 
   // ignore: unused_element
   _buildHeroTransition() {

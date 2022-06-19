@@ -165,10 +165,11 @@ class LoginScreenState extends State<LoginScreen> {
         child: AppTextField(
           isObscure: false,
           errorText: errorText,
-          label: "Username or email",
+          label: "Username or email address",
           controller: _emailController,
+          padding: const EdgeInsets.only(top: 10),
         ),
-        height: 65);
+        height: 58);
   }
 
   Widget _passwordTextField(state) {
@@ -178,14 +179,17 @@ class LoginScreenState extends State<LoginScreen> {
     }
 
     return SizedBox(
-      child: AppTextField(
-        label: "Password",
-        isObscure: true,
-        errorText: errorText,
-        controller: _passwordController,
-        padding: const EdgeInsets.only(top: 10),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: AppTextField(
+          label: "Password",
+          isObscure: true,
+          errorText: errorText,
+          controller: _passwordController,
+          padding: const EdgeInsets.only(top: 10),
+        ),
       ),
-      height: 65,
+      height: 58,
     );
   }
 
@@ -197,7 +201,7 @@ class LoginScreenState extends State<LoginScreen> {
           onPressed: _onAuthenticate,
           margin: const EdgeInsets.only(top: 24),
         ),
-        height: 80);
+        height: 65);
   }
 
   Widget _registerAccountText() {
@@ -206,7 +210,7 @@ class LoginScreenState extends State<LoginScreen> {
             text: "\n\nDon't have an account.",
             style: TextStyle(
               color: Colors.grey[400]!.withOpacity(0.9),
-              fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+              fontSize: ResponsiveFlutter.of(context).fontSize(1.55),
             ),
             children: <InlineSpan>[
           TextSpan(
@@ -214,7 +218,7 @@ class LoginScreenState extends State<LoginScreen> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _navigateToRegisterScreen(),
               style: TextStyle(
-                  fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.55),
                   color: HexColor('#FFB126')))
         ])));
   }
