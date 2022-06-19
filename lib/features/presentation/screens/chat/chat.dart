@@ -9,7 +9,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:dash_chat_2/dash_chat_2.dart' as chat;
@@ -40,7 +39,6 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   final storyController = StoryController();
   BlocGroup get _blocGroup => widget.blocGroup;
   User? _appUser = FirebaseAuth.instance.currentUser;
-  final PanelController panelController = PanelController();
   FollowingBloc get followingBloc => getIt<FollowingBloc>();
   final TextEditingController searchController = TextEditingController();
 
@@ -60,9 +58,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
     super.didChangeDependencies();
   }
 
-  void _createChatFromFriendsList(String id, FollowingState state) {
-    panelController.open();
-  }
+  void _createChatFromFriendsList(String id, FollowingState state) {}
 
   @override
   Widget build(BuildContext context) {
@@ -106,17 +102,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   }
 
   Widget _buildSlidingPanel() {
-    return SlidingUpPanel(
-      controller: panelController,
-      isDraggable: true,
-      minHeight: 0,
-      color: Colors.transparent,
-      maxHeight: MediaQuery.of(context).size.height,
-      backdropEnabled: true,
-      panel: const Center(),
-      borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
-    );
+    return Center();
   }
 
   Widget _headerWidget(ChatState state) {

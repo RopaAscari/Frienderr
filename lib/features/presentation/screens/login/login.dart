@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
@@ -76,7 +76,7 @@ class LoginScreenState extends State<LoginScreen> {
     return getIt<AppRouter>().push(MainRoute(blocGroup: _blocGroup));
   }
 
-  void _onAuthenticate(BuildContext context) {
+  void _onAuthenticate() {
     getIt<AppRouter>().context.showLoadingIndicator();
     FocusScope.of(context).unfocus();
     _blocGroup.authenticationBloc.add(AuthenticationEvent.onAuthenticate(
@@ -142,7 +142,8 @@ class LoginScreenState extends State<LoginScreen> {
       Padding(
           padding: const EdgeInsets.only(
               top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
-          child: Column(children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             _oAuthActions(),
             _orDivider(),
             _usernameOrEmailTextField(state),
@@ -155,108 +156,78 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _usernameOrEmailTextField(state) {
-    return AppTextField(
-        label: "Username or email",
-        isObscure: false,
-        prefixIcon:
-            null /* const Icon(
-          CupertinoIcons.person,
-          color: Colors.grey,
-        )*/
-        ,
-        controller: _emailController,
-        errorText:
-            state.currentState == AuthenticationStatus.AuthenticationFailure
-                ? ''
-                : null);
+    String? errorText;
+    if (state.currentState == AuthenticationStatus.AuthenticationFailure) {
+      errorText = state.error;
+    }
+
+    return SizedBox(
+        child: AppTextField(
+          isObscure: false,
+          errorText: errorText,
+          label: "Username or email",
+          controller: _emailController,
+        ),
+        height: 65);
   }
 
   Widget _passwordTextField(state) {
-    return AppTextField(
+    String? errorText;
+    if (state.currentState == AuthenticationStatus.AuthenticationFailure) {
+      errorText = state.error;
+    }
+
+    return SizedBox(
+      child: AppTextField(
         label: "Password",
         isObscure: true,
-        prefixIcon:
-            null /* const Icon(
-          CupertinoIcons.lock,
-          size: 21.5,
-          color: Colors.grey,
-        )*/
-        ,
+        errorText: errorText,
         controller: _passwordController,
-        padding: const EdgeInsets.only(top: 20),
-        errorText:
-            state.currentState == AuthenticationStatus.AuthenticationFailure
-                ? state.error
-                : null);
+        padding: const EdgeInsets.only(top: 10),
+      ),
+      height: 65,
+    );
   }
 
   Widget _loginButton() {
-    return AppButton(
-        label: "LOGIN",
-        margin: const EdgeInsets.only(top: 24),
-        onPressed: () => _onAuthenticate(context),
-        isLoading: false);
+    return SizedBox(
+        child: AppButton(
+          label: "LOGIN",
+          isLoading: false,
+          onPressed: _onAuthenticate,
+          margin: const EdgeInsets.only(top: 24),
+        ),
+        height: 80);
   }
 
   Widget _registerAccountText() {
     return Center(
-        child: AutoSizeText.rich(TextSpan(
+        child: Text.rich(TextSpan(
             text: "\n\nDon't have an account.",
             style: TextStyle(
               color: Colors.grey[400]!.withOpacity(0.9),
-              fontSize: 14.5,
+              fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
             ),
             children: <InlineSpan>[
           TextSpan(
               text: ' Sign Up',
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _navigateToRegisterScreen(),
-              style: TextStyle(fontSize: 14.5, color: HexColor('#FFB126')))
+              style: TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                  color: HexColor('#FFB126')))
         ])));
   }
 
-  Widget _googleAccountButton() {
-    return MaterialButton(
-        height: 60,
-        color: HexColor('#9C9C9C').withOpacity(0.1),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            side: BorderSide(color: Colors.grey[900]!)),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset(Constants.googleIcon, height: 35, width: 35),
-          Text('   Use Google Account',
-              style: Theme.of(context).textTheme.bodyText1)
-        ]),
-        onPressed: () {});
-  }
-
-  Widget _facebookAccountButton() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 20.0,
-      ),
-      child: MaterialButton(
-          height: 60,
-          color: HexColor('#9C9C9C').withOpacity(0.1),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              side: BorderSide(color: Colors.grey[900]!)),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Image.asset(Constants.facebookIcon, height: 25, width: 25),
-            Text('   Use Facebook Account',
-                style: Theme.of(context).textTheme.bodyText1)
-          ]),
-          onPressed: () {}),
-    );
-  }
-
   Widget _oAuthActions() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
-      child: OAuthHandler(
-        onSelected: (oAuth) {
-          //print(oAuth);
-        },
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15.0),
+        child: OAuthHandler(
+          onSelected: (oAuth) {
+            //print(oAuth);
+          },
+        ),
       ),
     );
   }

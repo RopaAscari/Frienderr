@@ -4,32 +4,27 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:frienderr/features/domain/entities/bloc_group.dart';
-import 'package:frienderr/features/presentation/screens/account/profile/profile_account.dart';
 import 'package:location/location.dart';
-import 'package:fluttericon/elusive_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:frienderr/core/constants/constants.dart';
-import 'package:frienderr/core/injection/injection.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
-import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:permission_handler/permission_handler.dart' as permission;
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
+import 'package:frienderr/features/presentation/screens/account/profile/profile_account.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class FindFriends extends StatefulWidget {
   final BlocGroup blocGroup;
-  FindFriends({Key? key, required this.blocGroup}) : super(key: key);
+  const FindFriends({Key? key, required this.blocGroup}) : super(key: key);
 
   @override
   FindFriendsState createState() => FindFriendsState();
@@ -47,10 +42,10 @@ class FindFriendsState extends State<FindFriends>
   late final UserModel user;
   Location location = Location();
   List<dynamic> globalMapUsers = [];
-  FocusNode _focus = new FocusNode();
+  final FocusNode _focus = FocusNode();
   late LocationData _currentPosition;
   late GoogleMapController _mapController;
-  LatLng _initialcameraposition = LatLng(0.5937, 0.9629);
+  LatLng _initialcameraposition = const LatLng(0.5937, 0.9629);
   final TextEditingController searchController = TextEditingController();
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
@@ -401,13 +396,14 @@ class FindFriendsState extends State<FindFriends>
                     child: FloatingActionButton(
                         heroTag: null,
                         backgroundColor: HexColor('#EE6115'),
-                        child: Icon(Elusive.location, color: Colors.white),
+                        child: const Icon(CupertinoIcons.location,
+                            color: Colors.white),
                         onPressed: () => _showMapActionSheet())))),
         fallbackWidget: Center());
   }
 
   Widget mapUserList() {
-    return new Container(
+    return SizedBox(
         height: 160,
         child: CarouselSlider.builder(
             itemCount: globalMapUsers.length,

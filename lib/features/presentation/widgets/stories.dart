@@ -1,12 +1,11 @@
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
-import 'package:shimmer/shimmer.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/domain/entities/story.dart';
@@ -210,7 +209,7 @@ class _StoriesState extends State<Stories> {
                           )
                         ]))),
                 const Padding(
-                  child: AutoSizeText(' You',
+                  child: Text(' You',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 14)),
                   padding: EdgeInsets.only(top: 3),
@@ -360,7 +359,7 @@ class _StoriesState extends State<Stories> {
                                           Icon(Icons.error),
                                     ))),
                             Padding(
-                              child: AutoSizeText(' $displayName',
+                              child: Text(' $displayName',
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontSize: 14,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:frienderr/core/services/services.dart';
 
 class AppTextField extends StatefulWidget {
@@ -41,20 +42,22 @@ class _AppTextFieldState extends State<AppTextField> {
             errorText: widget.errorText,
             prefixIcon: widget.prefixIcon,
             suffixIcon: widget.isObscure ? passswordIcon() : widget.suffixIcon,
-            labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+            labelStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
+              borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
-            fillColor: HexColor('#767676').withOpacity(0.1),
+            fillColor: Theme.of(context).inputDecorationTheme.fillColor,
             errorStyle:
                 const TextStyle(height: 0.7, color: Colors.red, fontSize: 14),
           ),

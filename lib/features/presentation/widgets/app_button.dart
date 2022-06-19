@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frienderr/core/services/helpers.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:frienderr/core/services/services.dart';
 
 import 'package:frienderr/features/presentation/widgets/loading.dart';
@@ -64,9 +65,9 @@ class _AppButtonState extends State<AppButton> {
             fallbackWidget: Text(
               widget.label,
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: const AdaptiveTextSize()
-                      .getAdaptiveTextSize(context, 11.5)),
+                  // color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.55)),
             )),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),

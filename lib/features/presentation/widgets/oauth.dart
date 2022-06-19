@@ -35,7 +35,7 @@ class OAuthHandler extends StatelessWidget {
                 onPressed: () {
                   onSelected(oAuth.type);
                 },
-                color: HexColor('#9C9C9C').withOpacity(0.1),
+                color: Theme.of(context).cardColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                     side: BorderSide(color: Colors.grey[900]!)),
@@ -45,7 +45,7 @@ class OAuthHandler extends StatelessWidget {
             .toList(),
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
       ),
-      width: MediaQuery.of(context).size.width * .45,
+      width: 220,
     );
   }
 }

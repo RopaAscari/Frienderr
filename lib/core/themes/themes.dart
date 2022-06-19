@@ -34,8 +34,11 @@ class AppTheme {
       fontFamily: 'Inter',
       primaryColor: Colors.black,
       brightness: Brightness.dark,
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: HexColor('#767676').withOpacity(0.1),
+      ),
+      cardColor: HexColor('#9C9C9C').withOpacity(0.1),
       canvasColor: HexColor('#000000'),
-      cardColor: HexColor('#0D0E0E').withOpacity(0.9),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       popupMenuTheme: PopupMenuThemeData(
           elevation: 10,
@@ -44,7 +47,7 @@ class AppTheme {
       textTheme: TextTheme(
         bodyText1: TextStyle(
             color: Colors.grey[500],
-            fontSize: _flutterResponsive.fontSize(1.4)),
+            fontSize: _flutterResponsive.fontSize(1.5)),
         bodyText2: const TextStyle(color: Colors.white),
       ),
     ),
