@@ -188,11 +188,11 @@
     <orderEntry type="module" module-name="io.flutter.plugins.firebase.core.android.firebase_core" />
     <orderEntry type="module" module-name="android.geolocator_android" />
     <orderEntry type="module" module-name="io.flutter.plugins.googlemaps.android.google_maps_flutter" />
-    <orderEntry type="module" module-name="android.flutter_local_notifications" />
     <orderEntry type="module" module-name="android.file_picker" />
+    <orderEntry type="module" module-name="android.flutter_local_notifications" />
     <orderEntry type="module" module-name="android.path_provider_android" />
-    <orderEntry type="module" module-name="android.shared_preferences_android" />
     <orderEntry type="module" module-name="android.just_audio" />
+    <orderEntry type="module" module-name="android.shared_preferences_android" />
     <orderEntry type="module" module-name="android.google_mlkit_commons" />
     <orderEntry type="module" module-name="com.fluttercandies.photo_manager.android.photo_manager" />
     <orderEntry type="module" module-name="android.bitmap" />
@@ -206,7 +206,6 @@
     <orderEntry type="module" module-name="android.url_launcher_android" />
     <orderEntry type="module" module-name="android.media_gallery" />
     <orderEntry type="module" module-name="io.flutter.plugins.connectivity.android.connectivity_plus" />
-    <orderEntry type="module" module-name="android.video_thumbnail" />
     <orderEntry type="module" module-name="android.learning_smart_reply" />
     <orderEntry type="module" module-name="android.camera_android" />
     <orderEntry type="module" module-name="android.video_compress" />

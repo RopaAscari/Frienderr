@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/app/app_delegate.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/animation/animation_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 
@@ -29,15 +30,16 @@ class HandlerDelegateState extends State<HandlerDelegate>
   late final StreamSubscription<ConnectivityResult> subscription;
   final FirebaseServices firebaseServices = FirebaseServices();
 
-  UserBloc userBloc = getIt<UserBloc>();
-  ThemeBloc themeBloc = getIt<ThemeBloc>();
+  final UserBloc _userBloc = getIt<UserBloc>();
+  final ThemeBloc _themeBloc = getIt<ThemeBloc>();
   AuthenticationBloc get authenticationBloc => getIt<AuthenticationBloc>();
 
   @override
   void initState() {
     super.initState();
-    initDynamicLinks();
+    _initDynamicLinks();
     _connectivitySubscriber();
+    _handlePlatformBrigthnessChange();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -52,7 +54,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
       );
     }
 
-    final String userId = userBloc.state.user.id;
+    final String userId = _userBloc.state.user.id;
 
     bool isOnline = true;
     switch (state) {
@@ -84,6 +86,18 @@ class HandlerDelegateState extends State<HandlerDelegate>
     }
 
     subscription.cancel();
+  }
+
+  void _handlePlatformBrigthnessChange() {
+    var window = WidgetsBinding.instance.window;
+    window.onPlatformBrightnessChanged = () {
+      WidgetsBinding.instance.handlePlatformBrightnessChanged();
+      Brightness brightness = window.platformBrightness;
+      String theme = brightness == Brightness.dark
+          ? Constants.darkTheme
+          : Constants.lightTheme;
+      _themeBloc.add(ThemeEvent.changeTheme(theme));
+    };
   }
 
   Future<void> _connectivitySubscriber() async {
@@ -128,7 +142,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
     ];
   }
 
-  List<BlocListener<dynamic, dynamic>> combineListeners() {
+  List<BlocListener<dynamic, dynamic>> _combineListeners() {
     return [
       BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {},
@@ -158,7 +172,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
     ;
   }
 
-  initDynamicLinks() async {
+  _initDynamicLinks() async {
     await Future.delayed(const Duration(seconds: 3));
 
     final PendingDynamicLinkData? initialLink =
@@ -171,14 +185,18 @@ class HandlerDelegateState extends State<HandlerDelegate>
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: _combineProviders(),
-        child: MultiBlocListener(
-            listeners: combineListeners(),
+    return MaterialApp(
+        home: MultiBlocProvider(
+          child: MultiBlocListener(
             child: AppDelegate(
-              userBloc: userBloc,
-              themeBloc: themeBloc,
+              userBloc: _userBloc,
+              themeBloc: _themeBloc,
               authenticationBloc: authenticationBloc,
-            )));
+            ),
+            listeners: _combineListeners(),
+          ),
+          providers: _combineProviders(),
+        ),
+        debugShowCheckedModeBanner: false);
   }
 }

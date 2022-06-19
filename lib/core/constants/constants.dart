@@ -6,7 +6,9 @@ class Constants {
   static String lightTheme = 'Light';
   static String appLogo = 'assets/images/app_logo.png';
   static String shareIcon = 'assets/icons/share-icon.svg';
-
+  static String googleIcon = 'assets/images/google_icon.png';
+  static String appleIconWhite = 'assets/images/apple_icon_white.png';
+  static String facebookIcon = 'assets/images/facebook_icon.png';
   static String recordingAnimation = 'assets/animations/recording.flr';
   static String loadingAnimation = 'assets/animations/loading.flr';
   static String likeAnimation = 'assets/animations/like kiby.flr';

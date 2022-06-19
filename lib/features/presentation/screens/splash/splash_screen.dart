@@ -119,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Theme.of(context).canvasColor,
       body: Center(
           child: Hero(
-              tag: Constants.heroTag, child: Image.asset(logo, width: 200))),
+              tag: Constants.heroTag, child: Image.asset(logo, width: 150))),
     );
   }
 }

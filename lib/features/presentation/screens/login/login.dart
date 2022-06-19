@@ -1,33 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
-import 'package:frienderr/features/data/models/user/user_model.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
-import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
+import 'package:frienderr/features/data/models/user/user_model.dart';
 import 'package:frienderr/features/presentation/widgets/app_logo.dart';
 import 'package:frienderr/features/presentation/widgets/app_button.dart';
-import 'package:frienderr/features/presentation/widgets/app_footer.dart';
-import 'package:frienderr/features/presentation/widgets/flash_message.dart';
-import 'package:frienderr/features/presentation/widgets/social_vector.dart';
+import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
+import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/app_text_field.dart';
-
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
+import 'package:frienderr/features/presentation/widgets/oauth.dart';
 
 class LoginScreen extends StatefulWidget {
   final BlocGroup blocGroup;
   final bool shouldRenderUI;
-  LoginScreen({
+  const LoginScreen({
     Key? key,
     required this.blocGroup,
     this.shouldRenderUI = true,
@@ -38,6 +35,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  bool _rememberMe = false;
   late bool _shouldRenderUI;
   BlocGroup get _blocGroup => widget.blocGroup;
   final TextEditingController _emailController = TextEditingController();
@@ -92,7 +90,7 @@ class LoginScreenState extends State<LoginScreen> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: Theme.of(context).canvasColor,
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: SingleChildScrollView(
               child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
                   bloc: _blocGroup.authenticationBloc,
@@ -121,100 +119,193 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() => _shouldRenderUI = true),
                       ),
                       ConditionalRenderDelegate(
-                        condition: true,
+                        condition: _shouldRenderUI,
                         fallbackWidget: const Center(),
-                        renderWidget: _appBody(state),
+                        renderWidget: _animationLimiter(child: _appBody(state)),
                       )
                     ]);
                   }),
             )));
   }
 
+  Widget _animationLimiter({required Widget child}) {
+    return AnimationLimiter(
+        child: AnimationConfiguration.staggeredList(
+            position: 1,
+            duration: const Duration(milliseconds: 500),
+            child: SlideAnimation(
+                verticalOffset: 50.0, child: FadeInAnimation(child: child))));
+  }
+
+  Widget _appBody(AuthenticationState state) {
+    return Column(children: [
+      Padding(
+          padding: const EdgeInsets.only(
+              top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
+          child: Column(children: [
+            _oAuthActions(),
+            _orDivider(),
+            _usernameOrEmailTextField(state),
+            _passwordTextField(state),
+            _loginActions(),
+            _loginButton(),
+            _registerAccountText(),
+          ])),
+    ]);
+  }
+
+  Widget _usernameOrEmailTextField(state) {
+    return AppTextField(
+        label: "Username or email",
+        isObscure: false,
+        prefixIcon:
+            null /* const Icon(
+          CupertinoIcons.person,
+          color: Colors.grey,
+        )*/
+        ,
+        controller: _emailController,
+        errorText:
+            state.currentState == AuthenticationStatus.AuthenticationFailure
+                ? ''
+                : null);
+  }
+
+  Widget _passwordTextField(state) {
+    return AppTextField(
+        label: "Password",
+        isObscure: true,
+        prefixIcon:
+            null /* const Icon(
+          CupertinoIcons.lock,
+          size: 21.5,
+          color: Colors.grey,
+        )*/
+        ,
+        controller: _passwordController,
+        padding: const EdgeInsets.only(top: 20),
+        errorText:
+            state.currentState == AuthenticationStatus.AuthenticationFailure
+                ? state.error
+                : null);
+  }
+
+  Widget _loginButton() {
+    return AppButton(
+        label: "LOGIN",
+        margin: const EdgeInsets.only(top: 24),
+        onPressed: () => _onAuthenticate(context),
+        isLoading: false);
+  }
+
   Widget _registerAccountText() {
     return Center(
         child: AutoSizeText.rich(TextSpan(
-            text: "\nDon't have an account. Register",
+            text: "\n\nDon't have an account.",
             style: TextStyle(
               color: Colors.grey[400]!.withOpacity(0.9),
               fontSize: 14.5,
             ),
             children: <InlineSpan>[
           TextSpan(
-              text: ' here',
+              text: ' Sign Up',
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _navigateToRegisterScreen(),
               style: TextStyle(fontSize: 14.5, color: HexColor('#FFB126')))
         ])));
   }
 
-  Widget _forgotPassword() {
-    return Container(
-        margin: const EdgeInsets.only(top: 10),
-        child: Align(
-            alignment: Alignment.center,
-            child: AutoSizeText.rich(TextSpan(
-                text: "Forgot password? Click",
-                style: TextStyle(
-                  color: Colors.grey[400]!.withOpacity(0.9),
-                  fontSize: 14,
-                ),
-                children: <InlineSpan>[
-                  TextSpan(
-                      text: ' here',
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => _navigateToForgotScreen(),
-                      style:
-                          TextStyle(fontSize: 14.5, color: HexColor('#FFB126')))
-                ]))));
+  Widget _googleAccountButton() {
+    return MaterialButton(
+        height: 60,
+        color: HexColor('#9C9C9C').withOpacity(0.1),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            side: BorderSide(color: Colors.grey[900]!)),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image.asset(Constants.googleIcon, height: 35, width: 35),
+          Text('   Use Google Account',
+              style: Theme.of(context).textTheme.bodyText1)
+        ]),
+        onPressed: () {});
   }
 
-  Widget _appBody(AuthenticationState state) {
-    return AnimationLimiter(
-        child: AnimationConfiguration.staggeredList(
-            position: 1,
-            duration: const Duration(milliseconds: 500),
-            child: SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                    child: Column(children: [
-                  SocialVector(vector: Constants.authVector),
-                  Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(children: [
-                        AppTextField(
-                            label: "Email",
-                            isObscure: false,
-                            prefixIcon: const Icon(
-                              Icons.person,
-                              color: Colors.grey,
-                            ),
-                            controller: _emailController,
-                            errorText: state.currentState ==
-                                    AuthenticationStatus.AuthenticationFailure
-                                ? ''
-                                : null),
-                        AppTextField(
-                            label: "Password",
-                            isObscure: true,
-                            prefixIcon: const Icon(
-                              Icons.lock,
-                              size: 21.5,
-                              color: Colors.grey,
-                            ),
-                            controller: _passwordController,
-                            padding: const EdgeInsets.only(top: 15),
-                            errorText: state.currentState ==
-                                    AuthenticationStatus.AuthenticationFailure
-                                ? state.error
-                                : null),
-                        AppButton(
-                            label: "Login",
-                            margin: const EdgeInsets.only(top: 24),
-                            onPressed: () => _onAuthenticate(context),
-                            isLoading: false),
-                        _registerAccountText(),
-                      ])),
-                  AppFooter(child: _forgotPassword()),
-                ])))));
+  Widget _facebookAccountButton() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 20.0,
+      ),
+      child: MaterialButton(
+          height: 60,
+          color: HexColor('#9C9C9C').withOpacity(0.1),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              side: BorderSide(color: Colors.grey[900]!)),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Image.asset(Constants.facebookIcon, height: 25, width: 25),
+            Text('   Use Facebook Account',
+                style: Theme.of(context).textTheme.bodyText1)
+          ]),
+          onPressed: () {}),
+    );
+  }
+
+  Widget _oAuthActions() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
+      child: OAuthHandler(
+        onSelected: (oAuth) {
+          //print(oAuth);
+        },
+      ),
+    );
+  }
+
+  Widget _orDivider() {
+    return Padding(
+        padding: const EdgeInsets.only(top: 50.0, bottom: 50),
+        child: Row(children: <Widget>[
+          Expanded(
+              child: Divider(
+            height: 5,
+            thickness: 2,
+            endIndent: 0,
+            color: Colors.grey[900],
+          )),
+          const Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Text("OR"),
+          ),
+          Expanded(
+              child: Divider(
+            height: 5,
+            thickness: 2,
+            endIndent: 0,
+            color: Colors.grey[900],
+          )),
+        ]));
+  }
+
+  Widget _loginActions() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(children: [
+            Switch(
+              value: _rememberMe,
+              onChanged: (value) {
+                setState(() {
+                  _rememberMe = value;
+                });
+              },
+            ),
+            Text('Remember Me', style: Theme.of(context).textTheme.bodyText1)
+          ]),
+          Text('Forgot password', style: Theme.of(context).textTheme.bodyText1)
+        ],
+      ),
+    );
   }
 }

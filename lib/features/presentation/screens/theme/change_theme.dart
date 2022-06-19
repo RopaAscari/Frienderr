@@ -20,7 +20,7 @@ class ChangeThemeState extends State<ChangeTheme> {
         height: 200,
         margin: const EdgeInsets.only(top: 200),
         child: Flex(direction: Axis.horizontal, children: [
-          Expanded(
+          /* Expanded(
               child: ListView.builder(
             padding: EdgeInsets.all(10),
             itemCount: AppTheme.values.length,
@@ -42,7 +42,7 @@ class ChangeThemeState extends State<ChangeTheme> {
                 ),
               );
             },
-          ))
+          ))*/
         ]),
       ),
     );

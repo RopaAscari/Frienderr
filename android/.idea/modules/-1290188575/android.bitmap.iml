@@ -77,7 +77,6 @@
       <excludeFolder url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/bitmap-0.1.2/android/.gradle" />
     </content>
     <content url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/bitmap-0.1.2/ios/Classes">
-      <sourceFolder url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/bitmap-0.1.2/ios/Classes" isTestSource="false" />
       <sourceFolder url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/bitmap-0.1.2/ios/Classes" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />

@@ -40,11 +40,11 @@ class ChooseThemeState extends State<ChooseTheme> {
         color: Theme.of(context).canvasColor,
         child: Scaffold(
             body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Align(
+          const Align(
               alignment: Alignment.topLeft,
               child: Text('\n\n\n      Choose Theme',
                   textAlign: TextAlign.left, style: TextStyle(fontSize: 17))),
-          Container(
+          /* Container(
             height: 200,
             margin: const EdgeInsets.only(top: 200),
             child: Flex(direction: Axis.horizontal, children: [
@@ -72,7 +72,8 @@ class ChooseThemeState extends State<ChooseTheme> {
                 },
               ))
             ]),
-          ),
+          ),*/
+
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

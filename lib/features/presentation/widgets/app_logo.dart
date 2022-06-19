@@ -13,7 +13,7 @@ class _AppLogoState extends State<AppLogo> {
   final Widget appLogo = // Align(
       // alignment: Alignment.topCenter,
       // child:
-      Image.asset(Constants.appLogo, width: 200); //);
+      Image.asset(Constants.appLogo, width: 150); //);
   @override
   Widget build(BuildContext context) {
     return Hero(
@@ -27,6 +27,6 @@ class _AppLogoState extends State<AppLogo> {
         },
         tag: Constants.heroTag,
         child: Padding(
-            padding: EdgeInsets.only(top: 0, bottom: 0), child: appLogo));
+            padding: const EdgeInsets.only(top: 0, bottom: 0), child: appLogo));
   }
 }

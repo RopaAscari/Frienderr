@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frienderr/core/services/services.dart';
 
@@ -40,9 +41,9 @@ class _AppTextFieldState extends State<AppTextField> {
             errorText: widget.errorText,
             prefixIcon: widget.prefixIcon,
             suffixIcon: widget.isObscure ? passswordIcon() : widget.suffixIcon,
-            labelStyle: TextStyle(color: Colors.grey, fontSize: 14),
+            labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[800]!),
+              borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
             focusedBorder: OutlineInputBorder(
@@ -50,12 +51,12 @@ class _AppTextFieldState extends State<AppTextField> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[800]!),
+              borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),
             ),
-            fillColor: HexColor('#9C9C9C').withOpacity(0.1),
-            contentPadding: const EdgeInsets.only(top: 40.0),
-            errorStyle: TextStyle(height: 0.7, color: Colors.red, fontSize: 14),
+            fillColor: HexColor('#767676').withOpacity(0.1),
+            errorStyle:
+                const TextStyle(height: 0.7, color: Colors.red, fontSize: 14),
           ),
           obscureText: widget.isObscure ? canPasswordShow : widget.isObscure,
         ));
@@ -67,14 +68,14 @@ class _AppTextFieldState extends State<AppTextField> {
             color: Colors.grey,
             onPressed: () => setState(() => canPasswordShow = !canPasswordShow),
             icon: const Icon(
-              Icons.visibility_off,
+              CupertinoIcons.eye_slash_fill,
               size: 21.5,
             ))
         : IconButton(
             color: Colors.grey,
             onPressed: () => setState(() => canPasswordShow = !canPasswordShow),
             icon: const Icon(
-              Icons.visibility,
+              CupertinoIcons.eye_fill,
               size: 21.5,
             ));
   }
