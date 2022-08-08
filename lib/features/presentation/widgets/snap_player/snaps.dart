@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flare_flutter/flare_controls.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/data/models/snap/snap_model.dart';
 import 'package:frienderr/features/presentation/widgets/user_avatar.dart';
-import 'package:frienderr/features/presentation/widgets/like_animation.dart';
 import 'package:frienderr/features/presentation/blocs/animation/animation_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/snap_player/like_button.dart';
 import 'package:frienderr/features/presentation/widgets/snap_player/option_button.dart';
@@ -35,7 +32,7 @@ class _SnapsState extends State<Snaps> with TickerProviderStateMixin {
   Snap get _snap => widget.snap;
   late AnimationController _animationController;
   BlocGroup get _blocGroup => widget.blocGroup;
-  FlareControls flareControls = FlareControls();
+
   final AnimationBloc animationBloc = AnimationBloc();
   @override
   void initState() {
@@ -97,10 +94,10 @@ class _SnapsState extends State<Snaps> with TickerProviderStateMixin {
   void _pauseVideo() => widget.controller.pause();
 
   void _determineLikeAction() {
-    flareControls.play("Like");
+    /* flareControls.play("Like");
     Timer(const Duration(milliseconds: 1200), () {
       flareControls.play("IdleUnlike");
-    });
+    });*/
   }
 
   Future<void> _getControllerFuture() async {
@@ -127,19 +124,17 @@ class _SnapsState extends State<Snaps> with TickerProviderStateMixin {
   }
 
   Widget _videoPlayer() {
-    return LikeAnimation(
-        animationController: _animationController,
-        child: GestureDetector(
-            onDoubleTap: () => _determineLikeAction(),
-            onLongPress: () => _pauseVideo(),
-            onTap: () => _toggleVideoPlayerState(),
-            onLongPressEnd: (gestureDetails) => _playVideo(),
-            child: LayoutBuilder(
-              builder: (context, constraints) => AspectRatio(
-                aspectRatio: constraints.maxWidth / constraints.maxHeight,
-                child: VideoPlayer(widget.controller),
-              ),
-            )));
+    return GestureDetector(
+        onDoubleTap: () => _determineLikeAction(),
+        onLongPress: () => _pauseVideo(),
+        onTap: () => _toggleVideoPlayerState(),
+        onLongPressEnd: (gestureDetails) => _playVideo(),
+        child: LayoutBuilder(
+          builder: (context, constraints) => AspectRatio(
+            aspectRatio: constraints.maxWidth / constraints.maxHeight,
+            child: VideoPlayer(widget.controller),
+          ),
+        ));
   }
 
   Widget _userAvatar() {

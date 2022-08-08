@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/core/enums/enums.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/generated/assets.gen.dart';
 import 'package:frienderr/core/injection/injection.dart';

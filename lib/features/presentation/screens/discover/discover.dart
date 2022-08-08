@@ -4,35 +4,32 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:frienderr/features/presentation/widgets/loading.dart';
-import 'package:location/location.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:frienderr/core/constants/constants.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:permission_handler/permission_handler.dart' as permission;
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/screens/account/profile/profile_account.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
+import 'package:frienderr/features/presentation/screens/account/profile/profile_account.dart';
 
-class FindFriends extends StatefulWidget {
+class DiscoverScreen extends StatefulWidget {
   final BlocGroup blocGroup;
-  const FindFriends({Key? key, required this.blocGroup}) : super(key: key);
+  const DiscoverScreen({Key? key, required this.blocGroup}) : super(key: key);
 
   @override
-  FindFriendsState createState() => FindFriendsState();
+  _DiscoverScreenState createState() => _DiscoverScreenState();
 }
 
-class FindFriendsState extends State<FindFriends>
-    with AutomaticKeepAliveClientMixin<FindFriends> {
+class _DiscoverScreenState extends State<DiscoverScreen>
+    with AutomaticKeepAliveClientMixin<DiscoverScreen> {
   //late Marker marker;
   bool showMap = true;
   bool _lights = false;
@@ -41,24 +38,24 @@ class FindFriendsState extends State<FindFriends>
   bool isSearching = false;
   bool areUsersLoaded = false;
   late final UserModel user;
-  Location location = Location();
+  //Location location = Location();
   List<dynamic> globalMapUsers = [];
   final FocusNode _focus = FocusNode();
-  late LocationData _currentPosition;
-  late GoogleMapController _mapController;
-  LatLng _initialcameraposition = const LatLng(0.5937, 0.9629);
+  //late LocationData _currentPosition;
+  //late GoogleMapController _mapController;
+  // final LatLng _initialcameraposition = const LatLng(0.5937, 0.9629);
   final TextEditingController searchController = TextEditingController();
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
-  late StreamSubscription<LocationData> locationSubscription;
-  static const CameraPosition _kGooglePlex = CameraPosition(
+  //ate StreamSubscription<LocationData> locationSubscription;
+  /*static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
-  );
+  );*/
 
   @override
   void initState() {
-    _askPermissions();
+    //_askPermissions();
     super.initState();
   }
 
@@ -80,13 +77,13 @@ class FindFriendsState extends State<FindFriends>
     });
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  /* void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _loadMapStyles();
     // locationSubscription = location.onLocationChanged.listen((l) {
     //  animateToPosition(l.latitude ?? 0, l.longitude ?? 0);
     //});
-  }
+  }*/
 
   Future<void> animateToPosition(double latitude, double longitude) async {
     /* mapController.animateCamera(
@@ -109,12 +106,12 @@ class FindFriendsState extends State<FindFriends>
       final _darkMapStyle =
           await rootBundle.loadString('assets/map_styles/dark.json');
 
-      _mapController.setMapStyle(_darkMapStyle);
+      //  _mapController.setMapStyle(_darkMapStyle);
     } else {
       final _lightMapStyle =
           await rootBundle.loadString('assets/map_styles/light.json');
 
-      _mapController.setMapStyle(_lightMapStyle);
+      //_mapController.setMapStyle(_lightMapStyle);
     }
   }
 
@@ -137,7 +134,7 @@ class FindFriendsState extends State<FindFriends>
     });
   }
 
-  Future<void> getLoc() async {
+  /*Future<void> getLoc() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
@@ -186,7 +183,7 @@ class FindFriendsState extends State<FindFriends>
         BlocProvider.of<UserBloc>(context, listen: false).state.user;
    / await appUserToMarkers(user);
     //await appUsersToMarkers(user);*/
-  }
+  }*/
 
   Future<void> _showMapActionSheet() async {
     showModalBottomSheet<void>(
@@ -196,7 +193,7 @@ class FindFriendsState extends State<FindFriends>
         return Stack(children: [
           Center(
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
                 bottomRight: Radius.circular(30),
@@ -212,8 +209,8 @@ class FindFriendsState extends State<FindFriends>
                       alignment: Alignment.bottomCenter,
                       child: areUsersLoaded
                           ? mapUserList()
-                          : Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
+                          : const Padding(
+                              padding: EdgeInsets.only(bottom: 20),
                               child: CircularProgressIndicator())),
                 ]),
               ),
@@ -232,7 +229,7 @@ class FindFriendsState extends State<FindFriends>
         return StatefulBuilder(builder: (BuildContext context,
             StateSetter setState /*You can rename this!*/) {
           return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10))),
@@ -308,14 +305,16 @@ class FindFriendsState extends State<FindFriends>
 
   Widget _discoverMap() {
     return ClipRRect(
-      child: GoogleMap(
+      child:
+          Center() /*GoogleMap(
         mapType: MapType.normal,
         myLocationEnabled: false,
         zoomControlsEnabled: false,
         onMapCreated: _onMapCreated,
         myLocationButtonEnabled: false,
         initialCameraPosition: _kGooglePlex,
-      ),
+      )*/
+      ,
       borderRadius: BorderRadius.circular(25),
     );
   }
@@ -402,32 +401,20 @@ class FindFriendsState extends State<FindFriends>
                         child: const Icon(CupertinoIcons.location,
                             color: Colors.white),
                         onPressed: () => _showMapActionSheet())))),
-        fallbackWidget: Center());
+        fallbackWidget: const Center());
   }
 
   Widget mapUserList() {
     return SizedBox(
         height: 160,
-        child: CarouselSlider.builder(
+        child: PageView.builder(
             itemCount: globalMapUsers.length,
-            options: CarouselOptions(
-              autoPlay: false,
-              enlargeCenterPage: true,
-              //  onScrolled: (val) => null,
-              enableInfiniteScroll: false,
-              viewportFraction: 0.9,
-              scrollDirection: Axis.horizontal,
-              height: double.infinity,
-              aspectRatio: 2.0,
-              onPageChanged: (i, v) {
-                final latitude = globalMapUsers[i]['location']['latitude'];
-                final longitutde = globalMapUsers[i]['location']['longitude'];
-                animateToPosition(latitude, longitutde);
-              },
-              initialPage: 0,
-            ),
-            itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) {
+            onPageChanged: (i) {
+              final latitude = globalMapUsers[i]['location']['latitude'];
+              final longitutde = globalMapUsers[i]['location']['longitude'];
+              animateToPosition(latitude, longitutde);
+            },
+            itemBuilder: (BuildContext context, int itemIndex) {
               final maxWidth = MediaQuery.of(context).size.width;
 
               final username = globalMapUsers[itemIndex]['username'];
@@ -466,7 +453,7 @@ class FindFriendsState extends State<FindFriends>
                               borderRadius: BorderRadius.circular(100),
                               color: Colors.transparent),
                           child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.messenger_outline,
                                 color: Colors.grey,
                               ),
@@ -490,7 +477,7 @@ class FindFriendsState extends State<FindFriends>
       height: 45,
       decoration: BoxDecoration(
           shape: BoxShape.circle, color: Colors.black.withOpacity(0.3)),
-      child: Icon(
+      child: const Icon(
         Icons.search,
         color: Colors.white,
         size: 23,
@@ -506,7 +493,7 @@ class FindFriendsState extends State<FindFriends>
           height: 45,
           decoration: BoxDecoration(
               shape: BoxShape.circle, color: Colors.black.withOpacity(0.3)),
-          child: Icon(
+          child: const Icon(
             Icons.settings,
             color: Colors.white,
             size: 23,
@@ -527,7 +514,8 @@ class FindFriendsState extends State<FindFriends>
             Text(
               'No results',
               style: TextStyle(
-                fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10),
+                fontSize:
+                    const AdaptiveTextSize().getAdaptiveTextSize(context, 10),
               ),
             )
           ])));
@@ -563,7 +551,8 @@ class FindFriendsState extends State<FindFriends>
                     CachedNetworkImageProvider(searched[index]['profilePic'])),
             title: Text('${searched[index]['username']}',
                 style: TextStyle(
-                  fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10),
+                  fontSize:
+                      const AdaptiveTextSize().getAdaptiveTextSize(context, 10),
                 )
                 // To show light text with the dark variants...
                 ),

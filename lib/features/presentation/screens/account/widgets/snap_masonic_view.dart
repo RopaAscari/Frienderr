@@ -6,7 +6,6 @@ import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:frienderr/features/domain/entities/quick.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/data/models/snap/snap_model.dart';
-import 'package:frienderr/features/presentation/widgets/render_posts.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:frienderr/features/presentation/widgets/snap_player/snaps.dart';
 

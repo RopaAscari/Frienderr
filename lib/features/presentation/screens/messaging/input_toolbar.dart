@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 import 'attachment_button.dart';
@@ -53,7 +53,7 @@ class ChatToolbar extends StatefulWidget {
 
   /// Will be called on [SendButton] tap. Has [types.PartialText] which can
   /// be transformed to [types.TextMessage] and added to the messages list.
-  final void Function(types.PartialText) onSendPressed;
+  final void Function(String) onSendPressed;
 
   /// Will be called whenever the text inside [TextField] changes.
   final void Function(String)? onTextChanged;
@@ -169,8 +169,8 @@ class _InputState extends State<ChatToolbar> {
   void _handleSendPressed() {
     final trimmedText = _textController.text.trim();
     if (trimmedText != '') {
-      final partialText = types.PartialText(text: trimmedText);
-      widget.onSendPressed(partialText);
+      // final partialText = types.PartialText(text: trimmedText);
+      widget.onSendPressed(trimmedText);
       _textController.clear();
     }
   }

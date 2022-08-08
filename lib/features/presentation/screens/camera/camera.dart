@@ -5,7 +5,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -426,13 +425,15 @@ class CameraScreenState extends State<CameraScreen>
   }
 
   Widget _recordingAnimation() {
-    return SizedBox(
+    return const SizedBox(
         height: 150.0,
         width: 150.0,
-        child: FlareActor(Constants.recordingAnimation,
+        child:
+            Center() /*FlareActor(Constants.recordingAnimation,
             alignment: Alignment.center,
             fit: BoxFit.contain,
-            animation: "record"));
+            animation: "record")*/
+        );
   }
 
   Widget _recordingDuration() {

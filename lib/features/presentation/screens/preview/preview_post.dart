@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:frienderr/core/services/helpers.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
@@ -161,22 +160,13 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height, // constrain height
-        child: CarouselSlider.builder(
+        child: PageView.builder(
             itemCount: selectedAssets.length,
-            options: CarouselOptions(
-              initialPage: 0,
-              autoPlay: false,
-              viewportFraction: 1,
-              enlargeCenterPage: true,
-              enableInfiniteScroll: false,
-              scrollDirection: Axis.horizontal,
-              height: MediaQuery.of(context).size.height,
-              onPageChanged: (i, v) => setState(() {
-                currentIndex = i;
-                // widget.quickBloc.add(QuickEvent.onSnapChange(index: i));
-              }),
-            ),
-            itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+            onPageChanged: (i) => setState(() {
+                  currentIndex = i;
+                  // widget.quickBloc.add(QuickEvent.onSnapChange(index: i));
+                }),
+            itemBuilder: (BuildContext context, int index) {
               final file = selectedAssets[index].asset;
 
               final isAssetImage =

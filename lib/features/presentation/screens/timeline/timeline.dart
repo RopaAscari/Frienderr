@@ -18,7 +18,7 @@ import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/screens/timeline/stories.dart';
 import 'package:frienderr/features/presentation/screens/timeline/refresher.dart';
-import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
+import 'package:frienderr/features/presentation/screens/discover/discover.dart';
 import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
 import 'package:frienderr/features/presentation/screens/timeline/timeline_posts.dart';
 import 'package:frienderr/features/presentation/screens/timeline/mini_post_section.dart';
@@ -80,7 +80,7 @@ class _TimelineScreenState extends State<TimelineScreen>
               top: ui.window.viewPadding.top / ui.window.devicePixelRatio,
             ),
             height: MediaQuery.of(context).size.height,
-            child: SafeArea(child: FindFriends(blocGroup: _blocGroup)));
+            child: SafeArea(child: DiscoverScreen(blocGroup: _blocGroup)));
       },
     );
   }
