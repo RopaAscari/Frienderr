@@ -204,7 +204,7 @@ class LoginScreenState extends State<LoginScreen> {
     return AppTextField(
       isObscure: false,
       errorText: errorText,
-      label: "Username, email or phone number",
+      label: "Username or email",
       /* prefixIcon: const Icon(
         Icons.person,
         color: Colors.grey,
@@ -222,17 +222,16 @@ class LoginScreenState extends State<LoginScreen> {
     }
 
     return AppTextField(
-      label: "Password",
-      isObscure: true,
-      /*  prefixIcon: const Icon(
+        label: "Password",
+        isObscure: true,
+        /*  prefixIcon: const Icon(
         Icons.lock,
         size: 21.5,
         color: Colors.grey,
       ),*/
-      errorText: errorText,
-      controller: _passwordController,
-      padding: const EdgeInsets.only(top: 15),
-    );
+        errorText: errorText,
+        controller: _passwordController,
+        padding: const EdgeInsets.only(top: 15));
   }
 
   Widget _loginButton(AuthenticationState state) {
@@ -263,7 +262,7 @@ class LoginScreenState extends State<LoginScreen> {
             text: "\n\nDon't have an account.",
             style: TextStyle(
               color: Colors.grey[400]!.withOpacity(0.9),
-              fontSize: ResponsiveFlutter.of(context).fontSize(1.3),
+              fontSize: ResponsiveFlutter.of(context).fontSize(1.55),
             ),
             children: <InlineSpan>[
           TextSpan(

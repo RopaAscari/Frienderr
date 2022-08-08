@@ -98,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
-      body: Center(
+      body: const Center(
           /* child: Hero(
               tag: Constants.heroTag, child: Image.asset(logo, width: 150))*/
           ),
