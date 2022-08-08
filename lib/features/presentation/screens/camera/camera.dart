@@ -11,14 +11,17 @@ import 'package:frienderr/core/enums/enums.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
-import 'package:frienderr/features/domain/entities/media_asset.dart';
+import 'package:frienderr/core/services/route_builder.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
+import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/widgets/gallery.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/blocs/camera/camera_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/asset_image_fullscreen.dart';
 import 'package:frienderr/features/presentation/widgets/asset_video_fullscreen.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
+import 'package:frienderr/features/presentation/widgets/gallery_picker/gallery_picker.dart';
 import 'package:frienderr/features/presentation/screens/camera/widgets/camera_list_item.dart';
 
 const mediaOptions = ['Posts', 'Stories', 'Quicks'];
@@ -35,12 +38,11 @@ class CameraScreen extends StatefulWidget {
 }
 
 class CameraScreenState extends State<CameraScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   double progress = 0;
   late File thumbnail;
   bool isRecording = false;
   late Timer recordingTimer;
-
   int currentTimelineIndex = 0;
   late AnimationController _animation;
   bool _isThumbnailInitialzed = false;
@@ -89,10 +91,12 @@ class CameraScreenState extends State<CameraScreen>
       vsync: this,
     );
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _cameraBloc.add(const CameraEvent.disposeCamera());
     super.dispose();
   }
@@ -100,6 +104,24 @@ class CameraScreenState extends State<CameraScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // App state changed before we got the chance to initialize.
+    if (_cameraBloc.state.controller == null) {
+      return;
+    }
+    if (!_cameraBloc.state.controller!.value.isInitialized) {
+      return;
+    }
+    if (state == AppLifecycleState.inactive) {
+      _cameraBloc.add(const CameraEvent.disposeCamera());
+    } else if (state == AppLifecycleState.resumed) {
+      if (_cameraBloc.state.controller != null) {
+        _cameraBloc.add(const CameraEvent.initializeCamera());
+      }
+    }
   }
 
   Future<void> _fetchAssetThumbnail() async {
@@ -125,6 +147,20 @@ class CameraScreenState extends State<CameraScreen>
     });
   }
 
+  void _handleSelectedAssets(List<GalleryAsset> assets) {
+    if (_cameraMode == CameraSelectionMode.post) {
+      getService<AppRouter>().push(PreviewPostRoute(
+          selectedAssets: assets, postBloc: widget.blocGroup.postBloc));
+    } else if (_cameraMode == CameraSelectionMode.story) {
+      getService<AppRouter>().push(PreviewStoryRoute(
+          selectedAssets: assets, storyBloc: widget.blocGroup.storyBloc));
+    } else if (_cameraMode == CameraSelectionMode.snap) {
+      final File file = assets.first.asset;
+      getService<AppRouter>().push(
+          PreviewQuickRoute(file: file, snapBloc: widget.blocGroup.snapBloc));
+    }
+  }
+
   void _initializeDuration() async {
     final _timer = Timer.periodic(
       const Duration(milliseconds: 100),
@@ -140,77 +176,39 @@ class CameraScreenState extends State<CameraScreen>
     });
   }
 
-  Future<void> _displayPhotoMediaTaken(Future<File?> file) async {
-    return showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return AssetImageFullscreen(file: file);
-        });
-  }
-
-  Future<void> _displayVideoMediaTaken(Future<File?> file) async {
-    return showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return AssetVideoFullscreen(file: file);
-        });
-  }
-
   void _startVideoRecording(CameraController controller) async {
     setState(() {
       isRecording = true;
     });
-    _initializeDuration();
-    controller.startVideoRecording();
+    //_initializeDuration();
+    await controller.startVideoRecording();
   }
 
   void _stopVideoRecording(CameraController controller) async {
-    setState(() {
-      isRecording = false;
-    });
-    recordingTimer.cancel();
-    final XFile file = await controller.stopVideoRecording();
+    try {
+      setState(() {
+        isRecording = false;
+      });
+      //recordingTimer.cancel();
+      final XFile file = await controller.stopVideoRecording();
 
-    final futureFile = Future(() => File(file.path));
-    _displayVideoMediaTaken(futureFile);
+      Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
+          child: AssetVideoFullscreen(
+        file: File(file.path),
+        onSelected: _handleSelectedAssets,
+      )));
+    } catch (e) {}
   }
 
   void _takePicture(CameraController controller) async {
     try {
       final image = await controller.takePicture();
 
-      final futureFile = Future(() => File(image.path));
-      _displayPhotoMediaTaken(futureFile);
+      Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
+          child: AssetImageFullscreen(file: File(image.path))));
+
       return;
     } catch (e) {}
-  }
-
-  void _openGallery() async {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Gallery(
-          onPicked: (BuildContext context, List<GalleryAsset> assets) {
-            Navigator.pop(context);
-            if (_cameraMode == CameraSelectionMode.post) {
-              getIt<AppRouter>().push(PreviewPostRoute(
-                  selectedAssets: assets, postBloc: widget.blocGroup.postBloc));
-            } else if (_cameraMode == CameraSelectionMode.story) {
-              getIt<AppRouter>().push(PreviewStoryRoute(
-                  selectedAssets: assets,
-                  storyBloc: widget.blocGroup.storyBloc));
-            } else if (_cameraMode == CameraSelectionMode.snap) {
-              final File file = assets.first.asset;
-              getIt<AppRouter>().push(PreviewQuickRoute(
-                  file: file, quickBloc: widget.blocGroup.quickBloc));
-            }
-          },
-        );
-      },
-    );
   }
 
   Future<void> _determineFeatureAction(CameraFeatureMode mode) async {
@@ -265,19 +263,20 @@ class CameraScreenState extends State<CameraScreen>
     return Column(children: [
       Stack(children: <Widget>[
         _cameraWidget(state),
-        _cameraFeatureList(state),
         _cameraModes(state),
+        _cameraFeatureList(state),
         _cameraSubModes(state),
         _recordingDuration(),
         _captureButton(_controller),
         _headerWidget(_controller),
-        _cameraOptions(_controller),
+        _galleryPreviewDisplay(),
+        _changeLensButton(_controller),
       ]),
     ]);
   }
 
   Widget _cameraInitializing() {
-    return const Center(child: CircularProgressIndicator());
+    return const Center(child: LoadingIndicator(size: Size.square(40)));
   }
 
   Widget _cameraError() {
@@ -287,7 +286,7 @@ class CameraScreenState extends State<CameraScreen>
   Widget _cameraModes(CameraState state) {
     return Positioned(
       child: SizedBox(
-          width: 200,
+          width: 100,
           height: 400,
           child: ListView.builder(
               shrinkWrap: true,
@@ -306,7 +305,7 @@ class CameraScreenState extends State<CameraScreen>
                       });
                     });
               })),
-      left: 10,
+      left: 15,
       top: MediaQuery.of(context).size.height * .20,
     );
   }
@@ -314,7 +313,7 @@ class CameraScreenState extends State<CameraScreen>
   Widget _cameraFeatureList(CameraState state) {
     return Positioned(
       child: SizedBox(
-          width: 200,
+          width: 100,
           height: 400, //_determineFeatureAction
           child: ListView.builder(
               shrinkWrap: true,
@@ -345,7 +344,7 @@ class CameraScreenState extends State<CameraScreen>
       child: ConditionalRenderDelegate(
           condition: isStory || isPost,
           renderWidget: SizedBox(
-              width: 200,
+              width: 100,
               height: 400,
               child: ListView.builder(
                   shrinkWrap: true,
@@ -357,18 +356,19 @@ class CameraScreenState extends State<CameraScreen>
                           title: state.cameraSubFeatureList[index].title,
                         ),
                         onTap: () {
-                          getIt<AppRouter>().push(const ArtboardRoute());
+                          getService<AppRouter>().push(ArtboardRoute(
+                              mode: _cameraMode, blocGroup: widget.blocGroup));
                         });
                   })),
           fallbackWidget: const Center()),
-      bottom: 10,
-      right: 10,
+      bottom: -40,
+      right: 0,
     );
   }
 
   Widget _captureButton(CameraController controller) {
     return Positioned(
-      bottom: 10,
+      bottom: 15,
       child: Align(
           alignment: Alignment.center,
           child: Container(
@@ -394,7 +394,7 @@ class CameraScreenState extends State<CameraScreen>
                       )),
                   const Center()
                 ]),
-            margin: const EdgeInsets.fromLTRB(1, 5, 1, 40),
+            margin: const EdgeInsets.fromLTRB(1, 5, 1, 0),
           )),
       width: MediaQuery.of(context).size.width,
     );
@@ -416,10 +416,10 @@ class CameraScreenState extends State<CameraScreen>
       onTap: () {
         _takePicture(controller);
       },
-      onTapDown: (TapDownDetails details) {
+      onLongPressStart: (LongPressStartDetails details) {
         _startVideoRecording(controller);
       },
-      onTapUp: (TapUpDetails details) {
+      onLongPressEnd: (LongPressEndDetails details) {
         _stopVideoRecording(controller);
       },
     );
@@ -482,80 +482,76 @@ class CameraScreenState extends State<CameraScreen>
   }
 
   Widget _galleryPreviewDisplay() {
-    return Align(
-        alignment: Alignment.bottomLeft,
+    return Positioned(
+        left: 15,
+        bottom: 15,
         child: GestureDetector(
-            onTap: () {
-              _openGallery();
-            },
-            child: ClipRRect(
-              child: Container(
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: ConditionalRenderDelegate(
-                      condition: _thumbnailType == AssetType.image,
-                      renderWidget: FutureBuilder<File?>(
-                          future: _isThumbnailInitialzed
-                              ? _initializeImageThumbnailFuture
-                              : null,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.data == null) {
-                                return const Center();
-                              } else {
-                                return Image.file(snapshot.data as File);
-                              }
-                            } else if (snapshot.hasError) {
-                              return const Center(); // error
-                            } else {
-                              return const Center(); // loading
-                            }
-                          }),
-                      fallbackWidget: FutureBuilder<Uint8List?>(
-                          future: _isThumbnailInitialzed
-                              ? _initializeVideoThumbnailFuture
-                              : null,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.data == null) {
-                                return const Center();
-                              } else {
-                                return Image.memory(snapshot.data as Uint8List);
-                              }
-                            } else if (snapshot.hasError) {
-                              return const Center(); // error
-                            } else {
-                              return const Center(); // loading
-                            }
-                          }))),
-              borderRadius: BorderRadius.circular(15),
-            )));
+          onTap: () {
+            Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
+              child: GalleryPicker(onPicked: _handleSelectedAssets),
+            ));
+          },
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(11),
+              child: ConditionalRenderDelegate(
+                  condition: _thumbnailType == AssetType.image,
+                  renderWidget: FutureBuilder<File?>(
+                      future: _isThumbnailInitialzed
+                          ? _initializeImageThumbnailFuture
+                          : null,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.data == null) {
+                            return const Center();
+                          } else {
+                            return Image.file(snapshot.data as File,
+                                width: 45, height: 45, fit: BoxFit.contain);
+                          }
+                        } else if (snapshot.hasError) {
+                          return const Center(); // error
+                        } else {
+                          return const Center(); // loading
+                        }
+                      }),
+                  fallbackWidget: FutureBuilder<Uint8List?>(
+                      future: _isThumbnailInitialzed
+                          ? _initializeVideoThumbnailFuture
+                          : null,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.data == null) {
+                            return const Center();
+                          } else {
+                            return Image.memory(snapshot.data as Uint8List,
+                                width: 45, height: 45, fit: BoxFit.contain);
+                          }
+                        } else if (snapshot.hasError) {
+                          return const Center(); // error
+                        } else {
+                          return const Center(); // loading
+                        }
+                      }))),
+        ));
   }
 
   Widget _changeLensButton(CameraController controller) {
-    return Padding(
-        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * .75),
-        child: Align(
-            alignment: Alignment.bottomRight,
-            child: IconButton(
-                iconSize: 30,
-                icon: const Icon(CupertinoIcons.camera_rotate),
-                onPressed: () {
-                  if (controller.description.lensDirection ==
-                      CameraLensDirection.front) {
-                    _cameraBloc.add(const CameraEvent.changeLens(
-                        direction: CameraLensDirection.back));
-                  } else if (controller.description.lensDirection ==
-                      CameraLensDirection.back) {
-                    _cameraBloc.add(const CameraEvent.changeLens(
-                        direction: CameraLensDirection.front));
-                  }
-                })));
+    return Positioned(
+        right: 15,
+        bottom: 15,
+        child: IconButton(
+            iconSize: 25,
+            icon: const Icon(CupertinoIcons.camera),
+            onPressed: () {
+              if (controller.description.lensDirection ==
+                  CameraLensDirection.front) {
+                _cameraBloc.add(const CameraEvent.changeLens(
+                    direction: CameraLensDirection.back));
+              } else if (controller.description.lensDirection ==
+                  CameraLensDirection.back) {
+                _cameraBloc.add(const CameraEvent.changeLens(
+                    direction: CameraLensDirection.front));
+              }
+            }));
   }
 
   Widget _cameraWidget(CameraState state) {
@@ -572,16 +568,7 @@ class CameraScreenState extends State<CameraScreen>
             ),
             child: AspectRatio(
                 aspectRatio: 1,
-                child: CameraPreview(state.controller
-                    as CameraController) /*ConditionalRenderDelegate(
-                    condition:
-                        selectedFeatures.contains(CameraFeatureMode.filter),
-                    renderWidget: DeepArCamera(
-                        controller:
-                            state.deepArController as CameraDeepArController),
-                    fallbackWidget:
-                        CameraPreview(state.controller as CameraController))))*/
-                )));
+                child: CameraPreview(state.controller as CameraController))));
   }
 
   Widget _headerWidget(CameraController controller) {

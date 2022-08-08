@@ -17,7 +17,7 @@ class SendLikeNotificationUseCase
 }
 
 class SendLikeNotificationParams {
-  final NotificationEntity notification;
+  final NotificationDTO notification;
 
   const SendLikeNotificationParams(this.notification);
 }

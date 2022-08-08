@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:injectable/injectable.dart';
-//import 'package:camera_deep_ar/camera_deep_ar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:frienderr/features/presentation/screens/camera/feature_list.dart';
 
@@ -49,33 +50,32 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
       _InitializeCamera event, Emitter<CameraState> emit) async {
     try {
       emit(state.copyWith(currentState: CameraStatus.initializing));
-
+      log("Attemtping to grab permissions");
+      var status = await Permission.camera.request();
+       log("After permiison attempt");
+      if (!status.isGranted) {
+        log("Permission is denined.");
+        emit(state.copyWith(currentState: CameraStatus.error));
+        return;
+      }
+      log("After permission attempt 1 ");
       final cameras = await availableCameras();
       final firstCamera = cameras.first;
-
+      log("After permission attempt 2");
       final _controller = CameraController(
         firstCamera,
         ResolutionPreset.medium,
       );
-
-      /* final _deepArController = CameraDeepArController(const DeepArConfig(
-        androidKey:
-            "3332daabda1e0784d08dec6da756646d57d37eb12e0ba28db523a8736c284ce605d24eac43a0c22f",
-        ioskey:
-            "dc808d1cde5684e23b18993334f96b54fb99730bc1b9f53ab16b2b1587bd39b8967d4195efeacf95",
-        displayMode: DisplayMode.camera,
-// displayMode: DisplayMode.camera,
-      ));*/
 
       await _controller.initialize();
 
       emit(state.copyWith(
         cameras: cameras,
         controller: _controller,
-        //   deepArController: _deepArController,
         currentState: CameraStatus.initialized,
       ));
     } catch (error) {
+      log("Camera Initialization Error $error");
       emit(state.copyWith(currentState: CameraStatus.error));
     }
   }

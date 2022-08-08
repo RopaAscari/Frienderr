@@ -1,83 +1,143 @@
-import 'dart:convert';
-
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/features/data/models/post/post_model.dart';
 
-class PostEntity {
-  final String id;
-  final dynamic user;
-  final String caption;
-  final int dateCreated;
-  final int commentCount;
-  final List<String> shares;
-  final List<String> likes;
-  final List<Content> content;
-
-  PostEntity({
+class PostDTO {
+  String id;
+  int saves;
+  int shares;
+  UserDTO user;
+  int comments;
+  bool? isSaved;
+  int reactions;
+  String caption;
+  int dateCreated;
+  TimelinePostType type;
+  List<ContentDTO> content;
+  PostReactionDTO? userReaction;
+  List<PostReactionDTO> latestReactions;
+  PostDTO({
+    this.isSaved,
+    this.userReaction,
     required this.id,
     required this.user,
-    required this.likes,
+    required this.saves,
+    required this.type,
     required this.shares,
     required this.caption,
     required this.content,
+    required this.comments,
+    required this.reactions,
     required this.dateCreated,
-    required this.commentCount,
+    required this.latestReactions,
   });
+
+  PostDTO copyWith({
+    String? id,
+    int? saves,
+    int? shares,
+    UserDTO? user,
+    int? comments,
+    int? reactions,
+    String? caption,
+    int? dateCreated,
+    List<ContentDTO>? content,
+    PostReactionDTO? userReaction,
+    List<PostReactionDTO>? latestReactions,
+  }) {
+    return PostDTO(
+      type: type,
+      id: id ?? this.id,
+      user: user ?? this.user,
+      saves: saves ?? this.saves,
+      isSaved: isSaved ?? isSaved,
+      shares: shares ?? this.shares,
+      content: content ?? this.content,
+      caption: caption ?? this.caption,
+      comments: comments ?? this.comments,
+      reactions: reactions ?? this.reactions,
+      dateCreated: dateCreated ?? this.dateCreated,
+      userReaction: userReaction ?? this.userReaction,
+      latestReactions: latestReactions ?? this.latestReactions,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'likes': likes,
+      'saves': saves,
       'shares': shares,
       'caption': caption,
+      'isSaved': isSaved,
       'user': user.toJson(),
+      'comments': comments,
+      'reactions': reactions,
       'dateCreated': dateCreated,
-      'commentCount': commentCount,
+      'type': serializeEnumType(type),
+      'userReaction': userReaction?.toJson(),
       'content': content.map((x) => x.toJson()).toList(),
+      'latestReactions': latestReactions.map((x) => x.toJson()).toList(),
     };
   }
 
-  factory PostEntity.fromJson(Map<String, dynamic> map) {
-    return PostEntity(
+  factory PostDTO.fromJson(Map<String, dynamic> map) {
+    return PostDTO(
       id: map['id'] ?? '',
-      user: map['user'] ?? null,
       caption: map['caption'] ?? '',
+      type: parseEnumType(map['type']),
+      saves: map['saves']?.toInt() ?? 0,
+      userReaction: map['userReaction'] != null
+          ? PostReactionDTO.fromJson(map['userReaction'])
+          : null,
+      shares: map['shares']?.toInt() ?? 0,
+      user: UserDTO.fromJson(map['user']),
+      comments: map['comments']?.toInt() ?? 0,
+      reactions: map['reactions']?.toInt() ?? 0,
       dateCreated: map['dateCreated']?.toInt() ?? 0,
-      commentCount: map['commentCount']?.toInt() ?? 0,
-      shares: List<String>.from(map['shares']),
-      likes: List<String>.from(map['likes']),
-      content:
-          List<Content>.from(map['content']?.map((x) => Content.fromJson(x))),
-    );
-  }
-
-  PostEntity copyWith({
-    String? id,
-    dynamic? user,
-    String? caption,
-    int? dateCreated,
-    int? commentCount,
-    List<String>? shares,
-    List<String>? likes,
-    List<Content>? content,
-  }) {
-    return PostEntity(
-      id: id ?? this.id,
-      user: user ?? this.user,
-      caption: caption ?? this.caption,
-      dateCreated: dateCreated ?? this.dateCreated,
-      commentCount: commentCount ?? this.commentCount,
-      shares: shares ?? this.shares,
-      likes: likes ?? this.likes,
-      content: content ?? this.content,
+      content: List<ContentDTO>.from(
+          map['content']?.map((x) => ContentDTO.fromJson(x))),
+      latestReactions: map['latestReactions'].isNotEmpty
+          ? map['latestReactions']
+              .map((x) => PostReactionDTO.fromJson(x))
+              .cast<PostReactionDTO>()
+              .toList()
+          : [].cast<PostReactionDTO>(),
     );
   }
 }
 
-class Content {
+class PostReactionDTO {
+  final String uid;
+  final String postId;
+  final String reaction;
+  PostReactionDTO({
+    required this.uid,
+    required this.postId,
+    required this.reaction,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uid': uid,
+      'postId': postId,
+      'reaction': reaction,
+    };
+  }
+
+  factory PostReactionDTO.fromJson(Map<String, dynamic> map) {
+    return PostReactionDTO(
+      uid: map['uid'] ?? '',
+      postId: map['postId'] ?? '',
+      reaction: map['reaction'] ?? '',
+    );
+  }
+}
+
+class ContentDTO {
   final String type;
   final String media;
-  final PostMetadata metadata;
-  Content({
+  final PostMetadataDTO metadata;
+  ContentDTO({
     required this.type,
     required this.media,
     required this.metadata,
@@ -91,18 +151,18 @@ class Content {
     };
   }
 
-  factory Content.fromJson(Map<String, dynamic> map) {
-    return Content(
+  factory ContentDTO.fromJson(Map<String, dynamic> map) {
+    return ContentDTO(
       type: map['type'] ?? '',
       media: map['media'] ?? '',
-      metadata: PostMetadata.fromJson(map['metadata']),
+      metadata: PostMetadataDTO.fromJson(map['metadata']),
     );
   }
 }
 
-class PostMetadata {
+class PostMetadataDTO {
   final String? thumbnail;
-  PostMetadata({
+  PostMetadataDTO({
     this.thumbnail,
   });
 
@@ -112,8 +172,8 @@ class PostMetadata {
     };
   }
 
-  factory PostMetadata.fromJson(Map<String, dynamic> map) {
-    return PostMetadata(
+  factory PostMetadataDTO.fromJson(Map<String, dynamic> map) {
+    return PostMetadataDTO(
       thumbnail: map['thumbnail'] ?? '',
     );
   }
@@ -130,11 +190,36 @@ class PostUser {
   });
 }
 
-class TimelineResponse {
+class Timeline {
   bool userCaughtUp;
-  List<PostEntity> posts;
-  TimelineResponse({
-    required this.userCaughtUp,
+  List<Post> posts;
+  Timeline({
     required this.posts,
+    required this.userCaughtUp,
   });
+}
+
+TimelinePostType parseEnumType(String type) {
+  switch (type) {
+    case 'post':
+      return TimelinePostType.post;
+
+    case 'status':
+      return TimelinePostType.status;
+    default:
+      throw Error();
+  }
+}
+
+String serializeEnumType(TimelinePostType type) {
+  switch (type) {
+    case TimelinePostType.post:
+      return TimelinePostType.post.name;
+
+    case TimelinePostType.status:
+      return TimelinePostType.status.name;
+
+    default:
+      throw Error();
+  }
 }

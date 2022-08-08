@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:frienderr/core/failure/failure.dart';
-import 'package:frienderr/features/domain/entities/comment.dart';
-import 'package:frienderr/features/data/models/comment/comment_model.dart';
-import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:frienderr/features/data/models/user/user_model.dart';
 
 abstract class IFollowersRepository {
-  Future<Either<Failure, List<String>>> getFollowers(String userId);
-  Future<Either<Failure, bool>> registerFollwoing(
+  Future<Either<Failure, int>> getFollowersCount(String userId);
+  Future<Either<Failure, bool>> registerFollowing(
       {required String uid, required String fid});
+  Future<Either<Failure, List<UserModel>>> getProfileFollowersList(
+      String userId);
 }

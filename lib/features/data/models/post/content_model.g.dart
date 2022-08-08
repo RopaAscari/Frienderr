@@ -6,17 +6,15 @@ part of 'content_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ContentModel _$$_ContentModelFromJson(Map<String, dynamic> json) =>
-    _$_ContentModel(
+_$_Content _$$_ContentFromJson(Map<String, dynamic> json) => _$_Content(
       type: json['type'] as String? ?? '',
       media: json['media'] as String? ?? '',
       metadata: json['metadata'] == null
-          ? const PostMetadataModel()
-          : PostMetadataModel.fromJson(
-              json['metadata'] as Map<String, dynamic>),
+          ? const PostMetadata()
+          : PostMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_ContentModelToJson(_$_ContentModel instance) =>
+Map<String, dynamic> _$$_ContentToJson(_$_Content instance) =>
     <String, dynamic>{
       'type': instance.type,
       'media': instance.media,

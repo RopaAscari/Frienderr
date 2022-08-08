@@ -14,56 +14,56 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-StoryMetadataModel _$StoryMetadataModelFromJson(Map<String, dynamic> json) {
-  return _StoryMetadataModel.fromJson(json);
+StoryMetadata _$StoryMetadataFromJson(Map<String, dynamic> json) {
+  return _StoryMetadata.fromJson(json);
 }
 
 /// @nodoc
-class _$StoryMetadataModelTearOff {
-  const _$StoryMetadataModelTearOff();
+class _$StoryMetadataTearOff {
+  const _$StoryMetadataTearOff();
 
-  _StoryMetadataModel call({int duration = 0, String? thumbnail = null}) {
-    return _StoryMetadataModel(
+  _StoryMetadata call({int duration = 0, String? thumbnail = null}) {
+    return _StoryMetadata(
       duration: duration,
       thumbnail: thumbnail,
     );
   }
 
-  StoryMetadataModel fromJson(Map<String, Object?> json) {
-    return StoryMetadataModel.fromJson(json);
+  StoryMetadata fromJson(Map<String, Object?> json) {
+    return StoryMetadata.fromJson(json);
   }
 }
 
 /// @nodoc
-const $StoryMetadataModel = _$StoryMetadataModelTearOff();
+const $StoryMetadata = _$StoryMetadataTearOff();
 
 /// @nodoc
-mixin _$StoryMetadataModel {
+mixin _$StoryMetadata {
   int get duration => throw _privateConstructorUsedError;
   String? get thumbnail => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $StoryMetadataModelCopyWith<StoryMetadataModel> get copyWith =>
+  $StoryMetadataCopyWith<StoryMetadata> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $StoryMetadataModelCopyWith<$Res> {
-  factory $StoryMetadataModelCopyWith(
-          StoryMetadataModel value, $Res Function(StoryMetadataModel) then) =
-      _$StoryMetadataModelCopyWithImpl<$Res>;
+abstract class $StoryMetadataCopyWith<$Res> {
+  factory $StoryMetadataCopyWith(
+          StoryMetadata value, $Res Function(StoryMetadata) then) =
+      _$StoryMetadataCopyWithImpl<$Res>;
   $Res call({int duration, String? thumbnail});
 }
 
 /// @nodoc
-class _$StoryMetadataModelCopyWithImpl<$Res>
-    implements $StoryMetadataModelCopyWith<$Res> {
-  _$StoryMetadataModelCopyWithImpl(this._value, this._then);
+class _$StoryMetadataCopyWithImpl<$Res>
+    implements $StoryMetadataCopyWith<$Res> {
+  _$StoryMetadataCopyWithImpl(this._value, this._then);
 
-  final StoryMetadataModel _value;
+  final StoryMetadata _value;
   // ignore: unused_field
-  final $Res Function(StoryMetadataModel) _then;
+  final $Res Function(StoryMetadata) _then;
 
   @override
   $Res call({
@@ -84,32 +84,32 @@ class _$StoryMetadataModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$StoryMetadataModelCopyWith<$Res>
-    implements $StoryMetadataModelCopyWith<$Res> {
-  factory _$StoryMetadataModelCopyWith(
-          _StoryMetadataModel value, $Res Function(_StoryMetadataModel) then) =
-      __$StoryMetadataModelCopyWithImpl<$Res>;
+abstract class _$StoryMetadataCopyWith<$Res>
+    implements $StoryMetadataCopyWith<$Res> {
+  factory _$StoryMetadataCopyWith(
+          _StoryMetadata value, $Res Function(_StoryMetadata) then) =
+      __$StoryMetadataCopyWithImpl<$Res>;
   @override
   $Res call({int duration, String? thumbnail});
 }
 
 /// @nodoc
-class __$StoryMetadataModelCopyWithImpl<$Res>
-    extends _$StoryMetadataModelCopyWithImpl<$Res>
-    implements _$StoryMetadataModelCopyWith<$Res> {
-  __$StoryMetadataModelCopyWithImpl(
-      _StoryMetadataModel _value, $Res Function(_StoryMetadataModel) _then)
-      : super(_value, (v) => _then(v as _StoryMetadataModel));
+class __$StoryMetadataCopyWithImpl<$Res>
+    extends _$StoryMetadataCopyWithImpl<$Res>
+    implements _$StoryMetadataCopyWith<$Res> {
+  __$StoryMetadataCopyWithImpl(
+      _StoryMetadata _value, $Res Function(_StoryMetadata) _then)
+      : super(_value, (v) => _then(v as _StoryMetadata));
 
   @override
-  _StoryMetadataModel get _value => super._value as _StoryMetadataModel;
+  _StoryMetadata get _value => super._value as _StoryMetadata;
 
   @override
   $Res call({
     Object? duration = freezed,
     Object? thumbnail = freezed,
   }) {
-    return _then(_StoryMetadataModel(
+    return _then(_StoryMetadata(
       duration: duration == freezed
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -124,11 +124,11 @@ class __$StoryMetadataModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_StoryMetadataModel implements _StoryMetadataModel {
-  const _$_StoryMetadataModel({this.duration = 0, this.thumbnail = null});
+class _$_StoryMetadata implements _StoryMetadata {
+  const _$_StoryMetadata({this.duration = 0, this.thumbnail = null});
 
-  factory _$_StoryMetadataModel.fromJson(Map<String, dynamic> json) =>
-      _$$_StoryMetadataModelFromJson(json);
+  factory _$_StoryMetadata.fromJson(Map<String, dynamic> json) =>
+      _$$_StoryMetadataFromJson(json);
 
   @JsonKey()
   @override
@@ -139,14 +139,14 @@ class _$_StoryMetadataModel implements _StoryMetadataModel {
 
   @override
   String toString() {
-    return 'StoryMetadataModel(duration: $duration, thumbnail: $thumbnail)';
+    return 'StoryMetadata(duration: $duration, thumbnail: $thumbnail)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _StoryMetadataModel &&
+            other is _StoryMetadata &&
             const DeepCollectionEquality().equals(other.duration, duration) &&
             const DeepCollectionEquality().equals(other.thumbnail, thumbnail));
   }
@@ -159,21 +159,21 @@ class _$_StoryMetadataModel implements _StoryMetadataModel {
 
   @JsonKey(ignore: true)
   @override
-  _$StoryMetadataModelCopyWith<_StoryMetadataModel> get copyWith =>
-      __$StoryMetadataModelCopyWithImpl<_StoryMetadataModel>(this, _$identity);
+  _$StoryMetadataCopyWith<_StoryMetadata> get copyWith =>
+      __$StoryMetadataCopyWithImpl<_StoryMetadata>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_StoryMetadataModelToJson(this);
+    return _$$_StoryMetadataToJson(this);
   }
 }
 
-abstract class _StoryMetadataModel implements StoryMetadataModel {
-  const factory _StoryMetadataModel({int duration, String? thumbnail}) =
-      _$_StoryMetadataModel;
+abstract class _StoryMetadata implements StoryMetadata {
+  const factory _StoryMetadata({int duration, String? thumbnail}) =
+      _$_StoryMetadata;
 
-  factory _StoryMetadataModel.fromJson(Map<String, dynamic> json) =
-      _$_StoryMetadataModel.fromJson;
+  factory _StoryMetadata.fromJson(Map<String, dynamic> json) =
+      _$_StoryMetadata.fromJson;
 
   @override
   int get duration;
@@ -181,6 +181,6 @@ abstract class _StoryMetadataModel implements StoryMetadataModel {
   String? get thumbnail;
   @override
   @JsonKey(ignore: true)
-  _$StoryMetadataModelCopyWith<_StoryMetadataModel> get copyWith =>
+  _$StoryMetadataCopyWith<_StoryMetadata> get copyWith =>
       throw _privateConstructorUsedError;
 }

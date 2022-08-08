@@ -17,13 +17,13 @@ class DeleteStoryUseCase extends UseCase<bool, DeleteStoryParams> {
   @override
   Future<Either<Failure, bool>> call(DeleteStoryParams params) {
     return repository.deleteStory(
-        userId: params.userId, isLast: params.isLast, story: params.story);
+        userId: params.userId, isLast: params.isLast, content: params.content);
   }
 }
 
 class DeleteStoryParams {
   final bool isLast;
   final String userId;
-  final StoryContent story;
-  DeleteStoryParams(this.isLast, this.userId, this.story);
+  final List<StoryContent>? content;
+  DeleteStoryParams(this.isLast, this.userId, this.content);
 }

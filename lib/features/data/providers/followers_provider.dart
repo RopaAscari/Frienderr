@@ -11,11 +11,23 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
   const FollowersRemoteDataProvider(this.firestoreInstance);
 
   @override
-  Future<QuerySnapshot<Map<String, dynamic>>> getFollowers(String uid) async {
+  Future<QuerySnapshot<Map<String, dynamic>>> getFollowersCount(
+      String uid) async {
     return await firestoreInstance
-        .collection(Collections.follower.name)
+        .collection(Collections.follower)
         .doc(uid)
-        .collection(Collections.records.name)
+        .collection(Collections.records)
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<Map<String, dynamic>>> getProfileFollowersList(
+      String uid) async {
+    return await firestoreInstance
+        .collection(Collections.follower)
+        .doc(uid)
+        .collection(Collections.records)
+        .limit(10)
         .get();
   }
 
@@ -24,9 +36,9 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
       {required String uid, required String fid}) async {
     try {
       await firestoreInstance
-          .collection(Collections.follower.name)
+          .collection(Collections.follower)
           .doc(fid)
-          .collection(Collections.records.name)
+          .collection(Collections.records)
           .doc(fid)
           .set({'id': uid});
 
@@ -41,9 +53,9 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
       {required String uid, required String fid}) async {
     try {
       await firestoreInstance
-          .collection(Collections.follower.name)
+          .collection(Collections.follower)
           .doc(fid)
-          .collection(Collections.records.name)
+          .collection(Collections.records)
           .doc(fid)
           .delete();
 
@@ -55,7 +67,9 @@ class FollowersRemoteDataProvider implements IFollowersRemoteDataProvider {
 }
 
 abstract class IFollowersRemoteDataProvider {
-  Future<QuerySnapshot<Map<String, dynamic>>> getFollowers(String id);
+  Future<QuerySnapshot<Map<String, dynamic>>> getFollowersCount(String id);
+  Future<QuerySnapshot<Map<String, dynamic>>> getProfileFollowersList(
+      String id);
   Future<bool> registerFollowing({required String uid, required String fid});
   Future<bool> registerUnFollowing({required String uid, required String fid});
 }

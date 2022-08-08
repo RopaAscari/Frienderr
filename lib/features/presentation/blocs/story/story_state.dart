@@ -9,17 +9,21 @@ enum StoryListenableAction {
   viewFailure,
   updateFailure,
   deteleFailure,
-
   creationFailure,
 }
+
 enum StoryStatus { idle, loaded, loading, error }
 
 @freezed
 class StoryState with _$StoryState {
   factory StoryState({
-    @Default('') String error,
-    required StoryResponse stories,
-    @Default(StoryStatus.idle) StoryStatus status,
+    required final UserStory userStory,
+    @Default(0) final int previousStoryViewerTimestamp,
+    @Default(false) final bool reachedMaximumThreshold,
+    @Default(false) final bool storyViewsReachedMaximumThreshold,
+    required final PagingController<int, Story> paginationController,
+    required final PagingController<int, UserModel>
+        storyViewsPaginationController,
     @Default(StoryListenableAction.idle) StoryListenableAction action,
   }) = _StoryState;
 }

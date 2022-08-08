@@ -20,7 +20,7 @@ class _$UserStateTearOff {
 
   _UserState call(
       {UserModel user = const UserModel(),
-      List<UserEntity> platformUsers = const [],
+      List<UserDTO> platformUsers = const [],
       UserStatus status = UserStatus.Initial}) {
     return _UserState(
       user: user,
@@ -36,7 +36,7 @@ const $UserState = _$UserStateTearOff();
 /// @nodoc
 mixin _$UserState {
   UserModel get user => throw _privateConstructorUsedError;
-  List<UserEntity> get platformUsers => throw _privateConstructorUsedError;
+  List<UserDTO> get platformUsers => throw _privateConstructorUsedError;
   UserStatus get status => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -48,8 +48,7 @@ mixin _$UserState {
 abstract class $UserStateCopyWith<$Res> {
   factory $UserStateCopyWith(UserState value, $Res Function(UserState) then) =
       _$UserStateCopyWithImpl<$Res>;
-  $Res call(
-      {UserModel user, List<UserEntity> platformUsers, UserStatus status});
+  $Res call({UserModel user, List<UserDTO> platformUsers, UserStatus status});
 
   $UserModelCopyWith<$Res> get user;
 }
@@ -76,7 +75,7 @@ class _$UserStateCopyWithImpl<$Res> implements $UserStateCopyWith<$Res> {
       platformUsers: platformUsers == freezed
           ? _value.platformUsers
           : platformUsers // ignore: cast_nullable_to_non_nullable
-              as List<UserEntity>,
+              as List<UserDTO>,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -98,8 +97,7 @@ abstract class _$UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
           _UserState value, $Res Function(_UserState) then) =
       __$UserStateCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {UserModel user, List<UserEntity> platformUsers, UserStatus status});
+  $Res call({UserModel user, List<UserDTO> platformUsers, UserStatus status});
 
   @override
   $UserModelCopyWith<$Res> get user;
@@ -128,7 +126,7 @@ class __$UserStateCopyWithImpl<$Res> extends _$UserStateCopyWithImpl<$Res>
       platformUsers: platformUsers == freezed
           ? _value.platformUsers
           : platformUsers // ignore: cast_nullable_to_non_nullable
-              as List<UserEntity>,
+              as List<UserDTO>,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -150,7 +148,7 @@ class _$_UserState implements _UserState {
   final UserModel user;
   @JsonKey()
   @override
-  final List<UserEntity> platformUsers;
+  final List<UserDTO> platformUsers;
   @JsonKey()
   @override
   final UserStatus status;
@@ -187,13 +185,13 @@ class _$_UserState implements _UserState {
 abstract class _UserState implements UserState {
   factory _UserState(
       {UserModel user,
-      List<UserEntity> platformUsers,
+      List<UserDTO> platformUsers,
       UserStatus status}) = _$_UserState;
 
   @override
   UserModel get user;
   @override
-  List<UserEntity> get platformUsers;
+  List<UserDTO> get platformUsers;
   @override
   UserStatus get status;
   @override

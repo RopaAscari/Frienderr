@@ -6,11 +6,10 @@ part of 'comment_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_CommentModel _$$_CommentModelFromJson(Map<String, dynamic> json) =>
-    _$_CommentModel(
+_$_Comment _$$_CommentFromJson(Map<String, dynamic> json) => _$_Comment(
       id: json['id'] as String? ?? '',
+      user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
       postId: json['postId'] as String? ?? '',
-      user: json['user'] ?? const {},
       comment: json['comment'] as String? ?? '',
       dateCreated: json['dateCreated'] as int? ?? 0,
       likes:
@@ -18,11 +17,11 @@ _$_CommentModel _$$_CommentModelFromJson(Map<String, dynamic> json) =>
               const [],
     );
 
-Map<String, dynamic> _$$_CommentModelToJson(_$_CommentModel instance) =>
+Map<String, dynamic> _$$_CommentToJson(_$_Comment instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'postId': instance.postId,
       'user': instance.user,
+      'postId': instance.postId,
       'comment': instance.comment,
       'dateCreated': instance.dateCreated,
       'likes': instance.likes,

@@ -1,3 +1,5 @@
+import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/features/data/models/notification/notification_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,58 +26,85 @@ class NotificationRemoteDataProvider
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateNotificationStream() {
     final uid = auth.currentUser!.uid;
     return firestoreInstance
-        .collection(Collections.activity.name)
+        .collection(Collections.activity)
         .doc(uid)
-        .collection(Collections.notifications.name)
+        .collection(Collections.notifications)
         .orderBy(NotificationOrderFields.dateCreated.name, descending: true)
         .snapshots();
   }
 
   @override
-  Future<QuerySnapshot<Object?>> getNotifications({required String uid}) async {
+  Future<QuerySnapshot<NotificationDTO>> getNotifications(
+      {required String uid}) async {
     return firestoreInstance
-        .collection(Collections.activity.name)
+        .collection(Collections.activity)
         .doc(uid)
-        .collection(Collections.notifications.name)
+        .collection(Collections.notifications)
         .orderBy(NotificationOrderFields.dateCreated.name, descending: true)
+        .withConverter<NotificationDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) {
+            return NotificationDTO.fromJson(snapshot.data()!);
+          },
+        )
+        .limit(Constants.pageSize)
         .get();
   }
 
   @override
-  Future<bool> sendFollowNotification(NotificationEntity notification) {
+  Future<QuerySnapshot<NotificationDTO>> getPaginatedNotifications(
+      {required String uid,
+      required NotificationModel previousNotification}) async {
+    return await firestoreInstance
+        .collection(Collections.activity)
+        .doc(uid)
+        .collection(Collections.notifications)
+        .startAfter([previousNotification.dateCreated])
+        .orderBy(NotificationOrderFields.dateCreated.name, descending: true)
+        .withConverter<NotificationDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) =>
+              NotificationDTO.fromJson(snapshot.data()!),
+        )
+        .limit(Constants.pageSize)
+        .get();
+  }
+
+  @override
+  Future<bool> sendFollowNotification(NotificationDTO notification) {
     return firestoreInstance
-        .collection(Collections.activity.name)
+        .collection(Collections.activity)
         .doc(notification.recipientId)
-        .collection(Collections.notifications.name)
+        .collection(Collections.notifications)
         .add(notification.toJson())
         .then((value) => true)
         .catchError((error) => false);
   }
 
   @override
-  Future<bool> sendLikeNotification(NotificationEntity notification) {
+  Future<bool> sendLikeNotification(NotificationDTO notification) {
     return firestoreInstance
-        .collection(Collections.activity.name)
+        .collection(Collections.activity)
         .doc(notification.recipientId)
-        .collection(Collections.notifications.name)
+        .collection(Collections.notifications)
         .add(notification.toJson())
         .then((value) => true)
         .catchError((error) => false);
   }
 
   @override
-  Future<bool> sendCommentNotification(NotificationEntity notification) async {
+  Future<bool> sendCommentNotification(NotificationDTO notification) async {
     return firestoreInstance
-        .collection(Collections.activity.name)
+        .collection(Collections.activity)
         .doc(notification.recipientId)
-        .collection(Collections.notifications.name)
+        .collection(Collections.notifications)
         .add(notification.toJson())
         .then((value) => true)
         .catchError((error) => false);
   }
 
   @override
-  Future<bool> disptachPushNotification(NotificationEntity notification) async {
+  Future<bool> disptachPushNotification(NotificationDTO notification) async {
     try {
       final variables = PushNotificationEntity(
         type: notification.type,
@@ -100,10 +129,13 @@ class NotificationRemoteDataProvider
 }
 
 abstract class INotificationRemoteDataProvider {
-  Future<bool> sendLikeNotification(NotificationEntity notification);
-  Future<bool> sendFollowNotification(NotificationEntity notification);
-  Future<bool> sendCommentNotification(NotificationEntity notification);
-  Future<bool> disptachPushNotification(NotificationEntity notification);
-  Future<QuerySnapshot<Object?>> getNotifications({required String uid});
+  Future<bool> sendLikeNotification(NotificationDTO notification);
+  Future<bool> sendFollowNotification(NotificationDTO notification);
+  Future<bool> sendCommentNotification(NotificationDTO notification);
+  Future<bool> disptachPushNotification(NotificationDTO notification);
+  Future<QuerySnapshot<NotificationDTO>> getNotifications(
+      {required String uid});
+  Future<QuerySnapshot<NotificationDTO>> getPaginatedNotifications(
+      {required String uid, required NotificationModel previousNotification});
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateNotificationStream();
 }

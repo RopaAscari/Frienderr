@@ -21,13 +21,13 @@ class FollowingBloc extends Bloc<FollowingEvent, FollowingState> {
   Future<void> _getFollowing(
       _GetFollowing event, Emitter<FollowingState> emit) async {
     /*emit(state.copyWith(currentState: FollowingStatus.Loaded));
-    final Either<Failure, List<UserEntity>> _either =
+    final Either<Failure, List<UserDTO>> _either =
         await _getFollowingUseCase(GetFollowingParams(event.userId));
     return _either.fold((error) {
       emit(state.copyWith(
           currentState: FollowingStatus.Faliure, error: error.message));
     },
-        (List<UserEntity> followers) => emit(state.copyWith(
+        (List<UserDTO> followers) => emit(state.copyWith(
             currentState: FollowingStatus.Faliure, following: followers)));
   }*/
   }

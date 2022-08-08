@@ -1,11 +1,12 @@
 import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/followers/followers_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/snap/snap_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/camera/camera_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/followers/followers_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/account/user/user_account_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
@@ -15,8 +16,9 @@ class BlocGroup {
   UserBloc userBloc;
   PostBloc postBloc;
   ChatBloc chatBloc;
-  QuickBloc quickBloc;
+  SnapBloc snapBloc;
   StoryBloc storyBloc;
+  ThemeBloc themeBloc;
   CameraBloc cameraBloc;
   MessageBloc messageBloc;
   FollowersBloc followersBloc;
@@ -29,8 +31,9 @@ class BlocGroup {
     required this.userBloc,
     required this.postBloc,
     required this.chatBloc,
+    required this.snapBloc,
     required this.storyBloc,
-    required this.quickBloc,
+    required this.themeBloc,
     required this.cameraBloc,
     required this.messageBloc,
     required this.followersBloc,
@@ -44,8 +47,9 @@ class BlocGroup {
     UserBloc? userBloc,
     PostBloc? postBloc,
     ChatBloc? chatBloc,
-    QuickBloc? quickBloc,
+    SnapBloc? snapBloc,
     StoryBloc? storyBloc,
+    ThemeBloc? themeBloc,
     CameraBloc? cameraBloc,
     MessageBloc? messageBloc,
     FollowersBloc? followersBloc,
@@ -58,7 +62,8 @@ class BlocGroup {
       chatBloc: chatBloc ?? this.chatBloc,
       userBloc: userBloc ?? this.userBloc,
       postBloc: postBloc ?? this.postBloc,
-      quickBloc: quickBloc ?? this.quickBloc,
+      snapBloc: snapBloc ?? this.snapBloc,
+      themeBloc: themeBloc ?? this.themeBloc,
       storyBloc: storyBloc ?? this.storyBloc,
       cameraBloc: cameraBloc ?? this.cameraBloc,
       messageBloc: messageBloc ?? this.messageBloc,

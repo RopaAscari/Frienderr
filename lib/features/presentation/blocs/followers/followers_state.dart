@@ -16,7 +16,7 @@ enum FollowerListenableAction {
 class FollowersState with _$FollowersState {
   const factory FollowersState({
     @Default('') String error,
-    required List<UserEntity> followers,
+    required List<UserDTO> followers,
     @Default(FollowerStatus.intial) FollowerStatus currentState,
     @Default(FollowerListenableAction.idle) FollowerListenableAction action,
   }) = _FollowersState;

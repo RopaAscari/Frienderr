@@ -24,9 +24,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateMessageStream(
       {required String chatId}) {
     return firestoreInstance
-        .collection(Collections.chats.name)
+        .collection(Collections.chats)
         .doc(chatId)
-        .collection(Collections.messages.name)
+        .collection(Collections.messages)
         .snapshots();
   }
 
@@ -52,9 +52,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
           .toList();
 
       await firestoreInstance
-          .collection(Collections.chats.name)
+          .collection(Collections.chats)
           .doc(chatId)
-          .collection(Collections.messages.name)
+          .collection(Collections.messages)
           .doc(message.id)
           .set(message.toJson());
       return message;
@@ -118,12 +118,14 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
             url: mediaUrl,
             type: chat.MediaType.video,
             fileName: item.asset.id.toString(),
+            metadata: chat.Metadata(thumbnail: null),
           ));
         } else {
           item.message.medias?.add(chat.ChatMedia(
             url: mediaUrl,
             type: chat.MediaType.image,
             fileName: item.asset.id.toString(),
+            metadata: chat.Metadata(thumbnail: null),
           ));
         }
 
@@ -150,9 +152,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
         Map<String, dynamic> _message = item.message.toJson();
 
         await firestoreInstance
-            .collection(Collections.chats.name)
+            .collection(Collections.chats)
             .doc(chatId)
-            .collection(Collections.messages.name)
+            .collection(Collections.messages)
             .doc(_id)
             .set(_message);
         _lastMessage = chat.ChatMessage.fromJson(_message);
@@ -208,9 +210,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
       Map<String, dynamic> _message = message.toJson();
 
       await firestoreInstance
-          .collection(Collections.chats.name)
+          .collection(Collections.chats)
           .doc(chatId)
-          .collection(Collections.messages.name)
+          .collection(Collections.messages)
           .doc(_id)
           .set(_message);
 
@@ -227,9 +229,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
       {required String chatId, required String messageId}) async {
     try {
       await firestoreInstance
-          .collection(Collections.chats.name)
+          .collection(Collections.chats)
           .doc(chatId)
-          .collection(Collections.messages.name)
+          .collection(Collections.messages)
           .doc(messageId)
           .update({'status': 'read'});
       return true;
@@ -243,9 +245,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
       {required String chatId, required previousId}) async {
     try {
       await firestoreInstance
-          .collection(Collections.chats.name)
+          .collection(Collections.chats)
           .doc(chatId)
-          .collection(Collections.messages.name)
+          .collection(Collections.messages)
           .doc(previousId)
           .update({'customProperties.isLast': false});
 
@@ -260,9 +262,9 @@ class MessageRemoteDataProvider implements IMessageRemoteDataProvider {
       {required String chatId, required String messageId}) async {
     try {
       await firestoreInstance
-          .collection(Collections.chats.name)
+          .collection(Collections.chats)
           .doc(chatId)
-          .collection(Collections.messages.name)
+          .collection(Collections.messages)
           .doc(messageId)
           .delete();
 

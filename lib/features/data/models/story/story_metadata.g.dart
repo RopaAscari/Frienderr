@@ -6,15 +6,13 @@ part of 'story_metadata.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_StoryMetadataModel _$$_StoryMetadataModelFromJson(
-        Map<String, dynamic> json) =>
-    _$_StoryMetadataModel(
+_$_StoryMetadata _$$_StoryMetadataFromJson(Map<String, dynamic> json) =>
+    _$_StoryMetadata(
       duration: json['duration'] as int? ?? 0,
       thumbnail: json['thumbnail'] as String? ?? null,
     );
 
-Map<String, dynamic> _$$_StoryMetadataModelToJson(
-        _$_StoryMetadataModel instance) =>
+Map<String, dynamic> _$$_StoryMetadataToJson(_$_StoryMetadata instance) =>
     <String, dynamic>{
       'duration': instance.duration,
       'thumbnail': instance.thumbnail,

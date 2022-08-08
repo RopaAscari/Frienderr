@@ -92,7 +92,7 @@ class GalleryState extends State<Gallery> {
       final File _file = await _assets.first.file as File;
       assets = [
         GalleryAsset(
-            id: 0,
+            id: '0',
             asset: _file,
             type: _assets.first.type,
             duration: _assets.first.duration,

@@ -186,7 +186,7 @@ class AudioRecorderState extends State<AudioRecorder>
                     color: _isRecording ? Colors.white : Colors.transparent),
                 child: Icon(
                   CupertinoIcons.mic,
-                  size: 27,
+                  size: 23,
                   color: _isRecording ? Colors.red[600]! : Colors.grey[400]!,
                 )),
           ),

@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>948515884264-p8viitdsqcc9c6ep1s7f49rup1vo82kf.apps.googleusercontent.com</string>
+	<string>538967978009-sv87jtnun634gtkao7138a4knm7df75e.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.948515884264-p8viitdsqcc9c6ep1s7f49rup1vo82kf</string>
+	<string>com.googleusercontent.apps.538967978009-sv87jtnun634gtkao7138a4knm7df75e</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>948515884264-e8ogqqug6rcedmbgt9u1hqnc4vl2aqgt.apps.googleusercontent.com</string>
+	<string>538967978009-psvhcb0rpefpe8uc0bol98bghu7fj4t7.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDm46Jwn6r9xXMeeyvAs-SI5HhrgHHgk3U</string>
+	<string>AIzaSyA-H7y7Z0i5Nd0qTFj9evmus6QAQcrAjBQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>948515884264</string>
+	<string>538967978009</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.frienderr</string>
+	<string>com.ascari.frienderr</string>
 	<key>PROJECT_ID</key>
-	<string>frienderr-5aa07</string>
+	<string>frienderr-b634b</string>
 	<key>STORAGE_BUCKET</key>
-	<string>frienderr-5aa07.appspot.com</string>
+	<string>frienderr-b634b.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:948515884264:ios:e7bf84356623f85be54d5d</string>
+	<string>1:538967978009:ios:a4847fb29ff6b1e3dc3a88</string>
 </dict>
 </plist>

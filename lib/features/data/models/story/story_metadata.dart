@@ -6,12 +6,12 @@ part 'story_metadata.g.dart';
 part 'story_metadata.freezed.dart';
 
 @freezed
-class StoryMetadataModel with _$StoryMetadataModel implements StoryMetadata {
-  const factory StoryMetadataModel({
+class StoryMetadata with _$StoryMetadata {
+  const factory StoryMetadata({
     @Default(0) final int duration,
     @Default(null) final String? thumbnail,
-  }) = _StoryMetadataModel;
+  }) = _StoryMetadata;
 
-  factory StoryMetadataModel.fromJson(Map<String, dynamic> json) =>
-      _$StoryMetadataModelFromJson(json);
+  factory StoryMetadata.fromJson(Map<String, dynamic> json) =>
+      _$StoryMetadataFromJson(json);
 }

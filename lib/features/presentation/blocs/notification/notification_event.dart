@@ -3,14 +3,17 @@ part of 'notification_bloc.dart';
 @freezed
 class NotificationEvent with _$NotificationEvent {
   const factory NotificationEvent.sendLikeNotification(
-      {required NotificationEntity notification}) = _SendLikeNotification;
+      {required NotificationDTO notification}) = _SendLikeNotification;
 
   const factory NotificationEvent.sendCommentNotification(
-      {required NotificationEntity notification}) = _SendCommentNotification;
+      {required NotificationDTO notification}) = _SendCommentNotification;
 
   const factory NotificationEvent.sendFollowNotification(
-      {required NotificationEntity notification}) = _SendFollowNotification;
+      {required NotificationDTO notification}) = _SendFollowNotification;
 
   const factory NotificationEvent.getNotifications({required String uid}) =
       _GetNotifications;
+
+  const factory NotificationEvent.getPaginatedNotifications(
+      {required String uid}) = _GetPaginatedNotifications;
 }

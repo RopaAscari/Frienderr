@@ -5,7 +5,7 @@ part 'partial_post.g.dart';
 part 'partial_post.freezed.dart';
 
 @freezed
-class PartialPost with _$PartialPost implements PartialPostEntity {
+class PartialPost with _$PartialPost {
   const factory PartialPost({
     required String id,
     required String display,

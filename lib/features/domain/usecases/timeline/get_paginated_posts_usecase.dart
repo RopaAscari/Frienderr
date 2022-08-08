@@ -10,21 +10,20 @@ import 'package:frienderr/features/domain/repositiories/post_repository.dart';
 
 @lazySingleton
 class GetPaginatedPostsUseCase
-    extends UseCase<TimelineResponse, GetPaginatedPostsParams> {
+    extends UseCase<Timeline, GetPaginatedPostsParams> {
   GetPaginatedPostsUseCase(this.repository);
 
   final IPostRepository repository;
 
   @override
-  Future<Either<Failure, TimelineResponse>> call(
-      GetPaginatedPostsParams params) {
-    return repository.getPaginatedPosts(params.posts);
+  Future<Either<Failure, Timeline>> call(GetPaginatedPostsParams params) {
+    return repository.getPaginatedPosts(params.post);
   }
 }
 
 class GetPaginatedPostsParams {
-  final List<Map<String, dynamic>> posts;
+  final Post post;
   GetPaginatedPostsParams({
-    required this.posts,
+    required this.post,
   });
 }

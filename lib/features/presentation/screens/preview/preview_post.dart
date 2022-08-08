@@ -72,7 +72,7 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
 
   void _navigateToPostMedia() async {
     try {
-      final _assets =
+      /*final _assets =
           await Stream.fromIterable(selectedAssets).asyncMap((asset) async {
         final _filteredAsset = await FilterService.applyFilter(
             asset.asset, currentFilter, BlendMode.color);
@@ -83,10 +83,10 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
           duration: asset.duration,
           thumbnail: asset.thumbnail,
         );
-      }).toList();
+      }).toList();*/
 
-      getIt<AppRouter>().push(PostMediaRoute(
-        posts: _assets,
+      getService<AppRouter>().push(PostMediaRoute(
+        posts: selectedAssets,
         postBloc: _postBloc,
       ));
     } catch (error) {}
@@ -98,22 +98,20 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Center(
-                child: Stack(
-                    //  mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                  _imagePreviewWidget(),
-                  _headerWidget(),
-                  Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      bottom: 0.0,
-                      child: FliterSelector<dynamic>(
-                        filters: colorFilters,
-                        onFilterChanged: (filter) => setState(() {
-                          currentFilter = filter;
-                        }),
-                      ))
-                ]))));
+                child: Stack(children: [
+              _imagePreviewWidget(),
+              _headerWidget(),
+              /* Positioned(
+                  left: 0.0,
+                  right: 0.0,
+                  bottom: 0.0,
+                  child: FliterSelector<dynamic>(
+                    filters: colorFilters,
+                    onFilterChanged: (filter) => setState(() {
+                      currentFilter = filter;
+                    }),
+                  ))*/
+            ]))));
   }
 
   Widget _trashIcon() {
@@ -140,7 +138,7 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () => getIt<AppRouter>().pop(),
+                onPressed: () => getService<AppRouter>().pop(),
                 icon: const Icon(Icons.close),
                 iconSize: 30),
             MaterialButton(
@@ -200,12 +198,12 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
         filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
             decoration: BoxDecoration(
-                border: Border.all(
+                /*border: Border.all(
                     width: 3.0,
                     style: currentAssetIndex == index
                         ? BorderStyle.solid
                         : BorderStyle.none,
-                    color: Colors.amber.shade700),
+                    color: Colors.amber.shade700),*/
                 //  color: Colors.black,
                 borderRadius: BorderRadius.circular(25)),
             height: 500,
@@ -220,12 +218,12 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
         filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
             decoration: BoxDecoration(
-                border: Border.all(
+                /*border: Border.all(
                     width: 3.0,
                     style: currentAssetIndex == index
                         ? BorderStyle.solid
                         : BorderStyle.none,
-                    color: Colors.amber.shade900),
+                    color: Colors.amber.shade900),*/
                 color: Colors.black.withOpacity(.2),
                 borderRadius: BorderRadius.circular(10)),
             height: MediaQuery.of(context).size.height,

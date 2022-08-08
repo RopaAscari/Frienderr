@@ -36,10 +36,59 @@ class _$PostEventTearOff {
     );
   }
 
-  _LikePost likePost({required UserEntity user, required dynamic post}) {
-    return _LikePost(
-      user: user,
+  _CreateStatusPost createStatusPost({required String status}) {
+    return _CreateStatusPost(
+      status: status,
+    );
+  }
+
+  _ReactPost reactToPost(
+      {required Post post,
+      required UserModel user,
+      required PostReaction reaction,
+      required List<PostReaction> latestReactions}) {
+    return _ReactPost(
       post: post,
+      user: user,
+      reaction: reaction,
+      latestReactions: latestReactions,
+    );
+  }
+
+  _UpdateReactPost updateReaction(
+      {required PostReaction reaction,
+      required List<PostReaction> latestReactions}) {
+    return _UpdateReactPost(
+      reaction: reaction,
+      latestReactions: latestReactions,
+    );
+  }
+
+  _UnReactPost unReactToPost(
+      {required PostReaction reaction,
+      required List<PostReaction> latestReactions}) {
+    return _UnReactPost(
+      reaction: reaction,
+      latestReactions: latestReactions,
+    );
+  }
+
+  _SharePost sharePost({required String postId}) {
+    return _SharePost(
+      postId: postId,
+    );
+  }
+
+  _SavePost savePost({required SavedPostDTO savedPost}) {
+    return _SavePost(
+      savedPost: savedPost,
+    );
+  }
+
+  _UnSavePost unSavePost({required String userId, required String postId}) {
+    return _UnSavePost(
+      userId: userId,
+      postId: postId,
     );
   }
 
@@ -52,6 +101,12 @@ class _$PostEventTearOff {
 
   _DeletePost deletePost({required String postId}) {
     return _DeletePost(
+      postId: postId,
+    );
+  }
+
+  _GetPost getPost({required String postId}) {
+    return _GetPost(
       postId: postId,
     );
   }
@@ -68,9 +123,22 @@ mixin _$PostEvent {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -78,9 +146,20 @@ mixin _$PostEvent {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -88,9 +167,20 @@ mixin _$PostEvent {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -100,9 +190,16 @@ mixin _$PostEvent {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -111,9 +208,16 @@ mixin _$PostEvent {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -122,9 +226,16 @@ mixin _$PostEvent {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -215,9 +326,22 @@ class _$_FetchTimelinePosts implements _FetchTimelinePosts {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) {
     return fetchTimelinePosts(shouldLoad);
   }
@@ -228,9 +352,20 @@ class _$_FetchTimelinePosts implements _FetchTimelinePosts {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) {
     return fetchTimelinePosts?.call(shouldLoad);
   }
@@ -241,9 +376,20 @@ class _$_FetchTimelinePosts implements _FetchTimelinePosts {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) {
     if (fetchTimelinePosts != null) {
@@ -259,9 +405,16 @@ class _$_FetchTimelinePosts implements _FetchTimelinePosts {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return fetchTimelinePosts(this);
   }
@@ -273,9 +426,16 @@ class _$_FetchTimelinePosts implements _FetchTimelinePosts {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) {
     return fetchTimelinePosts?.call(this);
   }
@@ -287,9 +447,16 @@ class _$_FetchTimelinePosts implements _FetchTimelinePosts {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (fetchTimelinePosts != null) {
@@ -358,9 +525,22 @@ class _$_FetchTimelinePaginatedPosts implements _FetchTimelinePaginatedPosts {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) {
     return fetchPaginatedTimelinePosts();
   }
@@ -371,9 +551,20 @@ class _$_FetchTimelinePaginatedPosts implements _FetchTimelinePaginatedPosts {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) {
     return fetchPaginatedTimelinePosts?.call();
   }
@@ -384,9 +575,20 @@ class _$_FetchTimelinePaginatedPosts implements _FetchTimelinePaginatedPosts {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) {
     if (fetchPaginatedTimelinePosts != null) {
@@ -402,9 +604,16 @@ class _$_FetchTimelinePaginatedPosts implements _FetchTimelinePaginatedPosts {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return fetchPaginatedTimelinePosts(this);
   }
@@ -416,9 +625,16 @@ class _$_FetchTimelinePaginatedPosts implements _FetchTimelinePaginatedPosts {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) {
     return fetchPaginatedTimelinePosts?.call(this);
   }
@@ -430,9 +646,16 @@ class _$_FetchTimelinePaginatedPosts implements _FetchTimelinePaginatedPosts {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (fetchPaginatedTimelinePosts != null) {
@@ -524,9 +747,22 @@ class _$_CreatePost implements _CreatePost {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) {
     return createPost(caption, assets);
   }
@@ -537,9 +773,20 @@ class _$_CreatePost implements _CreatePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) {
     return createPost?.call(caption, assets);
   }
@@ -550,9 +797,20 @@ class _$_CreatePost implements _CreatePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) {
     if (createPost != null) {
@@ -568,9 +826,16 @@ class _$_CreatePost implements _CreatePost {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return createPost(this);
   }
@@ -582,9 +847,16 @@ class _$_CreatePost implements _CreatePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) {
     return createPost?.call(this);
   }
@@ -596,9 +868,16 @@ class _$_CreatePost implements _CreatePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (createPost != null) {
@@ -621,73 +900,66 @@ abstract class _CreatePost implements PostEvent {
 }
 
 /// @nodoc
-abstract class _$LikePostCopyWith<$Res> {
-  factory _$LikePostCopyWith(_LikePost value, $Res Function(_LikePost) then) =
-      __$LikePostCopyWithImpl<$Res>;
-  $Res call({UserEntity user, dynamic post});
+abstract class _$CreateStatusPostCopyWith<$Res> {
+  factory _$CreateStatusPostCopyWith(
+          _CreateStatusPost value, $Res Function(_CreateStatusPost) then) =
+      __$CreateStatusPostCopyWithImpl<$Res>;
+  $Res call({String status});
 }
 
 /// @nodoc
-class __$LikePostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
-    implements _$LikePostCopyWith<$Res> {
-  __$LikePostCopyWithImpl(_LikePost _value, $Res Function(_LikePost) _then)
-      : super(_value, (v) => _then(v as _LikePost));
+class __$CreateStatusPostCopyWithImpl<$Res>
+    extends _$PostEventCopyWithImpl<$Res>
+    implements _$CreateStatusPostCopyWith<$Res> {
+  __$CreateStatusPostCopyWithImpl(
+      _CreateStatusPost _value, $Res Function(_CreateStatusPost) _then)
+      : super(_value, (v) => _then(v as _CreateStatusPost));
 
   @override
-  _LikePost get _value => super._value as _LikePost;
+  _CreateStatusPost get _value => super._value as _CreateStatusPost;
 
   @override
   $Res call({
-    Object? user = freezed,
-    Object? post = freezed,
+    Object? status = freezed,
   }) {
-    return _then(_LikePost(
-      user: user == freezed
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserEntity,
-      post: post == freezed
-          ? _value.post
-          : post // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+    return _then(_CreateStatusPost(
+      status: status == freezed
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_LikePost implements _LikePost {
-  const _$_LikePost({required this.user, required this.post});
+class _$_CreateStatusPost implements _CreateStatusPost {
+  const _$_CreateStatusPost({required this.status});
 
   @override
-  final UserEntity user;
-  @override
-  final dynamic post;
+  final String status;
 
   @override
   String toString() {
-    return 'PostEvent.likePost(user: $user, post: $post)';
+    return 'PostEvent.createStatusPost(status: $status)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _LikePost &&
-            const DeepCollectionEquality().equals(other.user, user) &&
-            const DeepCollectionEquality().equals(other.post, post));
+            other is _CreateStatusPost &&
+            const DeepCollectionEquality().equals(other.status, status));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(user),
-      const DeepCollectionEquality().hash(post));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(status));
 
   @JsonKey(ignore: true)
   @override
-  _$LikePostCopyWith<_LikePost> get copyWith =>
-      __$LikePostCopyWithImpl<_LikePost>(this, _$identity);
+  _$CreateStatusPostCopyWith<_CreateStatusPost> get copyWith =>
+      __$CreateStatusPostCopyWithImpl<_CreateStatusPost>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -696,11 +968,24 @@ class _$_LikePost implements _LikePost {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) {
-    return likePost(user, post);
+    return createStatusPost(status);
   }
 
   @override
@@ -709,11 +994,22 @@ class _$_LikePost implements _LikePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) {
-    return likePost?.call(user, post);
+    return createStatusPost?.call(status);
   }
 
   @override
@@ -722,13 +1018,24 @@ class _$_LikePost implements _LikePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) {
-    if (likePost != null) {
-      return likePost(user, post);
+    if (createStatusPost != null) {
+      return createStatusPost(status);
     }
     return orElse();
   }
@@ -740,11 +1047,18 @@ class _$_LikePost implements _LikePost {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) {
-    return likePost(this);
+    return createStatusPost(this);
   }
 
   @override
@@ -754,11 +1068,18 @@ class _$_LikePost implements _LikePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) {
-    return likePost?.call(this);
+    return createStatusPost?.call(this);
   }
 
   @override
@@ -768,26 +1089,1458 @@ class _$_LikePost implements _LikePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
-    if (likePost != null) {
-      return likePost(this);
+    if (createStatusPost != null) {
+      return createStatusPost(this);
     }
     return orElse();
   }
 }
 
-abstract class _LikePost implements PostEvent {
-  const factory _LikePost({required UserEntity user, required dynamic post}) =
-      _$_LikePost;
+abstract class _CreateStatusPost implements PostEvent {
+  const factory _CreateStatusPost({required String status}) =
+      _$_CreateStatusPost;
 
-  UserEntity get user;
-  dynamic get post;
+  String get status;
   @JsonKey(ignore: true)
-  _$LikePostCopyWith<_LikePost> get copyWith =>
+  _$CreateStatusPostCopyWith<_CreateStatusPost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$ReactPostCopyWith<$Res> {
+  factory _$ReactPostCopyWith(
+          _ReactPost value, $Res Function(_ReactPost) then) =
+      __$ReactPostCopyWithImpl<$Res>;
+  $Res call(
+      {Post post,
+      UserModel user,
+      PostReaction reaction,
+      List<PostReaction> latestReactions});
+
+  $PostCopyWith<$Res> get post;
+  $UserModelCopyWith<$Res> get user;
+  $PostReactionCopyWith<$Res> get reaction;
+}
+
+/// @nodoc
+class __$ReactPostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$ReactPostCopyWith<$Res> {
+  __$ReactPostCopyWithImpl(_ReactPost _value, $Res Function(_ReactPost) _then)
+      : super(_value, (v) => _then(v as _ReactPost));
+
+  @override
+  _ReactPost get _value => super._value as _ReactPost;
+
+  @override
+  $Res call({
+    Object? post = freezed,
+    Object? user = freezed,
+    Object? reaction = freezed,
+    Object? latestReactions = freezed,
+  }) {
+    return _then(_ReactPost(
+      post: post == freezed
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
+      reaction: reaction == freezed
+          ? _value.reaction
+          : reaction // ignore: cast_nullable_to_non_nullable
+              as PostReaction,
+      latestReactions: latestReactions == freezed
+          ? _value.latestReactions
+          : latestReactions // ignore: cast_nullable_to_non_nullable
+              as List<PostReaction>,
+    ));
+  }
+
+  @override
+  $PostCopyWith<$Res> get post {
+    return $PostCopyWith<$Res>(_value.post, (value) {
+      return _then(_value.copyWith(post: value));
+    });
+  }
+
+  @override
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
+
+  @override
+  $PostReactionCopyWith<$Res> get reaction {
+    return $PostReactionCopyWith<$Res>(_value.reaction, (value) {
+      return _then(_value.copyWith(reaction: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_ReactPost implements _ReactPost {
+  const _$_ReactPost(
+      {required this.post,
+      required this.user,
+      required this.reaction,
+      required this.latestReactions});
+
+  @override
+  final Post post;
+  @override
+  final UserModel user;
+  @override
+  final PostReaction reaction;
+  @override
+  final List<PostReaction> latestReactions;
+
+  @override
+  String toString() {
+    return 'PostEvent.reactToPost(post: $post, user: $user, reaction: $reaction, latestReactions: $latestReactions)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _ReactPost &&
+            const DeepCollectionEquality().equals(other.post, post) &&
+            const DeepCollectionEquality().equals(other.user, user) &&
+            const DeepCollectionEquality().equals(other.reaction, reaction) &&
+            const DeepCollectionEquality()
+                .equals(other.latestReactions, latestReactions));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(post),
+      const DeepCollectionEquality().hash(user),
+      const DeepCollectionEquality().hash(reaction),
+      const DeepCollectionEquality().hash(latestReactions));
+
+  @JsonKey(ignore: true)
+  @override
+  _$ReactPostCopyWith<_ReactPost> get copyWith =>
+      __$ReactPostCopyWithImpl<_ReactPost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return reactToPost(post, user, reaction, latestReactions);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return reactToPost?.call(post, user, reaction, latestReactions);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (reactToPost != null) {
+      return reactToPost(post, user, reaction, latestReactions);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return reactToPost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return reactToPost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (reactToPost != null) {
+      return reactToPost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ReactPost implements PostEvent {
+  const factory _ReactPost(
+      {required Post post,
+      required UserModel user,
+      required PostReaction reaction,
+      required List<PostReaction> latestReactions}) = _$_ReactPost;
+
+  Post get post;
+  UserModel get user;
+  PostReaction get reaction;
+  List<PostReaction> get latestReactions;
+  @JsonKey(ignore: true)
+  _$ReactPostCopyWith<_ReactPost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$UpdateReactPostCopyWith<$Res> {
+  factory _$UpdateReactPostCopyWith(
+          _UpdateReactPost value, $Res Function(_UpdateReactPost) then) =
+      __$UpdateReactPostCopyWithImpl<$Res>;
+  $Res call({PostReaction reaction, List<PostReaction> latestReactions});
+
+  $PostReactionCopyWith<$Res> get reaction;
+}
+
+/// @nodoc
+class __$UpdateReactPostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$UpdateReactPostCopyWith<$Res> {
+  __$UpdateReactPostCopyWithImpl(
+      _UpdateReactPost _value, $Res Function(_UpdateReactPost) _then)
+      : super(_value, (v) => _then(v as _UpdateReactPost));
+
+  @override
+  _UpdateReactPost get _value => super._value as _UpdateReactPost;
+
+  @override
+  $Res call({
+    Object? reaction = freezed,
+    Object? latestReactions = freezed,
+  }) {
+    return _then(_UpdateReactPost(
+      reaction: reaction == freezed
+          ? _value.reaction
+          : reaction // ignore: cast_nullable_to_non_nullable
+              as PostReaction,
+      latestReactions: latestReactions == freezed
+          ? _value.latestReactions
+          : latestReactions // ignore: cast_nullable_to_non_nullable
+              as List<PostReaction>,
+    ));
+  }
+
+  @override
+  $PostReactionCopyWith<$Res> get reaction {
+    return $PostReactionCopyWith<$Res>(_value.reaction, (value) {
+      return _then(_value.copyWith(reaction: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_UpdateReactPost implements _UpdateReactPost {
+  const _$_UpdateReactPost(
+      {required this.reaction, required this.latestReactions});
+
+  @override
+  final PostReaction reaction;
+  @override
+  final List<PostReaction> latestReactions;
+
+  @override
+  String toString() {
+    return 'PostEvent.updateReaction(reaction: $reaction, latestReactions: $latestReactions)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UpdateReactPost &&
+            const DeepCollectionEquality().equals(other.reaction, reaction) &&
+            const DeepCollectionEquality()
+                .equals(other.latestReactions, latestReactions));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(reaction),
+      const DeepCollectionEquality().hash(latestReactions));
+
+  @JsonKey(ignore: true)
+  @override
+  _$UpdateReactPostCopyWith<_UpdateReactPost> get copyWith =>
+      __$UpdateReactPostCopyWithImpl<_UpdateReactPost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return updateReaction(reaction, latestReactions);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return updateReaction?.call(reaction, latestReactions);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (updateReaction != null) {
+      return updateReaction(reaction, latestReactions);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return updateReaction(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return updateReaction?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (updateReaction != null) {
+      return updateReaction(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateReactPost implements PostEvent {
+  const factory _UpdateReactPost(
+      {required PostReaction reaction,
+      required List<PostReaction> latestReactions}) = _$_UpdateReactPost;
+
+  PostReaction get reaction;
+  List<PostReaction> get latestReactions;
+  @JsonKey(ignore: true)
+  _$UpdateReactPostCopyWith<_UpdateReactPost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$UnReactPostCopyWith<$Res> {
+  factory _$UnReactPostCopyWith(
+          _UnReactPost value, $Res Function(_UnReactPost) then) =
+      __$UnReactPostCopyWithImpl<$Res>;
+  $Res call({PostReaction reaction, List<PostReaction> latestReactions});
+
+  $PostReactionCopyWith<$Res> get reaction;
+}
+
+/// @nodoc
+class __$UnReactPostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$UnReactPostCopyWith<$Res> {
+  __$UnReactPostCopyWithImpl(
+      _UnReactPost _value, $Res Function(_UnReactPost) _then)
+      : super(_value, (v) => _then(v as _UnReactPost));
+
+  @override
+  _UnReactPost get _value => super._value as _UnReactPost;
+
+  @override
+  $Res call({
+    Object? reaction = freezed,
+    Object? latestReactions = freezed,
+  }) {
+    return _then(_UnReactPost(
+      reaction: reaction == freezed
+          ? _value.reaction
+          : reaction // ignore: cast_nullable_to_non_nullable
+              as PostReaction,
+      latestReactions: latestReactions == freezed
+          ? _value.latestReactions
+          : latestReactions // ignore: cast_nullable_to_non_nullable
+              as List<PostReaction>,
+    ));
+  }
+
+  @override
+  $PostReactionCopyWith<$Res> get reaction {
+    return $PostReactionCopyWith<$Res>(_value.reaction, (value) {
+      return _then(_value.copyWith(reaction: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_UnReactPost implements _UnReactPost {
+  const _$_UnReactPost({required this.reaction, required this.latestReactions});
+
+  @override
+  final PostReaction reaction;
+  @override
+  final List<PostReaction> latestReactions;
+
+  @override
+  String toString() {
+    return 'PostEvent.unReactToPost(reaction: $reaction, latestReactions: $latestReactions)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UnReactPost &&
+            const DeepCollectionEquality().equals(other.reaction, reaction) &&
+            const DeepCollectionEquality()
+                .equals(other.latestReactions, latestReactions));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(reaction),
+      const DeepCollectionEquality().hash(latestReactions));
+
+  @JsonKey(ignore: true)
+  @override
+  _$UnReactPostCopyWith<_UnReactPost> get copyWith =>
+      __$UnReactPostCopyWithImpl<_UnReactPost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return unReactToPost(reaction, latestReactions);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return unReactToPost?.call(reaction, latestReactions);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (unReactToPost != null) {
+      return unReactToPost(reaction, latestReactions);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return unReactToPost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return unReactToPost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (unReactToPost != null) {
+      return unReactToPost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UnReactPost implements PostEvent {
+  const factory _UnReactPost(
+      {required PostReaction reaction,
+      required List<PostReaction> latestReactions}) = _$_UnReactPost;
+
+  PostReaction get reaction;
+  List<PostReaction> get latestReactions;
+  @JsonKey(ignore: true)
+  _$UnReactPostCopyWith<_UnReactPost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$SharePostCopyWith<$Res> {
+  factory _$SharePostCopyWith(
+          _SharePost value, $Res Function(_SharePost) then) =
+      __$SharePostCopyWithImpl<$Res>;
+  $Res call({String postId});
+}
+
+/// @nodoc
+class __$SharePostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$SharePostCopyWith<$Res> {
+  __$SharePostCopyWithImpl(_SharePost _value, $Res Function(_SharePost) _then)
+      : super(_value, (v) => _then(v as _SharePost));
+
+  @override
+  _SharePost get _value => super._value as _SharePost;
+
+  @override
+  $Res call({
+    Object? postId = freezed,
+  }) {
+    return _then(_SharePost(
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_SharePost implements _SharePost {
+  const _$_SharePost({required this.postId});
+
+  @override
+  final String postId;
+
+  @override
+  String toString() {
+    return 'PostEvent.sharePost(postId: $postId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _SharePost &&
+            const DeepCollectionEquality().equals(other.postId, postId));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(postId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$SharePostCopyWith<_SharePost> get copyWith =>
+      __$SharePostCopyWithImpl<_SharePost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return sharePost(postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return sharePost?.call(postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (sharePost != null) {
+      return sharePost(postId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return sharePost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return sharePost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (sharePost != null) {
+      return sharePost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SharePost implements PostEvent {
+  const factory _SharePost({required String postId}) = _$_SharePost;
+
+  String get postId;
+  @JsonKey(ignore: true)
+  _$SharePostCopyWith<_SharePost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$SavePostCopyWith<$Res> {
+  factory _$SavePostCopyWith(_SavePost value, $Res Function(_SavePost) then) =
+      __$SavePostCopyWithImpl<$Res>;
+  $Res call({SavedPostDTO savedPost});
+}
+
+/// @nodoc
+class __$SavePostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$SavePostCopyWith<$Res> {
+  __$SavePostCopyWithImpl(_SavePost _value, $Res Function(_SavePost) _then)
+      : super(_value, (v) => _then(v as _SavePost));
+
+  @override
+  _SavePost get _value => super._value as _SavePost;
+
+  @override
+  $Res call({
+    Object? savedPost = freezed,
+  }) {
+    return _then(_SavePost(
+      savedPost: savedPost == freezed
+          ? _value.savedPost
+          : savedPost // ignore: cast_nullable_to_non_nullable
+              as SavedPostDTO,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_SavePost implements _SavePost {
+  const _$_SavePost({required this.savedPost});
+
+  @override
+  final SavedPostDTO savedPost;
+
+  @override
+  String toString() {
+    return 'PostEvent.savePost(savedPost: $savedPost)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _SavePost &&
+            const DeepCollectionEquality().equals(other.savedPost, savedPost));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(savedPost));
+
+  @JsonKey(ignore: true)
+  @override
+  _$SavePostCopyWith<_SavePost> get copyWith =>
+      __$SavePostCopyWithImpl<_SavePost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return savePost(savedPost);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return savePost?.call(savedPost);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (savePost != null) {
+      return savePost(savedPost);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return savePost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return savePost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (savePost != null) {
+      return savePost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SavePost implements PostEvent {
+  const factory _SavePost({required SavedPostDTO savedPost}) = _$_SavePost;
+
+  SavedPostDTO get savedPost;
+  @JsonKey(ignore: true)
+  _$SavePostCopyWith<_SavePost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$UnSavePostCopyWith<$Res> {
+  factory _$UnSavePostCopyWith(
+          _UnSavePost value, $Res Function(_UnSavePost) then) =
+      __$UnSavePostCopyWithImpl<$Res>;
+  $Res call({String userId, String postId});
+}
+
+/// @nodoc
+class __$UnSavePostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$UnSavePostCopyWith<$Res> {
+  __$UnSavePostCopyWithImpl(
+      _UnSavePost _value, $Res Function(_UnSavePost) _then)
+      : super(_value, (v) => _then(v as _UnSavePost));
+
+  @override
+  _UnSavePost get _value => super._value as _UnSavePost;
+
+  @override
+  $Res call({
+    Object? userId = freezed,
+    Object? postId = freezed,
+  }) {
+    return _then(_UnSavePost(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_UnSavePost implements _UnSavePost {
+  const _$_UnSavePost({required this.userId, required this.postId});
+
+  @override
+  final String userId;
+  @override
+  final String postId;
+
+  @override
+  String toString() {
+    return 'PostEvent.unSavePost(userId: $userId, postId: $postId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UnSavePost &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.postId, postId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(postId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$UnSavePostCopyWith<_UnSavePost> get copyWith =>
+      __$UnSavePostCopyWithImpl<_UnSavePost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return unSavePost(userId, postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return unSavePost?.call(userId, postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (unSavePost != null) {
+      return unSavePost(userId, postId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return unSavePost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return unSavePost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (unSavePost != null) {
+      return unSavePost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UnSavePost implements PostEvent {
+  const factory _UnSavePost({required String userId, required String postId}) =
+      _$_UnSavePost;
+
+  String get userId;
+  String get postId;
+  @JsonKey(ignore: true)
+  _$UnSavePostCopyWith<_UnSavePost> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -869,9 +2622,22 @@ class _$_UnLikePost implements _UnLikePost {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) {
     return unLikePost(postId, userId);
   }
@@ -882,9 +2648,20 @@ class _$_UnLikePost implements _UnLikePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) {
     return unLikePost?.call(postId, userId);
   }
@@ -895,9 +2672,20 @@ class _$_UnLikePost implements _UnLikePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) {
     if (unLikePost != null) {
@@ -913,9 +2701,16 @@ class _$_UnLikePost implements _UnLikePost {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return unLikePost(this);
   }
@@ -927,9 +2722,16 @@ class _$_UnLikePost implements _UnLikePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) {
     return unLikePost?.call(this);
   }
@@ -941,9 +2743,16 @@ class _$_UnLikePost implements _UnLikePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (unLikePost != null) {
@@ -1032,9 +2841,22 @@ class _$_DeletePost implements _DeletePost {
     required TResult Function() fetchPaginatedTimelinePosts,
     required TResult Function(String caption, List<GalleryAsset> assets)
         createPost,
-    required TResult Function(UserEntity user, dynamic post) likePost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
     required TResult Function(String postId, String userId) unLikePost,
     required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
   }) {
     return deletePost(postId);
   }
@@ -1045,9 +2867,20 @@ class _$_DeletePost implements _DeletePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
   }) {
     return deletePost?.call(postId);
   }
@@ -1058,9 +2891,20 @@ class _$_DeletePost implements _DeletePost {
     TResult Function(bool shouldLoad)? fetchTimelinePosts,
     TResult Function()? fetchPaginatedTimelinePosts,
     TResult Function(String caption, List<GalleryAsset> assets)? createPost,
-    TResult Function(UserEntity user, dynamic post)? likePost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
     TResult Function(String postId, String userId)? unLikePost,
     TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
     required TResult orElse(),
   }) {
     if (deletePost != null) {
@@ -1076,9 +2920,16 @@ class _$_DeletePost implements _DeletePost {
     required TResult Function(_FetchTimelinePaginatedPosts value)
         fetchPaginatedTimelinePosts,
     required TResult Function(_CreatePost value) createPost,
-    required TResult Function(_LikePost value) likePost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
     required TResult Function(_UnLikePost value) unLikePost,
     required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
   }) {
     return deletePost(this);
   }
@@ -1090,9 +2941,16 @@ class _$_DeletePost implements _DeletePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
   }) {
     return deletePost?.call(this);
   }
@@ -1104,9 +2962,16 @@ class _$_DeletePost implements _DeletePost {
     TResult Function(_FetchTimelinePaginatedPosts value)?
         fetchPaginatedTimelinePosts,
     TResult Function(_CreatePost value)? createPost,
-    TResult Function(_LikePost value)? likePost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
     TResult Function(_UnLikePost value)? unLikePost,
     TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
     required TResult orElse(),
   }) {
     if (deletePost != null) {
@@ -1126,18 +2991,233 @@ abstract class _DeletePost implements PostEvent {
 }
 
 /// @nodoc
+abstract class _$GetPostCopyWith<$Res> {
+  factory _$GetPostCopyWith(_GetPost value, $Res Function(_GetPost) then) =
+      __$GetPostCopyWithImpl<$Res>;
+  $Res call({String postId});
+}
+
+/// @nodoc
+class __$GetPostCopyWithImpl<$Res> extends _$PostEventCopyWithImpl<$Res>
+    implements _$GetPostCopyWith<$Res> {
+  __$GetPostCopyWithImpl(_GetPost _value, $Res Function(_GetPost) _then)
+      : super(_value, (v) => _then(v as _GetPost));
+
+  @override
+  _GetPost get _value => super._value as _GetPost;
+
+  @override
+  $Res call({
+    Object? postId = freezed,
+  }) {
+    return _then(_GetPost(
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetPost implements _GetPost {
+  const _$_GetPost({required this.postId});
+
+  @override
+  final String postId;
+
+  @override
+  String toString() {
+    return 'PostEvent.getPost(postId: $postId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetPost &&
+            const DeepCollectionEquality().equals(other.postId, postId));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(postId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetPostCopyWith<_GetPost> get copyWith =>
+      __$GetPostCopyWithImpl<_GetPost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(bool shouldLoad) fetchTimelinePosts,
+    required TResult Function() fetchPaginatedTimelinePosts,
+    required TResult Function(String caption, List<GalleryAsset> assets)
+        createPost,
+    required TResult Function(String status) createStatusPost,
+    required TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)
+        reactToPost,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        updateReaction,
+    required TResult Function(
+            PostReaction reaction, List<PostReaction> latestReactions)
+        unReactToPost,
+    required TResult Function(String postId) sharePost,
+    required TResult Function(SavedPostDTO savedPost) savePost,
+    required TResult Function(String userId, String postId) unSavePost,
+    required TResult Function(String postId, String userId) unLikePost,
+    required TResult Function(String postId) deletePost,
+    required TResult Function(String postId) getPost,
+  }) {
+    return getPost(postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+  }) {
+    return getPost?.call(postId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool shouldLoad)? fetchTimelinePosts,
+    TResult Function()? fetchPaginatedTimelinePosts,
+    TResult Function(String caption, List<GalleryAsset> assets)? createPost,
+    TResult Function(String status)? createStatusPost,
+    TResult Function(Post post, UserModel user, PostReaction reaction,
+            List<PostReaction> latestReactions)?
+        reactToPost,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        updateReaction,
+    TResult Function(PostReaction reaction, List<PostReaction> latestReactions)?
+        unReactToPost,
+    TResult Function(String postId)? sharePost,
+    TResult Function(SavedPostDTO savedPost)? savePost,
+    TResult Function(String userId, String postId)? unSavePost,
+    TResult Function(String postId, String userId)? unLikePost,
+    TResult Function(String postId)? deletePost,
+    TResult Function(String postId)? getPost,
+    required TResult orElse(),
+  }) {
+    if (getPost != null) {
+      return getPost(postId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FetchTimelinePosts value) fetchTimelinePosts,
+    required TResult Function(_FetchTimelinePaginatedPosts value)
+        fetchPaginatedTimelinePosts,
+    required TResult Function(_CreatePost value) createPost,
+    required TResult Function(_CreateStatusPost value) createStatusPost,
+    required TResult Function(_ReactPost value) reactToPost,
+    required TResult Function(_UpdateReactPost value) updateReaction,
+    required TResult Function(_UnReactPost value) unReactToPost,
+    required TResult Function(_SharePost value) sharePost,
+    required TResult Function(_SavePost value) savePost,
+    required TResult Function(_UnSavePost value) unSavePost,
+    required TResult Function(_UnLikePost value) unLikePost,
+    required TResult Function(_DeletePost value) deletePost,
+    required TResult Function(_GetPost value) getPost,
+  }) {
+    return getPost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+  }) {
+    return getPost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FetchTimelinePosts value)? fetchTimelinePosts,
+    TResult Function(_FetchTimelinePaginatedPosts value)?
+        fetchPaginatedTimelinePosts,
+    TResult Function(_CreatePost value)? createPost,
+    TResult Function(_CreateStatusPost value)? createStatusPost,
+    TResult Function(_ReactPost value)? reactToPost,
+    TResult Function(_UpdateReactPost value)? updateReaction,
+    TResult Function(_UnReactPost value)? unReactToPost,
+    TResult Function(_SharePost value)? sharePost,
+    TResult Function(_SavePost value)? savePost,
+    TResult Function(_UnSavePost value)? unSavePost,
+    TResult Function(_UnLikePost value)? unLikePost,
+    TResult Function(_DeletePost value)? deletePost,
+    TResult Function(_GetPost value)? getPost,
+    required TResult orElse(),
+  }) {
+    if (getPost != null) {
+      return getPost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetPost implements PostEvent {
+  const factory _GetPost({required String postId}) = _$_GetPost;
+
+  String get postId;
+  @JsonKey(ignore: true)
+  _$GetPostCopyWith<_GetPost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$PostStateTearOff {
   const _$PostStateTearOff();
 
   _PostState call(
-      {String error = '',
-      required TimelineResponse timelinePosts,
-      PostStatus currentState = PostStatus.idle,
+      {Post? rehydratedPost = null,
+      bool reachedMaximumThreshold = false,
+      required PagingController<int, Post> paginationController,
       PostListenableAction action = PostListenableAction.idle}) {
     return _PostState(
-      error: error,
-      timelinePosts: timelinePosts,
-      currentState: currentState,
+      rehydratedPost: rehydratedPost,
+      reachedMaximumThreshold: reachedMaximumThreshold,
+      paginationController: paginationController,
       action: action,
     );
   }
@@ -1148,9 +3228,10 @@ const $PostState = _$PostStateTearOff();
 
 /// @nodoc
 mixin _$PostState {
-  String get error => throw _privateConstructorUsedError;
-  TimelineResponse get timelinePosts => throw _privateConstructorUsedError;
-  PostStatus get currentState => throw _privateConstructorUsedError;
+  Post? get rehydratedPost => throw _privateConstructorUsedError;
+  bool get reachedMaximumThreshold => throw _privateConstructorUsedError;
+  PagingController<int, Post> get paginationController =>
+      throw _privateConstructorUsedError;
   PostListenableAction get action => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -1163,10 +3244,12 @@ abstract class $PostStateCopyWith<$Res> {
   factory $PostStateCopyWith(PostState value, $Res Function(PostState) then) =
       _$PostStateCopyWithImpl<$Res>;
   $Res call(
-      {String error,
-      TimelineResponse timelinePosts,
-      PostStatus currentState,
+      {Post? rehydratedPost,
+      bool reachedMaximumThreshold,
+      PagingController<int, Post> paginationController,
       PostListenableAction action});
+
+  $PostCopyWith<$Res>? get rehydratedPost;
 }
 
 /// @nodoc
@@ -1179,29 +3262,40 @@ class _$PostStateCopyWithImpl<$Res> implements $PostStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? timelinePosts = freezed,
-    Object? currentState = freezed,
+    Object? rehydratedPost = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_value.copyWith(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      timelinePosts: timelinePosts == freezed
-          ? _value.timelinePosts
-          : timelinePosts // ignore: cast_nullable_to_non_nullable
-              as TimelineResponse,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as PostStatus,
+      rehydratedPost: rehydratedPost == freezed
+          ? _value.rehydratedPost
+          : rehydratedPost // ignore: cast_nullable_to_non_nullable
+              as Post?,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, Post>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
               as PostListenableAction,
     ));
+  }
+
+  @override
+  $PostCopyWith<$Res>? get rehydratedPost {
+    if (_value.rehydratedPost == null) {
+      return null;
+    }
+
+    return $PostCopyWith<$Res>(_value.rehydratedPost!, (value) {
+      return _then(_value.copyWith(rehydratedPost: value));
+    });
   }
 }
 
@@ -1212,10 +3306,13 @@ abstract class _$PostStateCopyWith<$Res> implements $PostStateCopyWith<$Res> {
       __$PostStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String error,
-      TimelineResponse timelinePosts,
-      PostStatus currentState,
+      {Post? rehydratedPost,
+      bool reachedMaximumThreshold,
+      PagingController<int, Post> paginationController,
       PostListenableAction action});
+
+  @override
+  $PostCopyWith<$Res>? get rehydratedPost;
 }
 
 /// @nodoc
@@ -1229,24 +3326,24 @@ class __$PostStateCopyWithImpl<$Res> extends _$PostStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? timelinePosts = freezed,
-    Object? currentState = freezed,
+    Object? rehydratedPost = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_PostState(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      timelinePosts: timelinePosts == freezed
-          ? _value.timelinePosts
-          : timelinePosts // ignore: cast_nullable_to_non_nullable
-              as TimelineResponse,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as PostStatus,
+      rehydratedPost: rehydratedPost == freezed
+          ? _value.rehydratedPost
+          : rehydratedPost // ignore: cast_nullable_to_non_nullable
+              as Post?,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, Post>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -1259,26 +3356,26 @@ class __$PostStateCopyWithImpl<$Res> extends _$PostStateCopyWithImpl<$Res>
 
 class _$_PostState implements _PostState {
   const _$_PostState(
-      {this.error = '',
-      required this.timelinePosts,
-      this.currentState = PostStatus.idle,
+      {this.rehydratedPost = null,
+      this.reachedMaximumThreshold = false,
+      required this.paginationController,
       this.action = PostListenableAction.idle});
 
   @JsonKey()
   @override
-  final String error;
-  @override
-  final TimelineResponse timelinePosts;
+  final Post? rehydratedPost;
   @JsonKey()
   @override
-  final PostStatus currentState;
+  final bool reachedMaximumThreshold;
+  @override
+  final PagingController<int, Post> paginationController;
   @JsonKey()
   @override
   final PostListenableAction action;
 
   @override
   String toString() {
-    return 'PostState(error: $error, timelinePosts: $timelinePosts, currentState: $currentState, action: $action)';
+    return 'PostState(rehydratedPost: $rehydratedPost, reachedMaximumThreshold: $reachedMaximumThreshold, paginationController: $paginationController, action: $action)';
   }
 
   @override
@@ -1286,20 +3383,21 @@ class _$_PostState implements _PostState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _PostState &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
-                .equals(other.timelinePosts, timelinePosts) &&
+                .equals(other.rehydratedPost, rehydratedPost) &&
+            const DeepCollectionEquality().equals(
+                other.reachedMaximumThreshold, reachedMaximumThreshold) &&
             const DeepCollectionEquality()
-                .equals(other.currentState, currentState) &&
+                .equals(other.paginationController, paginationController) &&
             const DeepCollectionEquality().equals(other.action, action));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(timelinePosts),
-      const DeepCollectionEquality().hash(currentState),
+      const DeepCollectionEquality().hash(rehydratedPost),
+      const DeepCollectionEquality().hash(reachedMaximumThreshold),
+      const DeepCollectionEquality().hash(paginationController),
       const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
@@ -1310,17 +3408,17 @@ class _$_PostState implements _PostState {
 
 abstract class _PostState implements PostState {
   const factory _PostState(
-      {String error,
-      required TimelineResponse timelinePosts,
-      PostStatus currentState,
+      {Post? rehydratedPost,
+      bool reachedMaximumThreshold,
+      required PagingController<int, Post> paginationController,
       PostListenableAction action}) = _$_PostState;
 
   @override
-  String get error;
+  Post? get rehydratedPost;
   @override
-  TimelineResponse get timelinePosts;
+  bool get reachedMaximumThreshold;
   @override
-  PostStatus get currentState;
+  PagingController<int, Post> get paginationController;
   @override
   PostListenableAction get action;
   @override

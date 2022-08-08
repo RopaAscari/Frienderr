@@ -21,9 +21,9 @@ enum NotificationListenableAction {
 @freezed
 class NotificationState with _$NotificationState {
   const factory NotificationState({
-    @Default('') String error,
-    @Default([]) List<NotificationEntity> notifications,
-    @Default(NotificationStatus.idle) NotificationStatus currentState,
+    @Default(false) final bool reachedMaximumThreshold,
+    required final PagingController<int, NotificationModel>
+        paginationController,
     @Default(NotificationListenableAction.idle)
         NotificationListenableAction action,
   }) = _NotificationState;

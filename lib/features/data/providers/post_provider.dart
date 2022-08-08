@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,16 +9,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/core/services/helpers.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:frienderr/features/domain/entities/save_post.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/data/models/post/post_model.dart';
 import 'package:frienderr/core/enums/collections/posts/order_fields.dart';
 import 'package:frienderr/core/enums/collections/posts/query_fields.dart';
-import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/widgets/upload_progress.dart';
+import 'package:frienderr/features/data/models/post/post_reaction_model.dart';
 
 @LazySingleton(as: IPostRemoteDataProvider)
 class PostRemoteDataProvider implements IPostRemoteDataProvider {
@@ -27,7 +28,317 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   FirebaseFirestore firestoreInstance;
 
   PostRemoteDataProvider(
-      this.firestoreInstance, this.firebaseStorage, this.firebaseAuth);
+    this.firebaseAuth,
+    this.firebaseStorage,
+    this.firestoreInstance,
+  );
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> delegateTimelineStream() {
+    return firestoreInstance
+        .collection(Collections.posts)
+        .snapshots(includeMetadataChanges: true);
+  }
+
+  @override
+  Future<QuerySnapshot<PostDTO>> getUserPosts({required String uid}) async {
+    return await firestoreInstance
+        .collection(Collections.posts)
+        .orderBy(PostOrderFields.dateCreated.name, descending: true)
+        .where('user.id', isEqualTo: uid)
+        .where("type", isEqualTo: "post")
+        .limit(5)
+        .withConverter<PostDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => PostDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<DocumentSnapshot<PostDTO>> getPost({required String postId}) async {
+    return await firestoreInstance
+        .collection(Collections.posts)
+        .doc(postId)
+        .withConverter<PostDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => PostDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<PostDTO>> getPosts() async {
+    return await firestoreInstance
+        .collection(Collections.posts)
+        .orderBy(PostOrderFields.dateCreated.name, descending: true)
+        .limit(Constants.pageSize)
+        .withConverter<PostDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => PostDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<PostDTO>> getPaginatedPosts(Post post) async {
+    // print("getting paginatd");
+    return await firestoreInstance
+        .collection(Collections.posts)
+        .orderBy("dateCreated", descending: true)
+        .startAfter([post.dateCreated])
+        .withConverter<PostDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => PostDTO.fromJson(snapshot.data()!),
+        )
+        .limit(Constants.pageSize)
+        .get();
+  }
+
+  @override
+  Future<bool> savePost({required SavedPostDTO savedPost}) async {
+    try {
+      final userId = savedPost.userId;
+      final postId = savedPost.postId;
+      final batch = firestoreInstance.batch();
+
+      final _docId = "${postId}_$userId";
+
+      final docRef = firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .collection(Collections.saves)
+          .doc(_docId);
+
+      batch.set(docRef, savedPost.toJson());
+
+      final postRef =
+          firestoreInstance.collection(Collections.posts).doc(savedPost.postId);
+
+      batch.update(postRef, {
+        'saves': FieldValue.increment(1),
+      });
+
+      await batch.commit();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> unSavePost(
+      {required String postId, required String userId}) async {
+    try {
+      final batch = firestoreInstance.batch();
+
+      final _docId = "${postId}_$userId";
+
+      final docRef = firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .collection(Collections.saves)
+          .doc(_docId);
+
+      batch.delete(
+        docRef,
+      );
+
+      final postRef =
+          firestoreInstance.collection(Collections.posts).doc(postId);
+
+      batch.update(postRef, {
+        'saves': FieldValue.increment(-1),
+      });
+
+      await batch.commit();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  @override
+  Future<QuerySnapshot<SavedPostDTO>> getUserSavedPosts(
+      {required List<String> postIds, required String userId}) async {
+    return await firestoreInstance
+        .collectionGroup(Collections.saves)
+        .where('userId', isEqualTo: userId)
+        .where('postId', whereIn: postIds)
+        .withConverter<SavedPostDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) =>
+              SavedPostDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<bool> updatePostShares({
+    required String postId,
+  }) async {
+    try {
+      await firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .update({'shares': FieldValue.increment(1)});
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<QuerySnapshot<PostReactionDTO>> getUserPostReactions(
+      {required List<String> postIds, required String userId}) async {
+    return await firestoreInstance
+        .collectionGroup("reactions")
+        .where('uid', isEqualTo: userId)
+        .where('postId', whereIn: postIds)
+        .withConverter<PostReactionDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) =>
+              PostReactionDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<bool> reactToPost({
+    required PostReaction reaction,
+    required List<PostReaction> latestReactions,
+  }) async {
+    try {
+      final userId = reaction.uid;
+      final postId = reaction.postId;
+      final batch = firestoreInstance.batch();
+
+      final _docId = "${postId}_$userId";
+      final ref = firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .collection("reactions")
+          .doc(_docId);
+
+      batch.set(ref, reaction.toJson());
+
+      final postRef =
+          firestoreInstance.collection(Collections.posts).doc(reaction.postId);
+
+      batch.update(postRef, {
+        'reactions': FieldValue.increment(1),
+        'latestReactions': latestReactions.map((e) => e.toJson()).toList(),
+      });
+
+      await batch.commit();
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  @override
+  unReactToPost({
+    required PostReaction reaction,
+    required List<PostReaction> latestReactions,
+  }) async {
+    try {
+      final userId = reaction.uid;
+      final postId = reaction.postId;
+
+      final batch = firestoreInstance.batch();
+
+      final _docId = "${postId}_$userId";
+      final ref = firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .collection("reactions")
+          .doc(_docId);
+
+      batch.delete(ref);
+
+      final postRef =
+          firestoreInstance.collection(Collections.posts).doc(reaction.postId);
+
+      batch.update(postRef, {
+        'reactions': FieldValue.increment(-1),
+        'latestReactions': latestReactions.map((e) => e.toJson()).toList(),
+      });
+
+      await batch.commit();
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  @override
+  updatePostReaction({
+    required PostReaction reaction,
+    required List<PostReaction> latestReactions,
+  }) async {
+    try {
+      final userId = reaction.uid;
+      final postId = reaction.postId;
+
+      final batch = firestoreInstance.batch();
+
+      final _docId = "${postId}_$userId";
+      final ref = firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .collection("reactions")
+          .doc(_docId);
+
+      batch.update(ref, reaction.toJson());
+
+      final postRef =
+          firestoreInstance.collection(Collections.posts).doc(reaction.postId);
+
+      if (latestReactions.contains(reaction)) {
+        latestReactions[latestReactions
+            .indexWhere((element) => element.uid == reaction.uid)] = reaction;
+
+        batch.update(postRef, {
+          'reactions': FieldValue.increment(-1),
+          'lastReactions': latestReactions.map((e) => e.toJson()).toList(),
+        });
+      }
+
+      batch.commit();
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> unLikePost(String postId, String userId) async {
+    try {
+      await firestoreInstance.collection(Collections.posts).doc(postId).update({
+        PostQueryFields.likes.name: FieldValue.arrayRemove([userId])
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> deletePost(String postId) async {
+    try {
+      await firestoreInstance
+          .collection(Collections.posts)
+          .doc(postId)
+          .delete();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   @override
   Future<bool> createPost({
@@ -41,7 +352,7 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
       Late<File?> _initialThumbnailFile = Late();
       Late<File?> _uploadProgressThumnail = Late();
 
-      getIt<AppRouter>().popUntil((route) => route.isFirst);
+      getService<AppRouter>().popUntil((route) => route.isFirst);
 
       if (assets[_index].type == AssetType.video) {
         final File? value = assets[_index].asset;
@@ -56,13 +367,18 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
         _uploadProgressThumnail.value = assets[_index].asset;
       }
 
-      getIt<AppRouter>().context.showToast(
+      getService<AppRouter>().context.showToast(
             duration: const Duration(days: 365),
-            content:
-                UploadProgress(file: _uploadProgressThumnail.value as File),
+            content: UploadProgress(
+                leading: Image.file(
+                  _uploadProgressThumnail.value ?? File(""),
+                  width: 40,
+                  height: 40,
+                ),
+                file: _uploadProgressThumnail.value as File),
           );
 
-      final List<Content> content =
+      final List<ContentDTO> content =
           await Stream.fromIterable(assets).asyncMap((item) async {
         final String timestamp =
             DateTime.now().microsecondsSinceEpoch.toString();
@@ -126,28 +442,31 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
 
         _mapInterator++;
 
-        return Content(
+        return ContentDTO(
           media: url,
-          metadata: PostMetadata(thumbnail: _thumbnail),
+          metadata: PostMetadataDTO(thumbnail: _thumbnail),
           type: item.type == AssetType.image ? 'image' : 'video',
         );
       }).toList();
 
-      final PostEntity posts = PostEntity(
-        likes: [],
-        shares: [],
-        commentCount: 0,
+      final PostDTO posts = PostDTO(
+        saves: 0,
+        shares: 0,
+        comments: 0,
+        reactions: 0,
         content: content,
         caption: caption,
+        latestReactions: [],
+        type: TimelinePostType.post,
         id: Helpers.generateId(25),
-        user: PartialUser(
+        user: UserDTO(
           id: firebaseAuth.currentUser?.uid as String,
         ),
-        dateCreated: DateTime.now().microsecondsSinceEpoch,
+        dateCreated: DateTime.now().millisecondsSinceEpoch,
       );
 
       await firestoreInstance
-          .collection(Collections.posts.name)
+          .collection(Collections.posts)
           .doc(posts.id)
           .set(posts.toJson());
 
@@ -158,84 +477,38 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> delegateTimelineStream() {
-    return firestoreInstance
-        .collection(Collections.posts.name)
-        .snapshots(includeMetadataChanges: true);
-  }
-
-  @override
-  Future<QuerySnapshot<Map<String, dynamic>>> getUserPosts(
-      {required String uid}) async {
-    print(PostQueryFields.userId.name);
-    return await firestoreInstance
-        .collection(Collections.posts.name)
-        .orderBy(PostOrderFields.dateCreated.name, descending: true)
-        .where('user.id', isEqualTo: uid)
-        .get();
-  }
-
-  @override
-  Future<QuerySnapshot<Object?>> getPosts() async {
-    return await firestoreInstance
-        .collection(Collections.posts.name)
-        .orderBy(PostOrderFields.dateCreated.name, descending: true)
-        .limit(10)
-        .get();
-  }
-
-  @override
-  Future<QuerySnapshot<Object?>> getPaginatedPosts(
-      List<Map<String, dynamic>> posts) async {
-    return await firestoreInstance
-        .collection(Collections.posts.name)
-        .orderBy(PostOrderFields.dateCreated.name, descending: true)
-        .startAfter([posts[posts.length - 1][PostOrderFields.dateCreated.name]])
-        .limit(10)
-        .get();
-  }
-
-  @override
-  Future<bool> likePost(PostEntity post, UserEntity user) async {
-    final String userId = user.id;
-    final String postId = post.id;
-
+  Future<bool> createStatusPost({
+    required String status,
+  }) async {
     try {
-      await firestoreInstance
-          .collection(Collections.posts.name)
-          .doc(postId)
-          .update({
-        PostQueryFields.likes.name: FieldValue.arrayUnion([userId])
-      });
+      getService<AppRouter>().popUntil((route) => route.isFirst);
 
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
+      getService<AppRouter>().context.showToast(
+            duration: const Duration(days: 365),
+            content: const UploadProgress(file: null),
+          );
 
-  @override
-  Future<bool> unLikePost(String postId, String userId) async {
-    try {
-      await firestoreInstance
-          .collection(Collections.posts.name)
-          .doc(postId)
-          .update({
-        PostQueryFields.likes.name: FieldValue.arrayRemove([userId])
-      });
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
+      final PostDTO posts = PostDTO(
+        saves: 0,
+        shares: 0,
+        comments: 0,
+        reactions: 0,
+        content: [],
+        caption: status,
+        latestReactions: [],
+        id: Helpers.generateId(25),
+        type: TimelinePostType.status,
+        user: UserDTO(
+          id: firebaseAuth.currentUser?.uid as String,
+        ),
+        dateCreated: DateTime.now().millisecondsSinceEpoch,
+      );
 
-  @override
-  Future<bool> deletePost(String postId) async {
-    try {
       await firestoreInstance
-          .collection(Collections.posts.name)
-          .doc(postId)
-          .delete();
+          .collection(Collections.posts)
+          .doc(posts.id)
+          .set(posts.toJson());
+
       return true;
     } catch (error) {
       return false;
@@ -246,20 +519,51 @@ class PostRemoteDataProvider implements IPostRemoteDataProvider {
 abstract class IPostRemoteDataProvider {
   Future<bool> createPost(
       {required String caption, required List<GalleryAsset> assets});
-
+  Future<bool> createStatusPost({required String status});
   Future<bool> deletePost(String postId);
 
-  Future<QuerySnapshot<Object?>> getPosts();
+  Future<QuerySnapshot<PostDTO>> getPosts();
 
-  Future<bool> likePost(PostEntity post, UserEntity user);
+  Future<DocumentSnapshot<PostDTO>> getPost({required String postId});
 
+  Future<bool> reactToPost({
+    required PostReaction reaction,
+    required List<PostReaction> latestReactions,
+  });
+
+  Future<bool> unReactToPost({
+    required PostReaction reaction,
+    required List<PostReaction> latestReactions,
+  });
+
+  Future<bool> savePost({
+    required SavedPostDTO savedPost,
+  });
+
+  Future<bool> updatePostShares({
+    required String postId,
+  });
+
+  Future<bool> unSavePost({
+    required String userId,
+    required String postId,
+  });
+
+  Future<bool> updatePostReaction({
+    required PostReaction reaction,
+    required List<PostReaction> latestReactions,
+  });
   Future<bool> unLikePost(String postId, String userId);
 
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateTimelineStream();
 
-  Future<QuerySnapshot<Object?>> getPaginatedPosts(
-      List<Map<String, dynamic>> posts);
+  Future<QuerySnapshot<PostDTO>> getPaginatedPosts(Post post);
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getUserPosts(
-      {required String uid});
+  Future<QuerySnapshot<PostDTO>> getUserPosts({required String uid});
+
+  Future<QuerySnapshot<PostReactionDTO>> getUserPostReactions(
+      {required List<String> postIds, required String userId});
+
+  Future<QuerySnapshot<SavedPostDTO>> getUserSavedPosts(
+      {required List<String> postIds, required String userId});
 }

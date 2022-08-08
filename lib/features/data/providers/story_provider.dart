@@ -1,4 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:automap/automap.dart';
+import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/features/data/models/story/story_model.dart';
+import 'package:frienderr/features/domain/entities/story_view.dart';
+
 import '../models/story/story_content.dart';
 import 'package:injectable/injectable.dart';
 import 'package:frienderr/core/enums/enums.dart';
@@ -30,23 +36,72 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateStoryStream(
       String userId) {
     return FirebaseFirestore.instance
-        .collection(Collections.stories.name)
+        .collection(Collections.stories)
         .where(StoryQueryFields.id.name, isNotEqualTo: userId)
         .orderBy(StoryOrderFields.id.name, descending: true)
         .snapshots();
   }
 
   @override
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchStories(String userId) {
+  Future<DocumentSnapshot<StoryDTO>> fetchUserStory(String userId) {
     return FirebaseFirestore.instance
-        .collection(Collections.stories.name)
+        .collection(Collections.stories)
+        .doc(userId)
+        .withConverter<StoryDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => StoryDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<StoryViewDTO?>> fetchUserStoryViews(
+      {required List<String> latestContentIds, required String userId}) {
+    return FirebaseFirestore.instance
+        .collectionGroup("views")
+        .where("userId", isEqualTo: userId)
+        .where("contentId", whereIn: latestContentIds)
+        .withConverter<StoryViewDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) =>
+              StoryViewDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<StoryDTO>> fetchStories(String userId) {
+    return FirebaseFirestore.instance
+        .collection(Collections.stories)
+        .orderBy("dateUpdated", descending: false)
+        //  .where('id', isNotEqualTo: userId)
+        .limit(Constants.pageSize)
+        .withConverter<StoryDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => StoryDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<StoryDTO>> fetchPaginatedStories(
+      String userId, Story previousStory) {
+    return FirebaseFirestore.instance
+        .collection(Collections.stories)
+        .orderBy("dateUpdated", descending: false)
+        .limit(Constants.pageSize)
+        .startAfter([previousStory.dateUpdated])
+        .withConverter<StoryDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) => StoryDTO.fromJson(snapshot.data()!),
+        )
         .get();
   }
 
   Future<bool> checkIfDocExists(String docId) async {
     try {
       var doc = await firestoreInstance
-          .collection(Collections.stories.name)
+          .collection(Collections.stories)
           .doc(docId)
           .get();
       return doc.exists;
@@ -58,20 +113,21 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   @override
   Future<bool> createStory({required List<GalleryAsset> assets}) async {
     try {
-      final List<StoryContentEntity> content =
+      final List<StoryContentDTO> content =
           await generateStoryContent(assets: assets);
 
-      final StoryEntity stories = StoryEntity(
+      final StoryDTO stories = StoryDTO(
         content: content,
+        isPersitent: false,
         id: firebaseAuth.currentUser?.uid as String,
-        user: PartialUser(
+        user: UserDTO(
           id: firebaseAuth.currentUser?.uid as String,
         ),
         dateUpdated: DateTime.now().microsecondsSinceEpoch,
       );
 
       await firestoreInstance
-          .collection(Collections.stories.name)
+          .collection(Collections.stories)
           .doc(stories.id)
           .set(stories.toJson());
 
@@ -85,11 +141,11 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   Future<bool> updateStory(
       {required String userId, required List<GalleryAsset> assets}) async {
     try {
-      final List<StoryContentEntity> content =
+      final List<StoryContentDTO> content =
           await generateStoryContent(assets: assets);
 
       await firestoreInstance
-          .collection(Collections.stories.name)
+          .collection(Collections.stories)
           .doc(userId)
           .update({
         StoryQueryFields.content.name:
@@ -106,36 +162,48 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   Future<bool> viewStory(
       {required String userId,
       required String storyId,
+      required String contentId,
       required List<StoryContent> stories}) async {
     try {
-      final storyMap = stories.map((story) {
-        List<String> views = story.views;
+      Late<StoryViewDTO> storyView = Late();
+      final batch = firestoreInstance.batch();
 
-        if (userId == story.id) {
-          views.add(userId);
+      final _stories =
+          AutoMapper.I.map<List<StoryContent>, List<StoryContentDTO>>(
+        stories,
+      );
+
+      final _content = _stories.map((content) {
+        if (contentId == content.id) {
+          content.views++;
+          storyView.value = StoryViewDTO(
+              userId: userId,
+              contentId: content.id,
+              dateCreated: DateTime.now().millisecondsSinceEpoch);
         }
-
-        return {
-          'id': story.id,
-          'views': views,
-          'likes': story.likes,
-          'media': {
-            'url': story.media.url,
-            'type': story.media.type,
-            'metadata': {
-              'duration': story.media.metadata.duration,
-              'thumbnail': story.media.metadata.thumbnail,
-            },
-          },
-          'dateCreated': story.dateCreated,
-        };
+        return content;
       }).toList();
 
-      await firestoreInstance
-          .collection(Collections.stories.name)
-          .doc(userId)
-          .update(
-              {StoryQueryFields.content.name: FieldValue.arrayUnion(storyMap)});
+      final updateRef =
+          firestoreInstance.collection(Collections.stories).doc(storyId);
+
+      batch.update(updateRef, {
+        StoryQueryFields.content.name: _content.map((e) => e.toJson()).toList()
+      });
+
+      final _docId = "${storyId}_$userId";
+
+      if (storyView.isInitialized) {
+        final createRef = firestoreInstance
+            .collection(Collections.stories)
+            .doc(storyId)
+            .collection("views")
+            .doc(_docId);
+
+        batch.set(createRef, storyView.value.toJson());
+      }
+      await batch.commit();
+
       return true;
     } catch (err) {
       return false;
@@ -146,45 +214,33 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   Future<bool> deleteStory(
       {required bool isLast,
       required String userId,
-      required StoryContent story}) async {
+      required List<StoryContentDTO>? content}) async {
     try {
       if (isLast) {
         await firestoreInstance
-            .collection(Collections.stories.name)
+            .collection(Collections.stories)
             .doc(userId)
             .delete();
       } else {
-        // final Map<String, dynamic> content = story.toJson();
+        log('exe 1');
+        final List<Map<String, dynamic>>? storyContent =
+            content?.map((x) => x.toJson()).toList();
+
+        log('exe 2 $storyContent');
         await firestoreInstance
-            .collection(Collections.stories.name)
+            .collection(Collections.stories)
             .doc(userId)
-            .update({
-          StoryQueryFields.content.name: FieldValue.arrayRemove([
-            {
-              'id': story.id,
-              'views': story.views,
-              'likes': story.likes,
-              'media': {
-                'url': story.media.url,
-                'type': story.media.type,
-                'metadata': {
-                  'duration': story.media.metadata.duration,
-                  'thumbnail': story.media.metadata.thumbnail,
-                },
-              },
-              'dateCreated': story.dateCreated,
-            }
-          ])
-        });
+            .update({StoryQueryFields.content.name: storyContent});
       }
 
       return true;
     } catch (err) {
+      log(err.toString());
       return false;
     }
   }
 
-  Future<List<StoryContentEntity>> generateStoryContent(
+  Future<List<StoryContentDTO>> generateStoryContent(
       {required List<GalleryAsset> assets}) async {
     const _index = 0;
     String? _thumbnail;
@@ -193,7 +249,7 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
     Late<File?> _uploadProgressThumnail = Late();
 
     try {
-      getIt<AppRouter>().popUntil((route) => route.isFirst);
+      getService<AppRouter>().popUntil((route) => route.isFirst);
 
       if (assets[_index].type == AssetType.video) {
         final File? value = assets[_index].asset;
@@ -208,7 +264,7 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
         _uploadProgressThumnail.value = assets[_index].asset;
       }
 
-      getIt<AppRouter>().context.showToast(
+      getService<AppRouter>().context.showToast(
             duration: const Duration(days: 365),
             content:
                 UploadProgress(file: _uploadProgressThumnail.value as File),
@@ -267,40 +323,97 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
 
         _mapInterator++;
 
-        return StoryContentEntity(
-          views: [],
-          likes: [],
-          media: StoryMediaEntity(
+        return StoryContentDTO(
+          views: 0,
+          reactions: 0,
+          media: StoryMediaDTO(
             url: url,
-            metadata: StoryMetadata(
+            metadata: StoryMetadataDTO(
               thumbnail: _thumbnail,
               duration: item.duration,
             ),
             type: item.type == AssetType.image ? 'image' : 'video',
           ),
           id: Helpers.generateId(25),
-          dateCreated: DateTime.now().microsecondsSinceEpoch,
+          dateCreated: DateTime.now().millisecondsSinceEpoch,
         );
       }).toList();
     } catch (error) {
       return [];
     }
   }
+
+  @override
+  Future<QuerySnapshot<StoryViewDTO?>> getPaginatedStoryViewers(
+      {required String userId,
+      required String contentId,
+      required int previousStoryViewerTimestamp}) async {
+    return FirebaseFirestore.instance
+        .collection(Collections.stories)
+        .doc(userId)
+        .collection("views")
+        .where("contentId", isEqualTo: contentId)
+        .limit(Constants.pageSize)
+        .orderBy("contentId")
+        .startAfter([previousStoryViewerTimestamp])
+        .withConverter<StoryViewDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) =>
+              StoryViewDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
+
+  @override
+  Future<QuerySnapshot<StoryViewDTO?>> getStoryViewers({
+    required String userId,
+    required String contentId,
+  }) async {
+    return FirebaseFirestore.instance
+        .collection(Collections.stories)
+        .doc(userId)
+        .collection("views")
+        .where("contentId", isEqualTo: contentId)
+        .limit(Constants.pageSize)
+        .withConverter<StoryViewDTO>(
+          toFirestore: (snapshot, _) => snapshot.toJson(),
+          fromFirestore: (snapshot, _) =>
+              StoryViewDTO.fromJson(snapshot.data()!),
+        )
+        .get();
+  }
 }
 
 abstract class IStoryDataRemoteProvider {
   Future<bool> createStory({required List<GalleryAsset> assets});
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchStories(String userId);
+  Future<QuerySnapshot<StoryDTO>> fetchStories(String userId);
+  Future<DocumentSnapshot<StoryDTO>> fetchUserStory(String userId);
+
+  Future<QuerySnapshot<StoryViewDTO?>> fetchUserStoryViews(
+      {required List<String> latestContentIds, required String userId});
+  Future<QuerySnapshot<StoryDTO>> fetchPaginatedStories(
+      String userId, Story previousStory);
   Future<bool> updateStory(
       {required String userId, required List<GalleryAsset> assets});
   Future<bool> viewStory(
       {required String userId,
       required String storyId,
+      required String contentId,
       required List<StoryContent> stories});
   Stream<QuerySnapshot<Map<String, dynamic>>> delegateStoryStream(
       String userId);
   Future<bool> deleteStory(
       {required bool isLast,
       required String userId,
-      required StoryContent story});
+      required List<StoryContentDTO>? content});
+
+  Future<QuerySnapshot<StoryViewDTO?>> getPaginatedStoryViewers(
+      {required String userId,
+      required String contentId,
+      required int previousStoryViewerTimestamp});
+
+  Future<QuerySnapshot<StoryViewDTO?>> getStoryViewers({
+    required String userId,
+    required String contentId,
+  });
 }

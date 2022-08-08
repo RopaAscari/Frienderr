@@ -7,12 +7,13 @@ part 'user_model.g.dart';
 part 'user_model.freezed.dart';
 
 @freezed
-class UserModel with _$UserModel implements UserEntity {
+class UserModel with _$UserModel implements UserDTO {
   const factory UserModel({
     String? status,
     String? deviceToken,
     @Default('') final String id,
     @Default(true) bool? presence,
+    @Default('') final String email,
     @Default([]) List<dynamic>? chats,
     @Default('') final String username,
     @Default([]) List<dynamic>? following,

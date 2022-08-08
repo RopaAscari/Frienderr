@@ -14,62 +14,60 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-ContentModel _$ContentModelFromJson(Map<String, dynamic> json) {
-  return _ContentModel.fromJson(json);
+Content _$ContentFromJson(Map<String, dynamic> json) {
+  return _Content.fromJson(json);
 }
 
 /// @nodoc
-class _$ContentModelTearOff {
-  const _$ContentModelTearOff();
+class _$ContentTearOff {
+  const _$ContentTearOff();
 
-  _ContentModel call(
+  _Content call(
       {String type = '',
       String media = '',
-      PostMetadataModel metadata = const PostMetadataModel()}) {
-    return _ContentModel(
+      PostMetadata metadata = const PostMetadata()}) {
+    return _Content(
       type: type,
       media: media,
       metadata: metadata,
     );
   }
 
-  ContentModel fromJson(Map<String, Object?> json) {
-    return ContentModel.fromJson(json);
+  Content fromJson(Map<String, Object?> json) {
+    return Content.fromJson(json);
   }
 }
 
 /// @nodoc
-const $ContentModel = _$ContentModelTearOff();
+const $Content = _$ContentTearOff();
 
 /// @nodoc
-mixin _$ContentModel {
+mixin _$Content {
   String get type => throw _privateConstructorUsedError;
   String get media => throw _privateConstructorUsedError;
-  PostMetadataModel get metadata => throw _privateConstructorUsedError;
+  PostMetadata get metadata => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ContentModelCopyWith<ContentModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ContentCopyWith<Content> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ContentModelCopyWith<$Res> {
-  factory $ContentModelCopyWith(
-          ContentModel value, $Res Function(ContentModel) then) =
-      _$ContentModelCopyWithImpl<$Res>;
-  $Res call({String type, String media, PostMetadataModel metadata});
+abstract class $ContentCopyWith<$Res> {
+  factory $ContentCopyWith(Content value, $Res Function(Content) then) =
+      _$ContentCopyWithImpl<$Res>;
+  $Res call({String type, String media, PostMetadata metadata});
 
-  $PostMetadataModelCopyWith<$Res> get metadata;
+  $PostMetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
-class _$ContentModelCopyWithImpl<$Res> implements $ContentModelCopyWith<$Res> {
-  _$ContentModelCopyWithImpl(this._value, this._then);
+class _$ContentCopyWithImpl<$Res> implements $ContentCopyWith<$Res> {
+  _$ContentCopyWithImpl(this._value, this._then);
 
-  final ContentModel _value;
+  final Content _value;
   // ignore: unused_field
-  final $Res Function(ContentModel) _then;
+  final $Res Function(Content) _then;
 
   @override
   $Res call({
@@ -89,40 +87,37 @@ class _$ContentModelCopyWithImpl<$Res> implements $ContentModelCopyWith<$Res> {
       metadata: metadata == freezed
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as PostMetadataModel,
+              as PostMetadata,
     ));
   }
 
   @override
-  $PostMetadataModelCopyWith<$Res> get metadata {
-    return $PostMetadataModelCopyWith<$Res>(_value.metadata, (value) {
+  $PostMetadataCopyWith<$Res> get metadata {
+    return $PostMetadataCopyWith<$Res>(_value.metadata, (value) {
       return _then(_value.copyWith(metadata: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$ContentModelCopyWith<$Res>
-    implements $ContentModelCopyWith<$Res> {
-  factory _$ContentModelCopyWith(
-          _ContentModel value, $Res Function(_ContentModel) then) =
-      __$ContentModelCopyWithImpl<$Res>;
+abstract class _$ContentCopyWith<$Res> implements $ContentCopyWith<$Res> {
+  factory _$ContentCopyWith(_Content value, $Res Function(_Content) then) =
+      __$ContentCopyWithImpl<$Res>;
   @override
-  $Res call({String type, String media, PostMetadataModel metadata});
+  $Res call({String type, String media, PostMetadata metadata});
 
   @override
-  $PostMetadataModelCopyWith<$Res> get metadata;
+  $PostMetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
-class __$ContentModelCopyWithImpl<$Res> extends _$ContentModelCopyWithImpl<$Res>
-    implements _$ContentModelCopyWith<$Res> {
-  __$ContentModelCopyWithImpl(
-      _ContentModel _value, $Res Function(_ContentModel) _then)
-      : super(_value, (v) => _then(v as _ContentModel));
+class __$ContentCopyWithImpl<$Res> extends _$ContentCopyWithImpl<$Res>
+    implements _$ContentCopyWith<$Res> {
+  __$ContentCopyWithImpl(_Content _value, $Res Function(_Content) _then)
+      : super(_value, (v) => _then(v as _Content));
 
   @override
-  _ContentModel get _value => super._value as _ContentModel;
+  _Content get _value => super._value as _Content;
 
   @override
   $Res call({
@@ -130,7 +125,7 @@ class __$ContentModelCopyWithImpl<$Res> extends _$ContentModelCopyWithImpl<$Res>
     Object? media = freezed,
     Object? metadata = freezed,
   }) {
-    return _then(_ContentModel(
+    return _then(_Content(
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -142,21 +137,19 @@ class __$ContentModelCopyWithImpl<$Res> extends _$ContentModelCopyWithImpl<$Res>
       metadata: metadata == freezed
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as PostMetadataModel,
+              as PostMetadata,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_ContentModel implements _ContentModel {
-  const _$_ContentModel(
-      {this.type = '',
-      this.media = '',
-      this.metadata = const PostMetadataModel()});
+class _$_Content implements _Content {
+  const _$_Content(
+      {this.type = '', this.media = '', this.metadata = const PostMetadata()});
 
-  factory _$_ContentModel.fromJson(Map<String, dynamic> json) =>
-      _$$_ContentModelFromJson(json);
+  factory _$_Content.fromJson(Map<String, dynamic> json) =>
+      _$$_ContentFromJson(json);
 
   @JsonKey()
   @override
@@ -166,18 +159,18 @@ class _$_ContentModel implements _ContentModel {
   final String media;
   @JsonKey()
   @override
-  final PostMetadataModel metadata;
+  final PostMetadata metadata;
 
   @override
   String toString() {
-    return 'ContentModel(type: $type, media: $media, metadata: $metadata)';
+    return 'Content(type: $type, media: $media, metadata: $metadata)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ContentModel &&
+            other is _Content &&
             const DeepCollectionEquality().equals(other.type, type) &&
             const DeepCollectionEquality().equals(other.media, media) &&
             const DeepCollectionEquality().equals(other.metadata, metadata));
@@ -192,32 +185,29 @@ class _$_ContentModel implements _ContentModel {
 
   @JsonKey(ignore: true)
   @override
-  _$ContentModelCopyWith<_ContentModel> get copyWith =>
-      __$ContentModelCopyWithImpl<_ContentModel>(this, _$identity);
+  _$ContentCopyWith<_Content> get copyWith =>
+      __$ContentCopyWithImpl<_Content>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ContentModelToJson(this);
+    return _$$_ContentToJson(this);
   }
 }
 
-abstract class _ContentModel implements ContentModel {
-  const factory _ContentModel(
-      {String type,
-      String media,
-      PostMetadataModel metadata}) = _$_ContentModel;
+abstract class _Content implements Content {
+  const factory _Content({String type, String media, PostMetadata metadata}) =
+      _$_Content;
 
-  factory _ContentModel.fromJson(Map<String, dynamic> json) =
-      _$_ContentModel.fromJson;
+  factory _Content.fromJson(Map<String, dynamic> json) = _$_Content.fromJson;
 
   @override
   String get type;
   @override
   String get media;
   @override
-  PostMetadataModel get metadata;
+  PostMetadata get metadata;
   @override
   @JsonKey(ignore: true)
-  _$ContentModelCopyWith<_ContentModel> get copyWith =>
+  _$ContentCopyWith<_Content> get copyWith =>
       throw _privateConstructorUsedError;
 }

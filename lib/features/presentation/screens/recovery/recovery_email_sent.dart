@@ -28,7 +28,8 @@ class _RecoveryEmailSentScreenState extends State<RecoveryEmailSentScreen> {
   BlocGroup get _blocGroup => widget.blocGroup;
 
   Future<Object?> _navigateToLoginScreen() async {
-    return await getIt<AppRouter>().push(LoginRoute(blocGroup: _blocGroup));
+    return await getService<AppRouter>()
+        .push(LoginRoute(blocGroup: _blocGroup));
   }
 
   @override

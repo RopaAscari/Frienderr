@@ -13,7 +13,7 @@ class GetFollowersUseCase extends UseCase<List<String>, GetFollowersParams> {
 
   @override
   Future<Either<Failure, List<String>>> call(GetFollowersParams params) {
-    return repository.getFollowing(params.id);
+    return repository.getFollowing(uid: params.id);
   }
 }
 

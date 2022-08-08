@@ -1,30 +1,28 @@
+import 'package:lottie/lottie.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:frienderr/core/constants/constants.dart';
-import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/core/services/helpers.dart';
-import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/core/generated/assets.gen.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/features/presentation/widgets/oauth.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
-import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
+import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
+import 'package:frienderr/features/presentation/widgets/app_logo.dart';
+import 'package:frienderr/features/presentation/widgets/app_button.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
-import 'package:frienderr/features/presentation/screens/login/login.dart';
-import 'package:frienderr/features/presentation/screens/register/register_username.dart';
-import 'package:frienderr/features/presentation/widgets/app_button.dart';
-import 'package:frienderr/features/presentation/widgets/app_logo.dart';
 import 'package:frienderr/features/presentation/widgets/app_text_field.dart';
-import 'package:frienderr/features/presentation/widgets/flash_message.dart';
-import 'package:frienderr/features/presentation/widgets/social_vector.dart';
-
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   final BlocGroup blocGroup;
 
-  RegisterScreen({
+  const RegisterScreen({
     Key? key,
     required this.blocGroup,
   }) : super(key: key);
@@ -37,6 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   BlocGroup get _blocGroup => widget.blocGroup;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
 
   @override
   void initState() => super.initState();
@@ -48,8 +47,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  void _onProviderAuthenticate(OAuthType oAuth) {
+    if (oAuth == OAuthType.google) {
+      _blocGroup.authenticationBloc
+          .add(const AuthenticationEvent.googleSignUp());
+    } else if (oAuth == OAuthType.facebook) {
+      _blocGroup.authenticationBloc
+          .add(const AuthenticationEvent.facebookSignUp());
+    } else if (oAuth == OAuthType.twitter) {
+      _blocGroup.authenticationBloc
+          .add(const AuthenticationEvent.twitterSignUp());
+    }
+  }
+
   _onRegisterButtonPressed(BuildContext context) {
-    getIt<AppRouter>().context.showLoadingIndicator();
     FocusScope.of(context).unfocus();
     _blocGroup.authenticationBloc.add(AuthenticationEvent.createAccount(
       email: emailController.text,
@@ -57,14 +68,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ));
   }
 
-  void _navigateToLoginScreen() => getIt<AppRouter>().push(LoginRoute(
+  void _navigateToLoginScreen() => getService<AppRouter>().push(LoginRoute(
         shouldRenderUI: true,
         blocGroup: _blocGroup,
       ));
 
   void _navigateToRegisterUsername(AuthenticationState state) {
     _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
-    getIt<AppRouter>().push(RegisterUsernameRoute(
+    getService<AppRouter>().push(RegisterUsernameRoute(
       userId: state.user?.id ?? '',
       blocGroup: _blocGroup,
     ));
@@ -87,17 +98,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               AuthenticationState state,
                             ) {
                               if (state.currentState ==
-                                  AuthenticationStatus.AuthenticationFailure) {
-                                getIt<AppRouter>()
-                                    .context
-                                    .dismissLoadingIndicator();
+                                  AuthenticationStatus.authenticationFailure) {
+                                getService<AppRouter>().context.showToast(
+                                    type: SnackBarType.error,
+                                    content: Text(state.error,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                ResponsiveFlutter.of(context)
+                                                    .fontSize(1.4))));
                               }
 
                               if (state.currentState ==
-                                  AuthenticationStatus.CreateAccountSuccess) {
-                                getIt<AppRouter>()
-                                    .context
-                                    .dismissLoadingIndicator();
+                                  AuthenticationStatus.createAccountSuccess) {
                                 _navigateToRegisterUsername(state);
                               }
                             },
@@ -109,7 +122,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 AppLogo(
                                   onFlightCompletion: () => null,
                                 ),
-                                SocialVector(vector: Constants.registerVector),
                                 _appBody(state),
                               ]);
                             })))));
@@ -126,50 +138,132 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _appForm(AuthenticationState state) {
+    return Column(children: [
+      Padding(
+          padding: const EdgeInsets.only(
+              top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _oAuthActions(),
+            _orDivider(),
+            _buildEmailField(state),
+            // _buildPhoneNumberField(state),
+            _buildPasswordField(state),
+            _buildRegisterButton(state),
+            _buildAnimation(),
+            _buildAccountText(),
+            if (state.currentState == AuthenticationStatus.createAccountLoading)
+              const Center(
+                child: Padding(
+                    child: LoadingIndicator(size: Size.fromRadius(40)),
+                    padding: EdgeInsets.only(top: 20)),
+              )
+          ])),
+    ]);
+  }
+
+  Widget _buildEmailField(AuthenticationState state) {
+    return AppTextField(
+        label: "Email Address",
+        isObscure: false,
+        controller: emailController,
+        errorText:
+            state.currentState == AuthenticationStatus.createAccountFaliure
+                ? ''
+                : null);
+  }
+
+  Widget _buildPhoneNumberField(AuthenticationState state) {
+    return AppTextField(
+        label: "Phone Number",
+        isObscure: false,
+        prefixIcon: const Icon(
+          Icons.phone,
+          color: Colors.grey,
+        ),
+        padding: const EdgeInsets.only(top: 17),
+        controller: passwordController,
+        errorText:
+            state.currentState == AuthenticationStatus.createAccountFaliure
+                ? ''
+                : null);
+  }
+
+  Widget _buildPasswordField(AuthenticationState state) {
+    return AppTextField(
+        label: "Password",
+        isObscure: true,
+        controller: passwordController,
+        padding: const EdgeInsets.only(top: 17),
+        errorText:
+            state.currentState == AuthenticationStatus.createAccountFaliure
+                ? state.error
+                : null);
+  }
+
+  Widget _buildRegisterButton(AuthenticationState state) {
+    return SizedBox(
+      height: 70,
+      child: AppButton(
+          label: "Create Account",
+          margin: const EdgeInsets.only(top: 20),
+          onPressed: () => _onRegisterButtonPressed(context),
+          isLoading: false),
+    );
+  }
+
+  Widget _oAuthActions() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 0.0),
+        child: OAuthHandler(
+          onSelected: _onProviderAuthenticate,
+        ),
+      ),
+    );
+  }
+
+  Widget _orDivider() {
     return Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(children: [
-          AppTextField(
-              label: "Email",
-              isObscure: false,
-              prefixIcon: const Icon(
-                Icons.person,
-                color: Colors.grey,
-              ),
-              controller: emailController,
-              errorText: state.currentState ==
-                      AuthenticationStatus.CreateAccountFaliure
-                  ? ''
-                  : null),
-          AppTextField(
-              label: "Password",
-              isObscure: true,
-              prefixIcon: const Icon(
-                Icons.lock,
-                size: 21.5,
-                color: Colors.grey,
-              ),
-              controller: passwordController,
-              padding: const EdgeInsets.only(top: 17),
-              errorText: state.currentState ==
-                      AuthenticationStatus.CreateAccountFaliure
-                  ? state.error
-                  : null),
-          AppButton(
-              label: "Create Account",
-              margin: const EdgeInsets.only(top: 20),
-              onPressed: () => _onRegisterButtonPressed(context),
-              isLoading: false),
-          _accountText(),
+        padding: const EdgeInsets.only(top: 30.0, bottom: 20),
+        child: Row(children: <Widget>[
+          Expanded(
+              child: Divider(
+            height: 5,
+            thickness: 2,
+            endIndent: 0,
+            color: Colors.grey[900],
+          )),
+          const Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Text("OR"),
+          ),
+          Expanded(
+              child: Divider(
+            height: 5,
+            thickness: 2,
+            endIndent: 0,
+            color: Colors.grey[900],
+          )),
         ]));
   }
 
-  Widget _accountText() {
+  Widget _buildAnimation() {
+    return Center(
+      child: Lottie.asset(
+        Assets.lottie.socialMediaInteraction,
+        width: 290,
+        height: 290,
+      ),
+    );
+  }
+
+  Widget _buildAccountText() {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
             child: Text.rich(TextSpan(
-                text: "\nAlreay have an account?. Login",
+                text: "Alreay have an account?. Login",
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize:

@@ -56,7 +56,7 @@ class AssetThumbnailState extends State<AssetThumbnail> {
         setState(() {
           selectedAsset = index;
           fetchSelectedAssets(GalleryAsset(
-            id: index,
+            id: index.toString(),
             asset: _asset,
             type: asset.type,
             thumbnail: _thumbnail,
@@ -67,7 +67,7 @@ class AssetThumbnailState extends State<AssetThumbnail> {
         setState(() {
           selectedAsset = null;
           removeSelectedAssets(GalleryAsset(
-            id: index,
+            id: index.toString(),
             asset: _asset,
             type: asset.type,
             thumbnail: _thumbnail,
@@ -89,10 +89,11 @@ class AssetThumbnailState extends State<AssetThumbnail> {
             openBuilder: (BuildContext context, VoidCallback _) {
               final Future<File?> _file = asset.file;
               if (asset.type == AssetType.image) {
-                return AssetImageFullscreen(file: _file);
+                // return AssetImageFullscreen(file: _file);
               } else {
-                return AssetVideoFullscreen(file: _file);
+                //   return AssetVideoFullscreen(file: _file);
               }
+              return Center();
             },
             closedBuilder: (BuildContext context, VoidCallback openContainer) {
               return _thumbnailDisplay();

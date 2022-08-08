@@ -1,5 +1,5 @@
 name: frienderr
-description: A new Flutter project.
+description: A booming new social media app
 
 publish_to: 'none'
 
@@ -15,7 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   video_compress: ^3.1.0
-  visibility_detector: ^0.2.2
+  visibility_detector: ^0.3.3
   
 
 dev_dependencies:
@@ -28,17 +28,20 @@ dev_dependencies:
   path: ^1.8.0
   meta: ^1.3.0
   bloc: ^8.0.3
+  http: ^0.13.5
   share: ^2.0.4
   bitmap: ^0.1.0
   get_it: ^7.2.0
   dartz: ^0.10.1 
   badges: ^2.0.2
+  lottie: ^1.3.0
   freezed: ^1.1.1
-  location: ^4.4.0
+  automap: ^0.0.3
   provider: ^6.0.2
+  location: ^4.4.0
   siri_wave: ^0.2.1
-  camera: ^0.9.4+16
-  equatable: ^2.0.3 
+  camera: ^0.10.0
+  equatable: ^2.0.3
   animations: ^2.0.1
   auto_route: ^3.2.4
   injectable: ^1.5.3
@@ -46,20 +49,26 @@ dev_dependencies:
   like_button: ^2.0.2
   flutter_svg: ^1.0.3
   just_audio: ^0.9.24
+  google_sign_in: any
   build_runner: ^2.0.4
   video_player: ^2.3.0  
   flutter_bloc: ^8.0.1
+  twitter_login: ^4.0.1
   audio_session: ^0.1.7
   hydrated_bloc: ^8.0.0
   photo_manager: ^2.1.1
+  audioplayers: ^1.0.1
   firebase_auth: ^3.3.9
   path_provider: ^2.0.2
   flare_flutter: ^3.0.2
+  flutter_portal: ^1.1.0
   flutter_dotenv: ^5.0.2
   dots_indicator: ^2.0.0
   time_elapsed: ^0.2.4+2
   firebase_core: ^1.13.1
   flutter_sound: ^9.2.13
+  firestore_cache: ^2.2.1
+  flutter_chat_ui: ^1.6.2
   pull_to_refresh: ^2.0.0
   json_annotation: ^4.5.0
   flutter_stories: ^0.3.1
@@ -67,27 +76,39 @@ dev_dependencies:
   graphql_flutter: ^5.1.0  
   flutter_spinkit: ^5.1.0
   cupertino_icons: ^1.0.2
+  bloc_concurrency: ^0.2.0
   cloud_firestore: ^3.1.10
   flutter_slidable: ^1.2.0
+  insta_like_button: ^0.1.1
   firebase_storage: ^10.2.9
   connectivity_plus: ^2.2.0
   json_serializable: ^6.1.5
+  sign_in_with_apple: ^3.0.0
   firebase_analytics: ^9.1.2
   permission_handler: ^8.2.5
   freezed_annotation: ^1.1.0
+  cached_video_player: ^2.0.3
   google_maps_flutter: ^2.1.4
   firebase_messaging: ^11.2.8
+  wechat_assets_picker: ^7.3.2
   cube_transition_plus: ^2.0.1
   auto_route_generator: ^3.2.3
   injectable_generator: ^1.5.3
   cached_network_image: ^3.1.0
+  smooth_page_indicator: ^1.0.0+2
+  flutter_facebook_auth: ^3.5.0
   flutter_cache_manager: ^3.1.2
   firebase_dynamic_links: ^4.0.8
   flutter_launcher_icons: ^0.9.0
+  flutter_native_splash: ^2.2.3+1
+  custom_refresh_indicator: ^1.2.1
   google_mlkit_smart_reply: ^0.3.0
+  flutter_reaction_button: ^2.0.1+2
+  infinite_scroll_pagination: ^3.2.0
   flutter_staggered_grid_view: ^0.6.1 
   flutter_staggered_animations: ^1.0.0
   flutter_local_notifications: ^9.5.3+1
+  animated_bottom_navigation_bar: ^1.0.0
   dash_chat_2:
     git:
       url: https://github.com/droperr/dash_chat_2.1/
@@ -102,17 +123,21 @@ flutter_icons:
   ios: true
   android: true
   adaptive_icon_background: "#000000"
-  image_path: "assets/images/appicon.png"
+  image_path: "assets/images/app_logo_2.png"
 
 flutter:
   generate: true
   uses-material-design: true
   assets:
+    - .env
     - assets/icons/
+    - assets/data/
     - assets/images/
+    - assets/lottie/
     - assets/deep_ar/
     - assets/map_styles/
     - assets/animations/
+    
     
   fonts:
     - family: Inter
@@ -130,6 +155,21 @@ flutter:
     - family: Raleway
       fonts:
          - asset: assets/fonts/Raleway-Regular.ttf
+
+flutter_native_splash:
+
+  color: "#000000"
+
+  image: assets/images/app_logo_2.png
+
+  color_dark: "#000000"
+
+  image_dark: assets/images/app_logo_2.png
+
+  android_12:
+
+flutter_gen:
+    output: lib/core/generated
 
 
         

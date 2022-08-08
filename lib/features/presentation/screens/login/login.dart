@@ -1,25 +1,28 @@
-import 'package:flutter/cupertino.dart';
+import 'package:lottie/lottie.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/core/services/services.dart';
-import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/core/generated/assets.gen.dart';
+import 'package:frienderr/core/exceptions/exceptions.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/features/presentation/widgets/oauth.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:frienderr/features/presentation/widgets/app_logo.dart';
 import 'package:frienderr/features/presentation/widgets/app_button.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/snap/snap_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
-import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/app_text_field.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
-import 'package:frienderr/features/presentation/widgets/oauth.dart';
+import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   final BlocGroup blocGroup;
@@ -55,29 +58,62 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<dynamic> _navigateToRegisterScreen() {
-    return getIt<AppRouter>().push(RegisterRoute(
+    return getService<AppRouter>().push(RegisterRoute(
       blocGroup: _blocGroup,
     ));
   }
 
   Future<dynamic> _navigateToForgotScreen() async {
-    return getIt<AppRouter>().push(ForgotPasswordRoute(
+    return getService<AppRouter>().push(ForgotPasswordRoute(
       blocGroup: _blocGroup,
     ));
   }
 
   Future<dynamic> _navigateToTimeline(AuthenticationState state) async {
     _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
-    _blocGroup.quickBloc.add(const QuickEvent.initialize());
-    _blocGroup.storyBloc.add(StoryEvent.loadStories(userId: state.user!.id));
+    _blocGroup.snapBloc.add(const SnapEvent.initialize());
+    _blocGroup.storyBloc.add(StoryEvent.fetchStories(userId: state.user!.id));
     _blocGroup.postBloc
         .add(const PostEvent.fetchTimelinePosts(shouldLoad: true));
 
-    return getIt<AppRouter>().push(MainRoute(blocGroup: _blocGroup));
+    return getService<AppRouter>()
+        .push(TabNavigationRoute(blocGroup: _blocGroup));
+  }
+
+  void _onProviderAuthenticate(OAuthType oAuth) {
+    if (oAuth == OAuthType.google) {
+      _blocGroup.authenticationBloc
+          .add(const AuthenticationEvent.googleSignIn());
+    } else if (oAuth == OAuthType.facebook) {
+      _blocGroup.authenticationBloc
+          .add(const AuthenticationEvent.facebookSignIn());
+    } else if (oAuth == OAuthType.twitter) {
+      _blocGroup.authenticationBloc
+          .add(const AuthenticationEvent.twitterSignIn());
+    }
+  }
+
+  void _listenableHandler(
+    BuildContext context,
+    AuthenticationState state,
+  ) {
+    if (state.currentState == AuthenticationStatus.authenticationFailure) {
+      if (state.error == Errors.socialCancelled) {
+        getService<AppRouter>().context.showToast(
+            type: SnackBarType.error,
+            content: Text(state.error,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveFlutter.of(context).fontSize(1.4))));
+      }
+    }
+
+    if (state.currentState == AuthenticationStatus.authenticationSuccess) {
+      _navigateToTimeline(state);
+    }
   }
 
   void _onAuthenticate() {
-    getIt<AppRouter>().context.showLoadingIndicator();
     FocusScope.of(context).unfocus();
     _blocGroup.authenticationBloc.add(AuthenticationEvent.onAuthenticate(
       email: _emailController.text,
@@ -89,26 +125,13 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: Theme.of(context).canvasColor,
             resizeToAvoidBottomInset: true,
+            backgroundColor: Theme.of(context).canvasColor,
             body: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
               child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
                   bloc: _blocGroup.authenticationBloc,
-                  listener: (
-                    BuildContext context,
-                    AuthenticationState state,
-                  ) {
-                    if (state.currentState ==
-                        AuthenticationStatus.AuthenticationFailure) {
-                      getIt<AppRouter>().context.dismissLoadingIndicator();
-                    }
-
-                    if (state.currentState ==
-                        AuthenticationStatus.AuthenticationSuccess) {
-                      getIt<AppRouter>().context.dismissLoadingIndicator();
-                      _navigateToTimeline(state);
-                    }
-                  },
+                  listener: _listenableHandler,
                   builder: (
                     BuildContext context,
                     AuthenticationState state,
@@ -128,15 +151,6 @@ class LoginScreenState extends State<LoginScreen> {
             )));
   }
 
-  Widget _animationLimiter({required Widget child}) {
-    return AnimationLimiter(
-        child: AnimationConfiguration.staggeredList(
-            position: 1,
-            duration: const Duration(milliseconds: 500),
-            child: SlideAnimation(
-                verticalOffset: 50.0, child: FadeInAnimation(child: child))));
-  }
-
   Widget _appBody(AuthenticationState state) {
     return Column(children: [
       Padding(
@@ -149,55 +163,98 @@ class LoginScreenState extends State<LoginScreen> {
             _usernameOrEmailTextField(state),
             _passwordTextField(state),
             _loginActions(),
-            _loginButton(),
+            _loginButton(state),
             _registerAccountText(),
+            _buildLoading(state),
+            _buildAnimation(),
           ])),
     ]);
   }
 
+  Widget _animationLimiter({required Widget child}) {
+    return AnimationLimiter(
+        child: AnimationConfiguration.staggeredList(
+            position: 1,
+            duration: const Duration(milliseconds: 500),
+            child: SlideAnimation(
+                verticalOffset: 50.0, child: FadeInAnimation(child: child))));
+  }
+
+  Widget _buildLoading(state) {
+    if (state.currentState == AuthenticationStatus.authenticationLoading) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: 20),
+          child: LoadingIndicator(size: Size.fromRadius(40)),
+        ),
+      );
+    } else {
+      return const Center();
+    }
+  }
+
   Widget _usernameOrEmailTextField(state) {
     String? errorText;
-    if (state.currentState == AuthenticationStatus.AuthenticationFailure) {
-      errorText = state.error;
+    if (state.currentState == AuthenticationStatus.authenticationFailure) {
+      if (state.error != Errors.socialCancelled) {
+        errorText = '';
+      }
     }
 
-    return SizedBox(
-        child: AppTextField(
-          isObscure: false,
-          errorText: errorText,
-          label: "Username or email",
-          controller: _emailController,
-        ),
-        height: 65);
+    return AppTextField(
+      isObscure: false,
+      errorText: errorText,
+      label: "Username, email or phone number",
+      /* prefixIcon: const Icon(
+        Icons.person,
+        color: Colors.grey,
+      ),*/
+      controller: _emailController,
+    );
   }
 
   Widget _passwordTextField(state) {
     String? errorText;
-    if (state.currentState == AuthenticationStatus.AuthenticationFailure) {
-      errorText = state.error;
+    if (state.currentState == AuthenticationStatus.authenticationFailure) {
+      if (state.error != Errors.socialCancelled) {
+        errorText = state.error;
+      }
     }
 
-    return SizedBox(
-      child: AppTextField(
-        label: "Password",
-        isObscure: true,
-        errorText: errorText,
-        controller: _passwordController,
-        padding: const EdgeInsets.only(top: 10),
-      ),
-      height: 65,
+    return AppTextField(
+      label: "Password",
+      isObscure: true,
+      /*  prefixIcon: const Icon(
+        Icons.lock,
+        size: 21.5,
+        color: Colors.grey,
+      ),*/
+      errorText: errorText,
+      controller: _passwordController,
+      padding: const EdgeInsets.only(top: 15),
     );
   }
 
-  Widget _loginButton() {
+  Widget _loginButton(AuthenticationState state) {
     return SizedBox(
         child: AppButton(
-          label: "LOGIN",
-          isLoading: false,
-          onPressed: _onAuthenticate,
-          margin: const EdgeInsets.only(top: 24),
-        ),
-        height: 80);
+            label: "LOGIN",
+            isLoading: false,
+            onPressed: _onAuthenticate,
+            margin: const EdgeInsets.only(top: 15),
+            disabled: state.currentState ==
+                AuthenticationStatus.authenticationLoading),
+        height: 60);
+  }
+
+  Widget _buildAnimation() {
+    return Center(
+      child: Lottie.asset(
+        Assets.lottie.socialMediaNetwork,
+        width: 300,
+        height: 300,
+      ),
+    );
   }
 
   Widget _registerAccountText() {
@@ -206,7 +263,7 @@ class LoginScreenState extends State<LoginScreen> {
             text: "\n\nDon't have an account.",
             style: TextStyle(
               color: Colors.grey[400]!.withOpacity(0.9),
-              fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+              fontSize: ResponsiveFlutter.of(context).fontSize(1.3),
             ),
             children: <InlineSpan>[
           TextSpan(
@@ -214,7 +271,7 @@ class LoginScreenState extends State<LoginScreen> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _navigateToRegisterScreen(),
               style: TextStyle(
-                  fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.3),
                   color: HexColor('#FFB126')))
         ])));
   }
@@ -222,11 +279,9 @@ class LoginScreenState extends State<LoginScreen> {
   Widget _oAuthActions() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 15.0),
+        padding: const EdgeInsets.only(top: 0.0),
         child: OAuthHandler(
-          onSelected: (oAuth) {
-            //print(oAuth);
-          },
+          onSelected: _onProviderAuthenticate,
         ),
       ),
     );
@@ -234,7 +289,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget _orDivider() {
     return Padding(
-        padding: const EdgeInsets.only(top: 50.0, bottom: 50),
+        padding: const EdgeInsets.only(top: 25.0, bottom: 25),
         child: Row(children: <Widget>[
           Expanded(
               child: Divider(
@@ -259,11 +314,11 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget _loginActions() {
     return Padding(
-      padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
+      padding: const EdgeInsets.only(top: 15.0, bottom: 0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children: [
+          /*  Row(children: [
             Switch(
               value: _rememberMe,
               onChanged: (value) {
@@ -273,8 +328,12 @@ class LoginScreenState extends State<LoginScreen> {
               },
             ),
             Text('Remember Me', style: Theme.of(context).textTheme.bodyText1)
-          ]),
-          Text('Forgot password', style: Theme.of(context).textTheme.bodyText1)
+          ])*/
+          const Center(),
+          GestureDetector(
+              onTap: _navigateToForgotScreen,
+              child: Text('Forgot password?',
+                  style: Theme.of(context).textTheme.bodyText1))
         ],
       ),
     );

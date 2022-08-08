@@ -1,49 +1,42 @@
 {
   "project_info": {
-    "project_number": "948515884264",
-    "project_id": "frienderr-5aa07",
-    "storage_bucket": "frienderr-5aa07.appspot.com"
+    "project_number": "538967978009",
+    "project_id": "frienderr-b634b",
+    "storage_bucket": "frienderr-b634b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:948515884264:android:1093a930b20df743e54d5d",
+        "mobilesdk_app_id": "1:538967978009:android:092e8bc455ea121ddc3a88",
         "android_client_info": {
-          "package_name": "com.example.frienderr"
+          "package_name": "com.ascari.frienderr"
         }
       },
       "oauth_client": [
         {
-          "client_id": "948515884264-e8ogqqug6rcedmbgt9u1hqnc4vl2aqgt.apps.googleusercontent.com",
+          "client_id": "538967978009-psvhcb0rpefpe8uc0bol98bghu7fj4t7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.frienderr",
+            "package_name": "com.ascari.frienderr",
             "certificate_hash": "b2fde9cbdac813be58ad3b7772f60c96c7e0b68f"
           }
         },
         {
-          "client_id": "948515884264-lgamkg03q0e50nhkur1mfsg1tclatvak.apps.googleusercontent.com",
+          "client_id": "538967978009-0695795sfermdc7287ilobu7hp0r19gu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDcbHFS6e2uO8BjnxZK-luIcJc0dh6T_0U"
+          "current_key": "AIzaSyBKv4cRVyAplaFA36HaHeQ0Cvav5OD_m_0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "948515884264-lgamkg03q0e50nhkur1mfsg1tclatvak.apps.googleusercontent.com",
+              "client_id": "538967978009-0695795sfermdc7287ilobu7hp0r19gu.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "948515884264-p8viitdsqcc9c6ep1s7f49rup1vo82kf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.frienderr"
-              }
             }
           ]
         }

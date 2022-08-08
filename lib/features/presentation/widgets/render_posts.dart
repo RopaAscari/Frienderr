@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frienderr/features/data/models/post/post_model.dart';
+
 import 'package:like_button/like_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:time_elapsed/time_elapsed.dart';
@@ -29,7 +31,7 @@ import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class RenderPost extends StatefulWidget {
-  final PostEntity post;
+  final Post post;
   final bool isPostOwner;
   final PostBloc postBloc;
 
@@ -47,16 +49,16 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   int _postCount = 0;
   int _currentIndex = 0;
   bool _isPostLiked = false;
-  PostEntity get _post => widget.post;
+  Post get _post => widget.post;
   PostBloc get _postBloc => widget.postBloc;
-  UserEntity _user = getIt<UserBloc>().state.user;
+  UserDTO _user = getService<UserBloc>().state.user;
   final FlareControls _flareControls = FlareControls();
 
   @override
   void initState() {
     setState(() {
-      _postCount = _post.likes.length;
-      _isPostLiked = _post.likes.contains(_user.id);
+      // _postCount = _post.likes.length;
+      // _isPostLiked = _post.likes.contains(_user.id);
     });
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => {});
@@ -68,7 +70,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   void _likePost() {
-    _postBloc.add(PostEvent.likePost(user: _user, post: _post));
+    //_postBloc.add(PostEvent.likePost(user: _user, post: _post));
   }
 
   void _unLikePost() {
@@ -101,7 +103,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
   }
 
   dynamic _navigateToCommentScreen() async {
-    return await getIt<AppRouter>().push(CommentRoute(post: _post));
+    // return await getService<AppRouter>().push(CommentRoute(post: _post));
   }
 
   void _onRefresh() async {
@@ -144,7 +146,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
           PostState state,
         ) {
           if (state.action == PostListenableAction.likeFailure) {
-            getIt<AppRouter>().context.showToast(
+            getService<AppRouter>().context.showToast(
                 content: Text('An error occured',
                     style: TextStyle(color: Colors.white)),
                 type: SnackBarType.error);
@@ -161,10 +163,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
                         padding: const EdgeInsets.all(10),
                         child: SizedBox.expand(
                             child: Column(children: [
-                          LikeAnimation(
-                            child: _renderMediaWidget(),
-                            flareControls: _flareControls,
-                          ),
+                          _renderMediaWidget(),
                           _postDetailsWidget(),
                           Padding(
                               padding: const EdgeInsets.only(top: 10),
@@ -192,7 +191,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       _commentButton(),
       //_shareButton(),
-      _likeWidget()
+      // ReactionButton(onReaction: () => _determineLikeAction()),
     ]);
   }
 
@@ -281,11 +280,10 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
 
   Widget _postDetailsWidget() {
     final String postId = _post.id;
+    final int shareCount = _post.shares;
     final String caption = _post.caption;
-    final int shareCount = _post.shares.length;
+    final int commentCount = _post.comments;
     final int itemCount = _post.content.length;
-    final int commentCount = _post.commentCount;
-
     return Material(
       child: Container(
           width: double.infinity,
@@ -332,8 +330,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
     return Padding(
         padding: EdgeInsets.only(right: 15),
         child: Row(children: [
-          Text(_post.shares.length.toString(),
-              style: TextStyle(color: Colors.white)),
+          Text(_post.shares.toString(), style: TextStyle(color: Colors.white)),
           IconButton(
               onPressed: () => null,
               icon: SvgPicture.asset(
@@ -474,7 +471,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
         ),
       ),
       actions: <Widget>[
-       /* TextButton(
+        /* TextButton(
        
           onPressed: () {
             Navigator.of(alertContext).pop();
@@ -538,6 +535,7 @@ class _RenderPostState extends State<RenderPost> with TickerProviderStateMixin {
               width: MediaQuery.of(context).size.width,
               child: VideoScreen(
                 video: media,
+                onInitialized: (v) {},
               ))),
       renderWidget: ClipRRect(
           borderRadius: BorderRadius.circular(15),

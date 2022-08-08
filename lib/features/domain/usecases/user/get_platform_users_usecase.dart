@@ -9,14 +9,13 @@ import 'package:frienderr/features/domain/repositiories/post_repository.dart';
 
 @lazySingleton
 class GetPlatformUsersUseCase
-    extends UseCase<List<UserEntity>, GetPlatformUsersParams> {
+    extends UseCase<List<UserDTO>, GetPlatformUsersParams> {
   GetPlatformUsersUseCase(this.repository);
 
   final IUserRepository repository;
 
   @override
-  Future<Either<Failure, List<UserEntity>>> call(
-      GetPlatformUsersParams params) {
+  Future<Either<Failure, List<UserDTO>>> call(GetPlatformUsersParams params) {
     return repository.getPlatformUsers();
   }
 }

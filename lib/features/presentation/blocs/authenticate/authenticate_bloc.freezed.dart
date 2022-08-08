@@ -26,6 +26,30 @@ class _$AuthenticationEventTearOff {
     return const _AppInitialized();
   }
 
+  _GoogleSignIn googleSignIn() {
+    return const _GoogleSignIn();
+  }
+
+  _GoogleSignUp googleSignUp() {
+    return const _GoogleSignUp();
+  }
+
+  _TwitterSignIn twitterSignIn() {
+    return const _TwitterSignIn();
+  }
+
+  _TwitterSignUp twitterSignUp() {
+    return const _TwitterSignUp();
+  }
+
+  _FacebookSignIn facebookSignIn() {
+    return const _FacebookSignIn();
+  }
+
+  _FacebookSignUp facebookSignUp() {
+    return const _FacebookSignUp();
+  }
+
   _RecoverAccount recoverAccount({required String email}) {
     return _RecoverAccount(
       email: email,
@@ -66,6 +90,12 @@ mixin _$AuthenticationEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -76,6 +106,12 @@ mixin _$AuthenticationEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -86,6 +122,12 @@ mixin _$AuthenticationEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -97,6 +139,12 @@ mixin _$AuthenticationEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -107,6 +155,12 @@ mixin _$AuthenticationEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -117,6 +171,12 @@ mixin _$AuthenticationEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -184,6 +244,12 @@ class _$_LogOut implements _LogOut {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -197,6 +263,12 @@ class _$_LogOut implements _LogOut {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -210,6 +282,12 @@ class _$_LogOut implements _LogOut {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -227,6 +305,12 @@ class _$_LogOut implements _LogOut {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -240,6 +324,12 @@ class _$_LogOut implements _LogOut {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -253,6 +343,12 @@ class _$_LogOut implements _LogOut {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -313,6 +409,12 @@ class _$_AppInitialized implements _AppInitialized {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -326,6 +428,12 @@ class _$_AppInitialized implements _AppInitialized {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -339,6 +447,12 @@ class _$_AppInitialized implements _AppInitialized {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -356,6 +470,12 @@ class _$_AppInitialized implements _AppInitialized {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -369,6 +489,12 @@ class _$_AppInitialized implements _AppInitialized {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -382,6 +508,12 @@ class _$_AppInitialized implements _AppInitialized {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -397,6 +529,996 @@ class _$_AppInitialized implements _AppInitialized {
 
 abstract class _AppInitialized implements AuthenticationEvent {
   const factory _AppInitialized() = _$_AppInitialized;
+}
+
+/// @nodoc
+abstract class _$GoogleSignInCopyWith<$Res> {
+  factory _$GoogleSignInCopyWith(
+          _GoogleSignIn value, $Res Function(_GoogleSignIn) then) =
+      __$GoogleSignInCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$GoogleSignInCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$GoogleSignInCopyWith<$Res> {
+  __$GoogleSignInCopyWithImpl(
+      _GoogleSignIn _value, $Res Function(_GoogleSignIn) _then)
+      : super(_value, (v) => _then(v as _GoogleSignIn));
+
+  @override
+  _GoogleSignIn get _value => super._value as _GoogleSignIn;
+}
+
+/// @nodoc
+
+class _$_GoogleSignIn implements _GoogleSignIn {
+  const _$_GoogleSignIn();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.googleSignIn()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _GoogleSignIn);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() logOut,
+    required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
+    required TResult Function(String email) recoverAccount,
+    required TResult Function(String email, String password) onAuthenticate,
+    required TResult Function(String email, String password) createAccount,
+    required TResult Function(String userId, String username) registerUsername,
+  }) {
+    return googleSignIn();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+  }) {
+    return googleSignIn?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (googleSignIn != null) {
+      return googleSignIn();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
+    required TResult Function(_RecoverAccount value) recoverAccount,
+    required TResult Function(_Authenticate value) onAuthenticate,
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_RegisterUsername value) registerUsername,
+  }) {
+    return googleSignIn(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+  }) {
+    return googleSignIn?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (googleSignIn != null) {
+      return googleSignIn(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GoogleSignIn implements AuthenticationEvent {
+  const factory _GoogleSignIn() = _$_GoogleSignIn;
+}
+
+/// @nodoc
+abstract class _$GoogleSignUpCopyWith<$Res> {
+  factory _$GoogleSignUpCopyWith(
+          _GoogleSignUp value, $Res Function(_GoogleSignUp) then) =
+      __$GoogleSignUpCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$GoogleSignUpCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$GoogleSignUpCopyWith<$Res> {
+  __$GoogleSignUpCopyWithImpl(
+      _GoogleSignUp _value, $Res Function(_GoogleSignUp) _then)
+      : super(_value, (v) => _then(v as _GoogleSignUp));
+
+  @override
+  _GoogleSignUp get _value => super._value as _GoogleSignUp;
+}
+
+/// @nodoc
+
+class _$_GoogleSignUp implements _GoogleSignUp {
+  const _$_GoogleSignUp();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.googleSignUp()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _GoogleSignUp);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() logOut,
+    required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
+    required TResult Function(String email) recoverAccount,
+    required TResult Function(String email, String password) onAuthenticate,
+    required TResult Function(String email, String password) createAccount,
+    required TResult Function(String userId, String username) registerUsername,
+  }) {
+    return googleSignUp();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+  }) {
+    return googleSignUp?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (googleSignUp != null) {
+      return googleSignUp();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
+    required TResult Function(_RecoverAccount value) recoverAccount,
+    required TResult Function(_Authenticate value) onAuthenticate,
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_RegisterUsername value) registerUsername,
+  }) {
+    return googleSignUp(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+  }) {
+    return googleSignUp?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (googleSignUp != null) {
+      return googleSignUp(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GoogleSignUp implements AuthenticationEvent {
+  const factory _GoogleSignUp() = _$_GoogleSignUp;
+}
+
+/// @nodoc
+abstract class _$TwitterSignInCopyWith<$Res> {
+  factory _$TwitterSignInCopyWith(
+          _TwitterSignIn value, $Res Function(_TwitterSignIn) then) =
+      __$TwitterSignInCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$TwitterSignInCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$TwitterSignInCopyWith<$Res> {
+  __$TwitterSignInCopyWithImpl(
+      _TwitterSignIn _value, $Res Function(_TwitterSignIn) _then)
+      : super(_value, (v) => _then(v as _TwitterSignIn));
+
+  @override
+  _TwitterSignIn get _value => super._value as _TwitterSignIn;
+}
+
+/// @nodoc
+
+class _$_TwitterSignIn implements _TwitterSignIn {
+  const _$_TwitterSignIn();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.twitterSignIn()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _TwitterSignIn);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() logOut,
+    required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
+    required TResult Function(String email) recoverAccount,
+    required TResult Function(String email, String password) onAuthenticate,
+    required TResult Function(String email, String password) createAccount,
+    required TResult Function(String userId, String username) registerUsername,
+  }) {
+    return twitterSignIn();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+  }) {
+    return twitterSignIn?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (twitterSignIn != null) {
+      return twitterSignIn();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
+    required TResult Function(_RecoverAccount value) recoverAccount,
+    required TResult Function(_Authenticate value) onAuthenticate,
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_RegisterUsername value) registerUsername,
+  }) {
+    return twitterSignIn(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+  }) {
+    return twitterSignIn?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (twitterSignIn != null) {
+      return twitterSignIn(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TwitterSignIn implements AuthenticationEvent {
+  const factory _TwitterSignIn() = _$_TwitterSignIn;
+}
+
+/// @nodoc
+abstract class _$TwitterSignUpCopyWith<$Res> {
+  factory _$TwitterSignUpCopyWith(
+          _TwitterSignUp value, $Res Function(_TwitterSignUp) then) =
+      __$TwitterSignUpCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$TwitterSignUpCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$TwitterSignUpCopyWith<$Res> {
+  __$TwitterSignUpCopyWithImpl(
+      _TwitterSignUp _value, $Res Function(_TwitterSignUp) _then)
+      : super(_value, (v) => _then(v as _TwitterSignUp));
+
+  @override
+  _TwitterSignUp get _value => super._value as _TwitterSignUp;
+}
+
+/// @nodoc
+
+class _$_TwitterSignUp implements _TwitterSignUp {
+  const _$_TwitterSignUp();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.twitterSignUp()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _TwitterSignUp);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() logOut,
+    required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
+    required TResult Function(String email) recoverAccount,
+    required TResult Function(String email, String password) onAuthenticate,
+    required TResult Function(String email, String password) createAccount,
+    required TResult Function(String userId, String username) registerUsername,
+  }) {
+    return twitterSignUp();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+  }) {
+    return twitterSignUp?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (twitterSignUp != null) {
+      return twitterSignUp();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
+    required TResult Function(_RecoverAccount value) recoverAccount,
+    required TResult Function(_Authenticate value) onAuthenticate,
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_RegisterUsername value) registerUsername,
+  }) {
+    return twitterSignUp(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+  }) {
+    return twitterSignUp?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (twitterSignUp != null) {
+      return twitterSignUp(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TwitterSignUp implements AuthenticationEvent {
+  const factory _TwitterSignUp() = _$_TwitterSignUp;
+}
+
+/// @nodoc
+abstract class _$FacebookSignInCopyWith<$Res> {
+  factory _$FacebookSignInCopyWith(
+          _FacebookSignIn value, $Res Function(_FacebookSignIn) then) =
+      __$FacebookSignInCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$FacebookSignInCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$FacebookSignInCopyWith<$Res> {
+  __$FacebookSignInCopyWithImpl(
+      _FacebookSignIn _value, $Res Function(_FacebookSignIn) _then)
+      : super(_value, (v) => _then(v as _FacebookSignIn));
+
+  @override
+  _FacebookSignIn get _value => super._value as _FacebookSignIn;
+}
+
+/// @nodoc
+
+class _$_FacebookSignIn implements _FacebookSignIn {
+  const _$_FacebookSignIn();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.facebookSignIn()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _FacebookSignIn);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() logOut,
+    required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
+    required TResult Function(String email) recoverAccount,
+    required TResult Function(String email, String password) onAuthenticate,
+    required TResult Function(String email, String password) createAccount,
+    required TResult Function(String userId, String username) registerUsername,
+  }) {
+    return facebookSignIn();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+  }) {
+    return facebookSignIn?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (facebookSignIn != null) {
+      return facebookSignIn();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
+    required TResult Function(_RecoverAccount value) recoverAccount,
+    required TResult Function(_Authenticate value) onAuthenticate,
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_RegisterUsername value) registerUsername,
+  }) {
+    return facebookSignIn(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+  }) {
+    return facebookSignIn?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (facebookSignIn != null) {
+      return facebookSignIn(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FacebookSignIn implements AuthenticationEvent {
+  const factory _FacebookSignIn() = _$_FacebookSignIn;
+}
+
+/// @nodoc
+abstract class _$FacebookSignUpCopyWith<$Res> {
+  factory _$FacebookSignUpCopyWith(
+          _FacebookSignUp value, $Res Function(_FacebookSignUp) then) =
+      __$FacebookSignUpCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$FacebookSignUpCopyWithImpl<$Res>
+    extends _$AuthenticationEventCopyWithImpl<$Res>
+    implements _$FacebookSignUpCopyWith<$Res> {
+  __$FacebookSignUpCopyWithImpl(
+      _FacebookSignUp _value, $Res Function(_FacebookSignUp) _then)
+      : super(_value, (v) => _then(v as _FacebookSignUp));
+
+  @override
+  _FacebookSignUp get _value => super._value as _FacebookSignUp;
+}
+
+/// @nodoc
+
+class _$_FacebookSignUp implements _FacebookSignUp {
+  const _$_FacebookSignUp();
+
+  @override
+  String toString() {
+    return 'AuthenticationEvent.facebookSignUp()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _FacebookSignUp);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() logOut,
+    required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
+    required TResult Function(String email) recoverAccount,
+    required TResult Function(String email, String password) onAuthenticate,
+    required TResult Function(String email, String password) createAccount,
+    required TResult Function(String userId, String username) registerUsername,
+  }) {
+    return facebookSignUp();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+  }) {
+    return facebookSignUp?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? logOut,
+    TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
+    TResult Function(String email)? recoverAccount,
+    TResult Function(String email, String password)? onAuthenticate,
+    TResult Function(String email, String password)? createAccount,
+    TResult Function(String userId, String username)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (facebookSignUp != null) {
+      return facebookSignUp();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LogOut value) logOut,
+    required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
+    required TResult Function(_RecoverAccount value) recoverAccount,
+    required TResult Function(_Authenticate value) onAuthenticate,
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_RegisterUsername value) registerUsername,
+  }) {
+    return facebookSignUp(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+  }) {
+    return facebookSignUp?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LogOut value)? logOut,
+    TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
+    TResult Function(_RecoverAccount value)? recoverAccount,
+    TResult Function(_Authenticate value)? onAuthenticate,
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_RegisterUsername value)? registerUsername,
+    required TResult orElse(),
+  }) {
+    if (facebookSignUp != null) {
+      return facebookSignUp(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FacebookSignUp implements AuthenticationEvent {
+  const factory _FacebookSignUp() = _$_FacebookSignUp;
 }
 
 /// @nodoc
@@ -466,6 +1588,12 @@ class _$_RecoverAccount implements _RecoverAccount {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -479,6 +1607,12 @@ class _$_RecoverAccount implements _RecoverAccount {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -492,6 +1626,12 @@ class _$_RecoverAccount implements _RecoverAccount {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -509,6 +1649,12 @@ class _$_RecoverAccount implements _RecoverAccount {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -522,6 +1668,12 @@ class _$_RecoverAccount implements _RecoverAccount {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -535,6 +1687,12 @@ class _$_RecoverAccount implements _RecoverAccount {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -634,6 +1792,12 @@ class _$_Authenticate implements _Authenticate {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -647,6 +1811,12 @@ class _$_Authenticate implements _Authenticate {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -660,6 +1830,12 @@ class _$_Authenticate implements _Authenticate {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -677,6 +1853,12 @@ class _$_Authenticate implements _Authenticate {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -690,6 +1872,12 @@ class _$_Authenticate implements _Authenticate {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -703,6 +1891,12 @@ class _$_Authenticate implements _Authenticate {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -804,6 +1998,12 @@ class _$_CreateAccount implements _CreateAccount {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -817,6 +2017,12 @@ class _$_CreateAccount implements _CreateAccount {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -830,6 +2036,12 @@ class _$_CreateAccount implements _CreateAccount {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -847,6 +2059,12 @@ class _$_CreateAccount implements _CreateAccount {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -860,6 +2078,12 @@ class _$_CreateAccount implements _CreateAccount {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -873,6 +2097,12 @@ class _$_CreateAccount implements _CreateAccount {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -974,6 +2204,12 @@ class _$_RegisterUsername implements _RegisterUsername {
   TResult when<TResult extends Object?>({
     required TResult Function() logOut,
     required TResult Function() initialize,
+    required TResult Function() googleSignIn,
+    required TResult Function() googleSignUp,
+    required TResult Function() twitterSignIn,
+    required TResult Function() twitterSignUp,
+    required TResult Function() facebookSignIn,
+    required TResult Function() facebookSignUp,
     required TResult Function(String email) recoverAccount,
     required TResult Function(String email, String password) onAuthenticate,
     required TResult Function(String email, String password) createAccount,
@@ -987,6 +2223,12 @@ class _$_RegisterUsername implements _RegisterUsername {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -1000,6 +2242,12 @@ class _$_RegisterUsername implements _RegisterUsername {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? logOut,
     TResult Function()? initialize,
+    TResult Function()? googleSignIn,
+    TResult Function()? googleSignUp,
+    TResult Function()? twitterSignIn,
+    TResult Function()? twitterSignUp,
+    TResult Function()? facebookSignIn,
+    TResult Function()? facebookSignUp,
     TResult Function(String email)? recoverAccount,
     TResult Function(String email, String password)? onAuthenticate,
     TResult Function(String email, String password)? createAccount,
@@ -1017,6 +2265,12 @@ class _$_RegisterUsername implements _RegisterUsername {
   TResult map<TResult extends Object?>({
     required TResult Function(_LogOut value) logOut,
     required TResult Function(_AppInitialized value) initialize,
+    required TResult Function(_GoogleSignIn value) googleSignIn,
+    required TResult Function(_GoogleSignUp value) googleSignUp,
+    required TResult Function(_TwitterSignIn value) twitterSignIn,
+    required TResult Function(_TwitterSignUp value) twitterSignUp,
+    required TResult Function(_FacebookSignIn value) facebookSignIn,
+    required TResult Function(_FacebookSignUp value) facebookSignUp,
     required TResult Function(_RecoverAccount value) recoverAccount,
     required TResult Function(_Authenticate value) onAuthenticate,
     required TResult Function(_CreateAccount value) createAccount,
@@ -1030,6 +2284,12 @@ class _$_RegisterUsername implements _RegisterUsername {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -1043,6 +2303,12 @@ class _$_RegisterUsername implements _RegisterUsername {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LogOut value)? logOut,
     TResult Function(_AppInitialized value)? initialize,
+    TResult Function(_GoogleSignIn value)? googleSignIn,
+    TResult Function(_GoogleSignUp value)? googleSignUp,
+    TResult Function(_TwitterSignIn value)? twitterSignIn,
+    TResult Function(_TwitterSignUp value)? twitterSignUp,
+    TResult Function(_FacebookSignIn value)? facebookSignIn,
+    TResult Function(_FacebookSignUp value)? facebookSignUp,
     TResult Function(_RecoverAccount value)? recoverAccount,
     TResult Function(_Authenticate value)? onAuthenticate,
     TResult Function(_CreateAccount value)? createAccount,
@@ -1074,7 +2340,7 @@ class _$AuthenticationStateTearOff {
   _AuthenticationState call(
       {UserModel? user,
       String error = '',
-      AuthenticationStatus currentState = AuthenticationStatus.Initial}) {
+      AuthenticationStatus currentState = AuthenticationStatus.initial}) {
     return _AuthenticationState(
       user: user,
       error: error,
@@ -1203,7 +2469,7 @@ class _$_AuthenticationState implements _AuthenticationState {
   const _$_AuthenticationState(
       {this.user,
       this.error = '',
-      this.currentState = AuthenticationStatus.Initial});
+      this.currentState = AuthenticationStatus.initial});
 
   @override
   final UserModel? user;

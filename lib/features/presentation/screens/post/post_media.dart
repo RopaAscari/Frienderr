@@ -1,22 +1,18 @@
-import 'dart:io';
-import 'dart:ui';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frienderr/core/injection/injection.dart';
-import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/features/presentation/widgets/app_button.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:frienderr/core/services/helpers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:frienderr/core/constants/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/timeline/timeline_bloc.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class PostMediaScreen extends StatefulWidget {
   const PostMediaScreen({
@@ -57,14 +53,17 @@ class _PostMediaScreenState extends State<PostMediaScreen> {
         child: SafeArea(
             child: Scaffold(
                 resizeToAvoidBottomInset: true,
-                body: Column(children: [
-                  _headerWidget(),
-                  _imageSlider(),
-                  _captionFieldWidget(),
-                  _switchTileWidget(),
-                  _postOptionsWidget(),
-                  _loadingWidget()
-                ]))));
+                body: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 10.0),
+                  child: Column(children: [
+                    _headerWidget(),
+                    _imageSlider(),
+                    _captionFieldWidget(),
+                    // _captionFieldWidget_switchTileWidget(),
+                    _postButton(),
+                    _loadingWidget()
+                  ]),
+                ))));
   }
 
   Widget _loadingWidget() {
@@ -98,21 +97,19 @@ class _PostMediaScreenState extends State<PostMediaScreen> {
 
   Widget _headerWidget() {
     return Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(0),
         margin: const EdgeInsets.only(top: 30, bottom: 25),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                icon: Icon(Icons.arrow_back_ios,
-                    size: const AdaptiveTextSize()
-                        .getAdaptiveTextSize(context, 10)),
+                icon: Icon(Icons.arrow_back,
+                    size: ResponsiveFlutter.of(context).fontSize(2.5)),
                 onPressed: () => Navigator.pop(context)),
             Text(
               'New Post',
               style: TextStyle(
-                  fontSize: const AdaptiveTextSize()
-                      .getAdaptiveTextSize(context, 10)),
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.5)),
             )
           ],
         ));
@@ -142,7 +139,8 @@ class _PostMediaScreenState extends State<PostMediaScreen> {
                           condition: _posts[index].type == AssetType.image,
                           renderWidget: Image.file(_posts[index].asset,
                               fit: BoxFit.cover),
-                          fallbackWidget: Image.memory(_posts[index].thumbnail,
+                          fallbackWidget: Image.memory(
+                              _posts[index].thumbnail ?? Uint8List(0),
                               fit: BoxFit.cover))),
                 ),
               );
@@ -159,7 +157,7 @@ class _PostMediaScreenState extends State<PostMediaScreen> {
               fontSize: AdaptiveTextSize().getAdaptiveTextSize(context, 10)),
           controller: caption,
           maxLines: 7,
-          decoration: new InputDecoration(
+          decoration: InputDecoration(
               labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent),
@@ -168,7 +166,7 @@ class _PostMediaScreenState extends State<PostMediaScreen> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              border: new OutlineInputBorder(
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
               filled: true,
@@ -179,29 +177,15 @@ class _PostMediaScreenState extends State<PostMediaScreen> {
     );
   }
 
-  Widget _postOptionsWidget() {
-    final theme = BlocProvider.of<ThemeBloc>(context).state.theme;
-
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: GestureDetector(
-          onTap: () => _post(),
-          child: Container(
-              height: 60,
-              width: MediaQuery.of(context).size.width - 20,
-              margin: const EdgeInsets.only(top: 5),
-              child: Center(
-                  child: Text('Post',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: theme == Constants.darkTheme
-                              ? Colors.black
-                              : Colors.white))),
-              decoration: BoxDecoration(
-                  color: isPosting
-                      ? Theme.of(context).buttonColor.withOpacity(0.6)
-                      : Theme.of(context).buttonColor,
-                  borderRadius: BorderRadius.circular(5)))),
-    );
+  Widget _postButton() {
+    return SizedBox(
+        child: AppButton(
+          label: "Post",
+          isLoading: false,
+          onPressed: _post,
+          disabled: isPosting,
+          margin: const EdgeInsets.only(top: 24),
+        ),
+        height: 70);
   }
 }

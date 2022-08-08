@@ -19,14 +19,20 @@ class _$StoryStateTearOff {
   const _$StoryStateTearOff();
 
   _StoryState call(
-      {String error = '',
-      required StoryResponse stories,
-      StoryStatus status = StoryStatus.idle,
+      {required UserStory userStory,
+      int previousStoryViewerTimestamp = 0,
+      bool reachedMaximumThreshold = false,
+      bool storyViewsReachedMaximumThreshold = false,
+      required PagingController<int, Story> paginationController,
+      required PagingController<int, UserModel> storyViewsPaginationController,
       StoryListenableAction action = StoryListenableAction.idle}) {
     return _StoryState(
-      error: error,
-      stories: stories,
-      status: status,
+      userStory: userStory,
+      previousStoryViewerTimestamp: previousStoryViewerTimestamp,
+      reachedMaximumThreshold: reachedMaximumThreshold,
+      storyViewsReachedMaximumThreshold: storyViewsReachedMaximumThreshold,
+      paginationController: paginationController,
+      storyViewsPaginationController: storyViewsPaginationController,
       action: action,
     );
   }
@@ -37,9 +43,15 @@ const $StoryState = _$StoryStateTearOff();
 
 /// @nodoc
 mixin _$StoryState {
-  String get error => throw _privateConstructorUsedError;
-  StoryResponse get stories => throw _privateConstructorUsedError;
-  StoryStatus get status => throw _privateConstructorUsedError;
+  UserStory get userStory => throw _privateConstructorUsedError;
+  int get previousStoryViewerTimestamp => throw _privateConstructorUsedError;
+  bool get reachedMaximumThreshold => throw _privateConstructorUsedError;
+  bool get storyViewsReachedMaximumThreshold =>
+      throw _privateConstructorUsedError;
+  PagingController<int, Story> get paginationController =>
+      throw _privateConstructorUsedError;
+  PagingController<int, UserModel> get storyViewsPaginationController =>
+      throw _privateConstructorUsedError;
   StoryListenableAction get action => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -53,9 +65,12 @@ abstract class $StoryStateCopyWith<$Res> {
           StoryState value, $Res Function(StoryState) then) =
       _$StoryStateCopyWithImpl<$Res>;
   $Res call(
-      {String error,
-      StoryResponse stories,
-      StoryStatus status,
+      {UserStory userStory,
+      int previousStoryViewerTimestamp,
+      bool reachedMaximumThreshold,
+      bool storyViewsReachedMaximumThreshold,
+      PagingController<int, Story> paginationController,
+      PagingController<int, UserModel> storyViewsPaginationController,
       StoryListenableAction action});
 }
 
@@ -69,24 +84,40 @@ class _$StoryStateCopyWithImpl<$Res> implements $StoryStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? stories = freezed,
-    Object? status = freezed,
+    Object? userStory = freezed,
+    Object? previousStoryViewerTimestamp = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? storyViewsReachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
+    Object? storyViewsPaginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_value.copyWith(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      stories: stories == freezed
-          ? _value.stories
-          : stories // ignore: cast_nullable_to_non_nullable
-              as StoryResponse,
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as StoryStatus,
+      userStory: userStory == freezed
+          ? _value.userStory
+          : userStory // ignore: cast_nullable_to_non_nullable
+              as UserStory,
+      previousStoryViewerTimestamp: previousStoryViewerTimestamp == freezed
+          ? _value.previousStoryViewerTimestamp
+          : previousStoryViewerTimestamp // ignore: cast_nullable_to_non_nullable
+              as int,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      storyViewsReachedMaximumThreshold: storyViewsReachedMaximumThreshold ==
+              freezed
+          ? _value.storyViewsReachedMaximumThreshold
+          : storyViewsReachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, Story>,
+      storyViewsPaginationController: storyViewsPaginationController == freezed
+          ? _value.storyViewsPaginationController
+          : storyViewsPaginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, UserModel>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -102,9 +133,12 @@ abstract class _$StoryStateCopyWith<$Res> implements $StoryStateCopyWith<$Res> {
       __$StoryStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String error,
-      StoryResponse stories,
-      StoryStatus status,
+      {UserStory userStory,
+      int previousStoryViewerTimestamp,
+      bool reachedMaximumThreshold,
+      bool storyViewsReachedMaximumThreshold,
+      PagingController<int, Story> paginationController,
+      PagingController<int, UserModel> storyViewsPaginationController,
       StoryListenableAction action});
 }
 
@@ -120,24 +154,40 @@ class __$StoryStateCopyWithImpl<$Res> extends _$StoryStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? stories = freezed,
-    Object? status = freezed,
+    Object? userStory = freezed,
+    Object? previousStoryViewerTimestamp = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? storyViewsReachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
+    Object? storyViewsPaginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_StoryState(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      stories: stories == freezed
-          ? _value.stories
-          : stories // ignore: cast_nullable_to_non_nullable
-              as StoryResponse,
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as StoryStatus,
+      userStory: userStory == freezed
+          ? _value.userStory
+          : userStory // ignore: cast_nullable_to_non_nullable
+              as UserStory,
+      previousStoryViewerTimestamp: previousStoryViewerTimestamp == freezed
+          ? _value.previousStoryViewerTimestamp
+          : previousStoryViewerTimestamp // ignore: cast_nullable_to_non_nullable
+              as int,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      storyViewsReachedMaximumThreshold: storyViewsReachedMaximumThreshold ==
+              freezed
+          ? _value.storyViewsReachedMaximumThreshold
+          : storyViewsReachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, Story>,
+      storyViewsPaginationController: storyViewsPaginationController == freezed
+          ? _value.storyViewsPaginationController
+          : storyViewsPaginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, UserModel>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -150,26 +200,36 @@ class __$StoryStateCopyWithImpl<$Res> extends _$StoryStateCopyWithImpl<$Res>
 
 class _$_StoryState implements _StoryState {
   _$_StoryState(
-      {this.error = '',
-      required this.stories,
-      this.status = StoryStatus.idle,
+      {required this.userStory,
+      this.previousStoryViewerTimestamp = 0,
+      this.reachedMaximumThreshold = false,
+      this.storyViewsReachedMaximumThreshold = false,
+      required this.paginationController,
+      required this.storyViewsPaginationController,
       this.action = StoryListenableAction.idle});
 
+  @override
+  final UserStory userStory;
   @JsonKey()
   @override
-  final String error;
-  @override
-  final StoryResponse stories;
+  final int previousStoryViewerTimestamp;
   @JsonKey()
   @override
-  final StoryStatus status;
+  final bool reachedMaximumThreshold;
+  @JsonKey()
+  @override
+  final bool storyViewsReachedMaximumThreshold;
+  @override
+  final PagingController<int, Story> paginationController;
+  @override
+  final PagingController<int, UserModel> storyViewsPaginationController;
   @JsonKey()
   @override
   final StoryListenableAction action;
 
   @override
   String toString() {
-    return 'StoryState(error: $error, stories: $stories, status: $status, action: $action)';
+    return 'StoryState(userStory: $userStory, previousStoryViewerTimestamp: $previousStoryViewerTimestamp, reachedMaximumThreshold: $reachedMaximumThreshold, storyViewsReachedMaximumThreshold: $storyViewsReachedMaximumThreshold, paginationController: $paginationController, storyViewsPaginationController: $storyViewsPaginationController, action: $action)';
   }
 
   @override
@@ -177,18 +237,32 @@ class _$_StoryState implements _StoryState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _StoryState &&
-            const DeepCollectionEquality().equals(other.error, error) &&
-            const DeepCollectionEquality().equals(other.stories, stories) &&
-            const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality().equals(other.userStory, userStory) &&
+            const DeepCollectionEquality().equals(
+                other.previousStoryViewerTimestamp,
+                previousStoryViewerTimestamp) &&
+            const DeepCollectionEquality().equals(
+                other.reachedMaximumThreshold, reachedMaximumThreshold) &&
+            const DeepCollectionEquality().equals(
+                other.storyViewsReachedMaximumThreshold,
+                storyViewsReachedMaximumThreshold) &&
+            const DeepCollectionEquality()
+                .equals(other.paginationController, paginationController) &&
+            const DeepCollectionEquality().equals(
+                other.storyViewsPaginationController,
+                storyViewsPaginationController) &&
             const DeepCollectionEquality().equals(other.action, action));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(stories),
-      const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(userStory),
+      const DeepCollectionEquality().hash(previousStoryViewerTimestamp),
+      const DeepCollectionEquality().hash(reachedMaximumThreshold),
+      const DeepCollectionEquality().hash(storyViewsReachedMaximumThreshold),
+      const DeepCollectionEquality().hash(paginationController),
+      const DeepCollectionEquality().hash(storyViewsPaginationController),
       const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
@@ -199,17 +273,26 @@ class _$_StoryState implements _StoryState {
 
 abstract class _StoryState implements StoryState {
   factory _StoryState(
-      {String error,
-      required StoryResponse stories,
-      StoryStatus status,
+      {required UserStory userStory,
+      int previousStoryViewerTimestamp,
+      bool reachedMaximumThreshold,
+      bool storyViewsReachedMaximumThreshold,
+      required PagingController<int, Story> paginationController,
+      required PagingController<int, UserModel> storyViewsPaginationController,
       StoryListenableAction action}) = _$_StoryState;
 
   @override
-  String get error;
+  UserStory get userStory;
   @override
-  StoryResponse get stories;
+  int get previousStoryViewerTimestamp;
   @override
-  StoryStatus get status;
+  bool get reachedMaximumThreshold;
+  @override
+  bool get storyViewsReachedMaximumThreshold;
+  @override
+  PagingController<int, Story> get paginationController;
+  @override
+  PagingController<int, UserModel> get storyViewsPaginationController;
   @override
   StoryListenableAction get action;
   @override
@@ -239,16 +322,42 @@ class _$StoryEventTearOff {
   _DeleteStory deleteStory(
       {required bool isLast,
       required String userId,
-      required StoryContent story}) {
+      required List<StoryContent>? content}) {
     return _DeleteStory(
       isLast: isLast,
       userId: userId,
-      story: story,
+      content: content,
     );
   }
 
-  _LoadStories loadStories({required String userId}) {
-    return _LoadStories(
+  _FetchStories fetchStories({required String userId}) {
+    return _FetchStories(
+      userId: userId,
+    );
+  }
+
+  _ResetState resetState() {
+    return const _ResetState();
+  }
+
+  _FetchStoryViewers fetchStoryViewers(
+      {required String userId, required String contentId}) {
+    return _FetchStoryViewers(
+      userId: userId,
+      contentId: contentId,
+    );
+  }
+
+  _FetchPaginatedStoryViewers fetchPaginatedStoryViewers(
+      {required String userId, required String contentId}) {
+    return _FetchPaginatedStoryViewers(
+      userId: userId,
+      contentId: contentId,
+    );
+  }
+
+  _FetchPaginatedStories fetchPaginatedStories({required String userId}) {
+    return _FetchPaginatedStories(
       userId: userId,
     );
   }
@@ -256,10 +365,12 @@ class _$StoryEventTearOff {
   _ViewStory viewStory(
       {required String userId,
       required String storyId,
+      required String contentId,
       required List<StoryContent> stories}) {
     return _ViewStory(
       userId: userId,
       storyId: storyId,
+      contentId: contentId,
       stories: stories,
     );
   }
@@ -275,11 +386,18 @@ mixin _$StoryEvent {
     required TResult Function(List<GalleryAsset> assets) createStory,
     required TResult Function(String userId, List<GalleryAsset> assets)
         updateStory,
-    required TResult Function(bool isLast, String userId, StoryContent story)
-        deleteStory,
-    required TResult Function(String userId) loadStories,
     required TResult Function(
-            String userId, String storyId, List<StoryContent> stories)
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
         viewStory,
   }) =>
       throw _privateConstructorUsedError;
@@ -287,10 +405,16 @@ mixin _$StoryEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
   }) =>
       throw _privateConstructorUsedError;
@@ -298,10 +422,16 @@ mixin _$StoryEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
     required TResult orElse(),
   }) =>
@@ -311,7 +441,13 @@ mixin _$StoryEvent {
     required TResult Function(_CreateStory value) createStory,
     required TResult Function(_UpdateStory value) updateStory,
     required TResult Function(_DeleteStory value) deleteStory,
-    required TResult Function(_LoadStories value) loadStories,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
     required TResult Function(_ViewStory value) viewStory,
   }) =>
       throw _privateConstructorUsedError;
@@ -320,7 +456,12 @@ mixin _$StoryEvent {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
   }) =>
       throw _privateConstructorUsedError;
@@ -329,7 +470,12 @@ mixin _$StoryEvent {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
     required TResult orElse(),
   }) =>
@@ -419,11 +565,18 @@ class _$_CreateStory implements _CreateStory {
     required TResult Function(List<GalleryAsset> assets) createStory,
     required TResult Function(String userId, List<GalleryAsset> assets)
         updateStory,
-    required TResult Function(bool isLast, String userId, StoryContent story)
-        deleteStory,
-    required TResult Function(String userId) loadStories,
     required TResult Function(
-            String userId, String storyId, List<StoryContent> stories)
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
         viewStory,
   }) {
     return createStory(assets);
@@ -434,10 +587,16 @@ class _$_CreateStory implements _CreateStory {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
   }) {
     return createStory?.call(assets);
@@ -448,10 +607,16 @@ class _$_CreateStory implements _CreateStory {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
     required TResult orElse(),
   }) {
@@ -467,7 +632,13 @@ class _$_CreateStory implements _CreateStory {
     required TResult Function(_CreateStory value) createStory,
     required TResult Function(_UpdateStory value) updateStory,
     required TResult Function(_DeleteStory value) deleteStory,
-    required TResult Function(_LoadStories value) loadStories,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
     required TResult Function(_ViewStory value) viewStory,
   }) {
     return createStory(this);
@@ -479,7 +650,12 @@ class _$_CreateStory implements _CreateStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
   }) {
     return createStory?.call(this);
@@ -491,7 +667,12 @@ class _$_CreateStory implements _CreateStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
     required TResult orElse(),
   }) {
@@ -589,11 +770,18 @@ class _$_UpdateStory implements _UpdateStory {
     required TResult Function(List<GalleryAsset> assets) createStory,
     required TResult Function(String userId, List<GalleryAsset> assets)
         updateStory,
-    required TResult Function(bool isLast, String userId, StoryContent story)
-        deleteStory,
-    required TResult Function(String userId) loadStories,
     required TResult Function(
-            String userId, String storyId, List<StoryContent> stories)
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
         viewStory,
   }) {
     return updateStory(userId, assets);
@@ -604,10 +792,16 @@ class _$_UpdateStory implements _UpdateStory {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
   }) {
     return updateStory?.call(userId, assets);
@@ -618,10 +812,16 @@ class _$_UpdateStory implements _UpdateStory {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
     required TResult orElse(),
   }) {
@@ -637,7 +837,13 @@ class _$_UpdateStory implements _UpdateStory {
     required TResult Function(_CreateStory value) createStory,
     required TResult Function(_UpdateStory value) updateStory,
     required TResult Function(_DeleteStory value) deleteStory,
-    required TResult Function(_LoadStories value) loadStories,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
     required TResult Function(_ViewStory value) viewStory,
   }) {
     return updateStory(this);
@@ -649,7 +855,12 @@ class _$_UpdateStory implements _UpdateStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
   }) {
     return updateStory?.call(this);
@@ -661,7 +872,12 @@ class _$_UpdateStory implements _UpdateStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
     required TResult orElse(),
   }) {
@@ -689,9 +905,7 @@ abstract class _$DeleteStoryCopyWith<$Res> {
   factory _$DeleteStoryCopyWith(
           _DeleteStory value, $Res Function(_DeleteStory) then) =
       __$DeleteStoryCopyWithImpl<$Res>;
-  $Res call({bool isLast, String userId, StoryContent story});
-
-  $StoryContentCopyWith<$Res> get story;
+  $Res call({bool isLast, String userId, List<StoryContent>? content});
 }
 
 /// @nodoc
@@ -708,7 +922,7 @@ class __$DeleteStoryCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
   $Res call({
     Object? isLast = freezed,
     Object? userId = freezed,
-    Object? story = freezed,
+    Object? content = freezed,
   }) {
     return _then(_DeleteStory(
       isLast: isLast == freezed
@@ -719,18 +933,11 @@ class __$DeleteStoryCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      story: story == freezed
-          ? _value.story
-          : story // ignore: cast_nullable_to_non_nullable
-              as StoryContent,
+      content: content == freezed
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as List<StoryContent>?,
     ));
-  }
-
-  @override
-  $StoryContentCopyWith<$Res> get story {
-    return $StoryContentCopyWith<$Res>(_value.story, (value) {
-      return _then(_value.copyWith(story: value));
-    });
   }
 }
 
@@ -738,18 +945,18 @@ class __$DeleteStoryCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
 
 class _$_DeleteStory implements _DeleteStory {
   const _$_DeleteStory(
-      {required this.isLast, required this.userId, required this.story});
+      {required this.isLast, required this.userId, required this.content});
 
   @override
   final bool isLast;
   @override
   final String userId;
   @override
-  final StoryContent story;
+  final List<StoryContent>? content;
 
   @override
   String toString() {
-    return 'StoryEvent.deleteStory(isLast: $isLast, userId: $userId, story: $story)';
+    return 'StoryEvent.deleteStory(isLast: $isLast, userId: $userId, content: $content)';
   }
 
   @override
@@ -759,7 +966,7 @@ class _$_DeleteStory implements _DeleteStory {
             other is _DeleteStory &&
             const DeepCollectionEquality().equals(other.isLast, isLast) &&
             const DeepCollectionEquality().equals(other.userId, userId) &&
-            const DeepCollectionEquality().equals(other.story, story));
+            const DeepCollectionEquality().equals(other.content, content));
   }
 
   @override
@@ -767,7 +974,7 @@ class _$_DeleteStory implements _DeleteStory {
       runtimeType,
       const DeepCollectionEquality().hash(isLast),
       const DeepCollectionEquality().hash(userId),
-      const DeepCollectionEquality().hash(story));
+      const DeepCollectionEquality().hash(content));
 
   @JsonKey(ignore: true)
   @override
@@ -780,14 +987,21 @@ class _$_DeleteStory implements _DeleteStory {
     required TResult Function(List<GalleryAsset> assets) createStory,
     required TResult Function(String userId, List<GalleryAsset> assets)
         updateStory,
-    required TResult Function(bool isLast, String userId, StoryContent story)
-        deleteStory,
-    required TResult Function(String userId) loadStories,
     required TResult Function(
-            String userId, String storyId, List<StoryContent> stories)
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
         viewStory,
   }) {
-    return deleteStory(isLast, userId, story);
+    return deleteStory(isLast, userId, content);
   }
 
   @override
@@ -795,13 +1009,19 @@ class _$_DeleteStory implements _DeleteStory {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
   }) {
-    return deleteStory?.call(isLast, userId, story);
+    return deleteStory?.call(isLast, userId, content);
   }
 
   @override
@@ -809,15 +1029,21 @@ class _$_DeleteStory implements _DeleteStory {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
     required TResult orElse(),
   }) {
     if (deleteStory != null) {
-      return deleteStory(isLast, userId, story);
+      return deleteStory(isLast, userId, content);
     }
     return orElse();
   }
@@ -828,7 +1054,13 @@ class _$_DeleteStory implements _DeleteStory {
     required TResult Function(_CreateStory value) createStory,
     required TResult Function(_UpdateStory value) updateStory,
     required TResult Function(_DeleteStory value) deleteStory,
-    required TResult Function(_LoadStories value) loadStories,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
     required TResult Function(_ViewStory value) viewStory,
   }) {
     return deleteStory(this);
@@ -840,7 +1072,12 @@ class _$_DeleteStory implements _DeleteStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
   }) {
     return deleteStory?.call(this);
@@ -852,7 +1089,12 @@ class _$_DeleteStory implements _DeleteStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
     required TResult orElse(),
   }) {
@@ -867,39 +1109,39 @@ abstract class _DeleteStory implements StoryEvent {
   const factory _DeleteStory(
       {required bool isLast,
       required String userId,
-      required StoryContent story}) = _$_DeleteStory;
+      required List<StoryContent>? content}) = _$_DeleteStory;
 
   bool get isLast;
   String get userId;
-  StoryContent get story;
+  List<StoryContent>? get content;
   @JsonKey(ignore: true)
   _$DeleteStoryCopyWith<_DeleteStory> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$LoadStoriesCopyWith<$Res> {
-  factory _$LoadStoriesCopyWith(
-          _LoadStories value, $Res Function(_LoadStories) then) =
-      __$LoadStoriesCopyWithImpl<$Res>;
+abstract class _$FetchStoriesCopyWith<$Res> {
+  factory _$FetchStoriesCopyWith(
+          _FetchStories value, $Res Function(_FetchStories) then) =
+      __$FetchStoriesCopyWithImpl<$Res>;
   $Res call({String userId});
 }
 
 /// @nodoc
-class __$LoadStoriesCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
-    implements _$LoadStoriesCopyWith<$Res> {
-  __$LoadStoriesCopyWithImpl(
-      _LoadStories _value, $Res Function(_LoadStories) _then)
-      : super(_value, (v) => _then(v as _LoadStories));
+class __$FetchStoriesCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
+    implements _$FetchStoriesCopyWith<$Res> {
+  __$FetchStoriesCopyWithImpl(
+      _FetchStories _value, $Res Function(_FetchStories) _then)
+      : super(_value, (v) => _then(v as _FetchStories));
 
   @override
-  _LoadStories get _value => super._value as _LoadStories;
+  _FetchStories get _value => super._value as _FetchStories;
 
   @override
   $Res call({
     Object? userId = freezed,
   }) {
-    return _then(_LoadStories(
+    return _then(_FetchStories(
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -910,22 +1152,22 @@ class __$LoadStoriesCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_LoadStories implements _LoadStories {
-  const _$_LoadStories({required this.userId});
+class _$_FetchStories implements _FetchStories {
+  const _$_FetchStories({required this.userId});
 
   @override
   final String userId;
 
   @override
   String toString() {
-    return 'StoryEvent.loadStories(userId: $userId)';
+    return 'StoryEvent.fetchStories(userId: $userId)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _LoadStories &&
+            other is _FetchStories &&
             const DeepCollectionEquality().equals(other.userId, userId));
   }
 
@@ -935,8 +1177,8 @@ class _$_LoadStories implements _LoadStories {
 
   @JsonKey(ignore: true)
   @override
-  _$LoadStoriesCopyWith<_LoadStories> get copyWith =>
-      __$LoadStoriesCopyWithImpl<_LoadStories>(this, _$identity);
+  _$FetchStoriesCopyWith<_FetchStories> get copyWith =>
+      __$FetchStoriesCopyWithImpl<_FetchStories>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -944,14 +1186,21 @@ class _$_LoadStories implements _LoadStories {
     required TResult Function(List<GalleryAsset> assets) createStory,
     required TResult Function(String userId, List<GalleryAsset> assets)
         updateStory,
-    required TResult Function(bool isLast, String userId, StoryContent story)
-        deleteStory,
-    required TResult Function(String userId) loadStories,
     required TResult Function(
-            String userId, String storyId, List<StoryContent> stories)
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
         viewStory,
   }) {
-    return loadStories(userId);
+    return fetchStories(userId);
   }
 
   @override
@@ -959,13 +1208,19 @@ class _$_LoadStories implements _LoadStories {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
   }) {
-    return loadStories?.call(userId);
+    return fetchStories?.call(userId);
   }
 
   @override
@@ -973,15 +1228,21 @@ class _$_LoadStories implements _LoadStories {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
     required TResult orElse(),
   }) {
-    if (loadStories != null) {
-      return loadStories(userId);
+    if (fetchStories != null) {
+      return fetchStories(userId);
     }
     return orElse();
   }
@@ -992,10 +1253,16 @@ class _$_LoadStories implements _LoadStories {
     required TResult Function(_CreateStory value) createStory,
     required TResult Function(_UpdateStory value) updateStory,
     required TResult Function(_DeleteStory value) deleteStory,
-    required TResult Function(_LoadStories value) loadStories,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
     required TResult Function(_ViewStory value) viewStory,
   }) {
-    return loadStories(this);
+    return fetchStories(this);
   }
 
   @override
@@ -1004,10 +1271,15 @@ class _$_LoadStories implements _LoadStories {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
   }) {
-    return loadStories?.call(this);
+    return fetchStories?.call(this);
   }
 
   @override
@@ -1016,23 +1288,810 @@ class _$_LoadStories implements _LoadStories {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
     required TResult orElse(),
   }) {
-    if (loadStories != null) {
-      return loadStories(this);
+    if (fetchStories != null) {
+      return fetchStories(this);
     }
     return orElse();
   }
 }
 
-abstract class _LoadStories implements StoryEvent {
-  const factory _LoadStories({required String userId}) = _$_LoadStories;
+abstract class _FetchStories implements StoryEvent {
+  const factory _FetchStories({required String userId}) = _$_FetchStories;
 
   String get userId;
   @JsonKey(ignore: true)
-  _$LoadStoriesCopyWith<_LoadStories> get copyWith =>
+  _$FetchStoriesCopyWith<_FetchStories> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$ResetStateCopyWith<$Res> {
+  factory _$ResetStateCopyWith(
+          _ResetState value, $Res Function(_ResetState) then) =
+      __$ResetStateCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$ResetStateCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
+    implements _$ResetStateCopyWith<$Res> {
+  __$ResetStateCopyWithImpl(
+      _ResetState _value, $Res Function(_ResetState) _then)
+      : super(_value, (v) => _then(v as _ResetState));
+
+  @override
+  _ResetState get _value => super._value as _ResetState;
+}
+
+/// @nodoc
+
+class _$_ResetState implements _ResetState {
+  const _$_ResetState();
+
+  @override
+  String toString() {
+    return 'StoryEvent.resetState()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _ResetState);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<GalleryAsset> assets) createStory,
+    required TResult Function(String userId, List<GalleryAsset> assets)
+        updateStory,
+    required TResult Function(
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
+        viewStory,
+  }) {
+    return resetState();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+  }) {
+    return resetState?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+    required TResult orElse(),
+  }) {
+    if (resetState != null) {
+      return resetState();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CreateStory value) createStory,
+    required TResult Function(_UpdateStory value) updateStory,
+    required TResult Function(_DeleteStory value) deleteStory,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
+    required TResult Function(_ViewStory value) viewStory,
+  }) {
+    return resetState(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+  }) {
+    return resetState?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+    required TResult orElse(),
+  }) {
+    if (resetState != null) {
+      return resetState(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ResetState implements StoryEvent {
+  const factory _ResetState() = _$_ResetState;
+}
+
+/// @nodoc
+abstract class _$FetchStoryViewersCopyWith<$Res> {
+  factory _$FetchStoryViewersCopyWith(
+          _FetchStoryViewers value, $Res Function(_FetchStoryViewers) then) =
+      __$FetchStoryViewersCopyWithImpl<$Res>;
+  $Res call({String userId, String contentId});
+}
+
+/// @nodoc
+class __$FetchStoryViewersCopyWithImpl<$Res>
+    extends _$StoryEventCopyWithImpl<$Res>
+    implements _$FetchStoryViewersCopyWith<$Res> {
+  __$FetchStoryViewersCopyWithImpl(
+      _FetchStoryViewers _value, $Res Function(_FetchStoryViewers) _then)
+      : super(_value, (v) => _then(v as _FetchStoryViewers));
+
+  @override
+  _FetchStoryViewers get _value => super._value as _FetchStoryViewers;
+
+  @override
+  $Res call({
+    Object? userId = freezed,
+    Object? contentId = freezed,
+  }) {
+    return _then(_FetchStoryViewers(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      contentId: contentId == freezed
+          ? _value.contentId
+          : contentId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_FetchStoryViewers implements _FetchStoryViewers {
+  const _$_FetchStoryViewers({required this.userId, required this.contentId});
+
+  @override
+  final String userId;
+  @override
+  final String contentId;
+
+  @override
+  String toString() {
+    return 'StoryEvent.fetchStoryViewers(userId: $userId, contentId: $contentId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _FetchStoryViewers &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.contentId, contentId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(contentId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$FetchStoryViewersCopyWith<_FetchStoryViewers> get copyWith =>
+      __$FetchStoryViewersCopyWithImpl<_FetchStoryViewers>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<GalleryAsset> assets) createStory,
+    required TResult Function(String userId, List<GalleryAsset> assets)
+        updateStory,
+    required TResult Function(
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
+        viewStory,
+  }) {
+    return fetchStoryViewers(userId, contentId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+  }) {
+    return fetchStoryViewers?.call(userId, contentId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+    required TResult orElse(),
+  }) {
+    if (fetchStoryViewers != null) {
+      return fetchStoryViewers(userId, contentId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CreateStory value) createStory,
+    required TResult Function(_UpdateStory value) updateStory,
+    required TResult Function(_DeleteStory value) deleteStory,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
+    required TResult Function(_ViewStory value) viewStory,
+  }) {
+    return fetchStoryViewers(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+  }) {
+    return fetchStoryViewers?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+    required TResult orElse(),
+  }) {
+    if (fetchStoryViewers != null) {
+      return fetchStoryViewers(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FetchStoryViewers implements StoryEvent {
+  const factory _FetchStoryViewers(
+      {required String userId,
+      required String contentId}) = _$_FetchStoryViewers;
+
+  String get userId;
+  String get contentId;
+  @JsonKey(ignore: true)
+  _$FetchStoryViewersCopyWith<_FetchStoryViewers> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$FetchPaginatedStoryViewersCopyWith<$Res> {
+  factory _$FetchPaginatedStoryViewersCopyWith(
+          _FetchPaginatedStoryViewers value,
+          $Res Function(_FetchPaginatedStoryViewers) then) =
+      __$FetchPaginatedStoryViewersCopyWithImpl<$Res>;
+  $Res call({String userId, String contentId});
+}
+
+/// @nodoc
+class __$FetchPaginatedStoryViewersCopyWithImpl<$Res>
+    extends _$StoryEventCopyWithImpl<$Res>
+    implements _$FetchPaginatedStoryViewersCopyWith<$Res> {
+  __$FetchPaginatedStoryViewersCopyWithImpl(_FetchPaginatedStoryViewers _value,
+      $Res Function(_FetchPaginatedStoryViewers) _then)
+      : super(_value, (v) => _then(v as _FetchPaginatedStoryViewers));
+
+  @override
+  _FetchPaginatedStoryViewers get _value =>
+      super._value as _FetchPaginatedStoryViewers;
+
+  @override
+  $Res call({
+    Object? userId = freezed,
+    Object? contentId = freezed,
+  }) {
+    return _then(_FetchPaginatedStoryViewers(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      contentId: contentId == freezed
+          ? _value.contentId
+          : contentId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_FetchPaginatedStoryViewers implements _FetchPaginatedStoryViewers {
+  const _$_FetchPaginatedStoryViewers(
+      {required this.userId, required this.contentId});
+
+  @override
+  final String userId;
+  @override
+  final String contentId;
+
+  @override
+  String toString() {
+    return 'StoryEvent.fetchPaginatedStoryViewers(userId: $userId, contentId: $contentId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _FetchPaginatedStoryViewers &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.contentId, contentId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(contentId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$FetchPaginatedStoryViewersCopyWith<_FetchPaginatedStoryViewers>
+      get copyWith => __$FetchPaginatedStoryViewersCopyWithImpl<
+          _FetchPaginatedStoryViewers>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<GalleryAsset> assets) createStory,
+    required TResult Function(String userId, List<GalleryAsset> assets)
+        updateStory,
+    required TResult Function(
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
+        viewStory,
+  }) {
+    return fetchPaginatedStoryViewers(userId, contentId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+  }) {
+    return fetchPaginatedStoryViewers?.call(userId, contentId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+    required TResult orElse(),
+  }) {
+    if (fetchPaginatedStoryViewers != null) {
+      return fetchPaginatedStoryViewers(userId, contentId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CreateStory value) createStory,
+    required TResult Function(_UpdateStory value) updateStory,
+    required TResult Function(_DeleteStory value) deleteStory,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
+    required TResult Function(_ViewStory value) viewStory,
+  }) {
+    return fetchPaginatedStoryViewers(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+  }) {
+    return fetchPaginatedStoryViewers?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+    required TResult orElse(),
+  }) {
+    if (fetchPaginatedStoryViewers != null) {
+      return fetchPaginatedStoryViewers(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FetchPaginatedStoryViewers implements StoryEvent {
+  const factory _FetchPaginatedStoryViewers(
+      {required String userId,
+      required String contentId}) = _$_FetchPaginatedStoryViewers;
+
+  String get userId;
+  String get contentId;
+  @JsonKey(ignore: true)
+  _$FetchPaginatedStoryViewersCopyWith<_FetchPaginatedStoryViewers>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$FetchPaginatedStoriesCopyWith<$Res> {
+  factory _$FetchPaginatedStoriesCopyWith(_FetchPaginatedStories value,
+          $Res Function(_FetchPaginatedStories) then) =
+      __$FetchPaginatedStoriesCopyWithImpl<$Res>;
+  $Res call({String userId});
+}
+
+/// @nodoc
+class __$FetchPaginatedStoriesCopyWithImpl<$Res>
+    extends _$StoryEventCopyWithImpl<$Res>
+    implements _$FetchPaginatedStoriesCopyWith<$Res> {
+  __$FetchPaginatedStoriesCopyWithImpl(_FetchPaginatedStories _value,
+      $Res Function(_FetchPaginatedStories) _then)
+      : super(_value, (v) => _then(v as _FetchPaginatedStories));
+
+  @override
+  _FetchPaginatedStories get _value => super._value as _FetchPaginatedStories;
+
+  @override
+  $Res call({
+    Object? userId = freezed,
+  }) {
+    return _then(_FetchPaginatedStories(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_FetchPaginatedStories implements _FetchPaginatedStories {
+  const _$_FetchPaginatedStories({required this.userId});
+
+  @override
+  final String userId;
+
+  @override
+  String toString() {
+    return 'StoryEvent.fetchPaginatedStories(userId: $userId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _FetchPaginatedStories &&
+            const DeepCollectionEquality().equals(other.userId, userId));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(userId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$FetchPaginatedStoriesCopyWith<_FetchPaginatedStories> get copyWith =>
+      __$FetchPaginatedStoriesCopyWithImpl<_FetchPaginatedStories>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<GalleryAsset> assets) createStory,
+    required TResult Function(String userId, List<GalleryAsset> assets)
+        updateStory,
+    required TResult Function(
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
+        viewStory,
+  }) {
+    return fetchPaginatedStories(userId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+  }) {
+    return fetchPaginatedStories?.call(userId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<GalleryAsset> assets)? createStory,
+    TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
+        deleteStory,
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
+        viewStory,
+    required TResult orElse(),
+  }) {
+    if (fetchPaginatedStories != null) {
+      return fetchPaginatedStories(userId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CreateStory value) createStory,
+    required TResult Function(_UpdateStory value) updateStory,
+    required TResult Function(_DeleteStory value) deleteStory,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
+    required TResult Function(_ViewStory value) viewStory,
+  }) {
+    return fetchPaginatedStories(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+  }) {
+    return fetchPaginatedStories?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CreateStory value)? createStory,
+    TResult Function(_UpdateStory value)? updateStory,
+    TResult Function(_DeleteStory value)? deleteStory,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
+    TResult Function(_ViewStory value)? viewStory,
+    required TResult orElse(),
+  }) {
+    if (fetchPaginatedStories != null) {
+      return fetchPaginatedStories(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FetchPaginatedStories implements StoryEvent {
+  const factory _FetchPaginatedStories({required String userId}) =
+      _$_FetchPaginatedStories;
+
+  String get userId;
+  @JsonKey(ignore: true)
+  _$FetchPaginatedStoriesCopyWith<_FetchPaginatedStories> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1041,7 +2100,11 @@ abstract class _$ViewStoryCopyWith<$Res> {
   factory _$ViewStoryCopyWith(
           _ViewStory value, $Res Function(_ViewStory) then) =
       __$ViewStoryCopyWithImpl<$Res>;
-  $Res call({String userId, String storyId, List<StoryContent> stories});
+  $Res call(
+      {String userId,
+      String storyId,
+      String contentId,
+      List<StoryContent> stories});
 }
 
 /// @nodoc
@@ -1057,6 +2120,7 @@ class __$ViewStoryCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
   $Res call({
     Object? userId = freezed,
     Object? storyId = freezed,
+    Object? contentId = freezed,
     Object? stories = freezed,
   }) {
     return _then(_ViewStory(
@@ -1067,6 +2131,10 @@ class __$ViewStoryCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
       storyId: storyId == freezed
           ? _value.storyId
           : storyId // ignore: cast_nullable_to_non_nullable
+              as String,
+      contentId: contentId == freezed
+          ? _value.contentId
+          : contentId // ignore: cast_nullable_to_non_nullable
               as String,
       stories: stories == freezed
           ? _value.stories
@@ -1080,18 +2148,23 @@ class __$ViewStoryCopyWithImpl<$Res> extends _$StoryEventCopyWithImpl<$Res>
 
 class _$_ViewStory implements _ViewStory {
   const _$_ViewStory(
-      {required this.userId, required this.storyId, required this.stories});
+      {required this.userId,
+      required this.storyId,
+      required this.contentId,
+      required this.stories});
 
   @override
   final String userId;
   @override
   final String storyId;
   @override
+  final String contentId;
+  @override
   final List<StoryContent> stories;
 
   @override
   String toString() {
-    return 'StoryEvent.viewStory(userId: $userId, storyId: $storyId, stories: $stories)';
+    return 'StoryEvent.viewStory(userId: $userId, storyId: $storyId, contentId: $contentId, stories: $stories)';
   }
 
   @override
@@ -1101,6 +2174,7 @@ class _$_ViewStory implements _ViewStory {
             other is _ViewStory &&
             const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.storyId, storyId) &&
+            const DeepCollectionEquality().equals(other.contentId, contentId) &&
             const DeepCollectionEquality().equals(other.stories, stories));
   }
 
@@ -1109,6 +2183,7 @@ class _$_ViewStory implements _ViewStory {
       runtimeType,
       const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(storyId),
+      const DeepCollectionEquality().hash(contentId),
       const DeepCollectionEquality().hash(stories));
 
   @JsonKey(ignore: true)
@@ -1122,14 +2197,21 @@ class _$_ViewStory implements _ViewStory {
     required TResult Function(List<GalleryAsset> assets) createStory,
     required TResult Function(String userId, List<GalleryAsset> assets)
         updateStory,
-    required TResult Function(bool isLast, String userId, StoryContent story)
-        deleteStory,
-    required TResult Function(String userId) loadStories,
     required TResult Function(
-            String userId, String storyId, List<StoryContent> stories)
+            bool isLast, String userId, List<StoryContent>? content)
+        deleteStory,
+    required TResult Function(String userId) fetchStories,
+    required TResult Function() resetState,
+    required TResult Function(String userId, String contentId)
+        fetchStoryViewers,
+    required TResult Function(String userId, String contentId)
+        fetchPaginatedStoryViewers,
+    required TResult Function(String userId) fetchPaginatedStories,
+    required TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)
         viewStory,
   }) {
-    return viewStory(userId, storyId, stories);
+    return viewStory(userId, storyId, contentId, stories);
   }
 
   @override
@@ -1137,13 +2219,19 @@ class _$_ViewStory implements _ViewStory {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
   }) {
-    return viewStory?.call(userId, storyId, stories);
+    return viewStory?.call(userId, storyId, contentId, stories);
   }
 
   @override
@@ -1151,15 +2239,21 @@ class _$_ViewStory implements _ViewStory {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<GalleryAsset> assets)? createStory,
     TResult Function(String userId, List<GalleryAsset> assets)? updateStory,
-    TResult Function(bool isLast, String userId, StoryContent story)?
+    TResult Function(bool isLast, String userId, List<StoryContent>? content)?
         deleteStory,
-    TResult Function(String userId)? loadStories,
-    TResult Function(String userId, String storyId, List<StoryContent> stories)?
+    TResult Function(String userId)? fetchStories,
+    TResult Function()? resetState,
+    TResult Function(String userId, String contentId)? fetchStoryViewers,
+    TResult Function(String userId, String contentId)?
+        fetchPaginatedStoryViewers,
+    TResult Function(String userId)? fetchPaginatedStories,
+    TResult Function(String userId, String storyId, String contentId,
+            List<StoryContent> stories)?
         viewStory,
     required TResult orElse(),
   }) {
     if (viewStory != null) {
-      return viewStory(userId, storyId, stories);
+      return viewStory(userId, storyId, contentId, stories);
     }
     return orElse();
   }
@@ -1170,7 +2264,13 @@ class _$_ViewStory implements _ViewStory {
     required TResult Function(_CreateStory value) createStory,
     required TResult Function(_UpdateStory value) updateStory,
     required TResult Function(_DeleteStory value) deleteStory,
-    required TResult Function(_LoadStories value) loadStories,
+    required TResult Function(_FetchStories value) fetchStories,
+    required TResult Function(_ResetState value) resetState,
+    required TResult Function(_FetchStoryViewers value) fetchStoryViewers,
+    required TResult Function(_FetchPaginatedStoryViewers value)
+        fetchPaginatedStoryViewers,
+    required TResult Function(_FetchPaginatedStories value)
+        fetchPaginatedStories,
     required TResult Function(_ViewStory value) viewStory,
   }) {
     return viewStory(this);
@@ -1182,7 +2282,12 @@ class _$_ViewStory implements _ViewStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
   }) {
     return viewStory?.call(this);
@@ -1194,7 +2299,12 @@ class _$_ViewStory implements _ViewStory {
     TResult Function(_CreateStory value)? createStory,
     TResult Function(_UpdateStory value)? updateStory,
     TResult Function(_DeleteStory value)? deleteStory,
-    TResult Function(_LoadStories value)? loadStories,
+    TResult Function(_FetchStories value)? fetchStories,
+    TResult Function(_ResetState value)? resetState,
+    TResult Function(_FetchStoryViewers value)? fetchStoryViewers,
+    TResult Function(_FetchPaginatedStoryViewers value)?
+        fetchPaginatedStoryViewers,
+    TResult Function(_FetchPaginatedStories value)? fetchPaginatedStories,
     TResult Function(_ViewStory value)? viewStory,
     required TResult orElse(),
   }) {
@@ -1209,10 +2319,12 @@ abstract class _ViewStory implements StoryEvent {
   const factory _ViewStory(
       {required String userId,
       required String storyId,
+      required String contentId,
       required List<StoryContent> stories}) = _$_ViewStory;
 
   String get userId;
   String get storyId;
+  String get contentId;
   List<StoryContent> get stories;
   @JsonKey(ignore: true)
   _$ViewStoryCopyWith<_ViewStory> get copyWith =>

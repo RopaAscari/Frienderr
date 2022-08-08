@@ -2,15 +2,15 @@ import 'dart:convert';
 
 import 'package:frienderr/features/domain/entities/user.dart';
 
-class CommentEntity {
-  final String id;
-  final dynamic user;
-  final String postId;
-  final String comment;
-  final int dateCreated;
-  final List<String> likes;
+class CommentDTO {
+  String id;
+  UserDTO user;
+  String postId;
+  String comment;
+  int dateCreated;
+  List<String> likes;
 
-  CommentEntity(
+  CommentDTO(
       {required this.id,
       required this.user,
       required this.likes,
@@ -29,12 +29,12 @@ class CommentEntity {
     };
   }
 
-  factory CommentEntity.fromJson(Map<String, dynamic> map) {
-    return CommentEntity(
+  factory CommentDTO.fromJson(Map<String, dynamic> map) {
+    return CommentDTO(
       id: map['id'] ?? '',
       postId: map['postId'] ?? '',
       comment: map['comment'] ?? '',
-      user: UserEntity.fromJson(map['user']),
+      user: UserDTO.fromJson(map['user']),
       likes: List<String>.from(map['likes']),
       dateCreated: map['dateCreated']?.toInt() ?? 0,
     );

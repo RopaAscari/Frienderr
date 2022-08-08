@@ -1,7 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:automap/automap.dart';
 import 'package:injectable/injectable.dart';
+import 'package:collection/collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:frienderr/core/failure/failure.dart';
+import 'package:frienderr/core/mappers/mapping_profile.dart';
+import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/entities/notification.dart';
 import 'package:frienderr/features/data/providers/user_provider.dart';
 import 'package:frienderr/features/data/providers/notification_provider.dart';
@@ -14,7 +18,9 @@ class NotificationRepository implements INotificationRepository {
   final INotificationRemoteDataProvider _notificationRemoteDataProvider;
 
   const NotificationRepository(
-      this._notificationRemoteDataProvider, this._userRemoteDataProvider);
+    this._userRemoteDataProvider,
+    this._notificationRemoteDataProvider,
+  );
 
   @override
   Either<Failure, Stream<QuerySnapshot<Map<String, dynamic>>>>
@@ -29,7 +35,7 @@ class NotificationRepository implements INotificationRepository {
 
   @override
   Future<Either<Failure, bool>> sendFollowNotification(
-      {required NotificationEntity notification}) async {
+      {required NotificationDTO notification}) async {
     try {
       final _result = await _notificationRemoteDataProvider
           .sendFollowNotification(notification);
@@ -45,7 +51,7 @@ class NotificationRepository implements INotificationRepository {
 
   @override
   Future<Either<Failure, bool>> sendLikeNotification(
-      {required NotificationEntity notification}) async {
+      {required NotificationDTO notification}) async {
     try {
       final _result = await _notificationRemoteDataProvider
           .sendLikeNotification(notification);
@@ -61,7 +67,7 @@ class NotificationRepository implements INotificationRepository {
 
   @override
   Future<Either<Failure, bool>> sendCommentNotification(
-      {required NotificationEntity notification}) async {
+      {required NotificationDTO notification}) async {
     try {
       final _result = await _notificationRemoteDataProvider
           .sendCommentNotification(notification);
@@ -76,27 +82,87 @@ class NotificationRepository implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, List<NotificationEntity>>> getNotifications(
+  Future<Either<Failure, List<NotificationModel>>> getNotifications(
       {required String uid}) async {
     try {
-      final _rawNotifications =
+      final QuerySnapshot<NotificationDTO> _notificationQuery =
           await _notificationRemoteDataProvider.getNotifications(uid: uid);
 
-      final users = await _userRemoteDataProvider.getPlatformUsers();
+      List<String> userIds =
+          _notificationQuery.docs.map((p) => p.data().user.id).toSet().toList();
 
-      final _result = _rawNotifications.docs.map((notification) {
-        Map<String, dynamic> data = notification.data() as Map<String, dynamic>;
+      if (userIds.isEmpty) {
+        return const Right([]);
+      }
 
-        data['user'] = users.docs.firstWhere((user) {
-          return user.data()['id'] == data['user']['id'];
-        }).data();
+      final QuerySnapshot<UserDTO> _userQuery =
+          await _userRemoteDataProvider.getUsersByIds(userIds: userIds);
 
-        return NotificationModel.fromJson(data);
-      }).toList();
+      final _notificationDTO = _handleDTOMapping(
+        users: _userQuery,
+        notifications: _notificationQuery,
+      );
 
-      return Right(_result);
+      final notifcations =
+          AutoMapper.I.map<List<NotificationDTO>, List<NotificationModel>>(
+        _notificationDTO as List<NotificationDTO>,
+      );
+      return Right(notifcations);
     } catch (error) {
       return Left(Failure(message: error.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<NotificationModel>>> getPaginatedNotifications(
+      {required String uid,
+      required NotificationModel previousNotification}) async {
+    try {
+      final QuerySnapshot<NotificationDTO> _notificationQuery =
+          await _notificationRemoteDataProvider.getPaginatedNotifications(
+              uid: uid, previousNotification: previousNotification);
+      List<String> userIds =
+          _notificationQuery.docs.map((p) => p.data().user.id).toSet().toList();
+
+      if (userIds.isEmpty) {
+        return const Right([]);
+      }
+
+      final QuerySnapshot<UserDTO> _userQuery =
+          await _userRemoteDataProvider.getUsersByIds(userIds: userIds);
+      final _notificationDTO = _handleDTOMapping(
+        notifications: _notificationQuery,
+        users: _userQuery,
+      );
+
+      final notifcations =
+          AutoMapper.I.map<List<NotificationDTO>, List<NotificationModel>>(
+        _notificationDTO as List<NotificationDTO>,
+      );
+      return Right(notifcations);
+    } catch (error) {
+      return Left(Failure(message: error.toString()));
+    }
+  }
+
+  List<NotificationDTO> _handleDTOMapping({
+    required QuerySnapshot<UserDTO> users,
+    required QuerySnapshot<NotificationDTO> notifications,
+  }) {
+    List<NotificationDTO> result = [];
+
+    for (var document in notifications.docs) {
+      NotificationDTO notification = document.data();
+
+      final response = users.docs.firstWhereOrNull((x) {
+        return x.data().id == notification.user.id;
+      })?.data();
+
+      notification.user =
+          response ?? UserDTO(id: '0000000000000', username: "Unknown");
+
+      result.add(notification);
+    }
+    return result;
   }
 }

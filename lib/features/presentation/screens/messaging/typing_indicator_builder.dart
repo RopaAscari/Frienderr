@@ -17,7 +17,7 @@ class TypingIndicatorBuilder extends StatelessWidget {
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> get _chatStream {
     return FirebaseFirestore.instance
-        .collection(Collections.chats.name)
+        .collection(Collections.chats)
         .doc(chatId)
         .snapshots();
   }

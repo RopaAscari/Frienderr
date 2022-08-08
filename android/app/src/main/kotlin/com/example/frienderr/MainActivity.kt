@@ -1,4 +1,4 @@
-package com.example.frienderr
+package com.ascari.frienderr
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -11,7 +11,7 @@ enum FollowingStatus {
 class FollowingState with _$FollowingState {
   const factory FollowingState({
     @Default('') String error,
-    required List<UserEntity> following,
+    required List<UserDTO> following,
     @Default(FollowingStatus.Initial) FollowingStatus currentState,
   }) = _FollowingState;
 }

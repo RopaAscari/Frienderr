@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frienderr/core/injection/injection.dart';
+import 'package:cached_video_player/cached_video_player.dart';
+import 'package:frienderr/features/presentation/blocs/snap/snap_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
-import 'package:video_player/video_player.dart';
-import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
 
 class PreviewQuickScreen extends StatefulWidget {
   final File file;
-  final QuickBloc quickBloc;
+  final SnapBloc snapBloc;
   const PreviewQuickScreen(
-      {Key? key, required this.quickBloc, required this.file})
+      {Key? key, required this.snapBloc, required this.file})
       : super(key: key);
 
   @override
@@ -18,13 +18,13 @@ class PreviewQuickScreen extends StatefulWidget {
 
 class _PreviewQuickScreenState extends State<PreviewQuickScreen> {
   File get _file => widget.file;
-  late VideoPlayerController _controller;
-  QuickBloc get _quickBloc => widget.quickBloc;
+  late CachedVideoPlayerController _controller;
+  SnapBloc get _quickBloc => widget.snapBloc;
   late Future<void> _initializeVideoPlayerFuture;
 
   @override
   initState() {
-    _controller = VideoPlayerController.file(_file);
+    _controller = CachedVideoPlayerController.file(_file);
     _initializeVideoPlayerFuture = _controller.initialize();
     //  _controller.play();
     super.initState();
@@ -37,7 +37,8 @@ class _PreviewQuickScreenState extends State<PreviewQuickScreen> {
   }
 
   void _navigateToPostQuick() {
-    getIt<AppRouter>().push(PostQuickRoute(file: _file, quickBloc: _quickBloc));
+    getService<AppRouter>()
+        .push(PostQuickRoute(file: _file, snapbloc: _quickBloc));
   }
 
   @override
@@ -58,7 +59,7 @@ class _PreviewQuickScreenState extends State<PreviewQuickScreen> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           IconButton(
-            onPressed: () => getIt<AppRouter>().pop(),
+            onPressed: () => getService<AppRouter>().pop(),
             icon: const Icon(Icons.arrow_back_ios),
           ),
           MaterialButton(
@@ -82,7 +83,7 @@ class _PreviewQuickScreenState extends State<PreviewQuickScreen> {
             return LayoutBuilder(
                 builder: (context, constraints) => AspectRatio(
                       aspectRatio: constraints.maxWidth / constraints.maxHeight,
-                      child: VideoPlayer(_controller),
+                      child: CachedVideoPlayer(_controller),
                     ));
           } else {
             return const Center(

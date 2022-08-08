@@ -14,71 +14,77 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-StoryModel _$StoryModelFromJson(Map<String, dynamic> json) {
-  return _StoryModel.fromJson(json);
+Story _$StoryFromJson(Map<String, dynamic> json) {
+  return _Story.fromJson(json);
 }
 
 /// @nodoc
-class _$StoryModelTearOff {
-  const _$StoryModelTearOff();
+class _$StoryTearOff {
+  const _$StoryTearOff();
 
-  _StoryModel call(
+  _Story call(
       {String id = '',
       int dateUpdated = 0,
+      bool? isPersitent = false,
       List<StoryContent> content = const [],
       UserModel user = const UserModel(id: '')}) {
-    return _StoryModel(
+    return _Story(
       id: id,
       dateUpdated: dateUpdated,
+      isPersitent: isPersitent,
       content: content,
       user: user,
     );
   }
 
-  StoryModel fromJson(Map<String, Object?> json) {
-    return StoryModel.fromJson(json);
+  Story fromJson(Map<String, Object?> json) {
+    return Story.fromJson(json);
   }
 }
 
 /// @nodoc
-const $StoryModel = _$StoryModelTearOff();
+const $Story = _$StoryTearOff();
 
 /// @nodoc
-mixin _$StoryModel {
+mixin _$Story {
   String get id => throw _privateConstructorUsedError;
   int get dateUpdated => throw _privateConstructorUsedError;
+  bool? get isPersitent => throw _privateConstructorUsedError;
   List<StoryContent> get content => throw _privateConstructorUsedError;
   UserModel get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $StoryModelCopyWith<StoryModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  $StoryCopyWith<Story> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $StoryModelCopyWith<$Res> {
-  factory $StoryModelCopyWith(
-          StoryModel value, $Res Function(StoryModel) then) =
-      _$StoryModelCopyWithImpl<$Res>;
+abstract class $StoryCopyWith<$Res> {
+  factory $StoryCopyWith(Story value, $Res Function(Story) then) =
+      _$StoryCopyWithImpl<$Res>;
   $Res call(
-      {String id, int dateUpdated, List<StoryContent> content, UserModel user});
+      {String id,
+      int dateUpdated,
+      bool? isPersitent,
+      List<StoryContent> content,
+      UserModel user});
 
   $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
-class _$StoryModelCopyWithImpl<$Res> implements $StoryModelCopyWith<$Res> {
-  _$StoryModelCopyWithImpl(this._value, this._then);
+class _$StoryCopyWithImpl<$Res> implements $StoryCopyWith<$Res> {
+  _$StoryCopyWithImpl(this._value, this._then);
 
-  final StoryModel _value;
+  final Story _value;
   // ignore: unused_field
-  final $Res Function(StoryModel) _then;
+  final $Res Function(Story) _then;
 
   @override
   $Res call({
     Object? id = freezed,
     Object? dateUpdated = freezed,
+    Object? isPersitent = freezed,
     Object? content = freezed,
     Object? user = freezed,
   }) {
@@ -91,6 +97,10 @@ class _$StoryModelCopyWithImpl<$Res> implements $StoryModelCopyWith<$Res> {
           ? _value.dateUpdated
           : dateUpdated // ignore: cast_nullable_to_non_nullable
               as int,
+      isPersitent: isPersitent == freezed
+          ? _value.isPersitent
+          : isPersitent // ignore: cast_nullable_to_non_nullable
+              as bool?,
       content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -111,36 +121,39 @@ class _$StoryModelCopyWithImpl<$Res> implements $StoryModelCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$StoryModelCopyWith<$Res> implements $StoryModelCopyWith<$Res> {
-  factory _$StoryModelCopyWith(
-          _StoryModel value, $Res Function(_StoryModel) then) =
-      __$StoryModelCopyWithImpl<$Res>;
+abstract class _$StoryCopyWith<$Res> implements $StoryCopyWith<$Res> {
+  factory _$StoryCopyWith(_Story value, $Res Function(_Story) then) =
+      __$StoryCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id, int dateUpdated, List<StoryContent> content, UserModel user});
+      {String id,
+      int dateUpdated,
+      bool? isPersitent,
+      List<StoryContent> content,
+      UserModel user});
 
   @override
   $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
-class __$StoryModelCopyWithImpl<$Res> extends _$StoryModelCopyWithImpl<$Res>
-    implements _$StoryModelCopyWith<$Res> {
-  __$StoryModelCopyWithImpl(
-      _StoryModel _value, $Res Function(_StoryModel) _then)
-      : super(_value, (v) => _then(v as _StoryModel));
+class __$StoryCopyWithImpl<$Res> extends _$StoryCopyWithImpl<$Res>
+    implements _$StoryCopyWith<$Res> {
+  __$StoryCopyWithImpl(_Story _value, $Res Function(_Story) _then)
+      : super(_value, (v) => _then(v as _Story));
 
   @override
-  _StoryModel get _value => super._value as _StoryModel;
+  _Story get _value => super._value as _Story;
 
   @override
   $Res call({
     Object? id = freezed,
     Object? dateUpdated = freezed,
+    Object? isPersitent = freezed,
     Object? content = freezed,
     Object? user = freezed,
   }) {
-    return _then(_StoryModel(
+    return _then(_Story(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -149,6 +162,10 @@ class __$StoryModelCopyWithImpl<$Res> extends _$StoryModelCopyWithImpl<$Res>
           ? _value.dateUpdated
           : dateUpdated // ignore: cast_nullable_to_non_nullable
               as int,
+      isPersitent: isPersitent == freezed
+          ? _value.isPersitent
+          : isPersitent // ignore: cast_nullable_to_non_nullable
+              as bool?,
       content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -163,15 +180,16 @@ class __$StoryModelCopyWithImpl<$Res> extends _$StoryModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_StoryModel implements _StoryModel {
-  const _$_StoryModel(
+class _$_Story implements _Story {
+  const _$_Story(
       {this.id = '',
       this.dateUpdated = 0,
+      this.isPersitent = false,
       this.content = const [],
       this.user = const UserModel(id: '')});
 
-  factory _$_StoryModel.fromJson(Map<String, dynamic> json) =>
-      _$$_StoryModelFromJson(json);
+  factory _$_Story.fromJson(Map<String, dynamic> json) =>
+      _$$_StoryFromJson(json);
 
   @JsonKey()
   @override
@@ -181,6 +199,9 @@ class _$_StoryModel implements _StoryModel {
   final int dateUpdated;
   @JsonKey()
   @override
+  final bool? isPersitent;
+  @JsonKey()
+  @override
   final List<StoryContent> content;
   @JsonKey()
   @override
@@ -188,17 +209,19 @@ class _$_StoryModel implements _StoryModel {
 
   @override
   String toString() {
-    return 'StoryModel(id: $id, dateUpdated: $dateUpdated, content: $content, user: $user)';
+    return 'Story(id: $id, dateUpdated: $dateUpdated, isPersitent: $isPersitent, content: $content, user: $user)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _StoryModel &&
+            other is _Story &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
                 .equals(other.dateUpdated, dateUpdated) &&
+            const DeepCollectionEquality()
+                .equals(other.isPersitent, isPersitent) &&
             const DeepCollectionEquality().equals(other.content, content) &&
             const DeepCollectionEquality().equals(other.user, user));
   }
@@ -208,40 +231,42 @@ class _$_StoryModel implements _StoryModel {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(dateUpdated),
+      const DeepCollectionEquality().hash(isPersitent),
       const DeepCollectionEquality().hash(content),
       const DeepCollectionEquality().hash(user));
 
   @JsonKey(ignore: true)
   @override
-  _$StoryModelCopyWith<_StoryModel> get copyWith =>
-      __$StoryModelCopyWithImpl<_StoryModel>(this, _$identity);
+  _$StoryCopyWith<_Story> get copyWith =>
+      __$StoryCopyWithImpl<_Story>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_StoryModelToJson(this);
+    return _$$_StoryToJson(this);
   }
 }
 
-abstract class _StoryModel implements StoryModel {
-  const factory _StoryModel(
+abstract class _Story implements Story {
+  const factory _Story(
       {String id,
       int dateUpdated,
+      bool? isPersitent,
       List<StoryContent> content,
-      UserModel user}) = _$_StoryModel;
+      UserModel user}) = _$_Story;
 
-  factory _StoryModel.fromJson(Map<String, dynamic> json) =
-      _$_StoryModel.fromJson;
+  factory _Story.fromJson(Map<String, dynamic> json) = _$_Story.fromJson;
 
   @override
   String get id;
   @override
   int get dateUpdated;
   @override
+  bool? get isPersitent;
+  @override
   List<StoryContent> get content;
   @override
   UserModel get user;
   @override
   @JsonKey(ignore: true)
-  _$StoryModelCopyWith<_StoryModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$StoryCopyWith<_Story> get copyWith => throw _privateConstructorUsedError;
 }

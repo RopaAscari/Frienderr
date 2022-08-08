@@ -238,7 +238,7 @@ class _$FollowingStateTearOff {
 
   _FollowingState call(
       {String error = '',
-      required List<UserEntity> following,
+      required List<UserDTO> following,
       FollowingStatus currentState = FollowingStatus.Initial}) {
     return _FollowingState(
       error: error,
@@ -254,7 +254,7 @@ const $FollowingState = _$FollowingStateTearOff();
 /// @nodoc
 mixin _$FollowingState {
   String get error => throw _privateConstructorUsedError;
-  List<UserEntity> get following => throw _privateConstructorUsedError;
+  List<UserDTO> get following => throw _privateConstructorUsedError;
   FollowingStatus get currentState => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -268,7 +268,7 @@ abstract class $FollowingStateCopyWith<$Res> {
           FollowingState value, $Res Function(FollowingState) then) =
       _$FollowingStateCopyWithImpl<$Res>;
   $Res call(
-      {String error, List<UserEntity> following, FollowingStatus currentState});
+      {String error, List<UserDTO> following, FollowingStatus currentState});
 }
 
 /// @nodoc
@@ -294,7 +294,7 @@ class _$FollowingStateCopyWithImpl<$Res>
       following: following == freezed
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
-              as List<UserEntity>,
+              as List<UserDTO>,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
@@ -311,7 +311,7 @@ abstract class _$FollowingStateCopyWith<$Res>
       __$FollowingStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String error, List<UserEntity> following, FollowingStatus currentState});
+      {String error, List<UserDTO> following, FollowingStatus currentState});
 }
 
 /// @nodoc
@@ -339,7 +339,7 @@ class __$FollowingStateCopyWithImpl<$Res>
       following: following == freezed
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
-              as List<UserEntity>,
+              as List<UserDTO>,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
@@ -360,7 +360,7 @@ class _$_FollowingState implements _FollowingState {
   @override
   final String error;
   @override
-  final List<UserEntity> following;
+  final List<UserDTO> following;
   @JsonKey()
   @override
   final FollowingStatus currentState;
@@ -397,13 +397,13 @@ class _$_FollowingState implements _FollowingState {
 abstract class _FollowingState implements FollowingState {
   const factory _FollowingState(
       {String error,
-      required List<UserEntity> following,
+      required List<UserDTO> following,
       FollowingStatus currentState}) = _$_FollowingState;
 
   @override
   String get error;
   @override
-  List<UserEntity> get following;
+  List<UserDTO> get following;
   @override
   FollowingStatus get currentState;
   @override

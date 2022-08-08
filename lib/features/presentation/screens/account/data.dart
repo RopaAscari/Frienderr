@@ -14,7 +14,7 @@ class AccountOptions {
 }
 
 final accountOptions = [
-  AccountOptions(
+  /* AccountOptions(
       icon: Icons.account_circle, title: 'Profile', route: UnderConstruction()),
   AccountOptions(
       icon: Icons.theater_comedy, title: 'Theme', route: ChangeTheme()),
@@ -25,6 +25,6 @@ final accountOptions = [
   AccountOptions(
       icon: Icons.notifications,
       title: 'Notifications',
-      route: UnderConstruction()),
-  AccountOptions(icon: Icons.logout, title: 'Logout', route: Center()),
+      route: UnderConstruction()),*/
+  AccountOptions(icon: Icons.logout, title: 'Logout', route: const Center()),
 ];

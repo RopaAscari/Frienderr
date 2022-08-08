@@ -3,6 +3,9 @@ part of 'comment_bloc.dart';
 enum CommentListenableAction {
   idle,
   created,
+  deleted,
+  deleteFailed,
+  creationFailed,
 }
 
 enum CommentStatus {
@@ -14,12 +17,9 @@ enum CommentStatus {
 
 @freezed
 class CommentState with _$CommentState {
-  const factory CommentState(
-      {@Default('')
-          String error,
-      required List<CommentEntity> comments,
-      @Default(CommentStatus.idle)
-          CommentStatus currentState,
-      @Default(CommentListenableAction.idle)
-          CommentListenableAction action}) = _CommentState;
+  const factory CommentState({
+    @Default(false) final bool reachedMaximumThreshold,
+    required final PagingController<int, Comment> paginationController,
+    @Default(CommentListenableAction.idle) CommentListenableAction action,
+  }) = _CommentState;
 }

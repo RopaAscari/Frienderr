@@ -6,11 +6,11 @@ import 'package:frienderr/features/domain/entities/quick.dart';
 import 'package:frienderr/features/domain/entities/user.dart';
 
 class Account {
-  final UserEntity user;
+  final UserDTO user;
   final List<String> followers;
   final List<String> following;
-  final List<PostEntity> posts;
-  final List<QuickEntity> snaps;
+  final List<PostDTO> posts;
+  final List<SnapDTO> snaps;
   Account({
     required this.user,
     required this.followers,
@@ -20,11 +20,11 @@ class Account {
   });
 
   Account copyWith({
-    UserEntity? user,
+    UserDTO? user,
     List<String>? followers,
     List<String>? following,
-    List<PostEntity>? posts,
-    List<QuickEntity>? snaps,
+    List<PostDTO>? posts,
+    List<SnapDTO>? snaps,
   }) {
     return Account(
       user: user ?? this.user,
@@ -47,13 +47,11 @@ class Account {
 
   factory Account.fromJson(Map<String, dynamic> map) {
     return Account(
-      user: UserEntity.fromJson(map['user']),
+      user: UserDTO.fromJson(map['user']),
       followers: List<String>.from(map['followers']),
       following: List<String>.from(map['following']),
-      posts: List<PostEntity>.from(
-          map['posts']?.map((x) => PostEntity.fromJson(x))),
-      snaps: List<QuickEntity>.from(
-          map['snaps']?.map((x) => QuickEntity.fromJson(x))),
+      posts: List<PostDTO>.from(map['posts']?.map((x) => PostDTO.fromJson(x))),
+      snaps: List<SnapDTO>.from(map['snaps']?.map((x) => SnapDTO.fromJson(x))),
     );
   }
 }

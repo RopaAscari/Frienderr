@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$ChatEventTearOff {
   const _$ChatEventTearOff();
 
-  _InstantiateChat instantiateChat({required ChatEntity chat}) {
+  _InstantiateChat instantiateChat({required ChatDTO chat}) {
     return _InstantiateChat(
       chat: chat,
     );
@@ -26,6 +26,12 @@ class _$ChatEventTearOff {
 
   _GetChats getChats({required String id}) {
     return _GetChats(
+      id: id,
+    );
+  }
+
+  _GetPaginatedChats getPaginatedChats({required String id}) {
+    return _GetPaginatedChats(
       id: id,
     );
   }
@@ -58,8 +64,9 @@ const $ChatEvent = _$ChatEventTearOff();
 mixin _$ChatEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(ChatDTO chat) instantiateChat,
     required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
     required TResult Function(String uid) deleteChat,
     required TResult Function(String uid, String chatId) startTyping,
     required TResult Function(String uid, String chatId) stopTyping,
@@ -67,8 +74,9 @@ mixin _$ChatEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -76,8 +84,9 @@ mixin _$ChatEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -88,6 +97,7 @@ mixin _$ChatEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
     required TResult Function(_DeleteChat value) deleteChat,
     required TResult Function(_StartTyping value) startTyping,
     required TResult Function(_StopTyping value) stopTyping,
@@ -97,6 +107,7 @@ mixin _$ChatEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -106,6 +117,7 @@ mixin _$ChatEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -134,7 +146,7 @@ abstract class _$InstantiateChatCopyWith<$Res> {
   factory _$InstantiateChatCopyWith(
           _InstantiateChat value, $Res Function(_InstantiateChat) then) =
       __$InstantiateChatCopyWithImpl<$Res>;
-  $Res call({ChatEntity chat});
+  $Res call({ChatDTO chat});
 }
 
 /// @nodoc
@@ -155,7 +167,7 @@ class __$InstantiateChatCopyWithImpl<$Res> extends _$ChatEventCopyWithImpl<$Res>
       chat: chat == freezed
           ? _value.chat
           : chat // ignore: cast_nullable_to_non_nullable
-              as ChatEntity,
+              as ChatDTO,
     ));
   }
 }
@@ -166,7 +178,7 @@ class _$_InstantiateChat implements _InstantiateChat {
   const _$_InstantiateChat({required this.chat});
 
   @override
-  final ChatEntity chat;
+  final ChatDTO chat;
 
   @override
   String toString() {
@@ -193,8 +205,9 @@ class _$_InstantiateChat implements _InstantiateChat {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(ChatDTO chat) instantiateChat,
     required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
     required TResult Function(String uid) deleteChat,
     required TResult Function(String uid, String chatId) startTyping,
     required TResult Function(String uid, String chatId) stopTyping,
@@ -205,8 +218,9 @@ class _$_InstantiateChat implements _InstantiateChat {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -217,8 +231,9 @@ class _$_InstantiateChat implements _InstantiateChat {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -235,6 +250,7 @@ class _$_InstantiateChat implements _InstantiateChat {
   TResult map<TResult extends Object?>({
     required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
     required TResult Function(_DeleteChat value) deleteChat,
     required TResult Function(_StartTyping value) startTyping,
     required TResult Function(_StopTyping value) stopTyping,
@@ -247,6 +263,7 @@ class _$_InstantiateChat implements _InstantiateChat {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -259,6 +276,7 @@ class _$_InstantiateChat implements _InstantiateChat {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -272,10 +290,9 @@ class _$_InstantiateChat implements _InstantiateChat {
 }
 
 abstract class _InstantiateChat implements ChatEvent {
-  const factory _InstantiateChat({required ChatEntity chat}) =
-      _$_InstantiateChat;
+  const factory _InstantiateChat({required ChatDTO chat}) = _$_InstantiateChat;
 
-  ChatEntity get chat;
+  ChatDTO get chat;
   @JsonKey(ignore: true)
   _$InstantiateChatCopyWith<_InstantiateChat> get copyWith =>
       throw _privateConstructorUsedError;
@@ -343,8 +360,9 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(ChatDTO chat) instantiateChat,
     required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
     required TResult Function(String uid) deleteChat,
     required TResult Function(String uid, String chatId) startTyping,
     required TResult Function(String uid, String chatId) stopTyping,
@@ -355,8 +373,9 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -367,8 +386,9 @@ class _$_GetChats implements _GetChats {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -385,6 +405,7 @@ class _$_GetChats implements _GetChats {
   TResult map<TResult extends Object?>({
     required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
     required TResult Function(_DeleteChat value) deleteChat,
     required TResult Function(_StartTyping value) startTyping,
     required TResult Function(_StopTyping value) stopTyping,
@@ -397,6 +418,7 @@ class _$_GetChats implements _GetChats {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -409,6 +431,7 @@ class _$_GetChats implements _GetChats {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -427,6 +450,164 @@ abstract class _GetChats implements ChatEvent {
   String get id;
   @JsonKey(ignore: true)
   _$GetChatsCopyWith<_GetChats> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetPaginatedChatsCopyWith<$Res> {
+  factory _$GetPaginatedChatsCopyWith(
+          _GetPaginatedChats value, $Res Function(_GetPaginatedChats) then) =
+      __$GetPaginatedChatsCopyWithImpl<$Res>;
+  $Res call({String id});
+}
+
+/// @nodoc
+class __$GetPaginatedChatsCopyWithImpl<$Res>
+    extends _$ChatEventCopyWithImpl<$Res>
+    implements _$GetPaginatedChatsCopyWith<$Res> {
+  __$GetPaginatedChatsCopyWithImpl(
+      _GetPaginatedChats _value, $Res Function(_GetPaginatedChats) _then)
+      : super(_value, (v) => _then(v as _GetPaginatedChats));
+
+  @override
+  _GetPaginatedChats get _value => super._value as _GetPaginatedChats;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+  }) {
+    return _then(_GetPaginatedChats(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetPaginatedChats implements _GetPaginatedChats {
+  const _$_GetPaginatedChats({required this.id});
+
+  @override
+  final String id;
+
+  @override
+  String toString() {
+    return 'ChatEvent.getPaginatedChats(id: $id)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetPaginatedChats &&
+            const DeepCollectionEquality().equals(other.id, id));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(id));
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetPaginatedChatsCopyWith<_GetPaginatedChats> get copyWith =>
+      __$GetPaginatedChatsCopyWithImpl<_GetPaginatedChats>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ChatDTO chat) instantiateChat,
+    required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
+    required TResult Function(String uid) deleteChat,
+    required TResult Function(String uid, String chatId) startTyping,
+    required TResult Function(String uid, String chatId) stopTyping,
+  }) {
+    return getPaginatedChats(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ChatDTO chat)? instantiateChat,
+    TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
+  }) {
+    return getPaginatedChats?.call(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ChatDTO chat)? instantiateChat,
+    TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
+    TResult Function(String uid)? deleteChat,
+    TResult Function(String uid, String chatId)? startTyping,
+    TResult Function(String uid, String chatId)? stopTyping,
+    required TResult orElse(),
+  }) {
+    if (getPaginatedChats != null) {
+      return getPaginatedChats(id);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InstantiateChat value) instantiateChat,
+    required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
+    required TResult Function(_DeleteChat value) deleteChat,
+    required TResult Function(_StartTyping value) startTyping,
+    required TResult Function(_StopTyping value) stopTyping,
+  }) {
+    return getPaginatedChats(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
+    TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
+  }) {
+    return getPaginatedChats?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InstantiateChat value)? instantiateChat,
+    TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
+    TResult Function(_DeleteChat value)? deleteChat,
+    TResult Function(_StartTyping value)? startTyping,
+    TResult Function(_StopTyping value)? stopTyping,
+    required TResult orElse(),
+  }) {
+    if (getPaginatedChats != null) {
+      return getPaginatedChats(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetPaginatedChats implements ChatEvent {
+  const factory _GetPaginatedChats({required String id}) = _$_GetPaginatedChats;
+
+  String get id;
+  @JsonKey(ignore: true)
+  _$GetPaginatedChatsCopyWith<_GetPaginatedChats> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -494,8 +675,9 @@ class _$_DeleteChat implements _DeleteChat {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(ChatDTO chat) instantiateChat,
     required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
     required TResult Function(String uid) deleteChat,
     required TResult Function(String uid, String chatId) startTyping,
     required TResult Function(String uid, String chatId) stopTyping,
@@ -506,8 +688,9 @@ class _$_DeleteChat implements _DeleteChat {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -518,8 +701,9 @@ class _$_DeleteChat implements _DeleteChat {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -536,6 +720,7 @@ class _$_DeleteChat implements _DeleteChat {
   TResult map<TResult extends Object?>({
     required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
     required TResult Function(_DeleteChat value) deleteChat,
     required TResult Function(_StartTyping value) startTyping,
     required TResult Function(_StopTyping value) stopTyping,
@@ -548,6 +733,7 @@ class _$_DeleteChat implements _DeleteChat {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -560,6 +746,7 @@ class _$_DeleteChat implements _DeleteChat {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -655,8 +842,9 @@ class _$_StartTyping implements _StartTyping {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(ChatDTO chat) instantiateChat,
     required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
     required TResult Function(String uid) deleteChat,
     required TResult Function(String uid, String chatId) startTyping,
     required TResult Function(String uid, String chatId) stopTyping,
@@ -667,8 +855,9 @@ class _$_StartTyping implements _StartTyping {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -679,8 +868,9 @@ class _$_StartTyping implements _StartTyping {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -697,6 +887,7 @@ class _$_StartTyping implements _StartTyping {
   TResult map<TResult extends Object?>({
     required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
     required TResult Function(_DeleteChat value) deleteChat,
     required TResult Function(_StartTyping value) startTyping,
     required TResult Function(_StopTyping value) stopTyping,
@@ -709,6 +900,7 @@ class _$_StartTyping implements _StartTyping {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -721,6 +913,7 @@ class _$_StartTyping implements _StartTyping {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -818,8 +1011,9 @@ class _$_StopTyping implements _StopTyping {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ChatEntity chat) instantiateChat,
+    required TResult Function(ChatDTO chat) instantiateChat,
     required TResult Function(String id) getChats,
+    required TResult Function(String id) getPaginatedChats,
     required TResult Function(String uid) deleteChat,
     required TResult Function(String uid, String chatId) startTyping,
     required TResult Function(String uid, String chatId) stopTyping,
@@ -830,8 +1024,9 @@ class _$_StopTyping implements _StopTyping {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -842,8 +1037,9 @@ class _$_StopTyping implements _StopTyping {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ChatEntity chat)? instantiateChat,
+    TResult Function(ChatDTO chat)? instantiateChat,
     TResult Function(String id)? getChats,
+    TResult Function(String id)? getPaginatedChats,
     TResult Function(String uid)? deleteChat,
     TResult Function(String uid, String chatId)? startTyping,
     TResult Function(String uid, String chatId)? stopTyping,
@@ -860,6 +1056,7 @@ class _$_StopTyping implements _StopTyping {
   TResult map<TResult extends Object?>({
     required TResult Function(_InstantiateChat value) instantiateChat,
     required TResult Function(_GetChats value) getChats,
+    required TResult Function(_GetPaginatedChats value) getPaginatedChats,
     required TResult Function(_DeleteChat value) deleteChat,
     required TResult Function(_StartTyping value) startTyping,
     required TResult Function(_StopTyping value) stopTyping,
@@ -872,6 +1069,7 @@ class _$_StopTyping implements _StopTyping {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -884,6 +1082,7 @@ class _$_StopTyping implements _StopTyping {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InstantiateChat value)? instantiateChat,
     TResult Function(_GetChats value)? getChats,
+    TResult Function(_GetPaginatedChats value)? getPaginatedChats,
     TResult Function(_DeleteChat value)? deleteChat,
     TResult Function(_StartTyping value)? startTyping,
     TResult Function(_StopTyping value)? stopTyping,
@@ -912,15 +1111,13 @@ class _$ChatStateTearOff {
   const _$ChatStateTearOff();
 
   _ChatState call(
-      {String? error = null,
-      required List<ChatEntity> chats,
-      ChatStatus currentState = ChatStatus.idle,
-      ChatListenableAction action = ChatListenableAction.idle}) {
+      {bool reachedMaximumThreshold = false,
+      ChatListenableAction action = ChatListenableAction.idle,
+      required PagingController<int, ChatModel> paginationController}) {
     return _ChatState(
-      error: error,
-      chats: chats,
-      currentState: currentState,
+      reachedMaximumThreshold: reachedMaximumThreshold,
       action: action,
+      paginationController: paginationController,
     );
   }
 }
@@ -930,10 +1127,10 @@ const $ChatState = _$ChatStateTearOff();
 
 /// @nodoc
 mixin _$ChatState {
-  String? get error => throw _privateConstructorUsedError;
-  List<ChatEntity> get chats => throw _privateConstructorUsedError;
-  ChatStatus get currentState => throw _privateConstructorUsedError;
+  bool get reachedMaximumThreshold => throw _privateConstructorUsedError;
   ChatListenableAction get action => throw _privateConstructorUsedError;
+  PagingController<int, ChatModel> get paginationController =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ChatStateCopyWith<ChatState> get copyWith =>
@@ -945,10 +1142,9 @@ abstract class $ChatStateCopyWith<$Res> {
   factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) then) =
       _$ChatStateCopyWithImpl<$Res>;
   $Res call(
-      {String? error,
-      List<ChatEntity> chats,
-      ChatStatus currentState,
-      ChatListenableAction action});
+      {bool reachedMaximumThreshold,
+      ChatListenableAction action,
+      PagingController<int, ChatModel> paginationController});
 }
 
 /// @nodoc
@@ -961,28 +1157,23 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? chats = freezed,
-    Object? currentState = freezed,
+    Object? reachedMaximumThreshold = freezed,
     Object? action = freezed,
+    Object? paginationController = freezed,
   }) {
     return _then(_value.copyWith(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String?,
-      chats: chats == freezed
-          ? _value.chats
-          : chats // ignore: cast_nullable_to_non_nullable
-              as List<ChatEntity>,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as ChatStatus,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
               as ChatListenableAction,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, ChatModel>,
     ));
   }
 }
@@ -994,10 +1185,9 @@ abstract class _$ChatStateCopyWith<$Res> implements $ChatStateCopyWith<$Res> {
       __$ChatStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? error,
-      List<ChatEntity> chats,
-      ChatStatus currentState,
-      ChatListenableAction action});
+      {bool reachedMaximumThreshold,
+      ChatListenableAction action,
+      PagingController<int, ChatModel> paginationController});
 }
 
 /// @nodoc
@@ -1011,28 +1201,23 @@ class __$ChatStateCopyWithImpl<$Res> extends _$ChatStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? chats = freezed,
-    Object? currentState = freezed,
+    Object? reachedMaximumThreshold = freezed,
     Object? action = freezed,
+    Object? paginationController = freezed,
   }) {
     return _then(_ChatState(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String?,
-      chats: chats == freezed
-          ? _value.chats
-          : chats // ignore: cast_nullable_to_non_nullable
-              as List<ChatEntity>,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as ChatStatus,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
               as ChatListenableAction,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, ChatModel>,
     ));
   }
 }
@@ -1041,26 +1226,22 @@ class __$ChatStateCopyWithImpl<$Res> extends _$ChatStateCopyWithImpl<$Res>
 
 class _$_ChatState implements _ChatState {
   const _$_ChatState(
-      {this.error = null,
-      required this.chats,
-      this.currentState = ChatStatus.idle,
-      this.action = ChatListenableAction.idle});
+      {this.reachedMaximumThreshold = false,
+      this.action = ChatListenableAction.idle,
+      required this.paginationController});
 
   @JsonKey()
   @override
-  final String? error;
-  @override
-  final List<ChatEntity> chats;
-  @JsonKey()
-  @override
-  final ChatStatus currentState;
+  final bool reachedMaximumThreshold;
   @JsonKey()
   @override
   final ChatListenableAction action;
+  @override
+  final PagingController<int, ChatModel> paginationController;
 
   @override
   String toString() {
-    return 'ChatState(error: $error, chats: $chats, currentState: $currentState, action: $action)';
+    return 'ChatState(reachedMaximumThreshold: $reachedMaximumThreshold, action: $action, paginationController: $paginationController)';
   }
 
   @override
@@ -1068,20 +1249,19 @@ class _$_ChatState implements _ChatState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ChatState &&
-            const DeepCollectionEquality().equals(other.error, error) &&
-            const DeepCollectionEquality().equals(other.chats, chats) &&
+            const DeepCollectionEquality().equals(
+                other.reachedMaximumThreshold, reachedMaximumThreshold) &&
+            const DeepCollectionEquality().equals(other.action, action) &&
             const DeepCollectionEquality()
-                .equals(other.currentState, currentState) &&
-            const DeepCollectionEquality().equals(other.action, action));
+                .equals(other.paginationController, paginationController));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(chats),
-      const DeepCollectionEquality().hash(currentState),
-      const DeepCollectionEquality().hash(action));
+      const DeepCollectionEquality().hash(reachedMaximumThreshold),
+      const DeepCollectionEquality().hash(action),
+      const DeepCollectionEquality().hash(paginationController));
 
   @JsonKey(ignore: true)
   @override
@@ -1091,19 +1271,17 @@ class _$_ChatState implements _ChatState {
 
 abstract class _ChatState implements ChatState {
   const factory _ChatState(
-      {String? error,
-      required List<ChatEntity> chats,
-      ChatStatus currentState,
-      ChatListenableAction action}) = _$_ChatState;
+          {bool reachedMaximumThreshold,
+          ChatListenableAction action,
+          required PagingController<int, ChatModel> paginationController}) =
+      _$_ChatState;
 
   @override
-  String? get error;
-  @override
-  List<ChatEntity> get chats;
-  @override
-  ChatStatus get currentState;
+  bool get reachedMaximumThreshold;
   @override
   ChatListenableAction get action;
+  @override
+  PagingController<int, ChatModel> get paginationController;
   @override
   @JsonKey(ignore: true)
   _$ChatStateCopyWith<_ChatState> get copyWith =>

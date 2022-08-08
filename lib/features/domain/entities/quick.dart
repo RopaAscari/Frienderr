@@ -1,29 +1,31 @@
-import 'dart:convert';
+import 'package:frienderr/features/domain/entities/user.dart';
 
-import 'package:flutter/foundation.dart';
-
-class QuickEntity {
-  final String id;
-  final String url;
-  final String audio;
-  final dynamic user;
-  final String caption;
-  final int dateCreated;
-  final int commentCount;
-  final String thumbnail;
-  final List<String> likes;
-  final List<String> shares;
-  QuickEntity({
+class SnapDTO {
+  int saves;
+  String id;
+  int likes;
+  String url;
+  int shares;
+  String audio;
+  UserDTO user;
+  int comments;
+  bool? isLiked;
+  String caption;
+  int dateCreated;
+  String thumbnail;
+  SnapDTO({
+    this.isLiked,
     required this.id,
     required this.url,
     required this.audio,
     required this.user,
-    required this.caption,
-    required this.dateCreated,
-    required this.commentCount,
-    required this.thumbnail,
+    required this.saves,
     required this.likes,
     required this.shares,
+    required this.caption,
+    required this.comments,
+    required this.thumbnail,
+    required this.dateCreated,
   });
 
   Map<String, dynamic> toJson() {
@@ -31,54 +33,31 @@ class QuickEntity {
       'id': id,
       'url': url,
       'audio': audio,
+      'saves': saves,
       'likes': likes,
       'shares': shares,
+      'isLiked': isLiked,
       'caption': caption,
       'user': user.toJson(),
+      'comments': comments,
       'thumbnail': thumbnail,
       'dateCreated': dateCreated,
-      'commentCount': commentCount,
     };
   }
 
-  factory QuickEntity.fromJson(Map<String, dynamic> map) {
-    return QuickEntity(
+  factory SnapDTO.fromJson(Map<String, dynamic> map) {
+    return SnapDTO(
       id: map['id'] ?? '',
       url: map['url'] ?? '',
       audio: map['audio'] ?? '',
-      user: map['user'] ?? null,
       caption: map['caption'] ?? '',
+      likes: map['likes']?.toInt() ?? 0,
       thumbnail: map['thumbnail'] ?? '',
+      saves: map['saves']?.toInt() ?? 0,
+      shares: map['shares']?.toInt() ?? 0,
+      user: UserDTO.fromJson(map['user']),
+      comments: map['comments']?.toInt() ?? 0,
       dateCreated: map['dateCreated']?.toInt() ?? 0,
-      commentCount: map['commentCount']?.toInt() ?? 0,
-      likes: List<String>.from(map['likes'] ?? []),
-      shares: List<String>.from(map['shares'] ?? []),
-    );
-  }
-
-  QuickEntity copyWith({
-    String? id,
-    String? url,
-    String? audio,
-    dynamic? user,
-    String? caption,
-    int? dateCreated,
-    int? commentCount,
-    String? thumbnail,
-    List<String>? likes,
-    List<String>? shares,
-  }) {
-    return QuickEntity(
-      id: id ?? this.id,
-      url: url ?? this.url,
-      audio: audio ?? this.audio,
-      user: user ?? this.user,
-      caption: caption ?? this.caption,
-      dateCreated: dateCreated ?? this.dateCreated,
-      commentCount: commentCount ?? this.commentCount,
-      thumbnail: thumbnail ?? this.thumbnail,
-      likes: likes ?? this.likes,
-      shares: shares ?? this.shares,
     );
   }
 }

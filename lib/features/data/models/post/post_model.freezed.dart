@@ -14,101 +14,142 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-PostModel _$PostModelFromJson(Map<String, dynamic> json) {
-  return _PostModel.fromJson(json);
+Post _$PostFromJson(Map<String, dynamic> json) {
+  return _Post.fromJson(json);
 }
 
 /// @nodoc
-class _$PostModelTearOff {
-  const _$PostModelTearOff();
+class _$PostTearOff {
+  const _$PostTearOff();
 
-  _PostModel call(
+  _Post call(
       {String id = '',
+      int saves = 0,
+      int shares = 0,
+      int comments = 0,
+      int reactions = 0,
       String caption = '',
       int dateCreated = 0,
-      int commentCount = 0,
-      List<String> shares = const [],
-      List<String> likes = const [],
-      List<ContentModel> content = const [],
-      UserModel user = const UserModel(id: '')}) {
-    return _PostModel(
+      bool? isSaved = false,
+      required TimelinePostType type,
+      List<Content> content = const [],
+      PostReaction? userReaction = null,
+      UserModel user = const UserModel(id: ''),
+      List<PostReaction> latestReactions = const []}) {
+    return _Post(
       id: id,
+      saves: saves,
+      shares: shares,
+      comments: comments,
+      reactions: reactions,
       caption: caption,
       dateCreated: dateCreated,
-      commentCount: commentCount,
-      shares: shares,
-      likes: likes,
+      isSaved: isSaved,
+      type: type,
       content: content,
+      userReaction: userReaction,
       user: user,
+      latestReactions: latestReactions,
     );
   }
 
-  PostModel fromJson(Map<String, Object?> json) {
-    return PostModel.fromJson(json);
+  Post fromJson(Map<String, Object?> json) {
+    return Post.fromJson(json);
   }
 }
 
 /// @nodoc
-const $PostModel = _$PostModelTearOff();
+const $Post = _$PostTearOff();
 
 /// @nodoc
-mixin _$PostModel {
+mixin _$Post {
   String get id => throw _privateConstructorUsedError;
+  int get saves => throw _privateConstructorUsedError;
+  int get shares => throw _privateConstructorUsedError;
+  int get comments => throw _privateConstructorUsedError;
+  int get reactions => throw _privateConstructorUsedError;
   String get caption => throw _privateConstructorUsedError;
   int get dateCreated => throw _privateConstructorUsedError;
-  int get commentCount => throw _privateConstructorUsedError;
-  List<String> get shares => throw _privateConstructorUsedError;
-  List<String> get likes => throw _privateConstructorUsedError;
-  List<ContentModel> get content => throw _privateConstructorUsedError;
+  bool? get isSaved => throw _privateConstructorUsedError;
+  TimelinePostType get type => throw _privateConstructorUsedError;
+  List<Content> get content => throw _privateConstructorUsedError;
+  PostReaction? get userReaction => throw _privateConstructorUsedError;
   UserModel get user => throw _privateConstructorUsedError;
+  List<PostReaction> get latestReactions => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $PostModelCopyWith<PostModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  $PostCopyWith<Post> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PostModelCopyWith<$Res> {
-  factory $PostModelCopyWith(PostModel value, $Res Function(PostModel) then) =
-      _$PostModelCopyWithImpl<$Res>;
+abstract class $PostCopyWith<$Res> {
+  factory $PostCopyWith(Post value, $Res Function(Post) then) =
+      _$PostCopyWithImpl<$Res>;
   $Res call(
       {String id,
+      int saves,
+      int shares,
+      int comments,
+      int reactions,
       String caption,
       int dateCreated,
-      int commentCount,
-      List<String> shares,
-      List<String> likes,
-      List<ContentModel> content,
-      UserModel user});
+      bool? isSaved,
+      TimelinePostType type,
+      List<Content> content,
+      PostReaction? userReaction,
+      UserModel user,
+      List<PostReaction> latestReactions});
 
+  $PostReactionCopyWith<$Res>? get userReaction;
   $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
-class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
-  _$PostModelCopyWithImpl(this._value, this._then);
+class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
+  _$PostCopyWithImpl(this._value, this._then);
 
-  final PostModel _value;
+  final Post _value;
   // ignore: unused_field
-  final $Res Function(PostModel) _then;
+  final $Res Function(Post) _then;
 
   @override
   $Res call({
     Object? id = freezed,
+    Object? saves = freezed,
+    Object? shares = freezed,
+    Object? comments = freezed,
+    Object? reactions = freezed,
     Object? caption = freezed,
     Object? dateCreated = freezed,
-    Object? commentCount = freezed,
-    Object? shares = freezed,
-    Object? likes = freezed,
+    Object? isSaved = freezed,
+    Object? type = freezed,
     Object? content = freezed,
+    Object? userReaction = freezed,
     Object? user = freezed,
+    Object? latestReactions = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      saves: saves == freezed
+          ? _value.saves
+          : saves // ignore: cast_nullable_to_non_nullable
+              as int,
+      shares: shares == freezed
+          ? _value.shares
+          : shares // ignore: cast_nullable_to_non_nullable
+              as int,
+      comments: comments == freezed
+          ? _value.comments
+          : comments // ignore: cast_nullable_to_non_nullable
+              as int,
+      reactions: reactions == freezed
+          ? _value.reactions
+          : reactions // ignore: cast_nullable_to_non_nullable
+              as int,
       caption: caption == freezed
           ? _value.caption
           : caption // ignore: cast_nullable_to_non_nullable
@@ -117,27 +158,42 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as int,
-      commentCount: commentCount == freezed
-          ? _value.commentCount
-          : commentCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      shares: shares == freezed
-          ? _value.shares
-          : shares // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      likes: likes == freezed
-          ? _value.likes
-          : likes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      isSaved: isSaved == freezed
+          ? _value.isSaved
+          : isSaved // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as TimelinePostType,
       content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as List<ContentModel>,
+              as List<Content>,
+      userReaction: userReaction == freezed
+          ? _value.userReaction
+          : userReaction // ignore: cast_nullable_to_non_nullable
+              as PostReaction?,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as UserModel,
+      latestReactions: latestReactions == freezed
+          ? _value.latestReactions
+          : latestReactions // ignore: cast_nullable_to_non_nullable
+              as List<PostReaction>,
     ));
+  }
+
+  @override
+  $PostReactionCopyWith<$Res>? get userReaction {
+    if (_value.userReaction == null) {
+      return null;
+    }
+
+    return $PostReactionCopyWith<$Res>(_value.userReaction!, (value) {
+      return _then(_value.copyWith(userReaction: value));
+    });
   }
 
   @override
@@ -149,50 +205,77 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
-  factory _$PostModelCopyWith(
-          _PostModel value, $Res Function(_PostModel) then) =
-      __$PostModelCopyWithImpl<$Res>;
+abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
+  factory _$PostCopyWith(_Post value, $Res Function(_Post) then) =
+      __$PostCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
+      int saves,
+      int shares,
+      int comments,
+      int reactions,
       String caption,
       int dateCreated,
-      int commentCount,
-      List<String> shares,
-      List<String> likes,
-      List<ContentModel> content,
-      UserModel user});
+      bool? isSaved,
+      TimelinePostType type,
+      List<Content> content,
+      PostReaction? userReaction,
+      UserModel user,
+      List<PostReaction> latestReactions});
 
+  @override
+  $PostReactionCopyWith<$Res>? get userReaction;
   @override
   $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
-class __$PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
-    implements _$PostModelCopyWith<$Res> {
-  __$PostModelCopyWithImpl(_PostModel _value, $Res Function(_PostModel) _then)
-      : super(_value, (v) => _then(v as _PostModel));
+class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
+    implements _$PostCopyWith<$Res> {
+  __$PostCopyWithImpl(_Post _value, $Res Function(_Post) _then)
+      : super(_value, (v) => _then(v as _Post));
 
   @override
-  _PostModel get _value => super._value as _PostModel;
+  _Post get _value => super._value as _Post;
 
   @override
   $Res call({
     Object? id = freezed,
+    Object? saves = freezed,
+    Object? shares = freezed,
+    Object? comments = freezed,
+    Object? reactions = freezed,
     Object? caption = freezed,
     Object? dateCreated = freezed,
-    Object? commentCount = freezed,
-    Object? shares = freezed,
-    Object? likes = freezed,
+    Object? isSaved = freezed,
+    Object? type = freezed,
     Object? content = freezed,
+    Object? userReaction = freezed,
     Object? user = freezed,
+    Object? latestReactions = freezed,
   }) {
-    return _then(_PostModel(
+    return _then(_Post(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      saves: saves == freezed
+          ? _value.saves
+          : saves // ignore: cast_nullable_to_non_nullable
+              as int,
+      shares: shares == freezed
+          ? _value.shares
+          : shares // ignore: cast_nullable_to_non_nullable
+              as int,
+      comments: comments == freezed
+          ? _value.comments
+          : comments // ignore: cast_nullable_to_non_nullable
+              as int,
+      reactions: reactions == freezed
+          ? _value.reactions
+          : reactions // ignore: cast_nullable_to_non_nullable
+              as int,
       caption: caption == freezed
           ? _value.caption
           : caption // ignore: cast_nullable_to_non_nullable
@@ -201,49 +284,69 @@ class __$PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as int,
-      commentCount: commentCount == freezed
-          ? _value.commentCount
-          : commentCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      shares: shares == freezed
-          ? _value.shares
-          : shares // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      likes: likes == freezed
-          ? _value.likes
-          : likes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      isSaved: isSaved == freezed
+          ? _value.isSaved
+          : isSaved // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as TimelinePostType,
       content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as List<ContentModel>,
+              as List<Content>,
+      userReaction: userReaction == freezed
+          ? _value.userReaction
+          : userReaction // ignore: cast_nullable_to_non_nullable
+              as PostReaction?,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as UserModel,
+      latestReactions: latestReactions == freezed
+          ? _value.latestReactions
+          : latestReactions // ignore: cast_nullable_to_non_nullable
+              as List<PostReaction>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_PostModel implements _PostModel {
-  const _$_PostModel(
+class _$_Post implements _Post {
+  const _$_Post(
       {this.id = '',
+      this.saves = 0,
+      this.shares = 0,
+      this.comments = 0,
+      this.reactions = 0,
       this.caption = '',
       this.dateCreated = 0,
-      this.commentCount = 0,
-      this.shares = const [],
-      this.likes = const [],
+      this.isSaved = false,
+      required this.type,
       this.content = const [],
-      this.user = const UserModel(id: '')});
+      this.userReaction = null,
+      this.user = const UserModel(id: ''),
+      this.latestReactions = const []});
 
-  factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
-      _$$_PostModelFromJson(json);
+  factory _$_Post.fromJson(Map<String, dynamic> json) => _$$_PostFromJson(json);
 
   @JsonKey()
   @override
   final String id;
+  @JsonKey()
+  @override
+  final int saves;
+  @JsonKey()
+  @override
+  final int shares;
+  @JsonKey()
+  @override
+  final int comments;
+  @JsonKey()
+  @override
+  final int reactions;
   @JsonKey()
   @override
   final String caption;
@@ -252,97 +355,123 @@ class _$_PostModel implements _PostModel {
   final int dateCreated;
   @JsonKey()
   @override
-  final int commentCount;
+  final bool? isSaved;
+  @override
+  final TimelinePostType type;
   @JsonKey()
   @override
-  final List<String> shares;
+  final List<Content> content;
   @JsonKey()
   @override
-  final List<String> likes;
-  @JsonKey()
-  @override
-  final List<ContentModel> content;
+  final PostReaction? userReaction;
   @JsonKey()
   @override
   final UserModel user;
+  @JsonKey()
+  @override
+  final List<PostReaction> latestReactions;
 
   @override
   String toString() {
-    return 'PostModel(id: $id, caption: $caption, dateCreated: $dateCreated, commentCount: $commentCount, shares: $shares, likes: $likes, content: $content, user: $user)';
+    return 'Post(id: $id, saves: $saves, shares: $shares, comments: $comments, reactions: $reactions, caption: $caption, dateCreated: $dateCreated, isSaved: $isSaved, type: $type, content: $content, userReaction: $userReaction, user: $user, latestReactions: $latestReactions)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _PostModel &&
+            other is _Post &&
             const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.saves, saves) &&
+            const DeepCollectionEquality().equals(other.shares, shares) &&
+            const DeepCollectionEquality().equals(other.comments, comments) &&
+            const DeepCollectionEquality().equals(other.reactions, reactions) &&
             const DeepCollectionEquality().equals(other.caption, caption) &&
             const DeepCollectionEquality()
                 .equals(other.dateCreated, dateCreated) &&
-            const DeepCollectionEquality()
-                .equals(other.commentCount, commentCount) &&
-            const DeepCollectionEquality().equals(other.shares, shares) &&
-            const DeepCollectionEquality().equals(other.likes, likes) &&
+            const DeepCollectionEquality().equals(other.isSaved, isSaved) &&
+            const DeepCollectionEquality().equals(other.type, type) &&
             const DeepCollectionEquality().equals(other.content, content) &&
-            const DeepCollectionEquality().equals(other.user, user));
+            const DeepCollectionEquality()
+                .equals(other.userReaction, userReaction) &&
+            const DeepCollectionEquality().equals(other.user, user) &&
+            const DeepCollectionEquality()
+                .equals(other.latestReactions, latestReactions));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(saves),
+      const DeepCollectionEquality().hash(shares),
+      const DeepCollectionEquality().hash(comments),
+      const DeepCollectionEquality().hash(reactions),
       const DeepCollectionEquality().hash(caption),
       const DeepCollectionEquality().hash(dateCreated),
-      const DeepCollectionEquality().hash(commentCount),
-      const DeepCollectionEquality().hash(shares),
-      const DeepCollectionEquality().hash(likes),
+      const DeepCollectionEquality().hash(isSaved),
+      const DeepCollectionEquality().hash(type),
       const DeepCollectionEquality().hash(content),
-      const DeepCollectionEquality().hash(user));
+      const DeepCollectionEquality().hash(userReaction),
+      const DeepCollectionEquality().hash(user),
+      const DeepCollectionEquality().hash(latestReactions));
 
   @JsonKey(ignore: true)
   @override
-  _$PostModelCopyWith<_PostModel> get copyWith =>
-      __$PostModelCopyWithImpl<_PostModel>(this, _$identity);
+  _$PostCopyWith<_Post> get copyWith =>
+      __$PostCopyWithImpl<_Post>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_PostModelToJson(this);
+    return _$$_PostToJson(this);
   }
 }
 
-abstract class _PostModel implements PostModel {
-  const factory _PostModel(
+abstract class _Post implements Post {
+  const factory _Post(
       {String id,
+      int saves,
+      int shares,
+      int comments,
+      int reactions,
       String caption,
       int dateCreated,
-      int commentCount,
-      List<String> shares,
-      List<String> likes,
-      List<ContentModel> content,
-      UserModel user}) = _$_PostModel;
+      bool? isSaved,
+      required TimelinePostType type,
+      List<Content> content,
+      PostReaction? userReaction,
+      UserModel user,
+      List<PostReaction> latestReactions}) = _$_Post;
 
-  factory _PostModel.fromJson(Map<String, dynamic> json) =
-      _$_PostModel.fromJson;
+  factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
   @override
   String get id;
+  @override
+  int get saves;
+  @override
+  int get shares;
+  @override
+  int get comments;
+  @override
+  int get reactions;
   @override
   String get caption;
   @override
   int get dateCreated;
   @override
-  int get commentCount;
+  bool? get isSaved;
   @override
-  List<String> get shares;
+  TimelinePostType get type;
   @override
-  List<String> get likes;
+  List<Content> get content;
   @override
-  List<ContentModel> get content;
+  PostReaction? get userReaction;
   @override
   UserModel get user;
   @override
+  List<PostReaction> get latestReactions;
+  @override
   @JsonKey(ignore: true)
-  _$PostModelCopyWith<_PostModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;
 }

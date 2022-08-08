@@ -1,28 +1,37 @@
 import 'package:dartz/dartz.dart';
-
 import 'package:injectable/injectable.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/core/failure/failure.dart';
 import 'package:frienderr/core/usecase/usecase.dart';
-import 'package:frienderr/features/domain/entities/post.dart';
-import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/entities/comment.dart';
+import 'package:frienderr/features/domain/entities/notification.dart';
+import 'package:frienderr/features/data/models/comment/comment_model.dart';
 import 'package:frienderr/features/domain/repositiories/comment_repository.dart';
 
 @lazySingleton
-class PostCommentUseCase extends UseCase<bool, PostCommentUseCaseParams> {
+class PostCommentUseCase extends UseCase<Comment, PostCommentUseCaseParams> {
   PostCommentUseCase(this.repository);
 
   final ICommentRepository repository;
 
   @override
-  Future<Either<Failure, bool>> call(PostCommentUseCaseParams params) {
-    return repository.postComment(params.comment, params.post, params.user);
+  Future<Either<Failure, Comment>> call(PostCommentUseCaseParams params) {
+    return repository.postComment(
+      type: params.type,
+      comment: params.comment,
+      notification: params.notification,
+    );
   }
 }
 
 class PostCommentUseCaseParams {
-  final UserEntity user;
-  final PostEntity post;
-  final CommentEntity comment;
-  PostCommentUseCaseParams(this.comment, this.post, this.user);
+  final CommentType type;
+  final CommentDTO comment;
+  final NotificationDTO? notification;
+
+  PostCommentUseCaseParams({
+    required this.type,
+    required this.comment,
+    required this.notification,
+  });
 }

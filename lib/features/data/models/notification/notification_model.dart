@@ -9,7 +9,7 @@ part 'notification_model.g.dart';
 part 'notification_model.freezed.dart';
 
 @freezed
-class NotificationModel with _$NotificationModel implements NotificationEntity {
+class NotificationModel with _$NotificationModel {
   const factory NotificationModel({
     required String id,
     required int type,

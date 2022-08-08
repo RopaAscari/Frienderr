@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'package:dartz/dartz.dart';
-import 'package:frienderr/features/domain/entities/user.dart';
+import 'package:automap/automap.dart';
+import 'package:frienderr/core/constants/constants.dart';
+
 import 'package:injectable/injectable.dart';
+import 'package:collection/collection.dart';
 import 'package:frienderr/core/failure/failure.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/domain/entities/chat.dart';
 import 'package:frienderr/features/data/models/chat/chat_model.dart';
 import 'package:frienderr/features/data/providers/chat_provider.dart';
@@ -17,8 +21,7 @@ class ChatRepository implements IChatRepository {
   ChatRepository(this._chatProvider, this._userRemoteDataProvider);
 
   @override
-  Future<Either<Failure, bool>> instantiateChat(
-      {required ChatEntity chat}) async {
+  Future<Either<Failure, bool>> instantiateChat({required ChatDTO chat}) async {
     try {
       return Right(await _chatProvider.instantiateChat(chat: chat));
     } catch (e) {
@@ -47,36 +50,71 @@ class ChatRepository implements IChatRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChatEntity>>> getChats(
+  Future<Either<Failure, List<ChatModel>>> getChats(
       {required String uid}) async {
     try {
-      final QuerySnapshot<Object?> _rawChats =
+      final QuerySnapshot<ChatDTO> chatsQuery =
           await _chatProvider.getChats(uid: uid);
 
-      final QuerySnapshot<Object?> _rawUsers =
-          await _userRemoteDataProvider.getPlatformUsers();
-
-      final List<Map<String, dynamic>> _usersMap =
-          _rawUsers.docs.map((e) => e.data() as Map<String, dynamic>).toList();
-
-      List<Map<String, dynamic>> _chatsMap =
-          _rawChats.docs.map((e) => e.data() as Map<String, dynamic>).toList();
-
-      final _chatEntities = _chatsMap
-          .map((chat) {
-            final participants = chat['participants']
-                .map((participant) => UserEntity.fromJson(
-                    _usersMap.firstWhere((user) => user['id'] == participant)))
-                .toList();
-
-            chat['participants'] = participants;
-
-            return ChatModel.fromJson(chat);
+      List<String> userIds = chatsQuery.docs
+          .map((p) {
+            return p.data().participants.firstWhere((x) => x != uid).toString();
           })
-          .cast<ChatEntity>()
+          .toSet()
+          .cast<String>()
           .toList();
 
-      return Right(_chatEntities);
+      if (userIds.isEmpty) {
+        return const Right([]);
+      }
+
+      userIds.add(uid);
+
+      final QuerySnapshot<UserDTO> userQuery =
+          await _userRemoteDataProvider.getUsersByIds(userIds: userIds);
+
+      final _chatsDto =
+          _handleDTOMapping(chats: chatsQuery, users: userQuery, uid: uid);
+
+      final _chats = AutoMapper.I.map<List<ChatDTO>, List<ChatModel>>(
+        _chatsDto,
+      );
+
+      return Right(_chats);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ChatModel>>> getPaginatedChats(
+      {required String uid, required ChatModel previousChat}) async {
+    try {
+      final QuerySnapshot<ChatDTO> chatsQuery = await _chatProvider
+          .getPaginatedChats(uid: uid, previousChat: previousChat);
+
+      List<String> userIds = chatsQuery.docs
+          .map((p) => p.data().participants.firstWhere((x) => x != uid))
+          .toSet()
+          .cast<String>()
+          .toList();
+      if (userIds.isEmpty) {
+        return const Right([]);
+      }
+
+      userIds.add(uid);
+
+      final QuerySnapshot<UserDTO> userQuery =
+          await _userRemoteDataProvider.getUsersByIds(userIds: userIds);
+
+      final _chatsDto =
+          _handleDTOMapping(chats: chatsQuery, users: userQuery, uid: uid);
+
+      final _chats = AutoMapper.I.map<List<ChatDTO>, List<ChatModel>>(
+        _chatsDto,
+      );
+
+      return Right(_chats);
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }
@@ -99,5 +137,40 @@ class ChatRepository implements IChatRepository {
     } catch (e) {
       return Left(Failure(message: e.toString()));
     }
+  }
+
+  List<ChatDTO> _handleDTOMapping({
+    required String uid,
+    required QuerySnapshot<ChatDTO> chats,
+    required QuerySnapshot<UserDTO> users,
+  }) {
+    List<ChatDTO> result = [];
+
+    for (var document in chats.docs) {
+      List participants = [];
+      ChatDTO post = document.data();
+
+      final user = users.docs.firstWhere((x) => x.data().id == uid).data();
+
+      final participantId = post.participants.firstWhere((x) => x != uid);
+
+      final response = users.docs.firstWhereOrNull((x) {
+        return x.data().id == participantId;
+      })?.data();
+
+      final participant = response ??
+          UserDTO(
+              id: "0000000000",
+              username: "Unknown User",
+              profilePic: Constants.defaultProfilePic);
+
+      participants.addAll([user, participant]);
+
+      post.participants = participants;
+
+      result.add(post);
+    }
+
+    return result;
   }
 }

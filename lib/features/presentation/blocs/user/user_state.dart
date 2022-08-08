@@ -6,7 +6,7 @@ enum UserStatus { Initial, ThemeChanged }
 class UserState with _$UserState {
   factory UserState({
     @Default(UserModel()) UserModel user,
-    @Default([]) List<UserEntity> platformUsers,
+    @Default([]) List<UserDTO> platformUsers,
     @Default(UserStatus.Initial) UserStatus status,
   }) = _UserState;
 }

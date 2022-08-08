@@ -27,6 +27,7 @@ class _$UserModelTearOff {
       String? deviceToken,
       String id = '',
       bool? presence = true,
+      String email = '',
       List<dynamic>? chats = const [],
       String username = '',
       List<dynamic>? following = const [],
@@ -39,6 +40,7 @@ class _$UserModelTearOff {
       deviceToken: deviceToken,
       id: id,
       presence: presence,
+      email: email,
       chats: chats,
       username: username,
       following: following,
@@ -63,6 +65,7 @@ mixin _$UserModel {
   String? get deviceToken => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   bool? get presence => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
   List<dynamic>? get chats => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   List<dynamic>? get following => throw _privateConstructorUsedError;
@@ -86,6 +89,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? deviceToken,
       String id,
       bool? presence,
+      String email,
       List<dynamic>? chats,
       String username,
       List<dynamic>? following,
@@ -111,6 +115,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? deviceToken = freezed,
     Object? id = freezed,
     Object? presence = freezed,
+    Object? email = freezed,
     Object? chats = freezed,
     Object? username = freezed,
     Object? following = freezed,
@@ -136,6 +141,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.presence
           : presence // ignore: cast_nullable_to_non_nullable
               as bool?,
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       chats: chats == freezed
           ? _value.chats
           : chats // ignore: cast_nullable_to_non_nullable
@@ -190,6 +199,7 @@ abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String? deviceToken,
       String id,
       bool? presence,
+      String email,
       List<dynamic>? chats,
       String username,
       List<dynamic>? following,
@@ -217,6 +227,7 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
     Object? deviceToken = freezed,
     Object? id = freezed,
     Object? presence = freezed,
+    Object? email = freezed,
     Object? chats = freezed,
     Object? username = freezed,
     Object? following = freezed,
@@ -242,6 +253,10 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.presence
           : presence // ignore: cast_nullable_to_non_nullable
               as bool?,
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       chats: chats == freezed
           ? _value.chats
           : chats // ignore: cast_nullable_to_non_nullable
@@ -282,6 +297,7 @@ class _$_UserModel implements _UserModel {
       this.deviceToken,
       this.id = '',
       this.presence = true,
+      this.email = '',
       this.chats = const [],
       this.username = '',
       this.following = const [],
@@ -303,6 +319,9 @@ class _$_UserModel implements _UserModel {
   @JsonKey()
   @override
   final bool? presence;
+  @JsonKey()
+  @override
+  final String email;
   @JsonKey()
   @override
   final List<dynamic>? chats;
@@ -327,7 +346,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(status: $status, deviceToken: $deviceToken, id: $id, presence: $presence, chats: $chats, username: $username, following: $following, followers: $followers, location: $location, profilePic: $profilePic, coverPhoto: $coverPhoto)';
+    return 'UserModel(status: $status, deviceToken: $deviceToken, id: $id, presence: $presence, email: $email, chats: $chats, username: $username, following: $following, followers: $followers, location: $location, profilePic: $profilePic, coverPhoto: $coverPhoto)';
   }
 
   @override
@@ -340,6 +359,7 @@ class _$_UserModel implements _UserModel {
                 .equals(other.deviceToken, deviceToken) &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.presence, presence) &&
+            const DeepCollectionEquality().equals(other.email, email) &&
             const DeepCollectionEquality().equals(other.chats, chats) &&
             const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality().equals(other.following, following) &&
@@ -358,6 +378,7 @@ class _$_UserModel implements _UserModel {
       const DeepCollectionEquality().hash(deviceToken),
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(presence),
+      const DeepCollectionEquality().hash(email),
       const DeepCollectionEquality().hash(chats),
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(following),
@@ -383,6 +404,7 @@ abstract class _UserModel implements UserModel {
       String? deviceToken,
       String id,
       bool? presence,
+      String email,
       List<dynamic>? chats,
       String username,
       List<dynamic>? following,
@@ -402,6 +424,8 @@ abstract class _UserModel implements UserModel {
   String get id;
   @override
   bool? get presence;
+  @override
+  String get email;
   @override
   List<dynamic>? get chats;
   @override

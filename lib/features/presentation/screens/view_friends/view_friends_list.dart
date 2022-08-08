@@ -23,8 +23,8 @@ class ViewFriendsListState extends State<ViewFriendsList> {
   String get id => widget.id;
   late final PageController _pageController;
   late int currentPage = isFollowersInitial ? 0 : 1;
-  FollowersBloc get followersBloc => getIt<FollowersBloc>();
-  FollowingBloc get followingBloc => getIt<FollowingBloc>();
+  FollowersBloc get followersBloc => getService<FollowersBloc>();
+  FollowingBloc get followingBloc => getService<FollowingBloc>();
   bool get isFollowersInitial => widget.isFollowersInitial;
 
   RefreshController _refreshController =

@@ -1,26 +1,26 @@
 part of 'authenticate_bloc.dart';
 
 enum AuthenticationStatus {
-  Initial,
-  Authenticated,
-  UnAuthenticated,
-  UnAuthenticationLoading,
+  initial,
+  authenticated,
+  unAuthenticated,
+  unAuthenticationLoading,
   /* CREATE ACCOUNT STATES*/
-  CreateAccountLoading,
-  CreateAccountSuccess,
-  CreateAccountFaliure,
+  createAccountLoading,
+  createAccountSuccess,
+  createAccountFaliure,
   /* LOGIN STATES*/
-  AuthenticationLoading,
-  AuthenticationSuccess,
-  AuthenticationFailure,
+  authenticationLoading,
+  authenticationSuccess,
+  authenticationFailure,
   /* RECOVER ACCOUNT STATES */
-  RecoverAccountLoading,
-  RecoverAccountSuccess,
-  RecoverAccountFailure,
+  recoverAccountLoading,
+  recoverAccountSuccess,
+  recoverAccountFailure,
   /* REGIISTER USERNAME STATES */
-  RegisterUsernameLoading,
-  RegisterUsernameSuccess,
-  RegisterUsernameFailure,
+  registerUsernameLoading,
+  registerUsernameSuccess,
+  registerUsernameFailure,
 }
 
 @freezed
@@ -28,6 +28,6 @@ class AuthenticationState with _$AuthenticationState {
   const factory AuthenticationState({
     UserModel? user,
     @Default('') String error,
-    @Default(AuthenticationStatus.Initial) AuthenticationStatus currentState,
+    @Default(AuthenticationStatus.initial) AuthenticationStatus currentState,
   }) = _AuthenticationState;
 }

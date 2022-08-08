@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.frienderr">
+    package="com.ascari.frienderr">
     
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -18,10 +18,14 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     
    <application
+   
         android:label="Frienderr"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         >
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <meta-data android:name="com.google.android.geo.API_KEY"
           android:value="AIzaSyBcHUH57C39XYwzeB6hTN7dYKEdCrF68Ww"/>
@@ -57,7 +61,7 @@
     <category android:name="android.intent.category.BROWSABLE" />
     <data
       android:scheme="https"
-      android:host="https://frienderr.page.link.com"
+      android:host="https://ascari.page.link.com"
     />
   </intent-filter>
             <intent-filter>

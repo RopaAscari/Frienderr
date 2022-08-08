@@ -5,11 +5,11 @@ part 'metadata_model.g.dart';
 part 'metadata_model.freezed.dart';
 
 @freezed
-class PostMetadataModel with _$PostMetadataModel implements PostMetadata {
-  const factory PostMetadataModel({
+class PostMetadata with _$PostMetadata implements PostMetadataDTO {
+  const factory PostMetadata({
     @Default(null) final String? thumbnail,
-  }) = _PostMetadataModel;
+  }) = _PostMetadata;
 
-  factory PostMetadataModel.fromJson(Map<String, dynamic> json) =>
-      _$PostMetadataModelFromJson(json);
+  factory PostMetadata.fromJson(Map<String, dynamic> json) =>
+      _$PostMetadataFromJson(json);
 }

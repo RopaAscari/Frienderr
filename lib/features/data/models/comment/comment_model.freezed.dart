@@ -14,81 +14,81 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
-  return _CommentModel.fromJson(json);
+Comment _$CommentFromJson(Map<String, dynamic> json) {
+  return _Comment.fromJson(json);
 }
 
 /// @nodoc
-class _$CommentModelTearOff {
-  const _$CommentModelTearOff();
+class _$CommentTearOff {
+  const _$CommentTearOff();
 
-  _CommentModel call(
+  _Comment call(
       {String id = '',
+      required UserModel user,
       String postId = '',
-      dynamic user = const {},
       String comment = '',
       int dateCreated = 0,
       List<String> likes = const []}) {
-    return _CommentModel(
+    return _Comment(
       id: id,
-      postId: postId,
       user: user,
+      postId: postId,
       comment: comment,
       dateCreated: dateCreated,
       likes: likes,
     );
   }
 
-  CommentModel fromJson(Map<String, Object?> json) {
-    return CommentModel.fromJson(json);
+  Comment fromJson(Map<String, Object?> json) {
+    return Comment.fromJson(json);
   }
 }
 
 /// @nodoc
-const $CommentModel = _$CommentModelTearOff();
+const $Comment = _$CommentTearOff();
 
 /// @nodoc
-mixin _$CommentModel {
+mixin _$Comment {
   String get id => throw _privateConstructorUsedError;
+  UserModel get user => throw _privateConstructorUsedError;
   String get postId => throw _privateConstructorUsedError;
-  dynamic get user => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
   int get dateCreated => throw _privateConstructorUsedError;
   List<String> get likes => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CommentModelCopyWith<CommentModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  $CommentCopyWith<Comment> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CommentModelCopyWith<$Res> {
-  factory $CommentModelCopyWith(
-          CommentModel value, $Res Function(CommentModel) then) =
-      _$CommentModelCopyWithImpl<$Res>;
+abstract class $CommentCopyWith<$Res> {
+  factory $CommentCopyWith(Comment value, $Res Function(Comment) then) =
+      _$CommentCopyWithImpl<$Res>;
   $Res call(
       {String id,
+      UserModel user,
       String postId,
-      dynamic user,
       String comment,
       int dateCreated,
       List<String> likes});
+
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
-class _$CommentModelCopyWithImpl<$Res> implements $CommentModelCopyWith<$Res> {
-  _$CommentModelCopyWithImpl(this._value, this._then);
+class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
+  _$CommentCopyWithImpl(this._value, this._then);
 
-  final CommentModel _value;
+  final Comment _value;
   // ignore: unused_field
-  final $Res Function(CommentModel) _then;
+  final $Res Function(Comment) _then;
 
   @override
   $Res call({
     Object? id = freezed,
-    Object? postId = freezed,
     Object? user = freezed,
+    Object? postId = freezed,
     Object? comment = freezed,
     Object? dateCreated = freezed,
     Object? likes = freezed,
@@ -98,14 +98,14 @@ class _$CommentModelCopyWithImpl<$Res> implements $CommentModelCopyWith<$Res> {
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String,
-      user: user == freezed
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
@@ -120,56 +120,63 @@ class _$CommentModelCopyWithImpl<$Res> implements $CommentModelCopyWith<$Res> {
               as List<String>,
     ));
   }
+
+  @override
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$CommentModelCopyWith<$Res>
-    implements $CommentModelCopyWith<$Res> {
-  factory _$CommentModelCopyWith(
-          _CommentModel value, $Res Function(_CommentModel) then) =
-      __$CommentModelCopyWithImpl<$Res>;
+abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
+  factory _$CommentCopyWith(_Comment value, $Res Function(_Comment) then) =
+      __$CommentCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
+      UserModel user,
       String postId,
-      dynamic user,
       String comment,
       int dateCreated,
       List<String> likes});
+
+  @override
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
-class __$CommentModelCopyWithImpl<$Res> extends _$CommentModelCopyWithImpl<$Res>
-    implements _$CommentModelCopyWith<$Res> {
-  __$CommentModelCopyWithImpl(
-      _CommentModel _value, $Res Function(_CommentModel) _then)
-      : super(_value, (v) => _then(v as _CommentModel));
+class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
+    implements _$CommentCopyWith<$Res> {
+  __$CommentCopyWithImpl(_Comment _value, $Res Function(_Comment) _then)
+      : super(_value, (v) => _then(v as _Comment));
 
   @override
-  _CommentModel get _value => super._value as _CommentModel;
+  _Comment get _value => super._value as _Comment;
 
   @override
   $Res call({
     Object? id = freezed,
-    Object? postId = freezed,
     Object? user = freezed,
+    Object? postId = freezed,
     Object? comment = freezed,
     Object? dateCreated = freezed,
     Object? likes = freezed,
   }) {
-    return _then(_CommentModel(
+    return _then(_Comment(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String,
-      user: user == freezed
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
@@ -188,27 +195,26 @@ class __$CommentModelCopyWithImpl<$Res> extends _$CommentModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_CommentModel implements _CommentModel {
-  const _$_CommentModel(
+class _$_Comment implements _Comment {
+  const _$_Comment(
       {this.id = '',
+      required this.user,
       this.postId = '',
-      this.user = const {},
       this.comment = '',
       this.dateCreated = 0,
       this.likes = const []});
 
-  factory _$_CommentModel.fromJson(Map<String, dynamic> json) =>
-      _$$_CommentModelFromJson(json);
+  factory _$_Comment.fromJson(Map<String, dynamic> json) =>
+      _$$_CommentFromJson(json);
 
   @JsonKey()
   @override
   final String id;
+  @override
+  final UserModel user;
   @JsonKey()
   @override
   final String postId;
-  @JsonKey()
-  @override
-  final dynamic user;
   @JsonKey()
   @override
   final String comment;
@@ -221,17 +227,17 @@ class _$_CommentModel implements _CommentModel {
 
   @override
   String toString() {
-    return 'CommentModel(id: $id, postId: $postId, user: $user, comment: $comment, dateCreated: $dateCreated, likes: $likes)';
+    return 'Comment(id: $id, user: $user, postId: $postId, comment: $comment, dateCreated: $dateCreated, likes: $likes)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CommentModel &&
+            other is _Comment &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.postId, postId) &&
             const DeepCollectionEquality().equals(other.user, user) &&
+            const DeepCollectionEquality().equals(other.postId, postId) &&
             const DeepCollectionEquality().equals(other.comment, comment) &&
             const DeepCollectionEquality()
                 .equals(other.dateCreated, dateCreated) &&
@@ -242,41 +248,40 @@ class _$_CommentModel implements _CommentModel {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(postId),
       const DeepCollectionEquality().hash(user),
+      const DeepCollectionEquality().hash(postId),
       const DeepCollectionEquality().hash(comment),
       const DeepCollectionEquality().hash(dateCreated),
       const DeepCollectionEquality().hash(likes));
 
   @JsonKey(ignore: true)
   @override
-  _$CommentModelCopyWith<_CommentModel> get copyWith =>
-      __$CommentModelCopyWithImpl<_CommentModel>(this, _$identity);
+  _$CommentCopyWith<_Comment> get copyWith =>
+      __$CommentCopyWithImpl<_Comment>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CommentModelToJson(this);
+    return _$$_CommentToJson(this);
   }
 }
 
-abstract class _CommentModel implements CommentModel {
-  const factory _CommentModel(
+abstract class _Comment implements Comment {
+  const factory _Comment(
       {String id,
+      required UserModel user,
       String postId,
-      dynamic user,
       String comment,
       int dateCreated,
-      List<String> likes}) = _$_CommentModel;
+      List<String> likes}) = _$_Comment;
 
-  factory _CommentModel.fromJson(Map<String, dynamic> json) =
-      _$_CommentModel.fromJson;
+  factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 
   @override
   String get id;
   @override
-  String get postId;
+  UserModel get user;
   @override
-  dynamic get user;
+  String get postId;
   @override
   String get comment;
   @override
@@ -285,6 +290,6 @@ abstract class _CommentModel implements CommentModel {
   List<String> get likes;
   @override
   @JsonKey(ignore: true)
-  _$CommentModelCopyWith<_CommentModel> get copyWith =>
+  _$CommentCopyWith<_Comment> get copyWith =>
       throw _privateConstructorUsedError;
 }

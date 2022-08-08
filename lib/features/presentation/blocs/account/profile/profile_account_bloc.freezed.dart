@@ -19,12 +19,15 @@ class _$ProfileAccountStateTearOff {
   const _$ProfileAccountStateTearOff();
 
   _ProfileAccountState call(
-      {required UserEntity user,
+      {required UserModel user,
+      int following = 0,
+      int followers = 0,
+      int reactions = 0,
       String? error = null,
-      List<String> following = const [],
-      List<String> followers = const [],
-      List<PostEntity> posts = const [],
-      List<QuickEntity> snaps = const [],
+      List<Post> posts = const [],
+      List<Snap> snaps = const [],
+      bool isFollowing = false,
+      List<UserModel> followersList = const [],
       ProfileAccountPostStatus postState = ProfileAccountPostStatus.idle,
       ProfileAccountSnapStatus snapState = ProfileAccountSnapStatus.idle,
       ProfileAccountUserStatus userState = ProfileAccountUserStatus.idle,
@@ -36,11 +39,14 @@ class _$ProfileAccountStateTearOff {
           ProfileAccountListenableAction.idle}) {
     return _ProfileAccountState(
       user: user,
-      error: error,
       following: following,
       followers: followers,
+      reactions: reactions,
+      error: error,
       posts: posts,
       snaps: snaps,
+      isFollowing: isFollowing,
+      followersList: followersList,
       postState: postState,
       snapState: snapState,
       userState: userState,
@@ -56,12 +62,15 @@ const $ProfileAccountState = _$ProfileAccountStateTearOff();
 
 /// @nodoc
 mixin _$ProfileAccountState {
-  UserEntity get user => throw _privateConstructorUsedError;
+  UserModel get user => throw _privateConstructorUsedError;
+  int get following => throw _privateConstructorUsedError;
+  int get followers => throw _privateConstructorUsedError;
+  int get reactions => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
-  List<String> get following => throw _privateConstructorUsedError;
-  List<String> get followers => throw _privateConstructorUsedError;
-  List<PostEntity> get posts => throw _privateConstructorUsedError;
-  List<QuickEntity> get snaps => throw _privateConstructorUsedError;
+  List<Post> get posts => throw _privateConstructorUsedError;
+  List<Snap> get snaps => throw _privateConstructorUsedError;
+  bool get isFollowing => throw _privateConstructorUsedError;
+  List<UserModel> get followersList => throw _privateConstructorUsedError;
   ProfileAccountPostStatus get postState => throw _privateConstructorUsedError;
   ProfileAccountSnapStatus get snapState => throw _privateConstructorUsedError;
   ProfileAccountUserStatus get userState => throw _privateConstructorUsedError;
@@ -83,18 +92,23 @@ abstract class $ProfileAccountStateCopyWith<$Res> {
           ProfileAccountState value, $Res Function(ProfileAccountState) then) =
       _$ProfileAccountStateCopyWithImpl<$Res>;
   $Res call(
-      {UserEntity user,
+      {UserModel user,
+      int following,
+      int followers,
+      int reactions,
       String? error,
-      List<String> following,
-      List<String> followers,
-      List<PostEntity> posts,
-      List<QuickEntity> snaps,
+      List<Post> posts,
+      List<Snap> snaps,
+      bool isFollowing,
+      List<UserModel> followersList,
       ProfileAccountPostStatus postState,
       ProfileAccountSnapStatus snapState,
       ProfileAccountUserStatus userState,
       ProfileAccountFollowersStatus followerState,
       ProfileAccountFollowingStatus followingState,
       ProfileAccountListenableAction action});
+
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -109,11 +123,14 @@ class _$ProfileAccountStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? user = freezed,
-    Object? error = freezed,
     Object? following = freezed,
     Object? followers = freezed,
+    Object? reactions = freezed,
+    Object? error = freezed,
     Object? posts = freezed,
     Object? snaps = freezed,
+    Object? isFollowing = freezed,
+    Object? followersList = freezed,
     Object? postState = freezed,
     Object? snapState = freezed,
     Object? userState = freezed,
@@ -125,27 +142,39 @@ class _$ProfileAccountStateCopyWithImpl<$Res>
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserEntity,
+              as UserModel,
+      following: following == freezed
+          ? _value.following
+          : following // ignore: cast_nullable_to_non_nullable
+              as int,
+      followers: followers == freezed
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as int,
+      reactions: reactions == freezed
+          ? _value.reactions
+          : reactions // ignore: cast_nullable_to_non_nullable
+              as int,
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      following: following == freezed
-          ? _value.following
-          : following // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      followers: followers == freezed
-          ? _value.followers
-          : followers // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       posts: posts == freezed
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
-              as List<PostEntity>,
+              as List<Post>,
       snaps: snaps == freezed
           ? _value.snaps
           : snaps // ignore: cast_nullable_to_non_nullable
-              as List<QuickEntity>,
+              as List<Snap>,
+      isFollowing: isFollowing == freezed
+          ? _value.isFollowing
+          : isFollowing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      followersList: followersList == freezed
+          ? _value.followersList
+          : followersList // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
       postState: postState == freezed
           ? _value.postState
           : postState // ignore: cast_nullable_to_non_nullable
@@ -172,6 +201,13 @@ class _$ProfileAccountStateCopyWithImpl<$Res>
               as ProfileAccountListenableAction,
     ));
   }
+
+  @override
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -182,18 +218,24 @@ abstract class _$ProfileAccountStateCopyWith<$Res>
       __$ProfileAccountStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {UserEntity user,
+      {UserModel user,
+      int following,
+      int followers,
+      int reactions,
       String? error,
-      List<String> following,
-      List<String> followers,
-      List<PostEntity> posts,
-      List<QuickEntity> snaps,
+      List<Post> posts,
+      List<Snap> snaps,
+      bool isFollowing,
+      List<UserModel> followersList,
       ProfileAccountPostStatus postState,
       ProfileAccountSnapStatus snapState,
       ProfileAccountUserStatus userState,
       ProfileAccountFollowersStatus followerState,
       ProfileAccountFollowingStatus followingState,
       ProfileAccountListenableAction action});
+
+  @override
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -210,11 +252,14 @@ class __$ProfileAccountStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? user = freezed,
-    Object? error = freezed,
     Object? following = freezed,
     Object? followers = freezed,
+    Object? reactions = freezed,
+    Object? error = freezed,
     Object? posts = freezed,
     Object? snaps = freezed,
+    Object? isFollowing = freezed,
+    Object? followersList = freezed,
     Object? postState = freezed,
     Object? snapState = freezed,
     Object? userState = freezed,
@@ -226,27 +271,39 @@ class __$ProfileAccountStateCopyWithImpl<$Res>
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserEntity,
+              as UserModel,
+      following: following == freezed
+          ? _value.following
+          : following // ignore: cast_nullable_to_non_nullable
+              as int,
+      followers: followers == freezed
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as int,
+      reactions: reactions == freezed
+          ? _value.reactions
+          : reactions // ignore: cast_nullable_to_non_nullable
+              as int,
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      following: following == freezed
-          ? _value.following
-          : following // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      followers: followers == freezed
-          ? _value.followers
-          : followers // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       posts: posts == freezed
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
-              as List<PostEntity>,
+              as List<Post>,
       snaps: snaps == freezed
           ? _value.snaps
           : snaps // ignore: cast_nullable_to_non_nullable
-              as List<QuickEntity>,
+              as List<Snap>,
+      isFollowing: isFollowing == freezed
+          ? _value.isFollowing
+          : isFollowing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      followersList: followersList == freezed
+          ? _value.followersList
+          : followersList // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
       postState: postState == freezed
           ? _value.postState
           : postState // ignore: cast_nullable_to_non_nullable
@@ -280,11 +337,14 @@ class __$ProfileAccountStateCopyWithImpl<$Res>
 class _$_ProfileAccountState implements _ProfileAccountState {
   const _$_ProfileAccountState(
       {required this.user,
+      this.following = 0,
+      this.followers = 0,
+      this.reactions = 0,
       this.error = null,
-      this.following = const [],
-      this.followers = const [],
       this.posts = const [],
       this.snaps = const [],
+      this.isFollowing = false,
+      this.followersList = const [],
       this.postState = ProfileAccountPostStatus.idle,
       this.snapState = ProfileAccountSnapStatus.idle,
       this.userState = ProfileAccountUserStatus.idle,
@@ -293,22 +353,31 @@ class _$_ProfileAccountState implements _ProfileAccountState {
       this.action = ProfileAccountListenableAction.idle});
 
   @override
-  final UserEntity user;
+  final UserModel user;
+  @JsonKey()
+  @override
+  final int following;
+  @JsonKey()
+  @override
+  final int followers;
+  @JsonKey()
+  @override
+  final int reactions;
   @JsonKey()
   @override
   final String? error;
   @JsonKey()
   @override
-  final List<String> following;
+  final List<Post> posts;
   @JsonKey()
   @override
-  final List<String> followers;
+  final List<Snap> snaps;
   @JsonKey()
   @override
-  final List<PostEntity> posts;
+  final bool isFollowing;
   @JsonKey()
   @override
-  final List<QuickEntity> snaps;
+  final List<UserModel> followersList;
   @JsonKey()
   @override
   final ProfileAccountPostStatus postState;
@@ -330,7 +399,7 @@ class _$_ProfileAccountState implements _ProfileAccountState {
 
   @override
   String toString() {
-    return 'ProfileAccountState(user: $user, error: $error, following: $following, followers: $followers, posts: $posts, snaps: $snaps, postState: $postState, snapState: $snapState, userState: $userState, followerState: $followerState, followingState: $followingState, action: $action)';
+    return 'ProfileAccountState(user: $user, following: $following, followers: $followers, reactions: $reactions, error: $error, posts: $posts, snaps: $snaps, isFollowing: $isFollowing, followersList: $followersList, postState: $postState, snapState: $snapState, userState: $userState, followerState: $followerState, followingState: $followingState, action: $action)';
   }
 
   @override
@@ -339,11 +408,16 @@ class _$_ProfileAccountState implements _ProfileAccountState {
         (other.runtimeType == runtimeType &&
             other is _ProfileAccountState &&
             const DeepCollectionEquality().equals(other.user, user) &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality().equals(other.following, following) &&
             const DeepCollectionEquality().equals(other.followers, followers) &&
+            const DeepCollectionEquality().equals(other.reactions, reactions) &&
+            const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality().equals(other.posts, posts) &&
             const DeepCollectionEquality().equals(other.snaps, snaps) &&
+            const DeepCollectionEquality()
+                .equals(other.isFollowing, isFollowing) &&
+            const DeepCollectionEquality()
+                .equals(other.followersList, followersList) &&
             const DeepCollectionEquality().equals(other.postState, postState) &&
             const DeepCollectionEquality().equals(other.snapState, snapState) &&
             const DeepCollectionEquality().equals(other.userState, userState) &&
@@ -358,11 +432,14 @@ class _$_ProfileAccountState implements _ProfileAccountState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(user),
-      const DeepCollectionEquality().hash(error),
       const DeepCollectionEquality().hash(following),
       const DeepCollectionEquality().hash(followers),
+      const DeepCollectionEquality().hash(reactions),
+      const DeepCollectionEquality().hash(error),
       const DeepCollectionEquality().hash(posts),
       const DeepCollectionEquality().hash(snaps),
+      const DeepCollectionEquality().hash(isFollowing),
+      const DeepCollectionEquality().hash(followersList),
       const DeepCollectionEquality().hash(postState),
       const DeepCollectionEquality().hash(snapState),
       const DeepCollectionEquality().hash(userState),
@@ -379,12 +456,15 @@ class _$_ProfileAccountState implements _ProfileAccountState {
 
 abstract class _ProfileAccountState implements ProfileAccountState {
   const factory _ProfileAccountState(
-      {required UserEntity user,
+      {required UserModel user,
+      int following,
+      int followers,
+      int reactions,
       String? error,
-      List<String> following,
-      List<String> followers,
-      List<PostEntity> posts,
-      List<QuickEntity> snaps,
+      List<Post> posts,
+      List<Snap> snaps,
+      bool isFollowing,
+      List<UserModel> followersList,
       ProfileAccountPostStatus postState,
       ProfileAccountSnapStatus snapState,
       ProfileAccountUserStatus userState,
@@ -393,17 +473,23 @@ abstract class _ProfileAccountState implements ProfileAccountState {
       ProfileAccountListenableAction action}) = _$_ProfileAccountState;
 
   @override
-  UserEntity get user;
+  UserModel get user;
+  @override
+  int get following;
+  @override
+  int get followers;
+  @override
+  int get reactions;
   @override
   String? get error;
   @override
-  List<String> get following;
+  List<Post> get posts;
   @override
-  List<String> get followers;
+  List<Snap> get snaps;
   @override
-  List<PostEntity> get posts;
+  bool get isFollowing;
   @override
-  List<QuickEntity> get snaps;
+  List<UserModel> get followersList;
   @override
   ProfileAccountPostStatus get postState;
   @override
@@ -455,6 +541,53 @@ class _$ProfileAccountEventTearOff {
       uid: uid,
     );
   }
+
+  _GetReactions getReactions({required String uid}) {
+    return _GetReactions(
+      uid: uid,
+    );
+  }
+
+  _GetFollowingList getFollowingList({required String uid}) {
+    return _GetFollowingList(
+      uid: uid,
+    );
+  }
+
+  _GetFollowingStatus getFollowingStatus({required String uid}) {
+    return _GetFollowingStatus(
+      uid: uid,
+    );
+  }
+
+  _UpdateProfilePhoto updateProfilePhoto(
+      {required File file, required String uid, required UserBloc userBloc}) {
+    return _UpdateProfilePhoto(
+      file: file,
+      uid: uid,
+      userBloc: userBloc,
+    );
+  }
+
+  _UpdateCoverPhoto updateCoverPhoto(
+      {required File file, required String uid, required UserBloc userBloc}) {
+    return _UpdateCoverPhoto(
+      file: file,
+      uid: uid,
+      userBloc: userBloc,
+    );
+  }
+
+  _UpdateProfile updateProfile(
+      {required String uid,
+      required UserBloc userBloc,
+      required UpdateProfile profile}) {
+    return _UpdateProfile(
+      uid: uid,
+      userBloc: userBloc,
+      profile: profile,
+    );
+  }
 }
 
 /// @nodoc
@@ -471,6 +604,16 @@ mixin _$ProfileAccountEvent {
     required TResult Function(String uid) getFollowing,
     required TResult Function(String uid) getPosts,
     required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -480,6 +623,15 @@ mixin _$ProfileAccountEvent {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -489,6 +641,15 @@ mixin _$ProfileAccountEvent {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -499,6 +660,12 @@ mixin _$ProfileAccountEvent {
     required TResult Function(_GetFollowing value) getFollowing,
     required TResult Function(_GetPosts value) getPosts,
     required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -508,6 +675,12 @@ mixin _$ProfileAccountEvent {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -517,6 +690,12 @@ mixin _$ProfileAccountEvent {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -626,6 +805,16 @@ class _$_GetUser implements _GetUser {
     required TResult Function(String uid) getFollowing,
     required TResult Function(String uid) getPosts,
     required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
   }) {
     return getUser(uid);
   }
@@ -638,6 +827,15 @@ class _$_GetUser implements _GetUser {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
   }) {
     return getUser?.call(uid);
   }
@@ -650,6 +848,15 @@ class _$_GetUser implements _GetUser {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
     required TResult orElse(),
   }) {
     if (getUser != null) {
@@ -666,6 +873,12 @@ class _$_GetUser implements _GetUser {
     required TResult Function(_GetFollowing value) getFollowing,
     required TResult Function(_GetPosts value) getPosts,
     required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
   }) {
     return getUser(this);
   }
@@ -678,6 +891,12 @@ class _$_GetUser implements _GetUser {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
   }) {
     return getUser?.call(this);
   }
@@ -690,6 +909,12 @@ class _$_GetUser implements _GetUser {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
     required TResult orElse(),
   }) {
     if (getUser != null) {
@@ -782,6 +1007,16 @@ class _$_GetFollowers implements _GetFollowers {
     required TResult Function(String uid) getFollowing,
     required TResult Function(String uid) getPosts,
     required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
   }) {
     return getFollowers(uid);
   }
@@ -794,6 +1029,15 @@ class _$_GetFollowers implements _GetFollowers {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
   }) {
     return getFollowers?.call(uid);
   }
@@ -806,6 +1050,15 @@ class _$_GetFollowers implements _GetFollowers {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
     required TResult orElse(),
   }) {
     if (getFollowers != null) {
@@ -822,6 +1075,12 @@ class _$_GetFollowers implements _GetFollowers {
     required TResult Function(_GetFollowing value) getFollowing,
     required TResult Function(_GetPosts value) getPosts,
     required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
   }) {
     return getFollowers(this);
   }
@@ -834,6 +1093,12 @@ class _$_GetFollowers implements _GetFollowers {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
   }) {
     return getFollowers?.call(this);
   }
@@ -846,6 +1111,12 @@ class _$_GetFollowers implements _GetFollowers {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
     required TResult orElse(),
   }) {
     if (getFollowers != null) {
@@ -938,6 +1209,16 @@ class _$_GetFollowing implements _GetFollowing {
     required TResult Function(String uid) getFollowing,
     required TResult Function(String uid) getPosts,
     required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
   }) {
     return getFollowing(uid);
   }
@@ -950,6 +1231,15 @@ class _$_GetFollowing implements _GetFollowing {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
   }) {
     return getFollowing?.call(uid);
   }
@@ -962,6 +1252,15 @@ class _$_GetFollowing implements _GetFollowing {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
     required TResult orElse(),
   }) {
     if (getFollowing != null) {
@@ -978,6 +1277,12 @@ class _$_GetFollowing implements _GetFollowing {
     required TResult Function(_GetFollowing value) getFollowing,
     required TResult Function(_GetPosts value) getPosts,
     required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
   }) {
     return getFollowing(this);
   }
@@ -990,6 +1295,12 @@ class _$_GetFollowing implements _GetFollowing {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
   }) {
     return getFollowing?.call(this);
   }
@@ -1002,6 +1313,12 @@ class _$_GetFollowing implements _GetFollowing {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
     required TResult orElse(),
   }) {
     if (getFollowing != null) {
@@ -1092,6 +1409,16 @@ class _$_GetPosts implements _GetPosts {
     required TResult Function(String uid) getFollowing,
     required TResult Function(String uid) getPosts,
     required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
   }) {
     return getPosts(uid);
   }
@@ -1104,6 +1431,15 @@ class _$_GetPosts implements _GetPosts {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
   }) {
     return getPosts?.call(uid);
   }
@@ -1116,6 +1452,15 @@ class _$_GetPosts implements _GetPosts {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
     required TResult orElse(),
   }) {
     if (getPosts != null) {
@@ -1132,6 +1477,12 @@ class _$_GetPosts implements _GetPosts {
     required TResult Function(_GetFollowing value) getFollowing,
     required TResult Function(_GetPosts value) getPosts,
     required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
   }) {
     return getPosts(this);
   }
@@ -1144,6 +1495,12 @@ class _$_GetPosts implements _GetPosts {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
   }) {
     return getPosts?.call(this);
   }
@@ -1156,6 +1513,12 @@ class _$_GetPosts implements _GetPosts {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
     required TResult orElse(),
   }) {
     if (getPosts != null) {
@@ -1246,6 +1609,16 @@ class _$_GetSnaps implements _GetSnaps {
     required TResult Function(String uid) getFollowing,
     required TResult Function(String uid) getPosts,
     required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
   }) {
     return getSnaps(uid);
   }
@@ -1258,6 +1631,15 @@ class _$_GetSnaps implements _GetSnaps {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
   }) {
     return getSnaps?.call(uid);
   }
@@ -1270,6 +1652,15 @@ class _$_GetSnaps implements _GetSnaps {
     TResult Function(String uid)? getFollowing,
     TResult Function(String uid)? getPosts,
     TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
     required TResult orElse(),
   }) {
     if (getSnaps != null) {
@@ -1286,6 +1677,12 @@ class _$_GetSnaps implements _GetSnaps {
     required TResult Function(_GetFollowing value) getFollowing,
     required TResult Function(_GetPosts value) getPosts,
     required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
   }) {
     return getSnaps(this);
   }
@@ -1298,6 +1695,12 @@ class _$_GetSnaps implements _GetSnaps {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
   }) {
     return getSnaps?.call(this);
   }
@@ -1310,6 +1713,12 @@ class _$_GetSnaps implements _GetSnaps {
     TResult Function(_GetFollowing value)? getFollowing,
     TResult Function(_GetPosts value)? getPosts,
     TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
     required TResult orElse(),
   }) {
     if (getSnaps != null) {
@@ -1327,5 +1736,1293 @@ abstract class _GetSnaps implements ProfileAccountEvent {
   @override
   @JsonKey(ignore: true)
   _$GetSnapsCopyWith<_GetSnaps> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetReactionsCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$GetReactionsCopyWith(
+          _GetReactions value, $Res Function(_GetReactions) then) =
+      __$GetReactionsCopyWithImpl<$Res>;
+  @override
+  $Res call({String uid});
+}
+
+/// @nodoc
+class __$GetReactionsCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$GetReactionsCopyWith<$Res> {
+  __$GetReactionsCopyWithImpl(
+      _GetReactions _value, $Res Function(_GetReactions) _then)
+      : super(_value, (v) => _then(v as _GetReactions));
+
+  @override
+  _GetReactions get _value => super._value as _GetReactions;
+
+  @override
+  $Res call({
+    Object? uid = freezed,
+  }) {
+    return _then(_GetReactions(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetReactions implements _GetReactions {
+  const _$_GetReactions({required this.uid});
+
+  @override
+  final String uid;
+
+  @override
+  String toString() {
+    return 'ProfileAccountEvent.getReactions(uid: $uid)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetReactions &&
+            const DeepCollectionEquality().equals(other.uid, uid));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(uid));
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetReactionsCopyWith<_GetReactions> get copyWith =>
+      __$GetReactionsCopyWithImpl<_GetReactions>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String uid) getUser,
+    required TResult Function(String uid) getFollowers,
+    required TResult Function(String uid) getFollowing,
+    required TResult Function(String uid) getPosts,
+    required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
+  }) {
+    return getReactions(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+  }) {
+    return getReactions?.call(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+    required TResult orElse(),
+  }) {
+    if (getReactions != null) {
+      return getReactions(uid);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetUser value) getUser,
+    required TResult Function(_GetFollowers value) getFollowers,
+    required TResult Function(_GetFollowing value) getFollowing,
+    required TResult Function(_GetPosts value) getPosts,
+    required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
+  }) {
+    return getReactions(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+  }) {
+    return getReactions?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+    required TResult orElse(),
+  }) {
+    if (getReactions != null) {
+      return getReactions(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetReactions implements ProfileAccountEvent {
+  const factory _GetReactions({required String uid}) = _$_GetReactions;
+
+  @override
+  String get uid;
+  @override
+  @JsonKey(ignore: true)
+  _$GetReactionsCopyWith<_GetReactions> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetFollowingListCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$GetFollowingListCopyWith(
+          _GetFollowingList value, $Res Function(_GetFollowingList) then) =
+      __$GetFollowingListCopyWithImpl<$Res>;
+  @override
+  $Res call({String uid});
+}
+
+/// @nodoc
+class __$GetFollowingListCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$GetFollowingListCopyWith<$Res> {
+  __$GetFollowingListCopyWithImpl(
+      _GetFollowingList _value, $Res Function(_GetFollowingList) _then)
+      : super(_value, (v) => _then(v as _GetFollowingList));
+
+  @override
+  _GetFollowingList get _value => super._value as _GetFollowingList;
+
+  @override
+  $Res call({
+    Object? uid = freezed,
+  }) {
+    return _then(_GetFollowingList(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetFollowingList implements _GetFollowingList {
+  const _$_GetFollowingList({required this.uid});
+
+  @override
+  final String uid;
+
+  @override
+  String toString() {
+    return 'ProfileAccountEvent.getFollowingList(uid: $uid)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetFollowingList &&
+            const DeepCollectionEquality().equals(other.uid, uid));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(uid));
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetFollowingListCopyWith<_GetFollowingList> get copyWith =>
+      __$GetFollowingListCopyWithImpl<_GetFollowingList>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String uid) getUser,
+    required TResult Function(String uid) getFollowers,
+    required TResult Function(String uid) getFollowing,
+    required TResult Function(String uid) getPosts,
+    required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
+  }) {
+    return getFollowingList(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+  }) {
+    return getFollowingList?.call(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+    required TResult orElse(),
+  }) {
+    if (getFollowingList != null) {
+      return getFollowingList(uid);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetUser value) getUser,
+    required TResult Function(_GetFollowers value) getFollowers,
+    required TResult Function(_GetFollowing value) getFollowing,
+    required TResult Function(_GetPosts value) getPosts,
+    required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
+  }) {
+    return getFollowingList(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+  }) {
+    return getFollowingList?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+    required TResult orElse(),
+  }) {
+    if (getFollowingList != null) {
+      return getFollowingList(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetFollowingList implements ProfileAccountEvent {
+  const factory _GetFollowingList({required String uid}) = _$_GetFollowingList;
+
+  @override
+  String get uid;
+  @override
+  @JsonKey(ignore: true)
+  _$GetFollowingListCopyWith<_GetFollowingList> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$GetFollowingStatusCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$GetFollowingStatusCopyWith(
+          _GetFollowingStatus value, $Res Function(_GetFollowingStatus) then) =
+      __$GetFollowingStatusCopyWithImpl<$Res>;
+  @override
+  $Res call({String uid});
+}
+
+/// @nodoc
+class __$GetFollowingStatusCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$GetFollowingStatusCopyWith<$Res> {
+  __$GetFollowingStatusCopyWithImpl(
+      _GetFollowingStatus _value, $Res Function(_GetFollowingStatus) _then)
+      : super(_value, (v) => _then(v as _GetFollowingStatus));
+
+  @override
+  _GetFollowingStatus get _value => super._value as _GetFollowingStatus;
+
+  @override
+  $Res call({
+    Object? uid = freezed,
+  }) {
+    return _then(_GetFollowingStatus(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetFollowingStatus implements _GetFollowingStatus {
+  const _$_GetFollowingStatus({required this.uid});
+
+  @override
+  final String uid;
+
+  @override
+  String toString() {
+    return 'ProfileAccountEvent.getFollowingStatus(uid: $uid)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetFollowingStatus &&
+            const DeepCollectionEquality().equals(other.uid, uid));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(uid));
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetFollowingStatusCopyWith<_GetFollowingStatus> get copyWith =>
+      __$GetFollowingStatusCopyWithImpl<_GetFollowingStatus>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String uid) getUser,
+    required TResult Function(String uid) getFollowers,
+    required TResult Function(String uid) getFollowing,
+    required TResult Function(String uid) getPosts,
+    required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
+  }) {
+    return getFollowingStatus(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+  }) {
+    return getFollowingStatus?.call(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+    required TResult orElse(),
+  }) {
+    if (getFollowingStatus != null) {
+      return getFollowingStatus(uid);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetUser value) getUser,
+    required TResult Function(_GetFollowers value) getFollowers,
+    required TResult Function(_GetFollowing value) getFollowing,
+    required TResult Function(_GetPosts value) getPosts,
+    required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
+  }) {
+    return getFollowingStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+  }) {
+    return getFollowingStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+    required TResult orElse(),
+  }) {
+    if (getFollowingStatus != null) {
+      return getFollowingStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetFollowingStatus implements ProfileAccountEvent {
+  const factory _GetFollowingStatus({required String uid}) =
+      _$_GetFollowingStatus;
+
+  @override
+  String get uid;
+  @override
+  @JsonKey(ignore: true)
+  _$GetFollowingStatusCopyWith<_GetFollowingStatus> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$UpdateProfilePhotoCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$UpdateProfilePhotoCopyWith(
+          _UpdateProfilePhoto value, $Res Function(_UpdateProfilePhoto) then) =
+      __$UpdateProfilePhotoCopyWithImpl<$Res>;
+  @override
+  $Res call({File file, String uid, UserBloc userBloc});
+}
+
+/// @nodoc
+class __$UpdateProfilePhotoCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$UpdateProfilePhotoCopyWith<$Res> {
+  __$UpdateProfilePhotoCopyWithImpl(
+      _UpdateProfilePhoto _value, $Res Function(_UpdateProfilePhoto) _then)
+      : super(_value, (v) => _then(v as _UpdateProfilePhoto));
+
+  @override
+  _UpdateProfilePhoto get _value => super._value as _UpdateProfilePhoto;
+
+  @override
+  $Res call({
+    Object? file = freezed,
+    Object? uid = freezed,
+    Object? userBloc = freezed,
+  }) {
+    return _then(_UpdateProfilePhoto(
+      file: file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as File,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      userBloc: userBloc == freezed
+          ? _value.userBloc
+          : userBloc // ignore: cast_nullable_to_non_nullable
+              as UserBloc,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_UpdateProfilePhoto implements _UpdateProfilePhoto {
+  const _$_UpdateProfilePhoto(
+      {required this.file, required this.uid, required this.userBloc});
+
+  @override
+  final File file;
+  @override
+  final String uid;
+  @override
+  final UserBloc userBloc;
+
+  @override
+  String toString() {
+    return 'ProfileAccountEvent.updateProfilePhoto(file: $file, uid: $uid, userBloc: $userBloc)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UpdateProfilePhoto &&
+            const DeepCollectionEquality().equals(other.file, file) &&
+            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.userBloc, userBloc));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(file),
+      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(userBloc));
+
+  @JsonKey(ignore: true)
+  @override
+  _$UpdateProfilePhotoCopyWith<_UpdateProfilePhoto> get copyWith =>
+      __$UpdateProfilePhotoCopyWithImpl<_UpdateProfilePhoto>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String uid) getUser,
+    required TResult Function(String uid) getFollowers,
+    required TResult Function(String uid) getFollowing,
+    required TResult Function(String uid) getPosts,
+    required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
+  }) {
+    return updateProfilePhoto(file, uid, userBloc);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+  }) {
+    return updateProfilePhoto?.call(file, uid, userBloc);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+    required TResult orElse(),
+  }) {
+    if (updateProfilePhoto != null) {
+      return updateProfilePhoto(file, uid, userBloc);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetUser value) getUser,
+    required TResult Function(_GetFollowers value) getFollowers,
+    required TResult Function(_GetFollowing value) getFollowing,
+    required TResult Function(_GetPosts value) getPosts,
+    required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
+  }) {
+    return updateProfilePhoto(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+  }) {
+    return updateProfilePhoto?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+    required TResult orElse(),
+  }) {
+    if (updateProfilePhoto != null) {
+      return updateProfilePhoto(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateProfilePhoto implements ProfileAccountEvent {
+  const factory _UpdateProfilePhoto(
+      {required File file,
+      required String uid,
+      required UserBloc userBloc}) = _$_UpdateProfilePhoto;
+
+  File get file;
+  @override
+  String get uid;
+  UserBloc get userBloc;
+  @override
+  @JsonKey(ignore: true)
+  _$UpdateProfilePhotoCopyWith<_UpdateProfilePhoto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$UpdateCoverPhotoCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$UpdateCoverPhotoCopyWith(
+          _UpdateCoverPhoto value, $Res Function(_UpdateCoverPhoto) then) =
+      __$UpdateCoverPhotoCopyWithImpl<$Res>;
+  @override
+  $Res call({File file, String uid, UserBloc userBloc});
+}
+
+/// @nodoc
+class __$UpdateCoverPhotoCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$UpdateCoverPhotoCopyWith<$Res> {
+  __$UpdateCoverPhotoCopyWithImpl(
+      _UpdateCoverPhoto _value, $Res Function(_UpdateCoverPhoto) _then)
+      : super(_value, (v) => _then(v as _UpdateCoverPhoto));
+
+  @override
+  _UpdateCoverPhoto get _value => super._value as _UpdateCoverPhoto;
+
+  @override
+  $Res call({
+    Object? file = freezed,
+    Object? uid = freezed,
+    Object? userBloc = freezed,
+  }) {
+    return _then(_UpdateCoverPhoto(
+      file: file == freezed
+          ? _value.file
+          : file // ignore: cast_nullable_to_non_nullable
+              as File,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      userBloc: userBloc == freezed
+          ? _value.userBloc
+          : userBloc // ignore: cast_nullable_to_non_nullable
+              as UserBloc,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_UpdateCoverPhoto implements _UpdateCoverPhoto {
+  const _$_UpdateCoverPhoto(
+      {required this.file, required this.uid, required this.userBloc});
+
+  @override
+  final File file;
+  @override
+  final String uid;
+  @override
+  final UserBloc userBloc;
+
+  @override
+  String toString() {
+    return 'ProfileAccountEvent.updateCoverPhoto(file: $file, uid: $uid, userBloc: $userBloc)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UpdateCoverPhoto &&
+            const DeepCollectionEquality().equals(other.file, file) &&
+            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.userBloc, userBloc));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(file),
+      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(userBloc));
+
+  @JsonKey(ignore: true)
+  @override
+  _$UpdateCoverPhotoCopyWith<_UpdateCoverPhoto> get copyWith =>
+      __$UpdateCoverPhotoCopyWithImpl<_UpdateCoverPhoto>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String uid) getUser,
+    required TResult Function(String uid) getFollowers,
+    required TResult Function(String uid) getFollowing,
+    required TResult Function(String uid) getPosts,
+    required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
+  }) {
+    return updateCoverPhoto(file, uid, userBloc);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+  }) {
+    return updateCoverPhoto?.call(file, uid, userBloc);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+    required TResult orElse(),
+  }) {
+    if (updateCoverPhoto != null) {
+      return updateCoverPhoto(file, uid, userBloc);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetUser value) getUser,
+    required TResult Function(_GetFollowers value) getFollowers,
+    required TResult Function(_GetFollowing value) getFollowing,
+    required TResult Function(_GetPosts value) getPosts,
+    required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
+  }) {
+    return updateCoverPhoto(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+  }) {
+    return updateCoverPhoto?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+    required TResult orElse(),
+  }) {
+    if (updateCoverPhoto != null) {
+      return updateCoverPhoto(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateCoverPhoto implements ProfileAccountEvent {
+  const factory _UpdateCoverPhoto(
+      {required File file,
+      required String uid,
+      required UserBloc userBloc}) = _$_UpdateCoverPhoto;
+
+  File get file;
+  @override
+  String get uid;
+  UserBloc get userBloc;
+  @override
+  @JsonKey(ignore: true)
+  _$UpdateCoverPhotoCopyWith<_UpdateCoverPhoto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$UpdateProfileCopyWith<$Res>
+    implements $ProfileAccountEventCopyWith<$Res> {
+  factory _$UpdateProfileCopyWith(
+          _UpdateProfile value, $Res Function(_UpdateProfile) then) =
+      __$UpdateProfileCopyWithImpl<$Res>;
+  @override
+  $Res call({String uid, UserBloc userBloc, UpdateProfile profile});
+}
+
+/// @nodoc
+class __$UpdateProfileCopyWithImpl<$Res>
+    extends _$ProfileAccountEventCopyWithImpl<$Res>
+    implements _$UpdateProfileCopyWith<$Res> {
+  __$UpdateProfileCopyWithImpl(
+      _UpdateProfile _value, $Res Function(_UpdateProfile) _then)
+      : super(_value, (v) => _then(v as _UpdateProfile));
+
+  @override
+  _UpdateProfile get _value => super._value as _UpdateProfile;
+
+  @override
+  $Res call({
+    Object? uid = freezed,
+    Object? userBloc = freezed,
+    Object? profile = freezed,
+  }) {
+    return _then(_UpdateProfile(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      userBloc: userBloc == freezed
+          ? _value.userBloc
+          : userBloc // ignore: cast_nullable_to_non_nullable
+              as UserBloc,
+      profile: profile == freezed
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as UpdateProfile,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_UpdateProfile implements _UpdateProfile {
+  const _$_UpdateProfile(
+      {required this.uid, required this.userBloc, required this.profile});
+
+  @override
+  final String uid;
+  @override
+  final UserBloc userBloc;
+  @override
+  final UpdateProfile profile;
+
+  @override
+  String toString() {
+    return 'ProfileAccountEvent.updateProfile(uid: $uid, userBloc: $userBloc, profile: $profile)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UpdateProfile &&
+            const DeepCollectionEquality().equals(other.uid, uid) &&
+            const DeepCollectionEquality().equals(other.userBloc, userBloc) &&
+            const DeepCollectionEquality().equals(other.profile, profile));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(uid),
+      const DeepCollectionEquality().hash(userBloc),
+      const DeepCollectionEquality().hash(profile));
+
+  @JsonKey(ignore: true)
+  @override
+  _$UpdateProfileCopyWith<_UpdateProfile> get copyWith =>
+      __$UpdateProfileCopyWithImpl<_UpdateProfile>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String uid) getUser,
+    required TResult Function(String uid) getFollowers,
+    required TResult Function(String uid) getFollowing,
+    required TResult Function(String uid) getPosts,
+    required TResult Function(String uid) getSnaps,
+    required TResult Function(String uid) getReactions,
+    required TResult Function(String uid) getFollowingList,
+    required TResult Function(String uid) getFollowingStatus,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateProfilePhoto,
+    required TResult Function(File file, String uid, UserBloc userBloc)
+        updateCoverPhoto,
+    required TResult Function(
+            String uid, UserBloc userBloc, UpdateProfile profile)
+        updateProfile,
+  }) {
+    return updateProfile(uid, userBloc, profile);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+  }) {
+    return updateProfile?.call(uid, userBloc, profile);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String uid)? getUser,
+    TResult Function(String uid)? getFollowers,
+    TResult Function(String uid)? getFollowing,
+    TResult Function(String uid)? getPosts,
+    TResult Function(String uid)? getSnaps,
+    TResult Function(String uid)? getReactions,
+    TResult Function(String uid)? getFollowingList,
+    TResult Function(String uid)? getFollowingStatus,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateProfilePhoto,
+    TResult Function(File file, String uid, UserBloc userBloc)?
+        updateCoverPhoto,
+    TResult Function(String uid, UserBloc userBloc, UpdateProfile profile)?
+        updateProfile,
+    required TResult orElse(),
+  }) {
+    if (updateProfile != null) {
+      return updateProfile(uid, userBloc, profile);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetUser value) getUser,
+    required TResult Function(_GetFollowers value) getFollowers,
+    required TResult Function(_GetFollowing value) getFollowing,
+    required TResult Function(_GetPosts value) getPosts,
+    required TResult Function(_GetSnaps value) getSnaps,
+    required TResult Function(_GetReactions value) getReactions,
+    required TResult Function(_GetFollowingList value) getFollowingList,
+    required TResult Function(_GetFollowingStatus value) getFollowingStatus,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+    required TResult Function(_UpdateCoverPhoto value) updateCoverPhoto,
+    required TResult Function(_UpdateProfile value) updateProfile,
+  }) {
+    return updateProfile(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+  }) {
+    return updateProfile?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetUser value)? getUser,
+    TResult Function(_GetFollowers value)? getFollowers,
+    TResult Function(_GetFollowing value)? getFollowing,
+    TResult Function(_GetPosts value)? getPosts,
+    TResult Function(_GetSnaps value)? getSnaps,
+    TResult Function(_GetReactions value)? getReactions,
+    TResult Function(_GetFollowingList value)? getFollowingList,
+    TResult Function(_GetFollowingStatus value)? getFollowingStatus,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    TResult Function(_UpdateCoverPhoto value)? updateCoverPhoto,
+    TResult Function(_UpdateProfile value)? updateProfile,
+    required TResult orElse(),
+  }) {
+    if (updateProfile != null) {
+      return updateProfile(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateProfile implements ProfileAccountEvent {
+  const factory _UpdateProfile(
+      {required String uid,
+      required UserBloc userBloc,
+      required UpdateProfile profile}) = _$_UpdateProfile;
+
+  @override
+  String get uid;
+  UserBloc get userBloc;
+  UpdateProfile get profile;
+  @override
+  @JsonKey(ignore: true)
+  _$UpdateProfileCopyWith<_UpdateProfile> get copyWith =>
       throw _privateConstructorUsedError;
 }

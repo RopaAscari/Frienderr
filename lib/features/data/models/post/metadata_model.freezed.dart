@@ -14,54 +14,53 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-PostMetadataModel _$PostMetadataModelFromJson(Map<String, dynamic> json) {
-  return _PostMetadataModel.fromJson(json);
+PostMetadata _$PostMetadataFromJson(Map<String, dynamic> json) {
+  return _PostMetadata.fromJson(json);
 }
 
 /// @nodoc
-class _$PostMetadataModelTearOff {
-  const _$PostMetadataModelTearOff();
+class _$PostMetadataTearOff {
+  const _$PostMetadataTearOff();
 
-  _PostMetadataModel call({String? thumbnail = null}) {
-    return _PostMetadataModel(
+  _PostMetadata call({String? thumbnail = null}) {
+    return _PostMetadata(
       thumbnail: thumbnail,
     );
   }
 
-  PostMetadataModel fromJson(Map<String, Object?> json) {
-    return PostMetadataModel.fromJson(json);
+  PostMetadata fromJson(Map<String, Object?> json) {
+    return PostMetadata.fromJson(json);
   }
 }
 
 /// @nodoc
-const $PostMetadataModel = _$PostMetadataModelTearOff();
+const $PostMetadata = _$PostMetadataTearOff();
 
 /// @nodoc
-mixin _$PostMetadataModel {
+mixin _$PostMetadata {
   String? get thumbnail => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $PostMetadataModelCopyWith<PostMetadataModel> get copyWith =>
+  $PostMetadataCopyWith<PostMetadata> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PostMetadataModelCopyWith<$Res> {
-  factory $PostMetadataModelCopyWith(
-          PostMetadataModel value, $Res Function(PostMetadataModel) then) =
-      _$PostMetadataModelCopyWithImpl<$Res>;
+abstract class $PostMetadataCopyWith<$Res> {
+  factory $PostMetadataCopyWith(
+          PostMetadata value, $Res Function(PostMetadata) then) =
+      _$PostMetadataCopyWithImpl<$Res>;
   $Res call({String? thumbnail});
 }
 
 /// @nodoc
-class _$PostMetadataModelCopyWithImpl<$Res>
-    implements $PostMetadataModelCopyWith<$Res> {
-  _$PostMetadataModelCopyWithImpl(this._value, this._then);
+class _$PostMetadataCopyWithImpl<$Res> implements $PostMetadataCopyWith<$Res> {
+  _$PostMetadataCopyWithImpl(this._value, this._then);
 
-  final PostMetadataModel _value;
+  final PostMetadata _value;
   // ignore: unused_field
-  final $Res Function(PostMetadataModel) _then;
+  final $Res Function(PostMetadata) _then;
 
   @override
   $Res call({
@@ -77,31 +76,30 @@ class _$PostMetadataModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$PostMetadataModelCopyWith<$Res>
-    implements $PostMetadataModelCopyWith<$Res> {
-  factory _$PostMetadataModelCopyWith(
-          _PostMetadataModel value, $Res Function(_PostMetadataModel) then) =
-      __$PostMetadataModelCopyWithImpl<$Res>;
+abstract class _$PostMetadataCopyWith<$Res>
+    implements $PostMetadataCopyWith<$Res> {
+  factory _$PostMetadataCopyWith(
+          _PostMetadata value, $Res Function(_PostMetadata) then) =
+      __$PostMetadataCopyWithImpl<$Res>;
   @override
   $Res call({String? thumbnail});
 }
 
 /// @nodoc
-class __$PostMetadataModelCopyWithImpl<$Res>
-    extends _$PostMetadataModelCopyWithImpl<$Res>
-    implements _$PostMetadataModelCopyWith<$Res> {
-  __$PostMetadataModelCopyWithImpl(
-      _PostMetadataModel _value, $Res Function(_PostMetadataModel) _then)
-      : super(_value, (v) => _then(v as _PostMetadataModel));
+class __$PostMetadataCopyWithImpl<$Res> extends _$PostMetadataCopyWithImpl<$Res>
+    implements _$PostMetadataCopyWith<$Res> {
+  __$PostMetadataCopyWithImpl(
+      _PostMetadata _value, $Res Function(_PostMetadata) _then)
+      : super(_value, (v) => _then(v as _PostMetadata));
 
   @override
-  _PostMetadataModel get _value => super._value as _PostMetadataModel;
+  _PostMetadata get _value => super._value as _PostMetadata;
 
   @override
   $Res call({
     Object? thumbnail = freezed,
   }) {
-    return _then(_PostMetadataModel(
+    return _then(_PostMetadata(
       thumbnail: thumbnail == freezed
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
@@ -112,11 +110,11 @@ class __$PostMetadataModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PostMetadataModel implements _PostMetadataModel {
-  const _$_PostMetadataModel({this.thumbnail = null});
+class _$_PostMetadata implements _PostMetadata {
+  const _$_PostMetadata({this.thumbnail = null});
 
-  factory _$_PostMetadataModel.fromJson(Map<String, dynamic> json) =>
-      _$$_PostMetadataModelFromJson(json);
+  factory _$_PostMetadata.fromJson(Map<String, dynamic> json) =>
+      _$$_PostMetadataFromJson(json);
 
   @JsonKey()
   @override
@@ -124,14 +122,14 @@ class _$_PostMetadataModel implements _PostMetadataModel {
 
   @override
   String toString() {
-    return 'PostMetadataModel(thumbnail: $thumbnail)';
+    return 'PostMetadata(thumbnail: $thumbnail)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _PostMetadataModel &&
+            other is _PostMetadata &&
             const DeepCollectionEquality().equals(other.thumbnail, thumbnail));
   }
 
@@ -141,25 +139,25 @@ class _$_PostMetadataModel implements _PostMetadataModel {
 
   @JsonKey(ignore: true)
   @override
-  _$PostMetadataModelCopyWith<_PostMetadataModel> get copyWith =>
-      __$PostMetadataModelCopyWithImpl<_PostMetadataModel>(this, _$identity);
+  _$PostMetadataCopyWith<_PostMetadata> get copyWith =>
+      __$PostMetadataCopyWithImpl<_PostMetadata>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_PostMetadataModelToJson(this);
+    return _$$_PostMetadataToJson(this);
   }
 }
 
-abstract class _PostMetadataModel implements PostMetadataModel {
-  const factory _PostMetadataModel({String? thumbnail}) = _$_PostMetadataModel;
+abstract class _PostMetadata implements PostMetadata {
+  const factory _PostMetadata({String? thumbnail}) = _$_PostMetadata;
 
-  factory _PostMetadataModel.fromJson(Map<String, dynamic> json) =
-      _$_PostMetadataModel.fromJson;
+  factory _PostMetadata.fromJson(Map<String, dynamic> json) =
+      _$_PostMetadata.fromJson;
 
   @override
   String? get thumbnail;
   @override
   @JsonKey(ignore: true)
-  _$PostMetadataModelCopyWith<_PostMetadataModel> get copyWith =>
+  _$PostMetadataCopyWith<_PostMetadata> get copyWith =>
       throw _privateConstructorUsedError;
 }

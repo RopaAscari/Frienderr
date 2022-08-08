@@ -4,16 +4,15 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 
 import 'package:frienderr/features/domain/entities/user.dart';
 
-class ChatEntity {
-  final String id;
-  final int dateUpdated;
+class ChatDTO {
+  String id;
+  int dateUpdated;
+  List<String> typing;
+  List<dynamic> participants;
+  Map<String, dynamic>? unread;
+  LatestMessageDTO? latestMessage;
 
-  final List<String> typing;
-  final List<dynamic> participants;
-  final Map<String, dynamic> unread;
-  final LatestMessageEntity? latestMessage;
-
-  ChatEntity({
+  ChatDTO({
     required this.id,
     required this.typing,
     required this.unread,
@@ -38,23 +37,22 @@ class ChatEntity {
     };
   }
 
-  factory ChatEntity.fromJson(Map<String, dynamic> map) {
-    return ChatEntity(
+  factory ChatDTO.fromJson(Map<String, dynamic> map) {
+    return ChatDTO(
       id: map['id'] ?? '',
-      unread: map['unread'],
-      typing: map['typing'],
+      unread: map['unread'] ?? {},
+      typing: map['typing'].cast<String>(),
       dateUpdated: map['dateUpdated']?.toInt() ?? 0,
-      participants: List<UserEntity>.from(
-          map['participants']?.map((x) => UserEntity.fromJson(x))),
-      latestMessage: LatestMessageEntity.fromJson(map['latestMessage']),
+      participants: map['participants'].cast<String>(),
+      latestMessage: LatestMessageDTO.fromJson(map['latestMessage'] ?? {}),
     );
   }
 }
 
-class LatestMessageEntity {
+class LatestMessageDTO {
   final int date;
   final ChatMessage? message;
-  LatestMessageEntity({
+  LatestMessageDTO({
     required this.date,
     required this.message,
   });
@@ -66,18 +64,19 @@ class LatestMessageEntity {
     };
   }
 
-  factory LatestMessageEntity.fromJson(Map<String, dynamic> map) {
-    return LatestMessageEntity(
+  factory LatestMessageDTO.fromJson(Map<String, dynamic> map) {
+    return LatestMessageDTO(
       date: map['date']?.toInt() ?? 0,
-      message: ChatMessage.fromJson(map['message']),
+      message:
+          map['message'] != null ? ChatMessage.fromJson(map['message']) : null,
     );
   }
 }
 
 class MessagingMetaDataEntity {
   final String chatId;
-  final UserEntity chatUser;
-  final UserEntity chatRecipient;
+  final UserDTO chatUser;
+  final UserDTO chatRecipient;
   MessagingMetaDataEntity({
     required this.chatId,
     required this.chatUser,
@@ -95,8 +94,8 @@ class MessagingMetaDataEntity {
   factory MessagingMetaDataEntity.fromJson(Map<String, dynamic> map) {
     return MessagingMetaDataEntity(
       chatId: map['chatId'] ?? '',
-      chatUser: UserEntity.fromJson(map['chatUser']),
-      chatRecipient: UserEntity.fromJson(map['chatRecipient']),
+      chatUser: UserDTO.fromJson(map['chatUser']),
+      chatRecipient: UserDTO.fromJson(map['chatRecipient']),
     );
   }
 }

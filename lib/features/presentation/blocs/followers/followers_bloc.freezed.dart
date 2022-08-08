@@ -698,7 +698,7 @@ class _$FollowersStateTearOff {
 
   _FollowersState call(
       {String error = '',
-      required List<UserEntity> followers,
+      required List<UserDTO> followers,
       FollowerStatus currentState = FollowerStatus.intial,
       FollowerListenableAction action = FollowerListenableAction.idle}) {
     return _FollowersState(
@@ -716,7 +716,7 @@ const $FollowersState = _$FollowersStateTearOff();
 /// @nodoc
 mixin _$FollowersState {
   String get error => throw _privateConstructorUsedError;
-  List<UserEntity> get followers => throw _privateConstructorUsedError;
+  List<UserDTO> get followers => throw _privateConstructorUsedError;
   FollowerStatus get currentState => throw _privateConstructorUsedError;
   FollowerListenableAction get action => throw _privateConstructorUsedError;
 
@@ -732,7 +732,7 @@ abstract class $FollowersStateCopyWith<$Res> {
       _$FollowersStateCopyWithImpl<$Res>;
   $Res call(
       {String error,
-      List<UserEntity> followers,
+      List<UserDTO> followers,
       FollowerStatus currentState,
       FollowerListenableAction action});
 }
@@ -761,7 +761,7 @@ class _$FollowersStateCopyWithImpl<$Res>
       followers: followers == freezed
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
-              as List<UserEntity>,
+              as List<UserDTO>,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
@@ -783,7 +783,7 @@ abstract class _$FollowersStateCopyWith<$Res>
   @override
   $Res call(
       {String error,
-      List<UserEntity> followers,
+      List<UserDTO> followers,
       FollowerStatus currentState,
       FollowerListenableAction action});
 }
@@ -814,7 +814,7 @@ class __$FollowersStateCopyWithImpl<$Res>
       followers: followers == freezed
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
-              as List<UserEntity>,
+              as List<UserDTO>,
       currentState: currentState == freezed
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
@@ -840,7 +840,7 @@ class _$_FollowersState implements _FollowersState {
   @override
   final String error;
   @override
-  final List<UserEntity> followers;
+  final List<UserDTO> followers;
   @JsonKey()
   @override
   final FollowerStatus currentState;
@@ -882,14 +882,14 @@ class _$_FollowersState implements _FollowersState {
 abstract class _FollowersState implements FollowersState {
   const factory _FollowersState(
       {String error,
-      required List<UserEntity> followers,
+      required List<UserDTO> followers,
       FollowerStatus currentState,
       FollowerListenableAction action}) = _$_FollowersState;
 
   @override
   String get error;
   @override
-  List<UserEntity> get followers;
+  List<UserDTO> get followers;
   @override
   FollowerStatus get currentState;
   @override

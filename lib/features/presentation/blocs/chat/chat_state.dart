@@ -22,9 +22,8 @@ enum ChatListenableAction {
 @freezed
 class ChatState with _$ChatState {
   const factory ChatState({
-    @Default(null) String? error,
-    required List<ChatEntity> chats,
-    @Default(ChatStatus.idle) ChatStatus currentState,
+    @Default(false) final bool reachedMaximumThreshold,
     @Default(ChatListenableAction.idle) ChatListenableAction action,
+    required final PagingController<int, ChatModel> paginationController,
   }) = _ChatState;
 }

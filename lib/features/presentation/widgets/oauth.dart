@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/constants/constants.dart';
 
-enum OAuthType { google, apple, facebook }
+enum OAuthType { google, apple, facebook, twitter }
 
 class OAuthItems {
   String icon;
@@ -15,7 +15,7 @@ class OAuthItems {
 
 final oAuthItems = [
   OAuthItems(icon: Constants.googleIcon, type: OAuthType.google),
-  OAuthItems(icon: Constants.appleIconWhite, type: OAuthType.apple),
+  OAuthItems(icon: Constants.twitterIcon, type: OAuthType.twitter),
   OAuthItems(icon: Constants.facebookIcon, type: OAuthType.facebook),
 ];
 

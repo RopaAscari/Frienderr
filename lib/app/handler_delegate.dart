@@ -1,20 +1,31 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frienderr/app/app_delegate.dart';
-import 'package:frienderr/core/constants/constants.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frienderr/core/services/firebase.dart';
 import 'package:frienderr/core/services/services.dart';
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/snap/snap_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/camera/camera_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/animation/animation_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/followers/followers_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/notification/notification_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/account/user/user_account_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
+import 'package:frienderr/features/presentation/blocs/account/profile/profile_account_bloc.dart';
 
 class HandlerDelegate extends StatefulWidget {
   const HandlerDelegate({Key? key}) : super(key: key);
@@ -27,17 +38,29 @@ class HandlerDelegateState extends State<HandlerDelegate>
     with WidgetsBindingObserver {
   late Timer _timerLink;
   Connectivity connectivity = Connectivity();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   late final StreamSubscription<ConnectivityResult> subscription;
-  final FirebaseServices firebaseServices = FirebaseServices();
 
-  final UserBloc _userBloc = getIt<UserBloc>();
-  final ThemeBloc _themeBloc = getIt<ThemeBloc>();
-  AuthenticationBloc get authenticationBloc => getIt<AuthenticationBloc>();
+  final BlocGroup _blocGroup = BlocGroup(
+    userBloc: getService<UserBloc>(),
+    postBloc: getService<PostBloc>(),
+    chatBloc: getService<ChatBloc>(),
+    snapBloc: getService<SnapBloc>(),
+    themeBloc: getService<ThemeBloc>(),
+    storyBloc: getService<StoryBloc>(),
+    cameraBloc: getService<CameraBloc>(),
+    messageBloc: getService<MessageBloc>(),
+    followersBloc: getService<FollowersBloc>(),
+    userAccountBloc: getService<UserAccountBloc>(),
+    notificationBloc: getService<NotificationBloc>(),
+    profileAccountBloc: getService<ProfileAccountBloc>(),
+    authenticationBloc: getService<AuthenticationBloc>(),
+  );
 
   @override
   void initState() {
     super.initState();
-    _initDynamicLinks();
+    _handleDynamicLink();
     _connectivitySubscriber();
     _handlePlatformBrigthnessChange();
     WidgetsBinding.instance.addObserver(this);
@@ -49,31 +72,21 @@ class HandlerDelegateState extends State<HandlerDelegate>
       _timerLink = Timer(
         const Duration(milliseconds: 1000),
         () async {
-          firebaseServices.retrieveDynamicLink(context);
+          _handleDynamicLink();
         },
       );
     }
 
-    final String userId = _userBloc.state.user.id;
+    final user = _auth.currentUser;
 
-    bool isOnline = true;
-    switch (state) {
-      case AppLifecycleState.resumed:
-        isOnline = true;
-        break;
-      case AppLifecycleState.inactive:
-        isOnline = false;
-        FirebaseServices().manageUserPresence(userId, isOnline);
-        break;
-      case AppLifecycleState.paused:
-        isOnline = false;
-        FirebaseServices().manageUserPresence(userId, isOnline);
-        break;
-      case AppLifecycleState.detached:
-        break;
+    if (user == null) {
+      return;
     }
 
-    FirebaseServices().manageUserPresence(userId, isOnline);
+    if (state == AppLifecycleState.resumed) {}
+
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {}
   }
 
   @override
@@ -88,6 +101,10 @@ class HandlerDelegateState extends State<HandlerDelegate>
     subscription.cancel();
   }
 
+  void _handleDynamicLink() {
+    getService<FirebaseServices>().retrieveDynamicLink();
+  }
+
   void _handlePlatformBrigthnessChange() {
     var window = WidgetsBinding.instance.window;
     window.onPlatformBrightnessChanged = () {
@@ -96,7 +113,7 @@ class HandlerDelegateState extends State<HandlerDelegate>
       String theme = brightness == Brightness.dark
           ? Constants.darkTheme
           : Constants.lightTheme;
-      _themeBloc.add(ThemeEvent.changeTheme(theme));
+      //  _blocGroup.themeBloc.add(ThemeEvent.changeTheme(theme));
     };
   }
 
@@ -128,17 +145,18 @@ class HandlerDelegateState extends State<HandlerDelegate>
   List<BlocProvider<Bloc<dynamic, dynamic>>> _combineProviders() {
     return [
       BlocProvider<UserBloc>(
-        create: (context) => getIt<UserBloc>(),
+        create: (context) => getService<UserBloc>(),
       ),
-      BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
-      BlocProvider<ThemeBloc>(create: (context) => getIt<ThemeBloc>()),
-      BlocProvider<MessageBloc>(create: (context) => getIt<MessageBloc>()),
-      BlocProvider<AnimationBloc>(create: (context) => getIt<AnimationBloc>()),
+      BlocProvider<ChatBloc>(create: (context) => getService<ChatBloc>()),
+      BlocProvider<ThemeBloc>(create: (context) => getService<ThemeBloc>()),
+      BlocProvider<MessageBloc>(create: (context) => getService<MessageBloc>()),
+      BlocProvider<AnimationBloc>(
+          create: (context) => getService<AnimationBloc>()),
       BlocProvider<AuthenticationBloc>(
-          create: (context) => getIt<AuthenticationBloc>()),
-      BlocProvider<QuickBloc>(
+          create: (context) => getService<AuthenticationBloc>()),
+      BlocProvider<SnapBloc>(
           create: (context) =>
-              getIt<QuickBloc>()..add(const QuickEvent.initialize())),
+              getService<SnapBloc>()..add(const SnapEvent.initialize())),
     ];
   }
 
@@ -150,48 +168,13 @@ class HandlerDelegateState extends State<HandlerDelegate>
     ];
   }
 
-  Future<String> createDynamicLink() async {
-    var parameters = DynamicLinkParameters(
-      uriPrefix: 'https://frienderr.page.link',
-      link: Uri.parse('https://frienderr.page.link/posts/1'),
-      androidParameters: const AndroidParameters(
-        packageName: "com.exmple.frienderr",
-      ),
-      iosParameters: const IOSParameters(
-        bundleId: "com.exmple.frienderr",
-        // appStoreId: '1498909115',
-      ),
-    );
-
-    final dynamicLink =
-        await FirebaseDynamicLinks.instance.buildShortLink(parameters);
-
-    print(dynamicLink.shortUrl.toString());
-
-    return dynamicLink.shortUrl.toString();
-    ;
-  }
-
-  _initDynamicLinks() async {
-    await Future.delayed(const Duration(seconds: 3));
-
-    final PendingDynamicLinkData? initialLink =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-
-    final Uri? deepLink = initialLink?.link;
-
-    print(deepLink);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: MultiBlocProvider(
           child: MultiBlocListener(
             child: AppDelegate(
-              userBloc: _userBloc,
-              themeBloc: _themeBloc,
-              authenticationBloc: authenticationBloc,
+              blocGroup: _blocGroup,
             ),
             listeners: _combineListeners(),
           ),

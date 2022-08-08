@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:cached_video_player/cached_video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final File video;
@@ -12,12 +12,12 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  late VideoPlayerController _controller;
+  late CachedVideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
   @override
   void initState() {
-    _controller = VideoPlayerController.file(widget.video);
+    _controller = CachedVideoPlayerController.file(widget.video);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     super.initState();
@@ -34,7 +34,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(color: Colors.black),
+        decoration: const BoxDecoration(color: Colors.black),
         child: Scaffold(
           body: FutureBuilder(
             future: _initializeVideoPlayerFuture,
@@ -42,7 +42,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Stack(fit: StackFit.loose, children: [
                   GestureDetector(
-                      child: VideoPlayer(_controller),
+                      child: CachedVideoPlayer(_controller),
                       onTap: () => setState(() {
                             if (_controller.value.isPlaying) {
                               _controller.pause();

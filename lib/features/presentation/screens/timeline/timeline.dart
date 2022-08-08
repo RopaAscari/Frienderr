@@ -1,41 +1,48 @@
-import 'package:camera/camera.dart';
+import 'dart:ui' as ui;
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frienderr/core/enums/enums.dart';
+import 'package:frienderr/core/services/route_builder.dart';
 
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/constants/constants.dart';
-import 'package:frienderr/core/services/services.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
-import 'package:frienderr/features/presentation/screens/camera/camera.dart';
-import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
-import 'package:frienderr/features/presentation/screens/notifications/notifications.dart';
+import 'package:frienderr/features/data/models/user/user_model.dart';
 import 'package:frienderr/features/presentation/widgets/loading.dart';
-import 'package:frienderr/features/presentation/widgets/stories.dart';
-import 'package:frienderr/features/presentation/widgets/timeline.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
+import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
+import 'package:frienderr/features/presentation/screens/timeline/stories.dart';
+import 'package:frienderr/features/presentation/screens/timeline/refresher.dart';
+import 'package:frienderr/features/presentation/screens/discover/find_friends.dart';
+import 'package:frienderr/features/presentation/screens/account/user/user_account.dart';
+import 'package:frienderr/features/presentation/screens/timeline/timeline_posts.dart';
+import 'package:frienderr/features/presentation/screens/timeline/mini_post_section.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
+import 'package:frienderr/features/presentation/screens/timeline/create_post_button.dart';
 
-class Timeline extends StatefulWidget {
+class TimelineScreen extends StatefulWidget {
   final BlocGroup blocGroup;
 
-  const Timeline({Key? key, required this.blocGroup}) : super(key: key);
+  const TimelineScreen({Key? key, required this.blocGroup}) : super(key: key);
 
   @override
-  _TimelineState createState() => _TimelineState();
+  _TimelineScreenState createState() => _TimelineScreenState();
 }
 
-class _TimelineState extends State<Timeline>
-    with AutomaticKeepAliveClientMixin<Timeline> {
+class _TimelineScreenState extends State<TimelineScreen>
+    with AutomaticKeepAliveClientMixin<TimelineScreen> {
   bool showRefresher = false;
   late ScrollController _scrollController;
   BlocGroup get _blocGroup => widget.blocGroup;
-  User? user = FirebaseAuth.instance.currentUser;
+  UserModel get _user => widget.blocGroup.userBloc.state.user;
 
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   @override
   bool get wantKeepAlive => true;
 
@@ -43,6 +50,7 @@ class _TimelineState extends State<Timeline>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
@@ -55,9 +63,10 @@ class _TimelineState extends State<Timeline>
     super.didChangeDependencies();
   }
 
-  Future<Object?> _navigateToNotificationsScreen() async {
-    return await getIt<AppRouter>()
-        .push(NotificationRoute(blocGroup: _blocGroup));
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {}
   }
 
   Future<dynamic> _openDiscover() {
@@ -65,7 +74,25 @@ class _TimelineState extends State<Timeline>
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return FindFriends(blocGroup: _blocGroup);
+        return Container(
+            decoration: const BoxDecoration(color: Colors.black),
+            padding: EdgeInsets.only(
+              top: ui.window.viewPadding.top / ui.window.devicePixelRatio,
+            ),
+            height: MediaQuery.of(context).size.height,
+            child: SafeArea(child: FindFriends(blocGroup: _blocGroup)));
+      },
+    );
+  }
+
+  Future<void> _onRefresh() {
+    return Future.sync(
+      () async {
+        _blocGroup.storyBloc.add(StoryEvent.fetchStories(userId: _user.id));
+        _blocGroup.postBloc
+            .add(const PostEvent.fetchTimelinePosts(shouldLoad: false));
+        await Future.delayed(const Duration(milliseconds: 2000));
+        _refreshController.refreshCompleted();
       },
     );
   }
@@ -75,43 +102,67 @@ class _TimelineState extends State<Timeline>
     super.build(context);
     return SafeArea(
         child: Scaffold(
-            body: Stack(children: [
-      _appBody(),
-      ConditionalRenderDelegate(
-        condition: showRefresher,
-        fallbackWidget: const Center(),
-        renderWidget: _refresherWidget(),
-      )
-    ])));
+      body: Stack(children: [
+        _timelineBody(),
+        Refresher(
+            postBloc: _blocGroup.postBloc, scrollController: _scrollController)
+      ]),
+      floatingActionButton: CreatePostButton(
+        postBloc: _blocGroup.postBloc,
+        scrollController: _scrollController,
+      ),
+    ));
   }
 
-  Widget _appBody() {
-    return CustomScrollView(
-        controller: _scrollController,
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        slivers: <Widget>[
-          SliverAppBar(
-              floating: true,
-              leading: const Center(),
-              title: null,
-              backgroundColor: const Color.fromRGBO(0, 0, 0, 0.85),
-              expandedHeight: 55,
-              flexibleSpace: _appBar()),
-          SliverPadding(
-              padding: const EdgeInsets.all(0),
-              sliver: SliverList(
+  Widget _timelineBody() {
+    return SmartRefresher(
+        enablePullUp: false,
+        enablePullDown: true,
+        onRefresh: _onRefresh,
+        controller: _refreshController,
+        header:
+            CustomHeader(builder: (BuildContext context, RefreshStatus? mode) {
+          if (mode == RefreshStatus.refreshing) {
+            return const Center(child: LoadingIndicator(size: Size(40, 40)));
+          }
+
+          return const Center();
+        }),
+        child: CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            slivers: <Widget>[
+              SliverAppBar(
+                  floating: true,
+                  leading: const Center(),
+                  title: null,
+                  backgroundColor: const Color.fromRGBO(0, 0, 0, 0.85),
+                  expandedHeight: 55,
+                  flexibleSpace: _appBar()),
+              SliverList(
                   delegate: SliverChildListDelegate([
+                _buildStoryHeading(),
                 Stories(
                   blocGroup: _blocGroup,
                 ),
-                // _buildSearchExplorer(),
-                TimelinePosts(
-                  postBloc: _blocGroup.postBloc,
-                  scrollController: _scrollController,
+                _buildTimelineHeading(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: MiniPostSection(
+                    user: _user,
+                    postBloc: _blocGroup.postBloc,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: TimelinePosts(
+                    blocGroup: _blocGroup,
+                    scrollController: _scrollController,
+                  ),
                 )
-              ])))
-        ]);
+              ]))
+            ]));
   }
 
   Widget _appBar() {
@@ -141,31 +192,56 @@ class _TimelineState extends State<Timeline>
             ]));
   }
 
+  Widget _buildStoryHeading() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, right: 8, bottom: 15),
+      child: Text('\nStories',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Montserrat',
+            fontSize: ResponsiveFlutter.of(context).fontSize(2.5),
+          )),
+    );
+  }
+
+  Widget _buildTimelineHeading() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 8),
+      child: Text('\nFeed',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Montserrat',
+            fontSize: ResponsiveFlutter.of(context).fontSize(2.5),
+          )),
+    );
+  }
+
   Widget _appBarIcons() {
     return Row(children: [
       GestureDetector(
           child: SvgPicture.asset(
             Constants.searchIconOutline,
-            width: 27,
-            height: 27,
-            color: Colors.white,
+            width: 23,
+            height: 23,
+            color: Colors.grey[500],
           ),
           onTap: () {
             _openDiscover();
           }),
       GestureDetector(
         child: Padding(
-            padding: const EdgeInsets.only(left: 18),
-            child: Badge(
-                badgeContent: const Text('3'),
-                child: SvgPicture.asset(
-                  Constants.notificationIconOutline,
-                  width: 31,
-                  height: 31,
-                  color: Colors.white,
-                ))),
+            padding: const EdgeInsets.only(left: 10),
+            child: CircleAvatar(
+                radius: 13.5,
+                backgroundImage: CachedNetworkImageProvider(
+                    _blocGroup.userBloc.state.user.profilePic!))),
         onTap: () {
-          _navigateToNotificationsScreen();
+          Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
+              child: UserAccountScreen(
+            blocGroup: _blocGroup,
+            isProfileOwnerViewing: true,
+            profileUserId: _blocGroup.userBloc.state.user.id,
+          )));
         },
       ),
     ]);

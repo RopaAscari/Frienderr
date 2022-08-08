@@ -39,7 +39,7 @@ class MessageRepository implements IMessageRepository {
       final _message = await _messageRemoteDataProvider.sendMessage(
           chatId: chatId, message: message);
 
-      LatestMessageEntity lastMessage = LatestMessageEntity(
+      LatestMessageDTO lastMessage = LatestMessageDTO(
           message: _message, date: DateTime.now().microsecondsSinceEpoch);
       bool _updateLatestMessageSuccess =
           await _chatRemoteDataProvider.updateLastMessage(
@@ -74,7 +74,7 @@ class MessageRepository implements IMessageRepository {
       ChatMessage? _message = await _messageRemoteDataProvider
           .sendMultimediaMessages(chatId: chatId, messages: messages);
 
-      LatestMessageEntity lastMessage = LatestMessageEntity(
+      LatestMessageDTO lastMessage = LatestMessageDTO(
           message: _message, date: DateTime.now().microsecondsSinceEpoch);
       bool _updateLatestMessageSuccess =
           await _chatRemoteDataProvider.updateLastMessage(
@@ -96,7 +96,7 @@ class MessageRepository implements IMessageRepository {
       ChatMessage? _message = await _messageRemoteDataProvider.sendAudioMessage(
           chatId: chatId, message: message, file: file);
 
-      LatestMessageEntity lastMessage = LatestMessageEntity(
+      LatestMessageDTO lastMessage = LatestMessageDTO(
           message: _message, date: DateTime.now().microsecondsSinceEpoch);
       bool _updateLatestMessageSuccess =
           await _chatRemoteDataProvider.updateLastMessage(

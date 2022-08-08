@@ -17,7 +17,7 @@ class SendFollowNotificationUseCase
 }
 
 class SendFollowNotificationParams {
-  final NotificationEntity notification;
+  final NotificationDTO notification;
 
   const SendFollowNotificationParams(this.notification);
 }

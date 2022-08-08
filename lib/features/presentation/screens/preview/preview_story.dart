@@ -1,27 +1,17 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:frienderr/core/data/filters.dart';
-import 'package:frienderr/core/injection/injection.dart';
-import 'package:frienderr/core/services/filter.dart';
-import 'package:frienderr/features/presentation/navigation/app_router.dart';
-import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
-import 'package:frienderr/features/presentation/widgets/fliter_selector.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frienderr/core/data/filters.dart';
+import 'package:frienderr/core/services/filter.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/core/services/helpers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
-import 'package:frienderr/features/presentation/widgets/video_screen.dart';
+import 'package:frienderr/features/presentation/navigation/app_router.dart';
+import 'package:frienderr/features/presentation/widgets/fliter_selector.dart';
 import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
-import 'package:frienderr/features/presentation/navigation/tab_navigation.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 final helpers = new Helpers();
 
@@ -72,28 +62,14 @@ class _PreviewStoryScreenState extends State<PreviewStoryScreen> {
   }
 
   void _determineStoryAction() async {
-    getIt<AppRouter>().context.showLoadingIndicator();
-    final _assets =
-        await Stream.fromIterable(_selectedAssets).asyncMap((asset) async {
-      final _filteredAsset = await FilterService.applyFilter(
-          asset.asset, currentFilter, BlendMode.color);
-      return GalleryAsset(
-        id: asset.id,
-        type: asset.type,
-        asset: _filteredAsset,
-        duration: asset.duration,
-        thumbnail: asset.thumbnail,
-      );
-    }).toList();
-
-    if (_storyBloc.state.stories.userStory.doesUserHaveStories) {
-      _storyBloc
-          .add(StoryEvent.updateStory(userId: _user!.uid, assets: _assets));
+    if (_storyBloc.state.userStory.doesUserHaveStories) {
+      _storyBloc.add(
+          StoryEvent.updateStory(userId: _user!.uid, assets: _selectedAssets));
     } else {
-      _storyBloc.add(StoryEvent.createStory(assets: _assets));
+      _storyBloc.add(StoryEvent.createStory(assets: _selectedAssets));
     }
 
-    getIt<AppRouter>().context.dismissLoadingIndicator();
+    getService<AppRouter>().context.dismissLoadingIndicator();
   }
 
   @override
@@ -106,7 +82,7 @@ class _PreviewStoryScreenState extends State<PreviewStoryScreen> {
         _postButton(),
         _backButton(),
         _storyImageList(),
-        _filterSelector()
+        // _filterSelector()
       ],
     )));
   }

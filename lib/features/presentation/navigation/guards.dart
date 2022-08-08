@@ -7,11 +7,12 @@ class ValidateAuthentication extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
     final AuthenticationStatus status =
-        getIt<AuthenticationBloc>().state.currentState;
+        getService<AuthenticationBloc>().state.currentState;
 
-    if (status == AuthenticationStatus.Authenticated)
+    if (status == AuthenticationStatus.authenticated) {
       resolver.next(true);
-    else
-      router.push(UnauthenticatedRoute());
+    } else {
+      router.push(const UnauthenticatedRoute());
+    }
   }
 }

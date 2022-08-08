@@ -13,16 +13,16 @@ extension ContextEx on BuildContext {
     late Color backgroundColor;
     switch (type) {
       case SnackBarType.idle:
-        backgroundColor = Color.fromARGB(255, 26, 24, 24);
+        backgroundColor = const Color.fromARGB(255, 26, 24, 24);
         break;
       case SnackBarType.success:
-        backgroundColor = Color.fromARGB(255, 8, 158, 40);
+        backgroundColor = const Color.fromARGB(255, 8, 158, 40);
         break;
       case SnackBarType.error:
-        backgroundColor = Color.fromARGB(255, 194, 32, 20);
+        backgroundColor = const Color.fromARGB(255, 194, 32, 20);
         break;
       case SnackBarType.warning:
-        backgroundColor = Color.fromARGB(255, 206, 194, 26);
+        backgroundColor = const Color.fromARGB(255, 206, 194, 26);
         break;
       default:
         break;
@@ -57,7 +57,7 @@ extension ContextEx on BuildContext {
                 contentPadding:
                     const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 24.0),
                 backgroundColor: Colors.transparent,
-                shape:  RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 content: Builder(builder: (context) {
                   return const LoadingIndicator(

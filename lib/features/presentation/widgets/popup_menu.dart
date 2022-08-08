@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 
 class PopupMenuContainer<T> extends StatefulWidget {
@@ -20,33 +21,38 @@ class PopupMenuContainer<T> extends StatefulWidget {
 class PopupMenuContainerState<T> extends State<PopupMenuContainer<T>> {
   final Late<Offset> _tapDownPosition = Late();
 
+  void _handlePress() async {
+    final RenderBox? overlay =
+        Overlay.of(context)?.context.findRenderObject() as RenderBox;
+
+    if (overlay == null) {
+      return;
+    }
+
+    T? value = await showMenu<T>(
+      context: context,
+      items: widget.items,
+      color: HexColor('#141212'),
+      constraints: const BoxConstraints(minWidth: 300),
+      position: RelativeRect.fromLTRB(
+        _tapDownPosition.value.dx,
+        _tapDownPosition.value.dy,
+        overlay.size.width - _tapDownPosition.value.dx,
+        overlay.size.height - _tapDownPosition.value.dy,
+      ),
+    );
+
+    widget.onItemSelected(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTapDown: (TapDownDetails details) {
           _tapDownPosition.value = details.globalPosition;
         },
-        onLongPress: () async {
-          final RenderBox? overlay =
-              Overlay.of(context)?.context.findRenderObject() as RenderBox;
-
-          if (overlay == null) {
-            return;
-          }
-
-          T? value = await showMenu<T>(
-            context: context,
-            items: widget.items,
-            position: RelativeRect.fromLTRB(
-              _tapDownPosition.value.dx,
-              _tapDownPosition.value.dy,
-              overlay.size.width - _tapDownPosition.value.dx,
-              overlay.size.height - _tapDownPosition.value.dy,
-            ),
-          );
-
-          widget.onItemSelected(value);
-        },
+        onTap: _handlePress,
+        onLongPress: _handlePress,
         child: widget.child);
   }
 }

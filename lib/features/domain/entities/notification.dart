@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:frienderr/features/domain/entities/user.dart';
 
-class NotificationEntity {
-  final String id;
-  final int type;
-  final int mediaType;
-  final int dateCreated;
-  final UserEntity user;
-  final String recipientId;
-  final PartialPostEntity post;
-  final NotificationMetadataEntity metadata;
-  NotificationEntity({
+class NotificationDTO {
+  String id;
+  int type;
+  int mediaType;
+  int dateCreated;
+  UserDTO user;
+  String recipientId;
+  PartialPostDTO post;
+  NotificationMetadataDTO metadata;
+  NotificationDTO({
     required this.id,
     required this.type,
     required this.user,
@@ -35,24 +35,24 @@ class NotificationEntity {
     };
   }
 
-  factory NotificationEntity.fromJson(Map<String, dynamic> map) {
-    return NotificationEntity(
+  factory NotificationDTO.fromJson(Map<String, dynamic> map) {
+    return NotificationDTO(
       id: map['id'] ?? '',
       type: map['type'] ?? '',
       mediaType: map['mediaType'] ?? '',
-      user: UserEntity.fromJson(map['user']),
+      user: UserDTO.fromJson(map['user']),
       recipientId: map['recipientId'] ?? '',
-      post: PartialPostEntity.fromJson(map['post']),
+      post: PartialPostDTO.fromJson(map['post']),
       dateCreated: map['dateCreated']?.toInt() ?? 0,
-      metadata: NotificationMetadataEntity.fromJson(map['metadata']),
+      metadata: NotificationMetadataDTO.fromJson(map['metadata']),
     );
   }
 }
 
-class PartialPostEntity {
+class PartialPostDTO {
   final String id;
   final String display;
-  PartialPostEntity({
+  PartialPostDTO({
     required this.id,
     required this.display,
   });
@@ -64,17 +64,17 @@ class PartialPostEntity {
     };
   }
 
-  factory PartialPostEntity.fromJson(Map<String, dynamic> map) {
-    return PartialPostEntity(
+  factory PartialPostDTO.fromJson(Map<String, dynamic> map) {
+    return PartialPostDTO(
       id: map['id'] ?? '',
       display: map['display'] ?? '',
     );
   }
 }
 
-class NotificationMetadataEntity {
+class NotificationMetadataDTO {
   final String? comment;
-  NotificationMetadataEntity({
+  NotificationMetadataDTO({
     this.comment,
   });
 
@@ -84,8 +84,8 @@ class NotificationMetadataEntity {
     };
   }
 
-  factory NotificationMetadataEntity.fromJson(Map<String, dynamic> map) {
-    return NotificationMetadataEntity(
+  factory NotificationMetadataDTO.fromJson(Map<String, dynamic> map) {
+    return NotificationMetadataDTO(
       comment: map['comment'],
     );
   }

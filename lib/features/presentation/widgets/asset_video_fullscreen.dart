@@ -1,18 +1,24 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:photo_manager/photo_manager.dart';
+import 'package:cached_video_player/cached_video_player.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class AssetVideoFullscreen extends StatefulWidget {
-  final Future<File?> file;
-  const AssetVideoFullscreen({Key? key, required this.file}) : super(key: key);
+  final File file;
+  final Function(List<GalleryAsset>) onSelected;
+  const AssetVideoFullscreen(
+      {Key? key, required this.file, required this.onSelected})
+      : super(key: key);
 
   @override
   State<AssetVideoFullscreen> createState() => _AssetVideoFullscreenState();
 }
 
 class _AssetVideoFullscreenState extends State<AssetVideoFullscreen> {
-  late VideoPlayerController _controller;
+  late CachedVideoPlayerController _controller;
 
   @override
   initState() {
@@ -21,8 +27,7 @@ class _AssetVideoFullscreenState extends State<AssetVideoFullscreen> {
   }
 
   Future<void> _initializeVideoPlayer() async {
-    final File? file = await widget.file;
-    _controller = VideoPlayerController.file(file as File)
+    _controller = CachedVideoPlayerController.file(widget.file)
       ..initialize().then((_) {
         setState(() {});
         _controller.play();
@@ -38,28 +43,66 @@ class _AssetVideoFullscreenState extends State<AssetVideoFullscreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onPanUpdate: (details) {
-          if (details.delta.dy > 0) {
-            Navigator.pop(context);
-          }
+    return SafeArea(
+      child: Scaffold(
+        body: GestureDetector(
+            onPanUpdate: (details) {
+              if (details.delta.dy > 0) {
+                Navigator.pop(context);
+              }
+            },
+            child: ConditionalRenderDelegate(
+                condition: _controller.value.isInitialized,
+                renderWidget: LayoutBuilder(
+                    builder: (context, constraints) => AspectRatio(
+                          aspectRatio:
+                              constraints.maxWidth / constraints.maxHeight,
+                          child: Stack(children: [
+                            CachedVideoPlayer(_controller),
+                            _headerWidget()
+                          ]),
+                        )),
+                fallbackWidget:
+                    const Center(child: CircularProgressIndicator()))),
+      ),
+    );
+  }
+
+  Widget _buildNextButton() {
+    return MaterialButton(
+        height: 31,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            side: const BorderSide(color: Colors.white)),
+        onPressed: () {
+          widget.onSelected([
+            GalleryAsset(
+              id: '0',
+              asset: widget.file,
+              type: AssetType.video,
+            )
+          ]);
         },
-        child: ConditionalRenderDelegate(
-            condition: _controller.value.isInitialized,
-            renderWidget: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child:
-                  Stack(children: [VideoPlayer(_controller), _headerWidget()]),
-            ),
-            fallbackWidget: Center(child: CircularProgressIndicator())));
+        child: Text('Next',
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.45))));
   }
 
   Widget _headerWidget() {
     return Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 20),
-      child: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 25)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_ios,
+                  color: Colors.white, size: 25)),
+          _buildNextButton()
+        ],
+      ),
     );
   }
 }

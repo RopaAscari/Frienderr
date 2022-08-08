@@ -5,20 +5,17 @@ import 'package:frienderr/core/usecase/usecase.dart';
 import 'package:frienderr/features/domain/repositiories/auth_repository.dart';
 
 @lazySingleton
-class SignOutUseCase extends UseCase<void, SignOutParams> {
+class SignOutUseCase extends UseCase<bool, SignOutParams> {
   SignOutUseCase(this.repository);
 
   final IAuthRepository repository;
 
   @override
-  Future<Either<Failure, void>> call(SignOutParams params) {
-    return repository.signOut(
-        onComplete: params.onComplete, onFailure: params.onFailure);
+  Future<Either<Failure, bool>> call(SignOutParams params) {
+    return repository.signOut();
   }
 }
 
 class SignOutParams {
-  Function onComplete;
-  Function onFailure;
-  SignOutParams({required this.onComplete, required this.onFailure});
+  SignOutParams();
 }

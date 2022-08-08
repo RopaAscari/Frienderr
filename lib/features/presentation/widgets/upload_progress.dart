@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 
 class UploadProgress extends StatefulWidget {
-  final File file;
-  const UploadProgress({Key? key, required this.file}) : super(key: key);
+  final File? file;
+  final Widget? leading;
+  const UploadProgress({Key? key, this.file, this.leading}) : super(key: key);
 
   @override
   State<UploadProgress> createState() => _UploadProgressState();
@@ -17,24 +19,19 @@ class _UploadProgressState extends State<UploadProgress> {
       child: Padding(
           child: ListTile(
             dense: true,
-            leading: ClipRRect(
-              child: Image.file(
-                widget.file,
-                width: 40,
-                height: 40,
-              ),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            title: Text('Uploading', style: TextStyle(color: Colors.white)),
+            leading: widget.leading,
+            title:
+                const Text('Uploading', style: TextStyle(color: Colors.white)),
             subtitle: LinearProgressIndicator(
               value: 0.5,
               color: Colors.amber[600],
               backgroundColor: Colors.grey[800],
             ),
-            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-            contentPadding: EdgeInsets.symmetric(horizontal: 0.0, vertical: -4),
+            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 0.0, vertical: -4),
           ),
-          padding: EdgeInsets.only(bottom: 5)),
+          padding: const EdgeInsets.only(bottom: 5)),
     );
   }
 }

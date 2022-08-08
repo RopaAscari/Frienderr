@@ -42,7 +42,10 @@ class _AppButtonState extends State<AppButton> {
           colors: widget.isLoading
               ? [Colors.black, Colors.black]
               : widget.disabled
-                  ? [Colors.grey[500]!, Colors.grey[500]!]
+                  ? [
+                      Colors.grey[200]!.withOpacity(0.7),
+                      Colors.grey[200]!.withOpacity(0.7)
+                    ]
                   : [HexColor('#E09810'), HexColor('#FEDA43')],
           stops: const [0.0, 1.0],
         ),
@@ -67,7 +70,7 @@ class _AppButtonState extends State<AppButton> {
               style: TextStyle(
                   // color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: ResponsiveFlutter.of(context).fontSize(1.55)),
+                  fontSize: ResponsiveFlutter.of(context).fontSize(1.3)),
             )),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),

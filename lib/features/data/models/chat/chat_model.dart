@@ -6,7 +6,7 @@ part 'chat_model.g.dart';
 part 'chat_model.freezed.dart';
 
 @freezed
-class ChatModel with _$ChatModel implements ChatEntity {
+class ChatModel with _$ChatModel {
   const factory ChatModel({
     required final String id,
     required final int dateUpdated,

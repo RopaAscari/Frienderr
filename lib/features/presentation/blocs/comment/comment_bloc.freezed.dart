@@ -18,33 +18,44 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$CommentEventTearOff {
   const _$CommentEventTearOff();
 
-  _GetComments getComments({required String postId}) {
+  _GetComments getComments(
+      {required String postId, required CommentType type}) {
     return _GetComments(
       postId: postId,
+      type: type,
     );
   }
 
-  _GetPaginatedComments getPaginatedComments({required String postId}) {
+  _GetPaginatedComments getPaginatedComments(
+      {required String postId, required CommentType type}) {
     return _GetPaginatedComments(
       postId: postId,
+      type: type,
+    );
+  }
+
+  _DeleteComment deleteComment(
+      {required String id, required String postId, required CommentType type}) {
+    return _DeleteComment(
+      id: id,
+      postId: postId,
+      type: type,
     );
   }
 
   _PostComment postComment(
-      {required UserEntity user,
-      required PostEntity post,
-      required CommentEntity comment}) {
+      {required CommentType type,
+      required CommentDTO comment,
+      required NotificationDTO? notification}) {
     return _PostComment(
-      user: user,
-      post: post,
+      type: type,
       comment: comment,
+      notification: notification,
     );
   }
 
-  _LikeComment likeComemnt(
-      {required CommentEntity comment, required String postId}) {
+  _LikeComment likeComment({required String postId}) {
     return _LikeComment(
-      comment: comment,
       postId: postId,
     );
   }
@@ -57,30 +68,37 @@ const $CommentEvent = _$CommentEventTearOff();
 mixin _$CommentEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String postId) getComments,
-    required TResult Function(String postId) getPaginatedComments,
+    required TResult Function(String postId, CommentType type) getComments,
+    required TResult Function(String postId, CommentType type)
+        getPaginatedComments,
+    required TResult Function(String id, String postId, CommentType type)
+        deleteComment,
     required TResult Function(
-            UserEntity user, PostEntity post, CommentEntity comment)
+            CommentType type, CommentDTO comment, NotificationDTO? notification)
         postComment,
-    required TResult Function(CommentEntity comment, String postId) likeComemnt,
+    required TResult Function(String postId) likeComment,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -88,24 +106,27 @@ mixin _$CommentEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetComments value) getComments,
     required TResult Function(_GetPaginatedComments value) getPaginatedComments,
+    required TResult Function(_DeleteComment value) deleteComment,
     required TResult Function(_PostComment value) postComment,
-    required TResult Function(_LikeComment value) likeComemnt,
+    required TResult Function(_LikeComment value) likeComment,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -132,7 +153,7 @@ abstract class _$GetCommentsCopyWith<$Res> {
   factory _$GetCommentsCopyWith(
           _GetComments value, $Res Function(_GetComments) then) =
       __$GetCommentsCopyWithImpl<$Res>;
-  $Res call({String postId});
+  $Res call({String postId, CommentType type});
 }
 
 /// @nodoc
@@ -148,12 +169,17 @@ class __$GetCommentsCopyWithImpl<$Res> extends _$CommentEventCopyWithImpl<$Res>
   @override
   $Res call({
     Object? postId = freezed,
+    Object? type = freezed,
   }) {
     return _then(_GetComments(
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CommentType,
     ));
   }
 }
@@ -161,14 +187,16 @@ class __$GetCommentsCopyWithImpl<$Res> extends _$CommentEventCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_GetComments implements _GetComments {
-  const _$_GetComments({required this.postId});
+  const _$_GetComments({required this.postId, required this.type});
 
   @override
   final String postId;
+  @override
+  final CommentType type;
 
   @override
   String toString() {
-    return 'CommentEvent.getComments(postId: $postId)';
+    return 'CommentEvent.getComments(postId: $postId, type: $type)';
   }
 
   @override
@@ -176,12 +204,15 @@ class _$_GetComments implements _GetComments {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GetComments &&
-            const DeepCollectionEquality().equals(other.postId, postId));
+            const DeepCollectionEquality().equals(other.postId, postId) &&
+            const DeepCollectionEquality().equals(other.type, type));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(postId));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(postId),
+      const DeepCollectionEquality().hash(type));
 
   @JsonKey(ignore: true)
   @override
@@ -191,40 +222,47 @@ class _$_GetComments implements _GetComments {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String postId) getComments,
-    required TResult Function(String postId) getPaginatedComments,
+    required TResult Function(String postId, CommentType type) getComments,
+    required TResult Function(String postId, CommentType type)
+        getPaginatedComments,
+    required TResult Function(String id, String postId, CommentType type)
+        deleteComment,
     required TResult Function(
-            UserEntity user, PostEntity post, CommentEntity comment)
+            CommentType type, CommentDTO comment, NotificationDTO? notification)
         postComment,
-    required TResult Function(CommentEntity comment, String postId) likeComemnt,
+    required TResult Function(String postId) likeComment,
   }) {
-    return getComments(postId);
+    return getComments(postId, type);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
   }) {
-    return getComments?.call(postId);
+    return getComments?.call(postId, type);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
     required TResult orElse(),
   }) {
     if (getComments != null) {
-      return getComments(postId);
+      return getComments(postId, type);
     }
     return orElse();
   }
@@ -234,8 +272,9 @@ class _$_GetComments implements _GetComments {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetComments value) getComments,
     required TResult Function(_GetPaginatedComments value) getPaginatedComments,
+    required TResult Function(_DeleteComment value) deleteComment,
     required TResult Function(_PostComment value) postComment,
-    required TResult Function(_LikeComment value) likeComemnt,
+    required TResult Function(_LikeComment value) likeComment,
   }) {
     return getComments(this);
   }
@@ -245,8 +284,9 @@ class _$_GetComments implements _GetComments {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
   }) {
     return getComments?.call(this);
   }
@@ -256,8 +296,9 @@ class _$_GetComments implements _GetComments {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
     required TResult orElse(),
   }) {
     if (getComments != null) {
@@ -268,9 +309,11 @@ class _$_GetComments implements _GetComments {
 }
 
 abstract class _GetComments implements CommentEvent {
-  const factory _GetComments({required String postId}) = _$_GetComments;
+  const factory _GetComments(
+      {required String postId, required CommentType type}) = _$_GetComments;
 
   String get postId;
+  CommentType get type;
   @JsonKey(ignore: true)
   _$GetCommentsCopyWith<_GetComments> get copyWith =>
       throw _privateConstructorUsedError;
@@ -281,7 +324,7 @@ abstract class _$GetPaginatedCommentsCopyWith<$Res> {
   factory _$GetPaginatedCommentsCopyWith(_GetPaginatedComments value,
           $Res Function(_GetPaginatedComments) then) =
       __$GetPaginatedCommentsCopyWithImpl<$Res>;
-  $Res call({String postId});
+  $Res call({String postId, CommentType type});
 }
 
 /// @nodoc
@@ -298,12 +341,17 @@ class __$GetPaginatedCommentsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? postId = freezed,
+    Object? type = freezed,
   }) {
     return _then(_GetPaginatedComments(
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CommentType,
     ));
   }
 }
@@ -311,14 +359,16 @@ class __$GetPaginatedCommentsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_GetPaginatedComments implements _GetPaginatedComments {
-  const _$_GetPaginatedComments({required this.postId});
+  const _$_GetPaginatedComments({required this.postId, required this.type});
 
   @override
   final String postId;
+  @override
+  final CommentType type;
 
   @override
   String toString() {
-    return 'CommentEvent.getPaginatedComments(postId: $postId)';
+    return 'CommentEvent.getPaginatedComments(postId: $postId, type: $type)';
   }
 
   @override
@@ -326,12 +376,15 @@ class _$_GetPaginatedComments implements _GetPaginatedComments {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GetPaginatedComments &&
-            const DeepCollectionEquality().equals(other.postId, postId));
+            const DeepCollectionEquality().equals(other.postId, postId) &&
+            const DeepCollectionEquality().equals(other.type, type));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(postId));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(postId),
+      const DeepCollectionEquality().hash(type));
 
   @JsonKey(ignore: true)
   @override
@@ -342,40 +395,47 @@ class _$_GetPaginatedComments implements _GetPaginatedComments {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String postId) getComments,
-    required TResult Function(String postId) getPaginatedComments,
+    required TResult Function(String postId, CommentType type) getComments,
+    required TResult Function(String postId, CommentType type)
+        getPaginatedComments,
+    required TResult Function(String id, String postId, CommentType type)
+        deleteComment,
     required TResult Function(
-            UserEntity user, PostEntity post, CommentEntity comment)
+            CommentType type, CommentDTO comment, NotificationDTO? notification)
         postComment,
-    required TResult Function(CommentEntity comment, String postId) likeComemnt,
+    required TResult Function(String postId) likeComment,
   }) {
-    return getPaginatedComments(postId);
+    return getPaginatedComments(postId, type);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
   }) {
-    return getPaginatedComments?.call(postId);
+    return getPaginatedComments?.call(postId, type);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
     required TResult orElse(),
   }) {
     if (getPaginatedComments != null) {
-      return getPaginatedComments(postId);
+      return getPaginatedComments(postId, type);
     }
     return orElse();
   }
@@ -385,8 +445,9 @@ class _$_GetPaginatedComments implements _GetPaginatedComments {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetComments value) getComments,
     required TResult Function(_GetPaginatedComments value) getPaginatedComments,
+    required TResult Function(_DeleteComment value) deleteComment,
     required TResult Function(_PostComment value) postComment,
-    required TResult Function(_LikeComment value) likeComemnt,
+    required TResult Function(_LikeComment value) likeComment,
   }) {
     return getPaginatedComments(this);
   }
@@ -396,8 +457,9 @@ class _$_GetPaginatedComments implements _GetPaginatedComments {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
   }) {
     return getPaginatedComments?.call(this);
   }
@@ -407,8 +469,9 @@ class _$_GetPaginatedComments implements _GetPaginatedComments {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
     required TResult orElse(),
   }) {
     if (getPaginatedComments != null) {
@@ -419,12 +482,199 @@ class _$_GetPaginatedComments implements _GetPaginatedComments {
 }
 
 abstract class _GetPaginatedComments implements CommentEvent {
-  const factory _GetPaginatedComments({required String postId}) =
-      _$_GetPaginatedComments;
+  const factory _GetPaginatedComments(
+      {required String postId,
+      required CommentType type}) = _$_GetPaginatedComments;
 
   String get postId;
+  CommentType get type;
   @JsonKey(ignore: true)
   _$GetPaginatedCommentsCopyWith<_GetPaginatedComments> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$DeleteCommentCopyWith<$Res> {
+  factory _$DeleteCommentCopyWith(
+          _DeleteComment value, $Res Function(_DeleteComment) then) =
+      __$DeleteCommentCopyWithImpl<$Res>;
+  $Res call({String id, String postId, CommentType type});
+}
+
+/// @nodoc
+class __$DeleteCommentCopyWithImpl<$Res>
+    extends _$CommentEventCopyWithImpl<$Res>
+    implements _$DeleteCommentCopyWith<$Res> {
+  __$DeleteCommentCopyWithImpl(
+      _DeleteComment _value, $Res Function(_DeleteComment) _then)
+      : super(_value, (v) => _then(v as _DeleteComment));
+
+  @override
+  _DeleteComment get _value => super._value as _DeleteComment;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? postId = freezed,
+    Object? type = freezed,
+  }) {
+    return _then(_DeleteComment(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CommentType,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_DeleteComment implements _DeleteComment {
+  const _$_DeleteComment(
+      {required this.id, required this.postId, required this.type});
+
+  @override
+  final String id;
+  @override
+  final String postId;
+  @override
+  final CommentType type;
+
+  @override
+  String toString() {
+    return 'CommentEvent.deleteComment(id: $id, postId: $postId, type: $type)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _DeleteComment &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.postId, postId) &&
+            const DeepCollectionEquality().equals(other.type, type));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(postId),
+      const DeepCollectionEquality().hash(type));
+
+  @JsonKey(ignore: true)
+  @override
+  _$DeleteCommentCopyWith<_DeleteComment> get copyWith =>
+      __$DeleteCommentCopyWithImpl<_DeleteComment>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String postId, CommentType type) getComments,
+    required TResult Function(String postId, CommentType type)
+        getPaginatedComments,
+    required TResult Function(String id, String postId, CommentType type)
+        deleteComment,
+    required TResult Function(
+            CommentType type, CommentDTO comment, NotificationDTO? notification)
+        postComment,
+    required TResult Function(String postId) likeComment,
+  }) {
+    return deleteComment(id, postId, type);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
+        postComment,
+    TResult Function(String postId)? likeComment,
+  }) {
+    return deleteComment?.call(id, postId, type);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
+        postComment,
+    TResult Function(String postId)? likeComment,
+    required TResult orElse(),
+  }) {
+    if (deleteComment != null) {
+      return deleteComment(id, postId, type);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetComments value) getComments,
+    required TResult Function(_GetPaginatedComments value) getPaginatedComments,
+    required TResult Function(_DeleteComment value) deleteComment,
+    required TResult Function(_PostComment value) postComment,
+    required TResult Function(_LikeComment value) likeComment,
+  }) {
+    return deleteComment(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_GetComments value)? getComments,
+    TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
+    TResult Function(_PostComment value)? postComment,
+    TResult Function(_LikeComment value)? likeComment,
+  }) {
+    return deleteComment?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetComments value)? getComments,
+    TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
+    TResult Function(_PostComment value)? postComment,
+    TResult Function(_LikeComment value)? likeComment,
+    required TResult orElse(),
+  }) {
+    if (deleteComment != null) {
+      return deleteComment(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DeleteComment implements CommentEvent {
+  const factory _DeleteComment(
+      {required String id,
+      required String postId,
+      required CommentType type}) = _$_DeleteComment;
+
+  String get id;
+  String get postId;
+  CommentType get type;
+  @JsonKey(ignore: true)
+  _$DeleteCommentCopyWith<_DeleteComment> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -433,7 +683,8 @@ abstract class _$PostCommentCopyWith<$Res> {
   factory _$PostCommentCopyWith(
           _PostComment value, $Res Function(_PostComment) then) =
       __$PostCommentCopyWithImpl<$Res>;
-  $Res call({UserEntity user, PostEntity post, CommentEntity comment});
+  $Res call(
+      {CommentType type, CommentDTO comment, NotificationDTO? notification});
 }
 
 /// @nodoc
@@ -448,23 +699,23 @@ class __$PostCommentCopyWithImpl<$Res> extends _$CommentEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? user = freezed,
-    Object? post = freezed,
+    Object? type = freezed,
     Object? comment = freezed,
+    Object? notification = freezed,
   }) {
     return _then(_PostComment(
-      user: user == freezed
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserEntity,
-      post: post == freezed
-          ? _value.post
-          : post // ignore: cast_nullable_to_non_nullable
-              as PostEntity,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CommentType,
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as CommentEntity,
+              as CommentDTO,
+      notification: notification == freezed
+          ? _value.notification
+          : notification // ignore: cast_nullable_to_non_nullable
+              as NotificationDTO?,
     ));
   }
 }
@@ -473,18 +724,18 @@ class __$PostCommentCopyWithImpl<$Res> extends _$CommentEventCopyWithImpl<$Res>
 
 class _$_PostComment implements _PostComment {
   const _$_PostComment(
-      {required this.user, required this.post, required this.comment});
+      {required this.type, required this.comment, required this.notification});
 
   @override
-  final UserEntity user;
+  final CommentType type;
   @override
-  final PostEntity post;
+  final CommentDTO comment;
   @override
-  final CommentEntity comment;
+  final NotificationDTO? notification;
 
   @override
   String toString() {
-    return 'CommentEvent.postComment(user: $user, post: $post, comment: $comment)';
+    return 'CommentEvent.postComment(type: $type, comment: $comment, notification: $notification)';
   }
 
   @override
@@ -492,17 +743,18 @@ class _$_PostComment implements _PostComment {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _PostComment &&
-            const DeepCollectionEquality().equals(other.user, user) &&
-            const DeepCollectionEquality().equals(other.post, post) &&
-            const DeepCollectionEquality().equals(other.comment, comment));
+            const DeepCollectionEquality().equals(other.type, type) &&
+            const DeepCollectionEquality().equals(other.comment, comment) &&
+            const DeepCollectionEquality()
+                .equals(other.notification, notification));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(user),
-      const DeepCollectionEquality().hash(post),
-      const DeepCollectionEquality().hash(comment));
+      const DeepCollectionEquality().hash(type),
+      const DeepCollectionEquality().hash(comment),
+      const DeepCollectionEquality().hash(notification));
 
   @JsonKey(ignore: true)
   @override
@@ -512,40 +764,47 @@ class _$_PostComment implements _PostComment {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String postId) getComments,
-    required TResult Function(String postId) getPaginatedComments,
+    required TResult Function(String postId, CommentType type) getComments,
+    required TResult Function(String postId, CommentType type)
+        getPaginatedComments,
+    required TResult Function(String id, String postId, CommentType type)
+        deleteComment,
     required TResult Function(
-            UserEntity user, PostEntity post, CommentEntity comment)
+            CommentType type, CommentDTO comment, NotificationDTO? notification)
         postComment,
-    required TResult Function(CommentEntity comment, String postId) likeComemnt,
+    required TResult Function(String postId) likeComment,
   }) {
-    return postComment(user, post, comment);
+    return postComment(type, comment, notification);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
   }) {
-    return postComment?.call(user, post, comment);
+    return postComment?.call(type, comment, notification);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
     required TResult orElse(),
   }) {
     if (postComment != null) {
-      return postComment(user, post, comment);
+      return postComment(type, comment, notification);
     }
     return orElse();
   }
@@ -555,8 +814,9 @@ class _$_PostComment implements _PostComment {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetComments value) getComments,
     required TResult Function(_GetPaginatedComments value) getPaginatedComments,
+    required TResult Function(_DeleteComment value) deleteComment,
     required TResult Function(_PostComment value) postComment,
-    required TResult Function(_LikeComment value) likeComemnt,
+    required TResult Function(_LikeComment value) likeComment,
   }) {
     return postComment(this);
   }
@@ -566,8 +826,9 @@ class _$_PostComment implements _PostComment {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
   }) {
     return postComment?.call(this);
   }
@@ -577,8 +838,9 @@ class _$_PostComment implements _PostComment {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
     required TResult orElse(),
   }) {
     if (postComment != null) {
@@ -590,13 +852,13 @@ class _$_PostComment implements _PostComment {
 
 abstract class _PostComment implements CommentEvent {
   const factory _PostComment(
-      {required UserEntity user,
-      required PostEntity post,
-      required CommentEntity comment}) = _$_PostComment;
+      {required CommentType type,
+      required CommentDTO comment,
+      required NotificationDTO? notification}) = _$_PostComment;
 
-  UserEntity get user;
-  PostEntity get post;
-  CommentEntity get comment;
+  CommentType get type;
+  CommentDTO get comment;
+  NotificationDTO? get notification;
   @JsonKey(ignore: true)
   _$PostCommentCopyWith<_PostComment> get copyWith =>
       throw _privateConstructorUsedError;
@@ -607,7 +869,7 @@ abstract class _$LikeCommentCopyWith<$Res> {
   factory _$LikeCommentCopyWith(
           _LikeComment value, $Res Function(_LikeComment) then) =
       __$LikeCommentCopyWithImpl<$Res>;
-  $Res call({CommentEntity comment, String postId});
+  $Res call({String postId});
 }
 
 /// @nodoc
@@ -622,14 +884,9 @@ class __$LikeCommentCopyWithImpl<$Res> extends _$CommentEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? comment = freezed,
     Object? postId = freezed,
   }) {
     return _then(_LikeComment(
-      comment: comment == freezed
-          ? _value.comment
-          : comment // ignore: cast_nullable_to_non_nullable
-              as CommentEntity,
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
@@ -641,16 +898,14 @@ class __$LikeCommentCopyWithImpl<$Res> extends _$CommentEventCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_LikeComment implements _LikeComment {
-  const _$_LikeComment({required this.comment, required this.postId});
+  const _$_LikeComment({required this.postId});
 
-  @override
-  final CommentEntity comment;
   @override
   final String postId;
 
   @override
   String toString() {
-    return 'CommentEvent.likeComemnt(comment: $comment, postId: $postId)';
+    return 'CommentEvent.likeComment(postId: $postId)';
   }
 
   @override
@@ -658,15 +913,12 @@ class _$_LikeComment implements _LikeComment {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _LikeComment &&
-            const DeepCollectionEquality().equals(other.comment, comment) &&
             const DeepCollectionEquality().equals(other.postId, postId));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(comment),
-      const DeepCollectionEquality().hash(postId));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(postId));
 
   @JsonKey(ignore: true)
   @override
@@ -676,40 +928,47 @@ class _$_LikeComment implements _LikeComment {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String postId) getComments,
-    required TResult Function(String postId) getPaginatedComments,
+    required TResult Function(String postId, CommentType type) getComments,
+    required TResult Function(String postId, CommentType type)
+        getPaginatedComments,
+    required TResult Function(String id, String postId, CommentType type)
+        deleteComment,
     required TResult Function(
-            UserEntity user, PostEntity post, CommentEntity comment)
+            CommentType type, CommentDTO comment, NotificationDTO? notification)
         postComment,
-    required TResult Function(CommentEntity comment, String postId) likeComemnt,
+    required TResult Function(String postId) likeComment,
   }) {
-    return likeComemnt(comment, postId);
+    return likeComment(postId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
   }) {
-    return likeComemnt?.call(comment, postId);
+    return likeComment?.call(postId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String postId)? getComments,
-    TResult Function(String postId)? getPaginatedComments,
-    TResult Function(UserEntity user, PostEntity post, CommentEntity comment)?
+    TResult Function(String postId, CommentType type)? getComments,
+    TResult Function(String postId, CommentType type)? getPaginatedComments,
+    TResult Function(String id, String postId, CommentType type)? deleteComment,
+    TResult Function(CommentType type, CommentDTO comment,
+            NotificationDTO? notification)?
         postComment,
-    TResult Function(CommentEntity comment, String postId)? likeComemnt,
+    TResult Function(String postId)? likeComment,
     required TResult orElse(),
   }) {
-    if (likeComemnt != null) {
-      return likeComemnt(comment, postId);
+    if (likeComment != null) {
+      return likeComment(postId);
     }
     return orElse();
   }
@@ -719,10 +978,11 @@ class _$_LikeComment implements _LikeComment {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetComments value) getComments,
     required TResult Function(_GetPaginatedComments value) getPaginatedComments,
+    required TResult Function(_DeleteComment value) deleteComment,
     required TResult Function(_PostComment value) postComment,
-    required TResult Function(_LikeComment value) likeComemnt,
+    required TResult Function(_LikeComment value) likeComment,
   }) {
-    return likeComemnt(this);
+    return likeComment(this);
   }
 
   @override
@@ -730,10 +990,11 @@ class _$_LikeComment implements _LikeComment {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
   }) {
-    return likeComemnt?.call(this);
+    return likeComment?.call(this);
   }
 
   @override
@@ -741,23 +1002,21 @@ class _$_LikeComment implements _LikeComment {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetComments value)? getComments,
     TResult Function(_GetPaginatedComments value)? getPaginatedComments,
+    TResult Function(_DeleteComment value)? deleteComment,
     TResult Function(_PostComment value)? postComment,
-    TResult Function(_LikeComment value)? likeComemnt,
+    TResult Function(_LikeComment value)? likeComment,
     required TResult orElse(),
   }) {
-    if (likeComemnt != null) {
-      return likeComemnt(this);
+    if (likeComment != null) {
+      return likeComment(this);
     }
     return orElse();
   }
 }
 
 abstract class _LikeComment implements CommentEvent {
-  const factory _LikeComment(
-      {required CommentEntity comment,
-      required String postId}) = _$_LikeComment;
+  const factory _LikeComment({required String postId}) = _$_LikeComment;
 
-  CommentEntity get comment;
   String get postId;
   @JsonKey(ignore: true)
   _$LikeCommentCopyWith<_LikeComment> get copyWith =>
@@ -769,14 +1028,12 @@ class _$CommentStateTearOff {
   const _$CommentStateTearOff();
 
   _CommentState call(
-      {String error = '',
-      required List<CommentEntity> comments,
-      CommentStatus currentState = CommentStatus.idle,
+      {bool reachedMaximumThreshold = false,
+      required PagingController<int, Comment> paginationController,
       CommentListenableAction action = CommentListenableAction.idle}) {
     return _CommentState(
-      error: error,
-      comments: comments,
-      currentState: currentState,
+      reachedMaximumThreshold: reachedMaximumThreshold,
+      paginationController: paginationController,
       action: action,
     );
   }
@@ -787,9 +1044,9 @@ const $CommentState = _$CommentStateTearOff();
 
 /// @nodoc
 mixin _$CommentState {
-  String get error => throw _privateConstructorUsedError;
-  List<CommentEntity> get comments => throw _privateConstructorUsedError;
-  CommentStatus get currentState => throw _privateConstructorUsedError;
+  bool get reachedMaximumThreshold => throw _privateConstructorUsedError;
+  PagingController<int, Comment> get paginationController =>
+      throw _privateConstructorUsedError;
   CommentListenableAction get action => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -803,9 +1060,8 @@ abstract class $CommentStateCopyWith<$Res> {
           CommentState value, $Res Function(CommentState) then) =
       _$CommentStateCopyWithImpl<$Res>;
   $Res call(
-      {String error,
-      List<CommentEntity> comments,
-      CommentStatus currentState,
+      {bool reachedMaximumThreshold,
+      PagingController<int, Comment> paginationController,
       CommentListenableAction action});
 }
 
@@ -819,24 +1075,19 @@ class _$CommentStateCopyWithImpl<$Res> implements $CommentStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? comments = freezed,
-    Object? currentState = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_value.copyWith(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      comments: comments == freezed
-          ? _value.comments
-          : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentEntity>,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as CommentStatus,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, Comment>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -853,9 +1104,8 @@ abstract class _$CommentStateCopyWith<$Res>
       __$CommentStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String error,
-      List<CommentEntity> comments,
-      CommentStatus currentState,
+      {bool reachedMaximumThreshold,
+      PagingController<int, Comment> paginationController,
       CommentListenableAction action});
 }
 
@@ -871,24 +1121,19 @@ class __$CommentStateCopyWithImpl<$Res> extends _$CommentStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? comments = freezed,
-    Object? currentState = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_CommentState(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      comments: comments == freezed
-          ? _value.comments
-          : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentEntity>,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as CommentStatus,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, Comment>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -901,26 +1146,22 @@ class __$CommentStateCopyWithImpl<$Res> extends _$CommentStateCopyWithImpl<$Res>
 
 class _$_CommentState implements _CommentState {
   const _$_CommentState(
-      {this.error = '',
-      required this.comments,
-      this.currentState = CommentStatus.idle,
+      {this.reachedMaximumThreshold = false,
+      required this.paginationController,
       this.action = CommentListenableAction.idle});
 
   @JsonKey()
   @override
-  final String error;
+  final bool reachedMaximumThreshold;
   @override
-  final List<CommentEntity> comments;
-  @JsonKey()
-  @override
-  final CommentStatus currentState;
+  final PagingController<int, Comment> paginationController;
   @JsonKey()
   @override
   final CommentListenableAction action;
 
   @override
   String toString() {
-    return 'CommentState(error: $error, comments: $comments, currentState: $currentState, action: $action)';
+    return 'CommentState(reachedMaximumThreshold: $reachedMaximumThreshold, paginationController: $paginationController, action: $action)';
   }
 
   @override
@@ -928,19 +1169,18 @@ class _$_CommentState implements _CommentState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _CommentState &&
-            const DeepCollectionEquality().equals(other.error, error) &&
-            const DeepCollectionEquality().equals(other.comments, comments) &&
+            const DeepCollectionEquality().equals(
+                other.reachedMaximumThreshold, reachedMaximumThreshold) &&
             const DeepCollectionEquality()
-                .equals(other.currentState, currentState) &&
+                .equals(other.paginationController, paginationController) &&
             const DeepCollectionEquality().equals(other.action, action));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(comments),
-      const DeepCollectionEquality().hash(currentState),
+      const DeepCollectionEquality().hash(reachedMaximumThreshold),
+      const DeepCollectionEquality().hash(paginationController),
       const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
@@ -951,17 +1191,14 @@ class _$_CommentState implements _CommentState {
 
 abstract class _CommentState implements CommentState {
   const factory _CommentState(
-      {String error,
-      required List<CommentEntity> comments,
-      CommentStatus currentState,
+      {bool reachedMaximumThreshold,
+      required PagingController<int, Comment> paginationController,
       CommentListenableAction action}) = _$_CommentState;
 
   @override
-  String get error;
+  bool get reachedMaximumThreshold;
   @override
-  List<CommentEntity> get comments;
-  @override
-  CommentStatus get currentState;
+  PagingController<int, Comment> get paginationController;
   @override
   CommentListenableAction get action;
   @override

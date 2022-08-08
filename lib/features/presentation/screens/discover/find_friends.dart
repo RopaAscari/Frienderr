@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:location/location.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -50,7 +51,7 @@ class FindFriendsState extends State<FindFriends>
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
   late StreamSubscription<LocationData> locationSubscription;
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -122,10 +123,13 @@ class FindFriendsState extends State<FindFriends>
       isSearching = true;
     });
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
-    final searchedUsers =
-        await users.where('username', isGreaterThanOrEqualTo: term).get();
+    final searchedUsers = await users
+        .where('username', isGreaterThanOrEqualTo: term)
+        .where('username',
+            isNotEqualTo: widget.blocGroup.userBloc.state.user.username)
+        .get();
 
     setState(() {
       isSearching = false;
@@ -295,8 +299,8 @@ class FindFriendsState extends State<FindFriends>
                     renderWidget: Container(
                         margin: EdgeInsets.only(
                             top: (MediaQuery.of(context).size.height * .30)),
-                        child:
-                            const Center(child: CupertinoActivityIndicator())),
+                        child: const Center(
+                            child: LoadingIndicator(size: Size(40, 40)))),
                     fallbackWidget: searchResults())
               ]),
             )));
@@ -319,7 +323,7 @@ class FindFriendsState extends State<FindFriends>
   Widget _searchBar() {
     return Container(
         height: 40,
-        width: MediaQuery.of(context).size.width * .80,
+        width: MediaQuery.of(context).size.width * .75,
         padding: const EdgeInsets.all(0),
         margin: const EdgeInsets.only(top: 0),
         child: TextField(
@@ -329,19 +333,19 @@ class FindFriendsState extends State<FindFriends>
             controller: searchController,
             //   style: TextStyle(color: Colors.white),
             onChanged: (term) => _fetchUsers(term),
-            decoration: new InputDecoration(
-                labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
+            decoration: InputDecoration(
+                labelStyle: const TextStyle(color: Colors.grey, fontSize: 13.5),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(5.0),
+                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(25.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   // borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(5.0),
+                  borderRadius: BorderRadius.circular(25.0),
                 ),
-                border: new OutlineInputBorder(
+                border: OutlineInputBorder(
                   // borderSide: new BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(5.0),
+                  borderRadius: BorderRadius.circular(25.0),
                 ),
                 suffixIcon: searchController.text != ''
                     ? IconButton(
@@ -351,7 +355,7 @@ class FindFriendsState extends State<FindFriends>
                         },
                         icon: const Icon(Icons.close))
                     : IconButton(
-                        color: Colors.white,
+                        color: Colors.grey,
                         onPressed: () {},
                         icon: const Icon(Icons.search)),
                 // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
@@ -371,17 +375,16 @@ class FindFriendsState extends State<FindFriends>
             alignment: Alignment.topRight,
             child: IconButton(
                 iconSize: 25,
-                icon: Icon(
-                  Icons.mic,
-                ),
+                icon: const Icon(Icons.mic, color: Colors.grey),
                 onPressed: () => Navigator.pop(context))));
   }
 
   Widget _backIcon() {
     return IconButton(
         iconSize: 25,
+        color: Colors.grey,
         onPressed: () => Navigator.pop(context),
-        icon: Icon(Icons.arrow_back_ios));
+        icon: const Icon(Icons.arrow_back));
   }
 
   Widget _mapButton() {

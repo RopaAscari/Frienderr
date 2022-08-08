@@ -6,13 +6,12 @@ part of 'metadata_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_PostMetadataModel _$$_PostMetadataModelFromJson(Map<String, dynamic> json) =>
-    _$_PostMetadataModel(
+_$_PostMetadata _$$_PostMetadataFromJson(Map<String, dynamic> json) =>
+    _$_PostMetadata(
       thumbnail: json['thumbnail'] as String? ?? null,
     );
 
-Map<String, dynamic> _$$_PostMetadataModelToJson(
-        _$_PostMetadataModel instance) =>
+Map<String, dynamic> _$$_PostMetadataToJson(_$_PostMetadata instance) =>
     <String, dynamic>{
       'thumbnail': instance.thumbnail,
     };

@@ -8,22 +8,20 @@ part of 'story_content.dart';
 
 _$_StoryContent _$$_StoryContentFromJson(Map<String, dynamic> json) =>
     _$_StoryContent(
+      views: json['views'] as int? ?? 0,
       id: json['id'] as String? ?? '',
+      reactions: json['reactions'] as int? ?? 0,
       media: StoryMedia.fromJson(json['media'] as Map<String, dynamic>),
       dateCreated: json['dateCreated'] as int? ?? 0,
-      views:
-          (json['views'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
-      likes:
-          (json['likes'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
+      isViewed: json['isViewed'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_StoryContentToJson(_$_StoryContent instance) =>
     <String, dynamic>{
+      'views': instance.views,
       'id': instance.id,
+      'reactions': instance.reactions,
       'media': instance.media,
       'dateCreated': instance.dateCreated,
-      'views': instance.views,
-      'likes': instance.likes,
+      'isViewed': instance.isViewed,
     };

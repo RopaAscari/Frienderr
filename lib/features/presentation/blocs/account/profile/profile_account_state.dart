@@ -30,17 +30,29 @@ enum ProfileAccountSnapStatus {
   loading,
 }
 
-enum ProfileAccountListenableAction { idle }
+enum ProfileAccountListenableAction {
+  idle,
+  coverPhotoUpdated,
+  profileUpdateError,
+  profilePhotoUpdated,
+  profileUpdateLoading,
+  profileUpdateSuccess,
+  coverPhotoUpdateFailed,
+  profilePhotoUpdateFailed,
+}
 
 @freezed
 class ProfileAccountState with _$ProfileAccountState {
   const factory ProfileAccountState({
-    required UserEntity user,
+    required UserModel user,
+    @Default(0) int following,
+    @Default(0) int followers,
+    @Default(0) int reactions,
     @Default(null) String? error,
-    @Default([]) List<String> following,
-    @Default([]) List<String> followers,
-    @Default([]) List<PostEntity> posts,
-    @Default([]) List<QuickEntity> snaps,
+    @Default([]) List<Post> posts,
+    @Default([]) List<Snap> snaps,
+    @Default(false) bool isFollowing,
+    @Default([]) List<UserModel> followersList,
     @Default(ProfileAccountPostStatus.idle) ProfileAccountPostStatus postState,
     @Default(ProfileAccountSnapStatus.idle) ProfileAccountSnapStatus snapState,
     @Default(ProfileAccountUserStatus.idle) ProfileAccountUserStatus userState,

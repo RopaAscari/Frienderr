@@ -23,5 +23,5 @@ class InstantiateChatParams {
     required this.chat,
   });
 
-  final ChatEntity chat;
+  final ChatDTO chat;
 }

@@ -14,11 +14,36 @@ class FollowingRepository implements IFollowingRepository {
       this._followingRemoteDataProvider, this._followersRemoteDataProvider);
 
   @override
-  Future<Either<Failure, List<String>>> getFollowing(String uid) async {
-    final rawFollowing = await _followingRemoteDataProvider.getFollowing(uid);
+  Future<Either<Failure, int>> getFollowingCount(String uid) async {
+    final _following = await _followingRemoteDataProvider.getFollowing(uid);
+
+    try {
+      return Right(_following.docs.length);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> getFollowingStatus(
+      {required String uid}) async {
+    final _following =
+        await _followingRemoteDataProvider.getFollowingStatus(uid: uid);
+
+    try {
+      return Right(_following.docs.isNotEmpty);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getFollowing(
+      {required String uid}) async {
+    final _following = await _followingRemoteDataProvider.getFollowing(uid);
 
     final following =
-        rawFollowing.docs.map((e) => e.data()['id']).cast<String>().toList();
+        _following.docs.map((e) => e.data()['id']).cast<String>().toList();
     try {
       return Right(following);
     } catch (e) {

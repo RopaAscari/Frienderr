@@ -18,7 +18,7 @@ class SendCommentNotificationUseCase
 }
 
 class SendCommentNotificationParams {
-  final NotificationEntity notification;
+  final NotificationDTO notification;
 
   const SendCommentNotificationParams(this.notification);
 }

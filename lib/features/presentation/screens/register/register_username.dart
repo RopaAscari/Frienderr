@@ -7,7 +7,8 @@ import 'package:frienderr/features/data/models/user/user_model.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/blocs/authenticate/authenticate_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
-import 'package:frienderr/features/presentation/blocs/quick/quick_bloc.dart';
+
+import 'package:frienderr/features/presentation/blocs/snap/snap_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/story/story_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
@@ -34,7 +35,7 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
   bool isUsernameEmpty = true;
   BlocGroup get _blocGroup => widget.blocGroup;
   final TextEditingController usernameController = TextEditingController();
-  AuthenticationBloc get authenticationBloc => getIt<AuthenticationBloc>();
+  AuthenticationBloc get authenticationBloc => getService<AuthenticationBloc>();
 
   @override
   void initState() => super.initState();
@@ -46,7 +47,7 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
   }
 
   void _onRegisterUsername(BuildContext context) {
-    getIt<AppRouter>().context.showLoadingIndicator();
+    // getService<AppRouter>().context.showLoadingIndicator();
     FocusScope.of(context).unfocus();
     _blocGroup.authenticationBloc.add(AuthenticationEvent.registerUsername(
       userId: widget.userId,
@@ -55,13 +56,14 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
   }
 
   Future<dynamic> _navigateToTimeline(AuthenticationState state) async {
-    _blocGroup.quickBloc.add(const QuickEvent.initialize());
-    _blocGroup.storyBloc.add(StoryEvent.loadStories(userId: state.user!.id));
+    _blocGroup.snapBloc.add(const SnapEvent.initialize());
+    _blocGroup.storyBloc.add(StoryEvent.fetchStories(userId: state.user!.id));
     _blocGroup.postBloc
         .add(const PostEvent.fetchTimelinePosts(shouldLoad: true));
 
     _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
-    return getIt<AppRouter>().push(MainRoute(blocGroup: _blocGroup));
+    return getService<AppRouter>()
+        .push(TabNavigationRoute(blocGroup: _blocGroup));
   }
 
   @override
@@ -73,13 +75,13 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
           AuthenticationState state,
         ) {
           if (state.currentState ==
-              AuthenticationStatus.RegisterUsernameFailure) {
-            getIt<AppRouter>().context.dismissLoadingIndicator();
+              AuthenticationStatus.registerUsernameFailure) {
+            // getService<AppRouter>().context.dismissLoadingIndicator();
           }
 
           if (state.currentState ==
-              AuthenticationStatus.RegisterUsernameSuccess) {
-            getIt<AppRouter>().context.dismissLoadingIndicator();
+              AuthenticationStatus.registerUsernameSuccess) {
+            // getService<AppRouter>().context.dismissLoadingIndicator();
             _navigateToTimeline(state);
           }
         },
@@ -140,7 +142,7 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
               controller: usernameController,
               padding: const EdgeInsets.only(top: 15),
               errorText: state.currentState ==
-                      AuthenticationStatus.RegisterUsernameFailure
+                      AuthenticationStatus.registerUsernameFailure
                   ? state.error
                   : null),
           AppButton(

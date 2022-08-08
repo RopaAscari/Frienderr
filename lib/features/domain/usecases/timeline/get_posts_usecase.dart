@@ -6,13 +6,13 @@ import 'package:frienderr/features/domain/entities/post.dart';
 import 'package:frienderr/features/domain/repositiories/post_repository.dart';
 
 @lazySingleton
-class GetPostsUseCase extends UseCase<TimelineResponse, GetPostsParams> {
+class GetPostsUseCase extends UseCase<Timeline, GetPostsParams> {
   GetPostsUseCase(this.repository);
 
   final IPostRepository repository;
 
   @override
-  Future<Either<Failure, TimelineResponse>> call(GetPostsParams params) {
+  Future<Either<Failure, Timeline>> call(GetPostsParams params) {
     return repository.getPosts();
   }
 }

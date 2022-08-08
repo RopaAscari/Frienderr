@@ -23,9 +23,7 @@ class _$StoryMediaTearOff {
   const _$StoryMediaTearOff();
 
   _StoryMedia call(
-      {String url = '',
-      String type = '',
-      required StoryMetadataModel metadata}) {
+      {String url = '', String type = '', required StoryMetadata metadata}) {
     return _StoryMedia(
       url: url,
       type: type,
@@ -45,7 +43,7 @@ const $StoryMedia = _$StoryMediaTearOff();
 mixin _$StoryMedia {
   String get url => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
-  StoryMetadataModel get metadata => throw _privateConstructorUsedError;
+  StoryMetadata get metadata => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,9 +56,9 @@ abstract class $StoryMediaCopyWith<$Res> {
   factory $StoryMediaCopyWith(
           StoryMedia value, $Res Function(StoryMedia) then) =
       _$StoryMediaCopyWithImpl<$Res>;
-  $Res call({String url, String type, StoryMetadataModel metadata});
+  $Res call({String url, String type, StoryMetadata metadata});
 
-  $StoryMetadataModelCopyWith<$Res> get metadata;
+  $StoryMetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -89,13 +87,13 @@ class _$StoryMediaCopyWithImpl<$Res> implements $StoryMediaCopyWith<$Res> {
       metadata: metadata == freezed
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as StoryMetadataModel,
+              as StoryMetadata,
     ));
   }
 
   @override
-  $StoryMetadataModelCopyWith<$Res> get metadata {
-    return $StoryMetadataModelCopyWith<$Res>(_value.metadata, (value) {
+  $StoryMetadataCopyWith<$Res> get metadata {
+    return $StoryMetadataCopyWith<$Res>(_value.metadata, (value) {
       return _then(_value.copyWith(metadata: value));
     });
   }
@@ -107,10 +105,10 @@ abstract class _$StoryMediaCopyWith<$Res> implements $StoryMediaCopyWith<$Res> {
           _StoryMedia value, $Res Function(_StoryMedia) then) =
       __$StoryMediaCopyWithImpl<$Res>;
   @override
-  $Res call({String url, String type, StoryMetadataModel metadata});
+  $Res call({String url, String type, StoryMetadata metadata});
 
   @override
-  $StoryMetadataModelCopyWith<$Res> get metadata;
+  $StoryMetadataCopyWith<$Res> get metadata;
 }
 
 /// @nodoc
@@ -141,7 +139,7 @@ class __$StoryMediaCopyWithImpl<$Res> extends _$StoryMediaCopyWithImpl<$Res>
       metadata: metadata == freezed
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as StoryMetadataModel,
+              as StoryMetadata,
     ));
   }
 }
@@ -161,7 +159,7 @@ class _$_StoryMedia implements _StoryMedia {
   @override
   final String type;
   @override
-  final StoryMetadataModel metadata;
+  final StoryMetadata metadata;
 
   @override
   String toString() {
@@ -200,7 +198,7 @@ abstract class _StoryMedia implements StoryMedia {
   const factory _StoryMedia(
       {String url,
       String type,
-      required StoryMetadataModel metadata}) = _$_StoryMedia;
+      required StoryMetadata metadata}) = _$_StoryMedia;
 
   factory _StoryMedia.fromJson(Map<String, dynamic> json) =
       _$_StoryMedia.fromJson;
@@ -210,7 +208,7 @@ abstract class _StoryMedia implements StoryMedia {
   @override
   String get type;
   @override
-  StoryMetadataModel get metadata;
+  StoryMetadata get metadata;
   @override
   @JsonKey(ignore: true)
   _$StoryMediaCopyWith<_StoryMedia> get copyWith =>

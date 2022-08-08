@@ -6,7 +6,7 @@ part 'latest_message.g.dart';
 part 'latest_message.freezed.dart';
 
 @freezed
-class LatestMessage with _$LatestMessage implements LatestMessageEntity {
+class LatestMessage with _$LatestMessage {
   const factory LatestMessage(
       {@Default(0) final int date,
       required final ChatMessage? message}) = _LatestMessage;

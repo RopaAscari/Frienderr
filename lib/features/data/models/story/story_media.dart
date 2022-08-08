@@ -6,11 +6,11 @@ part 'story_media.g.dart';
 part 'story_media.freezed.dart';
 
 @freezed
-class StoryMedia with _$StoryMedia implements StoryMediaEntity {
+class StoryMedia with _$StoryMedia {
   const factory StoryMedia({
     @Default('') final String url,
     @Default('') final String type,
-    required final StoryMetadataModel metadata,
+    required final StoryMetadata metadata,
   }) = _StoryMedia;
 
   factory StoryMedia.fromJson(Map<String, dynamic> json) =>

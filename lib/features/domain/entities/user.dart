@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:frienderr/core/data/data.dart';
 
-class UserEntity implements PartialUser {
+class UserDTO implements PartialUser {
   @override
   final String id;
-  final String? status;
   final bool? presence;
+  final String? status;
+
   @override
+  final String? email;
   final String? username;
   final String? profilePic;
   final String? coverPhoto;
@@ -17,23 +19,26 @@ class UserEntity implements PartialUser {
   final List<dynamic>? followers;
   final UserLocationEntity? location;
 
-  UserEntity({
+  UserDTO({
     this.location,
+    this.email = '',
     required this.id,
     this.status = '',
     this.username = '',
-    this.deviceToken = ' ',
     this.presence = false,
     this.chats = const [],
+    this.deviceToken = ' ',
     this.followers = const [],
     this.following = const [],
     this.profilePic = defaultProfilePic,
     this.coverPhoto = defaultCoverPhoto,
   }) : super();
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'email': email,
       'chats': chats,
       'status': status,
       'presence': presence,
@@ -47,9 +52,10 @@ class UserEntity implements PartialUser {
     };
   }
 
-  factory UserEntity.fromJson(Map<String, dynamic> map) {
-    return UserEntity(
+  factory UserDTO.fromJson(Map<String, dynamic> map) {
+    return UserDTO(
       id: map['id'] ?? '',
+      email: map['email'],
       status: map['status'],
       presence: map['presence'],
       username: map['username'],

@@ -1,6 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/features/data/models/chat/chat_model.dart';
+import 'package:frienderr/features/data/models/chat/latest_message.dart';
+import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/presentation/navigation/app_router.dart';
+import 'package:frienderr/features/presentation/widgets/empy_builder.dart';
 import 'package:story_view/story_view.dart';
 import 'package:time_elapsed/time_elapsed.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +25,7 @@ import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:frienderr/features/presentation/blocs/chat/chat_bloc.dart';
 import 'package:frienderr/features/presentation/blocs/user/user_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:frienderr/features/presentation/blocs/theme/theme_bloc.dart';
 import 'package:frienderr/features/presentation/screens/messaging/messaging.dart';
 import 'package:frienderr/features/presentation/blocs/following/following_bloc.dart';
@@ -35,13 +42,11 @@ class ChatDashboardScreen extends StatefulWidget {
 
 class _ChatDashboardScreenState extends State<ChatDashboardScreen>
     with AutomaticKeepAliveClientMixin<ChatDashboardScreen> {
-  late UserState userState;
   final storyController = StoryController();
   BlocGroup get _blocGroup => widget.blocGroup;
-  User? _appUser = FirebaseAuth.instance.currentUser;
-  FollowingBloc get followingBloc => getIt<FollowingBloc>();
+  FollowingBloc get followingBloc => getService<FollowingBloc>();
+  UserModel get _user => widget.blocGroup.userBloc.state.user;
   final TextEditingController searchController = TextEditingController();
-
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -62,104 +67,105 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    userState = context.read<UserBloc>().state;
     super.build(context);
-    return SafeArea(
-        child: Scaffold(
-            body: BlocConsumer<ChatBloc, ChatState>(
-                bloc: _blocGroup.chatBloc,
-                listener: (
-                  BuildContext context,
-                  ChatState state,
-                ) {},
-                builder: (
-                  BuildContext context,
-                  ChatState state,
-                ) {
-                  return Stack(children: [
-                    Column(
-                      children: [
-                        _headerWidget(state),
-                        _chatContainerWidget(state)
-                      ],
-                    ),
-                    _buildSlidingPanel()
-                  ]);
-                })));
+    void _listener(BuildContext context, ChatState state) {}
+
+    return CustomScrollView(slivers: [
+      _buildAppBar(),
+      SliverList(
+          delegate: SliverChildListDelegate([
+        searchChatWidget(),
+        SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: SmartRefresher(
+                enablePullUp: false,
+                enablePullDown: true,
+                controller: _refreshController,
+                onRefresh: () async {
+                  await Future.delayed(const Duration(milliseconds: 2000));
+                  _refreshController.refreshCompleted();
+                },
+                header: CustomHeader(
+                    builder: (BuildContext context, RefreshStatus? mode) {
+                  if (mode == RefreshStatus.refreshing) {
+                    return const Center(
+                        child: LoadingIndicator(size: Size(40, 40)));
+                  }
+
+                  return const Center();
+                }),
+                child: BlocConsumer<ChatBloc, ChatState>(
+                    bloc: _blocGroup.chatBloc,
+                    listener: _listener,
+                    listenWhen: (ChatState prevState, ChatState currState) {
+                      return true;
+                    },
+                    builder: (BuildContext context, ChatState state) {
+                      return PagedListView<int, ChatModel>.separated(
+                        shrinkWrap: true,
+                        separatorBuilder: (ctx, i) {
+                          return const Center();
+                        },
+                        physics: const NeverScrollableScrollPhysics(),
+                        pagingController:
+                            _blocGroup.chatBloc.state.paginationController,
+                        builderDelegate: PagedChildBuilderDelegate<ChatModel>(
+                          animateTransitions: true,
+                          firstPageProgressIndicatorBuilder: (ctx) {
+                            return const LoadingIndicator(size: Size(40, 40));
+                          },
+                          noItemsFoundIndicatorBuilder: (ctx) {
+                            return SizedBox(
+                                height: MediaQuery.of(context).size.height * .7,
+                                child: const Center(
+                                    child: Text("You have no chats",
+                                        style: TextStyle(fontSize: 13))));
+                          },
+                          newPageProgressIndicatorBuilder: (ctx) {
+                            return const LoadingIndicator(size: Size(40, 40));
+                          },
+                          transitionDuration: const Duration(milliseconds: 500),
+                          itemBuilder: (context, chat, index) {
+                            return Padding(
+                              child: _buildChats(chat),
+                              padding: const EdgeInsets.only(top: 0.0),
+                            );
+                          },
+                        ),
+                      );
+                    })))
+      ]))
+    ]);
   }
 
-  Widget _determineChatRender(ChatState state) {
-    switch (state.currentState) {
-      case ChatStatus.loading:
-        return const Center(child: LoadingIndicator(size: Size(40, 40)));
-      case ChatStatus.error:
-        return const Center(child: Text('An error occured'));
-      case ChatStatus.loaded:
-        return _renderChatWidget(state);
-      case ChatStatus.idle:
-        return const Center();
-    }
-  }
-
-  Widget _buildSlidingPanel() {
-    return Center();
-  }
-
-  Widget _headerWidget(ChatState state) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 9, right: 9, bottom: 5),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Messages\n', style: TextStyle(fontSize: 17)),
-              InkWell(
-                  onTap: () {},
-                  child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Icon(Icons.add, color: Colors.black)))
-            ],
-          ),
-          searchChatWidget(),
-        ]));
-  }
-
-  Widget _chatContainerWidget(ChatState state) {
-    return Expanded(
-        child: Container(
-            margin: const EdgeInsets.only(top: 30.0),
-            constraints: const BoxConstraints(
-              maxHeight: double.infinity,
-            ),
-            decoration: const BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    topLeft: Radius.circular(10.0))),
-            width: MediaQuery.of(context).size.width,
-            child: Stack(
-              children: [_determineChatRender(state)],
+  Widget _buildAppBar() {
+    return SliverAppBar(
+        title: null,
+        floating: true,
+        leading: const Center(),
+        backgroundColor: Colors.black,
+        expandedHeight: 55,
+        flexibleSpace: PreferredSize(
+            preferredSize: const Size.fromHeight(45.0),
+            child: AppBar(
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.black,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Messages\n', style: TextStyle(fontSize: 17)),
+                  InkWell(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Icon(Icons.add, color: Colors.black)))
+                ],
+              ),
             )));
-  }
-
-  Widget _renderChatActionWidget(ChatState state) {
-    const bool shouldBeDisabled = true;
-    return SizedBox(
-        height: 45.0,
-        width: 45.0,
-        child: FittedBox(
-            child: Opacity(
-                opacity: shouldBeDisabled ? 0.5 : 1,
-                child: FloatingActionButton(
-                    heroTag: null,
-                    backgroundColor: HexColor('#EE6115'),
-                    child: const Icon(Icons.attractions,
-                        size: 30, color: Colors.white),
-                    onPressed: () =>
-                        shouldBeDisabled ? null : () => print('')))));
   }
 
   Widget determineFriendRender(FollowingState state) {
@@ -186,7 +192,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
             margin: const EdgeInsets.only(bottom: 10),
             child: Image.asset('assets/images/friends.png',
                 height: 70, width: 70)),
-        Text('\You have no friends', style: TextStyle(fontSize: 14)),
+        const Text('\You have no friends', style: TextStyle(fontSize: 14)),
         //your widgets here...
       ],
     );
@@ -226,13 +232,13 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
         margin: const EdgeInsets.only(top: 20),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topRight: Radius.circular(20.0), topLeft: Radius.circular(20.0)),
           color: HexColor('#1B1921'),
         ),
         child: Column(children: [
-          Text('\nFriends\n', style: TextStyle(fontSize: 20)),
-          new Expanded(
+          const Text('\nFriends\n', style: TextStyle(fontSize: 20)),
+          Expanded(
               child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[determineFriendRender(state)]))
@@ -267,149 +273,120 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
                         builder: (context) => MessagingScreen(
                             blocGroup: _blocGroup,
                             metadata: MessagingMetaDataEntity(
-                                chatId: '${_appUser!.uid}-$id',
-                                chatRecipient: UserEntity(
+                                chatId: '${_user.id}-$id',
+                                chatRecipient: UserDTO(
                                     id: id,
                                     username: username,
                                     profilePic: profilePic),
-                                chatUser: UserEntity(
-                                    id: _appUser!.uid,
-                                    username: userState.user.username,
-                                    profilePic:
-                                        userState.user.profilePic ?? '')))
+                                chatUser: UserDTO(
+                                    id: _user.id,
+                                    username: _user.username,
+                                    profilePic: _user.profilePic ?? '')))
                         // instantiateChatInstance(userState.user, )),
                         ))));
       },
     );
   }
 
-  Widget _renderChatWidget(ChatState state) {
-    return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: false,
-        header: const ClassicHeader(
-          idleText: '',
-          releaseText: '',
-          completeText: '',
-          refreshingText: '',
-          idleIcon: CupertinoActivityIndicator(radius: 10),
-          completeIcon: CupertinoActivityIndicator(radius: 10),
-          releaseIcon: CupertinoActivityIndicator(radius: 10),
-        ),
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            return const Center();
-          },
-        ),
-        controller: _refreshController,
-        child: _buildChats(state.chats));
-  }
-
-  Widget _buildChats(List<ChatEntity> chats) {
-    if (chats.isEmpty) {
-      return const Center(child: Text('You have no chats'));
+  Widget _buildChats(ChatModel chat) {
+    if (chat.latestMessage == null) {
+      return const Center();
     }
-    return ListView.builder(
-      itemCount: chats.length,
-      padding: const EdgeInsets.only(top: 25),
-      itemBuilder: (context, index) {
-        if (chats[index].latestMessage == null) {
-          return const Center();
-        }
-        final chatId = chats[index].id;
-        final unread = chats[index].unread[_appUser!.uid] ?? 0 as int;
-        final timeElapsed = chats[index].latestMessage?.date as int;
+    final chatId = chat.id;
+    final unread = chat.unread[_user.id] ?? 0 as int;
+    final timeElapsed = chat.latestMessage?.date as int;
 
-        final displayName = chats[index]
-            .participants
-            .firstWhere((participant) => participant.id != userState.user.id)
-            .username;
+    final displayName = chat.participants
+        .firstWhere((participant) => participant.id != _user.id)
+        .username;
+    print("TEST");
+    final displayPhoto = chat.participants
+        .firstWhere((participant) => participant.id != _user.id)
+        .profilePic as String;
 
-        final displayPhoto = chats[index]
-            .participants
-            .firstWhere((participant) => participant.id != userState.user.id)
-            .profilePic as String;
-        final displayMessage = chats[index].latestMessage?.message?.text;
+    final displayMessage = chat.latestMessage?.message?.text;
 
-        final chatUser = chats[index]
-            .participants
-            .firstWhere((participant) => participant.id == userState.user.id);
-        final chatRecipient = chats[index]
-            .participants
-            .firstWhere((participant) => participant.id != userState.user.id);
+    final chatUser = chat.participants
+        .firstWhere((participant) => participant.id == _user.id);
+    final chatRecipient = chat.participants
+        .firstWhere((participant) => participant.id != _user.id);
 
-        final chatMetadata = MessagingMetaDataEntity(
-          chatId: chatId,
-          chatUser: chatUser,
-          chatRecipient: chatRecipient,
-        );
-
-        return Padding(
-            padding: const EdgeInsets.all(0),
-            child: Column(children: [
-              Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  color: Colors.black,
-                  //HexColor('#121213'),
-                  child: Slidable(
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          spacing: 0,
-                          flex: 1,
-                          onPressed: (context) => null,
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                        ),
-                      ],
-                    ),
-                    child: ListTile(
-                        isThreeLine: true,
-                        leading: CircleAvatar(
-                            radius: 20,
-                            backgroundImage:
-                                CachedNetworkImageProvider(displayPhoto)),
-                        subtitle: _determineMessageDisplay(
-                            unread, chats[index].latestMessage),
-                        title: Text('$displayName',
-                            style: TextStyle(
-                                fontSize: const AdaptiveTextSize()
-                                    .getAdaptiveTextSize(context, 10))),
-                        trailing: Container(
-                            margin: const EdgeInsets.only(top: 0),
-                            child: Column(children: [
-                              _timeElaspedWidget(timeElapsed),
-                            ])),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MessagingScreen(
-                                    blocGroup: _blocGroup,
-                                    metadata: chatMetadata)))),
-                  )),
-            ]));
-      },
+    final chatMetadata = MessagingMetaDataEntity(
+      chatId: chatId,
+      chatUser: chatUser,
+      chatRecipient: chatRecipient,
     );
+
+    print("TEST");
+
+    return Padding(
+        padding: const EdgeInsets.all(0),
+        child: Column(children: [
+          Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              color: Colors.black,
+              //HexColor('#121213'),
+              child: Slidable(
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      spacing: 0,
+                      flex: 1,
+                      onPressed: (context) => null,
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    ),
+                  ],
+                ),
+                child: SizedBox(
+                  height: 60,
+                  child: ListTile(
+                      isThreeLine: true,
+                      dense: false,
+                      leading: CircleAvatar(
+                          radius: 20,
+                          backgroundImage:
+                              CachedNetworkImageProvider(displayPhoto)),
+                      subtitle:
+                          _determineMessageDisplay(unread, chat.latestMessage),
+                      title: Text(
+                        '$displayName',
+                        style: TextStyle(
+                            fontSize: const AdaptiveTextSize()
+                                .getAdaptiveTextSize(context, 10)),
+                      ),
+                      trailing: Container(
+                          margin: const EdgeInsets.only(top: 0),
+                          child: Column(children: [
+                            _timeElaspedWidget(timeElapsed),
+                          ])),
+                      onTap: () {
+                        getService<AppRouter>().push(MessagingRoute(
+                            blocGroup: _blocGroup, metadata: chatMetadata));
+                      }),
+                ),
+              )),
+        ]));
   }
 
   Widget _timeElaspedWidget(int timeElapsed) {
     return Text(
         TimeElapsed.elapsedTimeDynamic(
             DateTime.fromMicrosecondsSinceEpoch(timeElapsed).toString()),
-        style: const TextStyle(fontSize: 14));
+        style:
+            TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.3)));
   }
 
-  Widget _determineMessageDisplay(
-      int unread, LatestMessageEntity? latestMessage) {
-    String display = '';
+  Widget _determineMessageDisplay(int unread, LatestMessage? latestMessage) {
+    String display = '...';
 
-    final _isMine = latestMessage?.message?.user.id == _appUser!.uid;
+    final _isMine = latestMessage?.message?.user.id == _user.id;
 
     final _prefix = _isMine ? 'You: ' : '';
 

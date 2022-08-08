@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frienderr/features/presentation/screens/messaging/audio_player.dart';
-import 'package:video_player/video_player.dart';
 import 'package:frienderr/core/enums/enums.dart';
 import 'package:dash_chat_2/dash_chat_2.dart' as chat;
 import 'package:frienderr/core/constants/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_video_player/cached_video_player.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
+import 'package:frienderr/features/presentation/screens/messaging/video_player.dart';
 import 'package:frienderr/features/presentation/widgets/loading.dart';
 import 'package:frienderr/features/presentation/widgets/popup_menu.dart';
+import 'package:frienderr/features/presentation/screens/messaging/audio_player.dart';
 import 'package:frienderr/features/presentation/blocs/messaging/messaging_bloc.dart';
 import 'package:frienderr/features/presentation/screens/messaging/bubble_background.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
@@ -130,7 +133,9 @@ class _ChatBubbleState extends State<ChatBubble>
                                     Text('  Delete message',
                                         style: TextStyle(
                                             color: Colors.red[600]!,
-                                            fontSize: 18)),
+                                            fontSize:
+                                                ResponsiveFlutter.of(context)
+                                                    .fontSize(1.4))),
                                   ],
                                 )),
                           ],
@@ -159,13 +164,15 @@ class _ChatBubbleState extends State<ChatBubble>
     }
 
     return DefaultTextStyle.merge(
-      style: const TextStyle(
-        fontSize: 18.0,
+      style: TextStyle(
+        fontSize: ResponsiveFlutter.of(context).fontSize(1.45),
         color: Colors.white,
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Text(_message.text),
+        child: Text(_message.text,
+            style: TextStyle(
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.45))),
       ),
     );
   }
@@ -182,7 +189,7 @@ class _ChatBubbleState extends State<ChatBubble>
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: InteractiveViewer(
-                child: Image.network(url),
+                child: CachedNetworkImage(imageUrl: url),
               ));
         },
         closedBuilder: (BuildContext context, VoidCallback openContainer) {
@@ -199,8 +206,8 @@ class _ChatBubbleState extends State<ChatBubble>
         closedColor: Colors.transparent,
         transitionType: ContainerTransitionType.fadeThrough,
         openBuilder: (BuildContext context, VoidCallback _) {
-          final VideoPlayerController _controller =
-              VideoPlayerController.network(url);
+          final CachedVideoPlayerController _controller =
+              CachedVideoPlayerController.network(url);
 
           _controller.initialize();
 
@@ -213,7 +220,7 @@ class _ChatBubbleState extends State<ChatBubble>
                     condition: _controller.value.isInitialized,
                     renderWidget: AspectRatio(
                       aspectRatio: constraints.maxWidth / constraints.maxHeight,
-                      child: chat.VideoPlayer(url: url),
+                      child: ChatVideoPlayer(url: url),
                     ),
                     fallbackWidget:
                         const LoadingIndicator(size: Size(40, 40)))),
@@ -222,7 +229,7 @@ class _ChatBubbleState extends State<ChatBubble>
         closedBuilder: (BuildContext context, VoidCallback openContainer) {
           return SizedBox(
               width: MediaQuery.of(context).size.width * .7,
-              child: chat.VideoPlayer(url: url));
+              child: ChatVideoPlayer(url: url));
         });
   }
 
@@ -243,14 +250,14 @@ class _ChatBubbleState extends State<ChatBubble>
                       onTap: () async {},
                       child: Padding(
                         child: SvgPicture.asset(Constants.messageSeenIconFill,
-                            height: 22,
-                            width: 22,
+                            height: ResponsiveFlutter.of(context).fontSize(1.9),
+                            width: ResponsiveFlutter.of(context).fontSize(1.9),
                             color: _message.status == chat.MessageStatus.read
                                 ? Colors.blue[500]
                                 : Colors.grey[500]),
                         padding: const EdgeInsets.only(left: 10),
                       )),
-                  chat.DefaultAvatar(user: _message.user),
+                  chat.DefaultAvatar(user: _message.user, size: 30),
                 ]),
             fallbackWidget: const Center()),
       ],

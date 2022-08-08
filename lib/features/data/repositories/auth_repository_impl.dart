@@ -1,17 +1,18 @@
 import 'package:dartz/dartz.dart';
+import 'package:frienderr/features/data/providers/auth/social_auth_provider.dart';
 import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frienderr/core/failure/failure.dart';
 import 'package:frienderr/core/exceptions/exceptions.dart';
 import 'package:frienderr/features/data/models/auth/auth_model.dart';
-import 'package:frienderr/features/data/providers/auth_provider.dart';
+import 'package:frienderr/features/data/providers/auth/auth_provider.dart';
 import 'package:frienderr/features/domain/repositiories/auth_repository.dart';
 
 @LazySingleton(as: IAuthRepository)
 class AuthRepository implements IAuthRepository {
   final IAuthRemoteDataProvider authProvider;
-
-  const AuthRepository(this.authProvider);
+  final ISocialAuthRemoteDataProvider socialAuthProvider;
+  const AuthRepository(this.authProvider, this.socialAuthProvider);
 
   @override
   Future<Either<Failure, AuthResponse>> recoverPassword(
@@ -73,6 +74,96 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
+  Future<Either<Failure, AuthResponse>> googleProviderSignIn() async {
+    try {
+      final AuthResponse authResponse =
+          await socialAuthProvider.googleProviderSignIn();
+
+      if (authResponse.hasError) {
+        return Left(Failure(message: authResponse.error));
+      }
+      return Right(authResponse);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(message: Errors.login));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> googleProviderSignUp() async {
+    try {
+      final AuthResponse authResponse =
+          await socialAuthProvider.googleProviderSignUp();
+
+      if (authResponse.hasError) {
+        return Left(Failure(message: authResponse.error));
+      }
+      return Right(authResponse);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(message: Errors.login));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> facebookProviderSignIn() async {
+    try {
+      final AuthResponse authResponse =
+          await socialAuthProvider.facebookProviderSignIn();
+
+      if (authResponse.hasError) {
+        return Left(Failure(message: authResponse.error));
+      }
+      return Right(authResponse);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(message: Errors.login));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> facebookProviderSignUp() async {
+    try {
+      final AuthResponse authResponse =
+          await socialAuthProvider.facebookProviderSignUp();
+
+      if (authResponse.hasError) {
+        return Left(Failure(message: authResponse.error));
+      }
+      return Right(authResponse);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(message: Errors.login));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> twitterProviderSignUp() async {
+    try {
+      final AuthResponse authResponse =
+          await socialAuthProvider.twitterProviderSignUp();
+
+      if (authResponse.hasError) {
+        return Left(Failure(message: authResponse.error));
+      }
+      return Right(authResponse);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(message: Errors.login));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthResponse>> twitterProviderSignIn() async {
+    try {
+      final AuthResponse authResponse =
+          await socialAuthProvider.twitterProviderSignIn();
+
+      if (authResponse.hasError) {
+        return Left(Failure(message: authResponse.error));
+      }
+      return Right(authResponse);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(message: Errors.login));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> verfyAndUpdateUsername(
       String userId, String username) async {
     try {
@@ -80,7 +171,7 @@ class AuthRepository implements IAuthRepository {
           await authProvider.verfyAndUpdateUsername(userId, username);
 
       if (!authResponse) {
-        return Left(Failure(message: 'Username is aready selected'));
+        return const Left(Failure(message: 'Username is aready selected'));
       }
 
       return Right(authResponse);
@@ -90,13 +181,11 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> signOut(
-      {required Function onComplete, required Function onFailure}) async {
+  Future<Either<Failure, bool>> signOut() async {
     try {
-      return Right(
-          authProvider.signOut(onComplete: onComplete, onFailure: onFailure));
+      final result = await authProvider.signOut();
+      return Right(result);
     } on FirebaseAuthException catch (e) {
-      onFailure(e);
       return Left(Failure(message: e.toString()));
     }
   }

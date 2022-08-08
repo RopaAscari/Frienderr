@@ -1,6 +1,8 @@
 import 'package:frienderr/core/enums/enums.dart';
 
 class Constants {
+  static int pageSize = 10;
+
   static String darkTheme = 'Dark';
   static String heroTag = 'appLogo';
   static String lightTheme = 'Light';
@@ -8,6 +10,7 @@ class Constants {
   static String shareIcon = 'assets/icons/share-icon.svg';
   static String googleIcon = 'assets/images/google_icon.png';
   static String appleIconWhite = 'assets/images/apple_icon_white.png';
+  static String twitterIcon = 'assets/images/twitter_icon.png';
   static String facebookIcon = 'assets/images/facebook_icon.png';
   static String recordingAnimation = 'assets/animations/recording.flr';
   static String loadingAnimation = 'assets/animations/loading.flr';
@@ -128,8 +131,8 @@ class Constants {
   };
 
   static Map<PostType, String> postTypes = {
-    PostType.Post: 'Post',
-    PostType.Story: 'Story'
+    PostType.post: 'Post',
+    PostType.story: 'Story'
   };
 
   static Map<NotificationTypes, String> notificationTypes = {

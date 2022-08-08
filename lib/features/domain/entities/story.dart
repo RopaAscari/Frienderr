@@ -2,15 +2,17 @@ import 'dart:convert';
 import 'package:frienderr/features/domain/entities/user.dart';
 import 'package:frienderr/features/data/models/story/story_model.dart';
 
-class StoryEntity {
-  final String id;
-  final dynamic user;
-  final int dateUpdated;
-  final List<StoryContentEntity> content;
-  StoryEntity({
+class StoryDTO {
+  String id;
+  UserDTO user;
+  int dateUpdated;
+  bool isPersitent;
+  List<StoryContentDTO> content;
+  StoryDTO({
     required this.id,
     required this.user,
     required this.content,
+    required this.isPersitent,
     required this.dateUpdated,
   });
 
@@ -18,33 +20,37 @@ class StoryEntity {
     return {
       'id': id,
       'user': user.toJson(),
+      'isPersitent': isPersitent,
       'dateUpdated': dateUpdated,
       'content': content.map((x) => x.toJson()).toList(),
     };
   }
 
-  factory StoryEntity.fromJson(Map<String, dynamic> map) {
-    return StoryEntity(
+  factory StoryDTO.fromJson(Map<String, dynamic> map) {
+    return StoryDTO(
       id: map['id'] ?? '',
-      user: UserEntity.fromJson(map['user']),
+      user: UserDTO.fromJson(map['user']),
+      isPersitent: map['isPersitent'] ?? false,
       dateUpdated: map['dateUpdated']?.toInt() ?? 0,
-      content: List<StoryContentEntity>.from(
-          map['content']?.map((x) => StoryContentEntity.fromJson(x))),
+      content: List<StoryContentDTO>.from(
+          map['content']?.map((x) => StoryContentDTO.fromJson(x))),
     );
   }
 }
 
-class StoryContentEntity {
-  final String id;
-  final int dateCreated;
-  final List<String> views;
-  final List<String> likes;
-  final StoryMediaEntity media;
-  StoryContentEntity({
+class StoryContentDTO {
+  String id;
+  int views;
+  int reactions;
+  bool? isViewed;
+  int dateCreated;
+  StoryMediaDTO media;
+  StoryContentDTO({
+    this.isViewed,
     required this.id,
     required this.views,
-    required this.likes,
     required this.media,
+    required this.reactions,
     required this.dateCreated,
   });
 
@@ -52,28 +58,28 @@ class StoryContentEntity {
     return {
       'id': id,
       'views': views,
-      'likes': likes,
+      'reactions': reactions,
       'media': media.toJson(),
       'dateCreated': dateCreated,
     };
   }
 
-  factory StoryContentEntity.fromJson(Map<String, dynamic> map) {
-    return StoryContentEntity(
+  factory StoryContentDTO.fromJson(Map<String, dynamic> map) {
+    return StoryContentDTO(
       id: map['id'] ?? '',
-      views: List<String>.from(map['views'] ?? []),
-      likes: List<String>.from(map['likes'] ?? []),
+      views: map['views'] ?? 0,
+      reactions: map['likes'] ?? 0,
       dateCreated: map['dateCreated']?.toInt() ?? 0,
-      media: StoryMediaEntity.fromJson(map['media']),
+      media: StoryMediaDTO.fromJson(map['media']),
     );
   }
 }
 
-class StoryMediaEntity {
+class StoryMediaDTO {
   final String url;
   final String type;
-  final StoryMetadata metadata;
-  StoryMediaEntity({
+  final StoryMetadataDTO metadata;
+  StoryMediaDTO({
     required this.url,
     required this.type,
     required this.metadata,
@@ -87,19 +93,19 @@ class StoryMediaEntity {
     };
   }
 
-  factory StoryMediaEntity.fromJson(Map<String, dynamic> map) {
-    return StoryMediaEntity(
+  factory StoryMediaDTO.fromJson(Map<String, dynamic> map) {
+    return StoryMediaDTO(
       url: map['url'] ?? '',
       type: map['type'] ?? '',
-      metadata: StoryMetadata.fromJson(map['metadata']),
+      metadata: StoryMetadataDTO.fromJson(map['metadata']),
     );
   }
 }
 
-class StoryMetadata {
+class StoryMetadataDTO {
   final int? duration;
   final String? thumbnail;
-  StoryMetadata({
+  StoryMetadataDTO({
     this.duration,
     this.thumbnail,
   });
@@ -111,8 +117,8 @@ class StoryMetadata {
     };
   }
 
-  factory StoryMetadata.fromJson(Map<String, dynamic> map) {
-    return StoryMetadata(
+  factory StoryMetadataDTO.fromJson(Map<String, dynamic> map) {
+    return StoryMetadataDTO(
       duration: map['duration']?.toInt(),
       thumbnail: map['thumbnail'],
     );
@@ -120,7 +126,7 @@ class StoryMetadata {
 }
 
 class UserStory {
-  StoryModel? story;
+  Story? story;
   bool doesUserHaveStories;
   UserStory({
     required this.story,
@@ -130,7 +136,7 @@ class UserStory {
 
 class StoryResponse {
   UserStory userStory;
-  List<StoryModel> stories;
+  List<Story> stories;
   StoryResponse({
     required this.stories,
     required this.userStory,

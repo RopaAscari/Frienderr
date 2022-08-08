@@ -7,14 +7,14 @@ import 'package:frienderr/features/domain/repositiories/followers_repository.dar
 
 @lazySingleton
 class GetAccountFollowersUseCase
-    extends UseCase<List<String>, GetAccountFollowersParams> {
+    extends UseCase<int, GetAccountFollowersParams> {
   GetAccountFollowersUseCase(this.repository);
 
   final IFollowersRepository repository;
 
   @override
-  Future<Either<Failure, List<String>>> call(GetAccountFollowersParams params) {
-    return repository.getFollowers(params.uid);
+  Future<Either<Failure, int>> call(GetAccountFollowersParams params) {
+    return repository.getFollowersCount(params.uid);
   }
 }
 

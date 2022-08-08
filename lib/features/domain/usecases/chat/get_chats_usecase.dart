@@ -7,13 +7,13 @@ import 'package:frienderr/features/data/models/chat/chat_model.dart';
 import 'package:frienderr/features/domain/repositiories/chat_repository.dart';
 
 @lazySingleton
-class GetChatsUseCase extends UseCase<List<ChatEntity>, GetChatParams> {
+class GetChatsUseCase extends UseCase<List<ChatModel>, GetChatParams> {
   GetChatsUseCase(this.repository);
 
   final IChatRepository repository;
 
   @override
-  Future<Either<Failure, List<ChatEntity>>> call(GetChatParams params) {
+  Future<Either<Failure, List<ChatModel>>> call(GetChatParams params) {
     return repository.getChats(uid: params.uid);
   }
 }

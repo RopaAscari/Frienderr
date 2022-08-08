@@ -19,21 +19,21 @@ class _$NotificationEventTearOff {
   const _$NotificationEventTearOff();
 
   _SendLikeNotification sendLikeNotification(
-      {required NotificationEntity notification}) {
+      {required NotificationDTO notification}) {
     return _SendLikeNotification(
       notification: notification,
     );
   }
 
   _SendCommentNotification sendCommentNotification(
-      {required NotificationEntity notification}) {
+      {required NotificationDTO notification}) {
     return _SendCommentNotification(
       notification: notification,
     );
   }
 
   _SendFollowNotification sendFollowNotification(
-      {required NotificationEntity notification}) {
+      {required NotificationDTO notification}) {
     return _SendFollowNotification(
       notification: notification,
     );
@@ -41,6 +41,12 @@ class _$NotificationEventTearOff {
 
   _GetNotifications getNotifications({required String uid}) {
     return _GetNotifications(
+      uid: uid,
+    );
+  }
+
+  _GetPaginatedNotifications getPaginatedNotifications({required String uid}) {
+    return _GetPaginatedNotifications(
       uid: uid,
     );
   }
@@ -53,29 +59,32 @@ const $NotificationEvent = _$NotificationEventTearOff();
 mixin _$NotificationEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendLikeNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendCommentNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendFollowNotification,
     required TResult Function(String uid) getNotifications,
+    required TResult Function(String uid) getPaginatedNotifications,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -87,6 +96,8 @@ mixin _$NotificationEvent {
     required TResult Function(_SendFollowNotification value)
         sendFollowNotification,
     required TResult Function(_GetNotifications value) getNotifications,
+    required TResult Function(_GetPaginatedNotifications value)
+        getPaginatedNotifications,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -95,6 +106,8 @@ mixin _$NotificationEvent {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -103,6 +116,8 @@ mixin _$NotificationEvent {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -130,7 +145,7 @@ abstract class _$SendLikeNotificationCopyWith<$Res> {
   factory _$SendLikeNotificationCopyWith(_SendLikeNotification value,
           $Res Function(_SendLikeNotification) then) =
       __$SendLikeNotificationCopyWithImpl<$Res>;
-  $Res call({NotificationEntity notification});
+  $Res call({NotificationDTO notification});
 }
 
 /// @nodoc
@@ -152,7 +167,7 @@ class __$SendLikeNotificationCopyWithImpl<$Res>
       notification: notification == freezed
           ? _value.notification
           : notification // ignore: cast_nullable_to_non_nullable
-              as NotificationEntity,
+              as NotificationDTO,
     ));
   }
 }
@@ -163,7 +178,7 @@ class _$_SendLikeNotification implements _SendLikeNotification {
   const _$_SendLikeNotification({required this.notification});
 
   @override
-  final NotificationEntity notification;
+  final NotificationDTO notification;
 
   @override
   String toString() {
@@ -192,13 +207,14 @@ class _$_SendLikeNotification implements _SendLikeNotification {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendLikeNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendCommentNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendFollowNotification,
     required TResult Function(String uid) getNotifications,
+    required TResult Function(String uid) getPaginatedNotifications,
   }) {
     return sendLikeNotification(notification);
   }
@@ -206,10 +222,11 @@ class _$_SendLikeNotification implements _SendLikeNotification {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
   }) {
     return sendLikeNotification?.call(notification);
   }
@@ -217,10 +234,11 @@ class _$_SendLikeNotification implements _SendLikeNotification {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (sendLikeNotification != null) {
@@ -238,6 +256,8 @@ class _$_SendLikeNotification implements _SendLikeNotification {
     required TResult Function(_SendFollowNotification value)
         sendFollowNotification,
     required TResult Function(_GetNotifications value) getNotifications,
+    required TResult Function(_GetPaginatedNotifications value)
+        getPaginatedNotifications,
   }) {
     return sendLikeNotification(this);
   }
@@ -249,6 +269,8 @@ class _$_SendLikeNotification implements _SendLikeNotification {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
   }) {
     return sendLikeNotification?.call(this);
   }
@@ -260,6 +282,8 @@ class _$_SendLikeNotification implements _SendLikeNotification {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (sendLikeNotification != null) {
@@ -270,10 +294,10 @@ class _$_SendLikeNotification implements _SendLikeNotification {
 }
 
 abstract class _SendLikeNotification implements NotificationEvent {
-  const factory _SendLikeNotification(
-      {required NotificationEntity notification}) = _$_SendLikeNotification;
+  const factory _SendLikeNotification({required NotificationDTO notification}) =
+      _$_SendLikeNotification;
 
-  NotificationEntity get notification;
+  NotificationDTO get notification;
   @JsonKey(ignore: true)
   _$SendLikeNotificationCopyWith<_SendLikeNotification> get copyWith =>
       throw _privateConstructorUsedError;
@@ -284,7 +308,7 @@ abstract class _$SendCommentNotificationCopyWith<$Res> {
   factory _$SendCommentNotificationCopyWith(_SendCommentNotification value,
           $Res Function(_SendCommentNotification) then) =
       __$SendCommentNotificationCopyWithImpl<$Res>;
-  $Res call({NotificationEntity notification});
+  $Res call({NotificationDTO notification});
 }
 
 /// @nodoc
@@ -307,7 +331,7 @@ class __$SendCommentNotificationCopyWithImpl<$Res>
       notification: notification == freezed
           ? _value.notification
           : notification // ignore: cast_nullable_to_non_nullable
-              as NotificationEntity,
+              as NotificationDTO,
     ));
   }
 }
@@ -318,7 +342,7 @@ class _$_SendCommentNotification implements _SendCommentNotification {
   const _$_SendCommentNotification({required this.notification});
 
   @override
-  final NotificationEntity notification;
+  final NotificationDTO notification;
 
   @override
   String toString() {
@@ -347,13 +371,14 @@ class _$_SendCommentNotification implements _SendCommentNotification {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendLikeNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendCommentNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendFollowNotification,
     required TResult Function(String uid) getNotifications,
+    required TResult Function(String uid) getPaginatedNotifications,
   }) {
     return sendCommentNotification(notification);
   }
@@ -361,10 +386,11 @@ class _$_SendCommentNotification implements _SendCommentNotification {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
   }) {
     return sendCommentNotification?.call(notification);
   }
@@ -372,10 +398,11 @@ class _$_SendCommentNotification implements _SendCommentNotification {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (sendCommentNotification != null) {
@@ -393,6 +420,8 @@ class _$_SendCommentNotification implements _SendCommentNotification {
     required TResult Function(_SendFollowNotification value)
         sendFollowNotification,
     required TResult Function(_GetNotifications value) getNotifications,
+    required TResult Function(_GetPaginatedNotifications value)
+        getPaginatedNotifications,
   }) {
     return sendCommentNotification(this);
   }
@@ -404,6 +433,8 @@ class _$_SendCommentNotification implements _SendCommentNotification {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
   }) {
     return sendCommentNotification?.call(this);
   }
@@ -415,6 +446,8 @@ class _$_SendCommentNotification implements _SendCommentNotification {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (sendCommentNotification != null) {
@@ -426,9 +459,9 @@ class _$_SendCommentNotification implements _SendCommentNotification {
 
 abstract class _SendCommentNotification implements NotificationEvent {
   const factory _SendCommentNotification(
-      {required NotificationEntity notification}) = _$_SendCommentNotification;
+      {required NotificationDTO notification}) = _$_SendCommentNotification;
 
-  NotificationEntity get notification;
+  NotificationDTO get notification;
   @JsonKey(ignore: true)
   _$SendCommentNotificationCopyWith<_SendCommentNotification> get copyWith =>
       throw _privateConstructorUsedError;
@@ -439,7 +472,7 @@ abstract class _$SendFollowNotificationCopyWith<$Res> {
   factory _$SendFollowNotificationCopyWith(_SendFollowNotification value,
           $Res Function(_SendFollowNotification) then) =
       __$SendFollowNotificationCopyWithImpl<$Res>;
-  $Res call({NotificationEntity notification});
+  $Res call({NotificationDTO notification});
 }
 
 /// @nodoc
@@ -461,7 +494,7 @@ class __$SendFollowNotificationCopyWithImpl<$Res>
       notification: notification == freezed
           ? _value.notification
           : notification // ignore: cast_nullable_to_non_nullable
-              as NotificationEntity,
+              as NotificationDTO,
     ));
   }
 }
@@ -472,7 +505,7 @@ class _$_SendFollowNotification implements _SendFollowNotification {
   const _$_SendFollowNotification({required this.notification});
 
   @override
-  final NotificationEntity notification;
+  final NotificationDTO notification;
 
   @override
   String toString() {
@@ -501,13 +534,14 @@ class _$_SendFollowNotification implements _SendFollowNotification {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendLikeNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendCommentNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendFollowNotification,
     required TResult Function(String uid) getNotifications,
+    required TResult Function(String uid) getPaginatedNotifications,
   }) {
     return sendFollowNotification(notification);
   }
@@ -515,10 +549,11 @@ class _$_SendFollowNotification implements _SendFollowNotification {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
   }) {
     return sendFollowNotification?.call(notification);
   }
@@ -526,10 +561,11 @@ class _$_SendFollowNotification implements _SendFollowNotification {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (sendFollowNotification != null) {
@@ -547,6 +583,8 @@ class _$_SendFollowNotification implements _SendFollowNotification {
     required TResult Function(_SendFollowNotification value)
         sendFollowNotification,
     required TResult Function(_GetNotifications value) getNotifications,
+    required TResult Function(_GetPaginatedNotifications value)
+        getPaginatedNotifications,
   }) {
     return sendFollowNotification(this);
   }
@@ -558,6 +596,8 @@ class _$_SendFollowNotification implements _SendFollowNotification {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
   }) {
     return sendFollowNotification?.call(this);
   }
@@ -569,6 +609,8 @@ class _$_SendFollowNotification implements _SendFollowNotification {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (sendFollowNotification != null) {
@@ -580,9 +622,9 @@ class _$_SendFollowNotification implements _SendFollowNotification {
 
 abstract class _SendFollowNotification implements NotificationEvent {
   const factory _SendFollowNotification(
-      {required NotificationEntity notification}) = _$_SendFollowNotification;
+      {required NotificationDTO notification}) = _$_SendFollowNotification;
 
-  NotificationEntity get notification;
+  NotificationDTO get notification;
   @JsonKey(ignore: true)
   _$SendFollowNotificationCopyWith<_SendFollowNotification> get copyWith =>
       throw _privateConstructorUsedError;
@@ -653,13 +695,14 @@ class _$_GetNotifications implements _GetNotifications {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendLikeNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendCommentNotification,
-    required TResult Function(NotificationEntity notification)
+    required TResult Function(NotificationDTO notification)
         sendFollowNotification,
     required TResult Function(String uid) getNotifications,
+    required TResult Function(String uid) getPaginatedNotifications,
   }) {
     return getNotifications(uid);
   }
@@ -667,10 +710,11 @@ class _$_GetNotifications implements _GetNotifications {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
   }) {
     return getNotifications?.call(uid);
   }
@@ -678,10 +722,11 @@ class _$_GetNotifications implements _GetNotifications {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(NotificationEntity notification)? sendLikeNotification,
-    TResult Function(NotificationEntity notification)? sendCommentNotification,
-    TResult Function(NotificationEntity notification)? sendFollowNotification,
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
     TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (getNotifications != null) {
@@ -699,6 +744,8 @@ class _$_GetNotifications implements _GetNotifications {
     required TResult Function(_SendFollowNotification value)
         sendFollowNotification,
     required TResult Function(_GetNotifications value) getNotifications,
+    required TResult Function(_GetPaginatedNotifications value)
+        getPaginatedNotifications,
   }) {
     return getNotifications(this);
   }
@@ -710,6 +757,8 @@ class _$_GetNotifications implements _GetNotifications {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
   }) {
     return getNotifications?.call(this);
   }
@@ -721,6 +770,8 @@ class _$_GetNotifications implements _GetNotifications {
     TResult Function(_SendCommentNotification value)? sendCommentNotification,
     TResult Function(_SendFollowNotification value)? sendFollowNotification,
     TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
     required TResult orElse(),
   }) {
     if (getNotifications != null) {
@@ -740,19 +791,181 @@ abstract class _GetNotifications implements NotificationEvent {
 }
 
 /// @nodoc
+abstract class _$GetPaginatedNotificationsCopyWith<$Res> {
+  factory _$GetPaginatedNotificationsCopyWith(_GetPaginatedNotifications value,
+          $Res Function(_GetPaginatedNotifications) then) =
+      __$GetPaginatedNotificationsCopyWithImpl<$Res>;
+  $Res call({String uid});
+}
+
+/// @nodoc
+class __$GetPaginatedNotificationsCopyWithImpl<$Res>
+    extends _$NotificationEventCopyWithImpl<$Res>
+    implements _$GetPaginatedNotificationsCopyWith<$Res> {
+  __$GetPaginatedNotificationsCopyWithImpl(_GetPaginatedNotifications _value,
+      $Res Function(_GetPaginatedNotifications) _then)
+      : super(_value, (v) => _then(v as _GetPaginatedNotifications));
+
+  @override
+  _GetPaginatedNotifications get _value =>
+      super._value as _GetPaginatedNotifications;
+
+  @override
+  $Res call({
+    Object? uid = freezed,
+  }) {
+    return _then(_GetPaginatedNotifications(
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_GetPaginatedNotifications implements _GetPaginatedNotifications {
+  const _$_GetPaginatedNotifications({required this.uid});
+
+  @override
+  final String uid;
+
+  @override
+  String toString() {
+    return 'NotificationEvent.getPaginatedNotifications(uid: $uid)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetPaginatedNotifications &&
+            const DeepCollectionEquality().equals(other.uid, uid));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(uid));
+
+  @JsonKey(ignore: true)
+  @override
+  _$GetPaginatedNotificationsCopyWith<_GetPaginatedNotifications>
+      get copyWith =>
+          __$GetPaginatedNotificationsCopyWithImpl<_GetPaginatedNotifications>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(NotificationDTO notification)
+        sendLikeNotification,
+    required TResult Function(NotificationDTO notification)
+        sendCommentNotification,
+    required TResult Function(NotificationDTO notification)
+        sendFollowNotification,
+    required TResult Function(String uid) getNotifications,
+    required TResult Function(String uid) getPaginatedNotifications,
+  }) {
+    return getPaginatedNotifications(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
+    TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
+  }) {
+    return getPaginatedNotifications?.call(uid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(NotificationDTO notification)? sendLikeNotification,
+    TResult Function(NotificationDTO notification)? sendCommentNotification,
+    TResult Function(NotificationDTO notification)? sendFollowNotification,
+    TResult Function(String uid)? getNotifications,
+    TResult Function(String uid)? getPaginatedNotifications,
+    required TResult orElse(),
+  }) {
+    if (getPaginatedNotifications != null) {
+      return getPaginatedNotifications(uid);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SendLikeNotification value) sendLikeNotification,
+    required TResult Function(_SendCommentNotification value)
+        sendCommentNotification,
+    required TResult Function(_SendFollowNotification value)
+        sendFollowNotification,
+    required TResult Function(_GetNotifications value) getNotifications,
+    required TResult Function(_GetPaginatedNotifications value)
+        getPaginatedNotifications,
+  }) {
+    return getPaginatedNotifications(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_SendLikeNotification value)? sendLikeNotification,
+    TResult Function(_SendCommentNotification value)? sendCommentNotification,
+    TResult Function(_SendFollowNotification value)? sendFollowNotification,
+    TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
+  }) {
+    return getPaginatedNotifications?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SendLikeNotification value)? sendLikeNotification,
+    TResult Function(_SendCommentNotification value)? sendCommentNotification,
+    TResult Function(_SendFollowNotification value)? sendFollowNotification,
+    TResult Function(_GetNotifications value)? getNotifications,
+    TResult Function(_GetPaginatedNotifications value)?
+        getPaginatedNotifications,
+    required TResult orElse(),
+  }) {
+    if (getPaginatedNotifications != null) {
+      return getPaginatedNotifications(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetPaginatedNotifications implements NotificationEvent {
+  const factory _GetPaginatedNotifications({required String uid}) =
+      _$_GetPaginatedNotifications;
+
+  String get uid;
+  @JsonKey(ignore: true)
+  _$GetPaginatedNotificationsCopyWith<_GetPaginatedNotifications>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$NotificationStateTearOff {
   const _$NotificationStateTearOff();
 
   _NotificationState call(
-      {String error = '',
-      List<NotificationEntity> notifications = const [],
-      NotificationStatus currentState = NotificationStatus.idle,
+      {bool reachedMaximumThreshold = false,
+      required PagingController<int, NotificationModel> paginationController,
       NotificationListenableAction action =
           NotificationListenableAction.idle}) {
     return _NotificationState(
-      error: error,
-      notifications: notifications,
-      currentState: currentState,
+      reachedMaximumThreshold: reachedMaximumThreshold,
+      paginationController: paginationController,
       action: action,
     );
   }
@@ -763,10 +976,9 @@ const $NotificationState = _$NotificationStateTearOff();
 
 /// @nodoc
 mixin _$NotificationState {
-  String get error => throw _privateConstructorUsedError;
-  List<NotificationEntity> get notifications =>
+  bool get reachedMaximumThreshold => throw _privateConstructorUsedError;
+  PagingController<int, NotificationModel> get paginationController =>
       throw _privateConstructorUsedError;
-  NotificationStatus get currentState => throw _privateConstructorUsedError;
   NotificationListenableAction get action => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -780,9 +992,8 @@ abstract class $NotificationStateCopyWith<$Res> {
           NotificationState value, $Res Function(NotificationState) then) =
       _$NotificationStateCopyWithImpl<$Res>;
   $Res call(
-      {String error,
-      List<NotificationEntity> notifications,
-      NotificationStatus currentState,
+      {bool reachedMaximumThreshold,
+      PagingController<int, NotificationModel> paginationController,
       NotificationListenableAction action});
 }
 
@@ -797,24 +1008,19 @@ class _$NotificationStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? notifications = freezed,
-    Object? currentState = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_value.copyWith(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      notifications: notifications == freezed
-          ? _value.notifications
-          : notifications // ignore: cast_nullable_to_non_nullable
-              as List<NotificationEntity>,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as NotificationStatus,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, NotificationModel>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -831,9 +1037,8 @@ abstract class _$NotificationStateCopyWith<$Res>
       __$NotificationStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String error,
-      List<NotificationEntity> notifications,
-      NotificationStatus currentState,
+      {bool reachedMaximumThreshold,
+      PagingController<int, NotificationModel> paginationController,
       NotificationListenableAction action});
 }
 
@@ -850,24 +1055,19 @@ class __$NotificationStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? error = freezed,
-    Object? notifications = freezed,
-    Object? currentState = freezed,
+    Object? reachedMaximumThreshold = freezed,
+    Object? paginationController = freezed,
     Object? action = freezed,
   }) {
     return _then(_NotificationState(
-      error: error == freezed
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-      notifications: notifications == freezed
-          ? _value.notifications
-          : notifications // ignore: cast_nullable_to_non_nullable
-              as List<NotificationEntity>,
-      currentState: currentState == freezed
-          ? _value.currentState
-          : currentState // ignore: cast_nullable_to_non_nullable
-              as NotificationStatus,
+      reachedMaximumThreshold: reachedMaximumThreshold == freezed
+          ? _value.reachedMaximumThreshold
+          : reachedMaximumThreshold // ignore: cast_nullable_to_non_nullable
+              as bool,
+      paginationController: paginationController == freezed
+          ? _value.paginationController
+          : paginationController // ignore: cast_nullable_to_non_nullable
+              as PagingController<int, NotificationModel>,
       action: action == freezed
           ? _value.action
           : action // ignore: cast_nullable_to_non_nullable
@@ -880,27 +1080,22 @@ class __$NotificationStateCopyWithImpl<$Res>
 
 class _$_NotificationState implements _NotificationState {
   const _$_NotificationState(
-      {this.error = '',
-      this.notifications = const [],
-      this.currentState = NotificationStatus.idle,
+      {this.reachedMaximumThreshold = false,
+      required this.paginationController,
       this.action = NotificationListenableAction.idle});
 
   @JsonKey()
   @override
-  final String error;
-  @JsonKey()
+  final bool reachedMaximumThreshold;
   @override
-  final List<NotificationEntity> notifications;
-  @JsonKey()
-  @override
-  final NotificationStatus currentState;
+  final PagingController<int, NotificationModel> paginationController;
   @JsonKey()
   @override
   final NotificationListenableAction action;
 
   @override
   String toString() {
-    return 'NotificationState(error: $error, notifications: $notifications, currentState: $currentState, action: $action)';
+    return 'NotificationState(reachedMaximumThreshold: $reachedMaximumThreshold, paginationController: $paginationController, action: $action)';
   }
 
   @override
@@ -908,20 +1103,18 @@ class _$_NotificationState implements _NotificationState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _NotificationState &&
-            const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality().equals(
+                other.reachedMaximumThreshold, reachedMaximumThreshold) &&
             const DeepCollectionEquality()
-                .equals(other.notifications, notifications) &&
-            const DeepCollectionEquality()
-                .equals(other.currentState, currentState) &&
+                .equals(other.paginationController, paginationController) &&
             const DeepCollectionEquality().equals(other.action, action));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(notifications),
-      const DeepCollectionEquality().hash(currentState),
+      const DeepCollectionEquality().hash(reachedMaximumThreshold),
+      const DeepCollectionEquality().hash(paginationController),
       const DeepCollectionEquality().hash(action));
 
   @JsonKey(ignore: true)
@@ -932,17 +1125,14 @@ class _$_NotificationState implements _NotificationState {
 
 abstract class _NotificationState implements NotificationState {
   const factory _NotificationState(
-      {String error,
-      List<NotificationEntity> notifications,
-      NotificationStatus currentState,
+      {bool reachedMaximumThreshold,
+      required PagingController<int, NotificationModel> paginationController,
       NotificationListenableAction action}) = _$_NotificationState;
 
   @override
-  String get error;
+  bool get reachedMaximumThreshold;
   @override
-  List<NotificationEntity> get notifications;
-  @override
-  NotificationStatus get currentState;
+  PagingController<int, NotificationModel> get paginationController;
   @override
   NotificationListenableAction get action;
   @override

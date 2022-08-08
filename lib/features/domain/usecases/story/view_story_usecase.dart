@@ -16,15 +16,18 @@ class ViewStoryUseCase extends UseCase<bool, ViewStoryParams> {
   @override
   Future<Either<Failure, bool>> call(ViewStoryParams params) {
     return repository.viewStory(
-        userId: params.userId,
-        storyId: params.storyId,
-        stories: params.stories);
+      userId: params.userId,
+      storyId: params.storyId,
+      stories: params.stories,
+      contentId: params.contentId,
+    );
   }
 }
 
 class ViewStoryParams {
   final String userId;
   final String storyId;
+  final String contentId;
   final List<StoryContent> stories;
-  ViewStoryParams(this.userId, this.storyId, this.stories);
+  ViewStoryParams(this.userId, this.storyId, this.stories, this.contentId);
 }

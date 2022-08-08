@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:frienderr/features/presentation/widgets/conditional_render_delegate.dart';
 import 'package:just_audio/just_audio.dart' as a;
 import 'package:audio_session/audio_session.dart';
@@ -19,7 +20,7 @@ class _AudioPlayerState extends State<AudioPlayer>
     with TickerProviderStateMixin {
   int pos = 0;
   int _duration = 0;
-  int _barCount = 15;
+  int _barCount = 10;
   bool _isIntial = false;
   bool _isPlaying = false;
   final player = a.AudioPlayer();
@@ -164,8 +165,8 @@ class _AudioPlayerState extends State<AudioPlayer>
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 185,
-        height: 70,
+        width: 165,
+        height: 57,
         child: Row(
           children: [
             IconButton(
@@ -177,7 +178,7 @@ class _AudioPlayerState extends State<AudioPlayer>
                   }
                 },
                 icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow,
-                    size: 30)),
+                    size: 27)),
             ConditionalRenderDelegate(
                 condition: _isIntial,
                 renderWidget: MusicVisualizer(
@@ -187,9 +188,9 @@ class _AudioPlayerState extends State<AudioPlayer>
                     animationController: animationControllers),
                 fallbackWidget: Text(
                     '${((_duration) ~/ 60).toString().padLeft(2)}: ${((_duration)).toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                    )))
+                    style: TextStyle(
+                        fontSize:
+                            ResponsiveFlutter.of(context).fontSize(1.45))))
           ],
         ));
   }

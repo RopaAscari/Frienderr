@@ -7,13 +7,13 @@ part 'story_model.g.dart';
 part 'story_model.freezed.dart';
 
 @freezed
-class StoryModel with _$StoryModel implements StoryEntity {
-  const factory StoryModel(
+class Story with _$Story {
+  const factory Story(
       {@Default('') final String id,
       @Default(0) final int dateUpdated,
+      @Default(false) final bool? isPersitent,
       @Default([]) final List<StoryContent> content,
-      @Default(UserModel(id: '')) final UserModel user}) = _StoryModel;
+      @Default(UserModel(id: '')) final UserModel user}) = _Story;
 
-  factory StoryModel.fromJson(Map<String, dynamic> json) =>
-      _$StoryModelFromJson(json);
+  factory Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);
 }

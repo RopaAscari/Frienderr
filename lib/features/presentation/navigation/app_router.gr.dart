@@ -17,11 +17,11 @@ class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    MainRoute.name: (routeData) {
-      final args = routeData.argsAs<MainRouteArgs>();
+    TabNavigationRoute.name: (routeData) {
+      final args = routeData.argsAs<TabNavigationRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: MainScreen(key: args.key, blocGroup: args.blocGroup),
+          child: TabNavigationScreen(key: args.key, blocGroup: args.blocGroup),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -40,31 +40,29 @@ class _$AppRouter extends RootStackRouter {
           opaque: false,
           barrierDismissible: false);
     },
-    CameraRoute.name: (routeData) {
-      final args = routeData.argsAs<CameraRouteArgs>();
-      return CustomPage<dynamic>(
-          routeData: routeData,
-          child: CameraScreen(
-              key: args.key, mode: args.mode, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideLeft,
-          durationInMilliseconds: 250,
-          opaque: false,
-          barrierDismissible: false);
-    },
     CommentRoute.name: (routeData) {
       final args = routeData.argsAs<CommentRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: CommentScreen(key: args.key, post: args.post),
+          child: CommentScreen(
+              key: args.key,
+              post: args.post,
+              snap: args.snap,
+              user: args.user,
+              type: args.type,
+              onDelete: args.onDelete,
+              onComment: args.onComment),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
           barrierDismissible: false);
     },
     ArtboardRoute.name: (routeData) {
+      final args = routeData.argsAs<ArtboardRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: const ArtboardScreen(),
+          child: ArtboardScreen(
+              key: args.key, mode: args.mode, blocGroup: args.blocGroup),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -80,12 +78,25 @@ class _$AppRouter extends RootStackRouter {
           opaque: false,
           barrierDismissible: false);
     },
+    MessagingRoute.name: (routeData) {
+      final args = routeData.argsAs<MessagingRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: MessagingScreen(
+              metadata: args.metadata,
+              blocGroup: args.blocGroup,
+              key: args.key),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
     PostQuickRoute.name: (routeData) {
       final args = routeData.argsAs<PostQuickRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
           child: PostQuickScreen(
-              key: args.key, file: args.file, quickBloc: args.quickBloc),
+              key: args.key, file: args.file, snapbloc: args.snapbloc),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -102,14 +113,43 @@ class _$AppRouter extends RootStackRouter {
           opaque: false,
           barrierDismissible: false);
     },
-    MessagingRoute.name: (routeData) {
-      final args = routeData.argsAs<MessagingRouteArgs>();
+    UserAccountRoute.name: (routeData) {
+      final args = routeData.argsAs<UserAccountRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: MessagingScreen(
-              metadata: args.metadata,
+          child: UserAccountScreen(
+              key: args.key,
               blocGroup: args.blocGroup,
-              key: args.key),
+              profileUserId: args.profileUserId,
+              isProfileOwnerViewing: args.isProfileOwnerViewing),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    PostMasonicRoute.name: (routeData) {
+      final args = routeData.argsAs<PostMasonicRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: PostMasonicScreen(
+              key: args.key,
+              posts: args.posts,
+              blocGroup: args.blocGroup,
+              isProfileOwnerViewing: args.isProfileOwnerViewing),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    SnapMasonicRoute.name: (routeData) {
+      final args = routeData.argsAs<SnapMasonicRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: SnapMasonicScreen(
+              key: args.key,
+              snaps: args.snaps,
+              blocGroup: args.blocGroup,
+              isProfileOwnerViewing: args.isProfileOwnerViewing),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -133,7 +173,7 @@ class _$AppRouter extends RootStackRouter {
       return CustomPage<dynamic>(
           routeData: routeData,
           child: PreviewQuickScreen(
-              key: args.key, quickBloc: args.quickBloc, file: args.file),
+              key: args.key, snapBloc: args.snapBloc, file: args.file),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -152,21 +192,15 @@ class _$AppRouter extends RootStackRouter {
           opaque: false,
           barrierDismissible: false);
     },
-    NotificationRoute.name: (routeData) {
-      final args = routeData.argsAs<NotificationRouteArgs>();
+    ProfileAccountRoute.name: (routeData) {
+      final args = routeData.argsAs<ProfileAccountRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: NotificationScreen(key: args.key, blocGroup: args.blocGroup),
-          transitionsBuilder: TransitionsBuilders.slideLeft,
-          durationInMilliseconds: 250,
-          opaque: false,
-          barrierDismissible: false);
-    },
-    ChatDashboardRoute.name: (routeData) {
-      final args = routeData.argsAs<ChatDashboardRouteArgs>();
-      return CustomPage<dynamic>(
-          routeData: routeData,
-          child: ChatDashboardScreen(key: args.key, blocGroup: args.blocGroup),
+          child: ProfileAccountScreen(
+              key: args.key,
+              blocGroup: args.blocGroup,
+              profileUserId: args.profileUserId,
+              isProfileOwnerViewing: args.isProfileOwnerViewing),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -214,9 +248,61 @@ class _$AppRouter extends RootStackRouter {
           barrierDismissible: false);
     },
     SplashRoute.name: (routeData) {
+      final args = routeData.argsAs<SplashRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: const SplashScreen(),
+          child: SplashScreen(key: args.key, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    CameraRoute.name: (routeData) {
+      final args = routeData.argsAs<CameraRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: CameraScreen(
+              key: args.key, mode: args.mode, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    TimelineRoute.name: (routeData) {
+      final args = routeData.argsAs<TimelineRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: TimelineScreen(key: args.key, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    SnapFeedRoute.name: (routeData) {
+      final args = routeData.argsAs<SnapFeedRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: SnapFeedScreen(key: args.key, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    NotificationRoute.name: (routeData) {
+      final args = routeData.argsAs<NotificationRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: NotificationScreen(key: args.key, blocGroup: args.blocGroup),
+          transitionsBuilder: TransitionsBuilders.slideLeft,
+          durationInMilliseconds: 250,
+          opaque: false,
+          barrierDismissible: false);
+    },
+    ChatDashboardRoute.name: (routeData) {
+      final args = routeData.argsAs<ChatDashboardRouteArgs>();
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: ChatDashboardScreen(key: args.key, blocGroup: args.blocGroup),
           transitionsBuilder: TransitionsBuilders.slideLeft,
           durationInMilliseconds: 250,
           opaque: false,
@@ -226,20 +312,35 @@ class _$AppRouter extends RootStackRouter {
 
   @override
   List<RouteConfig> get routes => [
-        RouteConfig(MainRoute.name, path: '/main-screen'),
+        RouteConfig(TabNavigationRoute.name,
+            path: '/tab-navigation-screen',
+            children: [
+              RouteConfig(CameraRoute.name,
+                  path: 'camera-screen', parent: TabNavigationRoute.name),
+              RouteConfig(TimelineRoute.name,
+                  path: 'timeline-screen', parent: TabNavigationRoute.name),
+              RouteConfig(SnapFeedRoute.name,
+                  path: 'snap-feed-screen', parent: TabNavigationRoute.name),
+              RouteConfig(NotificationRoute.name,
+                  path: 'notification-screen', parent: TabNavigationRoute.name),
+              RouteConfig(ChatDashboardRoute.name,
+                  path: 'chat-dashboard-screen',
+                  parent: TabNavigationRoute.name)
+            ]),
         RouteConfig(LoginRoute.name, path: '/login-screen'),
-        RouteConfig(CameraRoute.name, path: '/camera-screen'),
         RouteConfig(CommentRoute.name, path: '/comment-screen'),
         RouteConfig(ArtboardRoute.name, path: '/artboard-screen'),
         RouteConfig(RegisterRoute.name, path: '/register-screen'),
+        RouteConfig(MessagingRoute.name, path: '/messaging-screen'),
         RouteConfig(PostQuickRoute.name, path: '/post-quick-screen'),
         RouteConfig(PostMediaRoute.name, path: '/post-media-screen'),
-        RouteConfig(MessagingRoute.name, path: '/messaging-screen'),
+        RouteConfig(UserAccountRoute.name, path: '/user-account-screen'),
+        RouteConfig(PostMasonicRoute.name, path: '/post-masonic-screen'),
+        RouteConfig(SnapMasonicRoute.name, path: '/snap-masonic-screen'),
         RouteConfig(PreviewPostRoute.name, path: '/preview-post-screen'),
         RouteConfig(PreviewQuickRoute.name, path: '/preview-quick-screen'),
         RouteConfig(PreviewStoryRoute.name, path: '/preview-story-screen'),
-        RouteConfig(NotificationRoute.name, path: '/notification-screen'),
-        RouteConfig(ChatDashboardRoute.name, path: '/chat-dashboard-screen'),
+        RouteConfig(ProfileAccountRoute.name, path: '/profile-account-screen'),
         RouteConfig(ForgotPasswordRoute.name, path: '/forgot-password-screen'),
         RouteConfig(UnauthenticatedRoute.name, path: '/unauthenticated-screen'),
         RouteConfig(RegisterUsernameRoute.name,
@@ -251,18 +352,20 @@ class _$AppRouter extends RootStackRouter {
 }
 
 /// generated route for
-/// [MainScreen]
-class MainRoute extends PageRouteInfo<MainRouteArgs> {
-  MainRoute({Key? key, required BlocGroup blocGroup})
-      : super(MainRoute.name,
-            path: '/main-screen',
-            args: MainRouteArgs(key: key, blocGroup: blocGroup));
+/// [TabNavigationScreen]
+class TabNavigationRoute extends PageRouteInfo<TabNavigationRouteArgs> {
+  TabNavigationRoute(
+      {Key? key, required BlocGroup blocGroup, List<PageRouteInfo>? children})
+      : super(TabNavigationRoute.name,
+            path: '/tab-navigation-screen',
+            args: TabNavigationRouteArgs(key: key, blocGroup: blocGroup),
+            initialChildren: children);
 
-  static const String name = 'MainRoute';
+  static const String name = 'TabNavigationRoute';
 }
 
-class MainRouteArgs {
-  const MainRouteArgs({this.key, required this.blocGroup});
+class TabNavigationRouteArgs {
+  const TabNavigationRouteArgs({this.key, required this.blocGroup});
 
   final Key? key;
 
@@ -270,7 +373,7 @@ class MainRouteArgs {
 
   @override
   String toString() {
-    return 'MainRouteArgs{key: $key, blocGroup: $blocGroup}';
+    return 'TabNavigationRouteArgs{key: $key, blocGroup: $blocGroup}';
   }
 }
 
@@ -306,21 +409,77 @@ class LoginRouteArgs {
 }
 
 /// generated route for
-/// [CameraScreen]
-class CameraRoute extends PageRouteInfo<CameraRouteArgs> {
-  CameraRoute(
+/// [CommentScreen]
+class CommentRoute extends PageRouteInfo<CommentRouteArgs> {
+  CommentRoute(
+      {Key? key,
+      Post? post,
+      Snap? snap,
+      required UserModel user,
+      required CommentType type,
+      required dynamic Function() onDelete,
+      required dynamic Function() onComment})
+      : super(CommentRoute.name,
+            path: '/comment-screen',
+            args: CommentRouteArgs(
+                key: key,
+                post: post,
+                snap: snap,
+                user: user,
+                type: type,
+                onDelete: onDelete,
+                onComment: onComment));
+
+  static const String name = 'CommentRoute';
+}
+
+class CommentRouteArgs {
+  const CommentRouteArgs(
+      {this.key,
+      this.post,
+      this.snap,
+      required this.user,
+      required this.type,
+      required this.onDelete,
+      required this.onComment});
+
+  final Key? key;
+
+  final Post? post;
+
+  final Snap? snap;
+
+  final UserModel user;
+
+  final CommentType type;
+
+  final dynamic Function() onDelete;
+
+  final dynamic Function() onComment;
+
+  @override
+  String toString() {
+    return 'CommentRouteArgs{key: $key, post: $post, snap: $snap, user: $user, type: $type, onDelete: $onDelete, onComment: $onComment}';
+  }
+}
+
+/// generated route for
+/// [ArtboardScreen]
+class ArtboardRoute extends PageRouteInfo<ArtboardRouteArgs> {
+  ArtboardRoute(
       {Key? key,
       required CameraSelectionMode mode,
       required BlocGroup blocGroup})
-      : super(CameraRoute.name,
-            path: '/camera-screen',
-            args: CameraRouteArgs(key: key, mode: mode, blocGroup: blocGroup));
+      : super(ArtboardRoute.name,
+            path: '/artboard-screen',
+            args:
+                ArtboardRouteArgs(key: key, mode: mode, blocGroup: blocGroup));
 
-  static const String name = 'CameraRoute';
+  static const String name = 'ArtboardRoute';
 }
 
-class CameraRouteArgs {
-  const CameraRouteArgs(
+class ArtboardRouteArgs {
+  const ArtboardRouteArgs(
       {this.key, required this.mode, required this.blocGroup});
 
   final Key? key;
@@ -331,40 +490,8 @@ class CameraRouteArgs {
 
   @override
   String toString() {
-    return 'CameraRouteArgs{key: $key, mode: $mode, blocGroup: $blocGroup}';
+    return 'ArtboardRouteArgs{key: $key, mode: $mode, blocGroup: $blocGroup}';
   }
-}
-
-/// generated route for
-/// [CommentScreen]
-class CommentRoute extends PageRouteInfo<CommentRouteArgs> {
-  CommentRoute({Key? key, required PostEntity post})
-      : super(CommentRoute.name,
-            path: '/comment-screen',
-            args: CommentRouteArgs(key: key, post: post));
-
-  static const String name = 'CommentRoute';
-}
-
-class CommentRouteArgs {
-  const CommentRouteArgs({this.key, required this.post});
-
-  final Key? key;
-
-  final PostEntity post;
-
-  @override
-  String toString() {
-    return 'CommentRouteArgs{key: $key, post: $post}';
-  }
-}
-
-/// generated route for
-/// [ArtboardScreen]
-class ArtboardRoute extends PageRouteInfo<void> {
-  const ArtboardRoute() : super(ArtboardRoute.name, path: '/artboard-screen');
-
-  static const String name = 'ArtboardRoute';
 }
 
 /// generated route for
@@ -392,30 +519,60 @@ class RegisterRouteArgs {
 }
 
 /// generated route for
+/// [MessagingScreen]
+class MessagingRoute extends PageRouteInfo<MessagingRouteArgs> {
+  MessagingRoute(
+      {required MessagingMetaDataEntity metadata,
+      required BlocGroup blocGroup,
+      Key? key})
+      : super(MessagingRoute.name,
+            path: '/messaging-screen',
+            args: MessagingRouteArgs(
+                metadata: metadata, blocGroup: blocGroup, key: key));
+
+  static const String name = 'MessagingRoute';
+}
+
+class MessagingRouteArgs {
+  const MessagingRouteArgs(
+      {required this.metadata, required this.blocGroup, this.key});
+
+  final MessagingMetaDataEntity metadata;
+
+  final BlocGroup blocGroup;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'MessagingRouteArgs{metadata: $metadata, blocGroup: $blocGroup, key: $key}';
+  }
+}
+
+/// generated route for
 /// [PostQuickScreen]
 class PostQuickRoute extends PageRouteInfo<PostQuickRouteArgs> {
-  PostQuickRoute({Key? key, required File file, required QuickBloc quickBloc})
+  PostQuickRoute({Key? key, required File file, required SnapBloc snapbloc})
       : super(PostQuickRoute.name,
             path: '/post-quick-screen',
-            args:
-                PostQuickRouteArgs(key: key, file: file, quickBloc: quickBloc));
+            args: PostQuickRouteArgs(key: key, file: file, snapbloc: snapbloc));
 
   static const String name = 'PostQuickRoute';
 }
 
 class PostQuickRouteArgs {
   const PostQuickRouteArgs(
-      {this.key, required this.file, required this.quickBloc});
+      {this.key, required this.file, required this.snapbloc});
 
   final Key? key;
 
   final File file;
 
-  final QuickBloc quickBloc;
+  final SnapBloc snapbloc;
 
   @override
   String toString() {
-    return 'PostQuickRouteArgs{key: $key, file: $file, quickBloc: $quickBloc}';
+    return 'PostQuickRouteArgs{key: $key, file: $file, snapbloc: $snapbloc}';
   }
 }
 
@@ -449,33 +606,122 @@ class PostMediaRouteArgs {
 }
 
 /// generated route for
-/// [MessagingScreen]
-class MessagingRoute extends PageRouteInfo<MessagingRouteArgs> {
-  MessagingRoute(
-      {required MessagingMetaDataEntity metadata,
+/// [UserAccountScreen]
+class UserAccountRoute extends PageRouteInfo<UserAccountRouteArgs> {
+  UserAccountRoute(
+      {Key? key,
       required BlocGroup blocGroup,
-      Key? key})
-      : super(MessagingRoute.name,
-            path: '/messaging-screen',
-            args: MessagingRouteArgs(
-                metadata: metadata, blocGroup: blocGroup, key: key));
+      required String profileUserId,
+      required bool isProfileOwnerViewing})
+      : super(UserAccountRoute.name,
+            path: '/user-account-screen',
+            args: UserAccountRouteArgs(
+                key: key,
+                blocGroup: blocGroup,
+                profileUserId: profileUserId,
+                isProfileOwnerViewing: isProfileOwnerViewing));
 
-  static const String name = 'MessagingRoute';
+  static const String name = 'UserAccountRoute';
 }
 
-class MessagingRouteArgs {
-  const MessagingRouteArgs(
-      {required this.metadata, required this.blocGroup, this.key});
-
-  final MessagingMetaDataEntity metadata;
-
-  final BlocGroup blocGroup;
+class UserAccountRouteArgs {
+  const UserAccountRouteArgs(
+      {this.key,
+      required this.blocGroup,
+      required this.profileUserId,
+      required this.isProfileOwnerViewing});
 
   final Key? key;
 
+  final BlocGroup blocGroup;
+
+  final String profileUserId;
+
+  final bool isProfileOwnerViewing;
+
   @override
   String toString() {
-    return 'MessagingRouteArgs{metadata: $metadata, blocGroup: $blocGroup, key: $key}';
+    return 'UserAccountRouteArgs{key: $key, blocGroup: $blocGroup, profileUserId: $profileUserId, isProfileOwnerViewing: $isProfileOwnerViewing}';
+  }
+}
+
+/// generated route for
+/// [PostMasonicScreen]
+class PostMasonicRoute extends PageRouteInfo<PostMasonicRouteArgs> {
+  PostMasonicRoute(
+      {Key? key,
+      required List<Post> posts,
+      required BlocGroup blocGroup,
+      required bool isProfileOwnerViewing})
+      : super(PostMasonicRoute.name,
+            path: '/post-masonic-screen',
+            args: PostMasonicRouteArgs(
+                key: key,
+                posts: posts,
+                blocGroup: blocGroup,
+                isProfileOwnerViewing: isProfileOwnerViewing));
+
+  static const String name = 'PostMasonicRoute';
+}
+
+class PostMasonicRouteArgs {
+  const PostMasonicRouteArgs(
+      {this.key,
+      required this.posts,
+      required this.blocGroup,
+      required this.isProfileOwnerViewing});
+
+  final Key? key;
+
+  final List<Post> posts;
+
+  final BlocGroup blocGroup;
+
+  final bool isProfileOwnerViewing;
+
+  @override
+  String toString() {
+    return 'PostMasonicRouteArgs{key: $key, posts: $posts, blocGroup: $blocGroup, isProfileOwnerViewing: $isProfileOwnerViewing}';
+  }
+}
+
+/// generated route for
+/// [SnapMasonicScreen]
+class SnapMasonicRoute extends PageRouteInfo<SnapMasonicRouteArgs> {
+  SnapMasonicRoute(
+      {Key? key,
+      required List<Snap> snaps,
+      required BlocGroup blocGroup,
+      required bool isProfileOwnerViewing})
+      : super(SnapMasonicRoute.name,
+            path: '/snap-masonic-screen',
+            args: SnapMasonicRouteArgs(
+                key: key,
+                snaps: snaps,
+                blocGroup: blocGroup,
+                isProfileOwnerViewing: isProfileOwnerViewing));
+
+  static const String name = 'SnapMasonicRoute';
+}
+
+class SnapMasonicRouteArgs {
+  const SnapMasonicRouteArgs(
+      {this.key,
+      required this.snaps,
+      required this.blocGroup,
+      required this.isProfileOwnerViewing});
+
+  final Key? key;
+
+  final List<Snap> snaps;
+
+  final BlocGroup blocGroup;
+
+  final bool isProfileOwnerViewing;
+
+  @override
+  String toString() {
+    return 'SnapMasonicRouteArgs{key: $key, snaps: $snaps, blocGroup: $blocGroup, isProfileOwnerViewing: $isProfileOwnerViewing}';
   }
 }
 
@@ -513,29 +759,28 @@ class PreviewPostRouteArgs {
 /// generated route for
 /// [PreviewQuickScreen]
 class PreviewQuickRoute extends PageRouteInfo<PreviewQuickRouteArgs> {
-  PreviewQuickRoute(
-      {Key? key, required QuickBloc quickBloc, required File file})
+  PreviewQuickRoute({Key? key, required SnapBloc snapBloc, required File file})
       : super(PreviewQuickRoute.name,
             path: '/preview-quick-screen',
             args: PreviewQuickRouteArgs(
-                key: key, quickBloc: quickBloc, file: file));
+                key: key, snapBloc: snapBloc, file: file));
 
   static const String name = 'PreviewQuickRoute';
 }
 
 class PreviewQuickRouteArgs {
   const PreviewQuickRouteArgs(
-      {this.key, required this.quickBloc, required this.file});
+      {this.key, required this.snapBloc, required this.file});
 
   final Key? key;
 
-  final QuickBloc quickBloc;
+  final SnapBloc snapBloc;
 
   final File file;
 
   @override
   String toString() {
-    return 'PreviewQuickRouteArgs{key: $key, quickBloc: $quickBloc, file: $file}';
+    return 'PreviewQuickRouteArgs{key: $key, snapBloc: $snapBloc, file: $file}';
   }
 }
 
@@ -573,50 +818,42 @@ class PreviewStoryRouteArgs {
 }
 
 /// generated route for
-/// [NotificationScreen]
-class NotificationRoute extends PageRouteInfo<NotificationRouteArgs> {
-  NotificationRoute({Key? key, required BlocGroup blocGroup})
-      : super(NotificationRoute.name,
-            path: '/notification-screen',
-            args: NotificationRouteArgs(key: key, blocGroup: blocGroup));
+/// [ProfileAccountScreen]
+class ProfileAccountRoute extends PageRouteInfo<ProfileAccountRouteArgs> {
+  ProfileAccountRoute(
+      {Key? key,
+      required BlocGroup blocGroup,
+      required String profileUserId,
+      required bool isProfileOwnerViewing})
+      : super(ProfileAccountRoute.name,
+            path: '/profile-account-screen',
+            args: ProfileAccountRouteArgs(
+                key: key,
+                blocGroup: blocGroup,
+                profileUserId: profileUserId,
+                isProfileOwnerViewing: isProfileOwnerViewing));
 
-  static const String name = 'NotificationRoute';
+  static const String name = 'ProfileAccountRoute';
 }
 
-class NotificationRouteArgs {
-  const NotificationRouteArgs({this.key, required this.blocGroup});
+class ProfileAccountRouteArgs {
+  const ProfileAccountRouteArgs(
+      {this.key,
+      required this.blocGroup,
+      required this.profileUserId,
+      required this.isProfileOwnerViewing});
 
   final Key? key;
 
   final BlocGroup blocGroup;
 
-  @override
-  String toString() {
-    return 'NotificationRouteArgs{key: $key, blocGroup: $blocGroup}';
-  }
-}
+  final String profileUserId;
 
-/// generated route for
-/// [ChatDashboardScreen]
-class ChatDashboardRoute extends PageRouteInfo<ChatDashboardRouteArgs> {
-  ChatDashboardRoute({Key? key, required BlocGroup blocGroup})
-      : super(ChatDashboardRoute.name,
-            path: '/chat-dashboard-screen',
-            args: ChatDashboardRouteArgs(key: key, blocGroup: blocGroup));
-
-  static const String name = 'ChatDashboardRoute';
-}
-
-class ChatDashboardRouteArgs {
-  const ChatDashboardRouteArgs({this.key, required this.blocGroup});
-
-  final Key? key;
-
-  final BlocGroup blocGroup;
+  final bool isProfileOwnerViewing;
 
   @override
   String toString() {
-    return 'ChatDashboardRouteArgs{key: $key, blocGroup: $blocGroup}';
+    return 'ProfileAccountRouteArgs{key: $key, blocGroup: $blocGroup, profileUserId: $profileUserId, isProfileOwnerViewing: $isProfileOwnerViewing}';
   }
 }
 
@@ -708,8 +945,149 @@ class RecoveryEmailSentRouteArgs {
 
 /// generated route for
 /// [SplashScreen]
-class SplashRoute extends PageRouteInfo<void> {
-  const SplashRoute() : super(SplashRoute.name, path: '/');
+class SplashRoute extends PageRouteInfo<SplashRouteArgs> {
+  SplashRoute({Key? key, required BlocGroup blocGroup})
+      : super(SplashRoute.name,
+            path: '/', args: SplashRouteArgs(key: key, blocGroup: blocGroup));
 
   static const String name = 'SplashRoute';
+}
+
+class SplashRouteArgs {
+  const SplashRouteArgs({this.key, required this.blocGroup});
+
+  final Key? key;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'SplashRouteArgs{key: $key, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [CameraScreen]
+class CameraRoute extends PageRouteInfo<CameraRouteArgs> {
+  CameraRoute(
+      {Key? key,
+      required CameraSelectionMode mode,
+      required BlocGroup blocGroup})
+      : super(CameraRoute.name,
+            path: 'camera-screen',
+            args: CameraRouteArgs(key: key, mode: mode, blocGroup: blocGroup));
+
+  static const String name = 'CameraRoute';
+}
+
+class CameraRouteArgs {
+  const CameraRouteArgs(
+      {this.key, required this.mode, required this.blocGroup});
+
+  final Key? key;
+
+  final CameraSelectionMode mode;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'CameraRouteArgs{key: $key, mode: $mode, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [TimelineScreen]
+class TimelineRoute extends PageRouteInfo<TimelineRouteArgs> {
+  TimelineRoute({Key? key, required BlocGroup blocGroup})
+      : super(TimelineRoute.name,
+            path: 'timeline-screen',
+            args: TimelineRouteArgs(key: key, blocGroup: blocGroup));
+
+  static const String name = 'TimelineRoute';
+}
+
+class TimelineRouteArgs {
+  const TimelineRouteArgs({this.key, required this.blocGroup});
+
+  final Key? key;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'TimelineRouteArgs{key: $key, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [SnapFeedScreen]
+class SnapFeedRoute extends PageRouteInfo<SnapFeedRouteArgs> {
+  SnapFeedRoute({Key? key, required BlocGroup blocGroup})
+      : super(SnapFeedRoute.name,
+            path: 'snap-feed-screen',
+            args: SnapFeedRouteArgs(key: key, blocGroup: blocGroup));
+
+  static const String name = 'SnapFeedRoute';
+}
+
+class SnapFeedRouteArgs {
+  const SnapFeedRouteArgs({this.key, required this.blocGroup});
+
+  final Key? key;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'SnapFeedRouteArgs{key: $key, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [NotificationScreen]
+class NotificationRoute extends PageRouteInfo<NotificationRouteArgs> {
+  NotificationRoute({Key? key, required BlocGroup blocGroup})
+      : super(NotificationRoute.name,
+            path: 'notification-screen',
+            args: NotificationRouteArgs(key: key, blocGroup: blocGroup));
+
+  static const String name = 'NotificationRoute';
+}
+
+class NotificationRouteArgs {
+  const NotificationRouteArgs({this.key, required this.blocGroup});
+
+  final Key? key;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'NotificationRouteArgs{key: $key, blocGroup: $blocGroup}';
+  }
+}
+
+/// generated route for
+/// [ChatDashboardScreen]
+class ChatDashboardRoute extends PageRouteInfo<ChatDashboardRouteArgs> {
+  ChatDashboardRoute({Key? key, required BlocGroup blocGroup})
+      : super(ChatDashboardRoute.name,
+            path: 'chat-dashboard-screen',
+            args: ChatDashboardRouteArgs(key: key, blocGroup: blocGroup));
+
+  static const String name = 'ChatDashboardRoute';
+}
+
+class ChatDashboardRouteArgs {
+  const ChatDashboardRouteArgs({this.key, required this.blocGroup});
+
+  final Key? key;
+
+  final BlocGroup blocGroup;
+
+  @override
+  String toString() {
+    return 'ChatDashboardRouteArgs{key: $key, blocGroup: $blocGroup}';
+  }
 }

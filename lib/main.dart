@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frienderr/app/handler_delegate.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:frienderr/features/presentation/blocs/bloc_observer.dart';
 import 'package:frienderr/core/providers/local_notiifcation_provider.dart';
 
@@ -18,24 +19,26 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  //await dotenv.load();
+  await dotenv.load();
   await Firebase.initializeApp();
+
+  //FacebookSdk.sdkInitialize();
 
   final HydratedStorage storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
 
-  final token = await FirebaseMessaging.instance.getToken();
-  print(token);
+  //final token = await FirebaseMessaging.instance.getToken();
 
   await configureInjection(kReleaseMode ? Environment.prod : Environment.dev);
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   HydratedBlocOverrides.runZoned(
-    () => runApp(HandlerDelegate()),
+    () => runApp(const HandlerDelegate()),
     storage: storage,
     //  blocObserver: AppBlocObserver(),
   );

@@ -3,9 +3,9 @@ import 'package:injectable/injectable.dart';
 
 import 'injection.config.dart';
 
-final GetIt getIt = GetIt.instance;
+final GetIt getService = GetIt.instance;
 
 @injectableInit
 Future<void> configureInjection(String env) async {
-  $initGetIt(getIt, environment: env);
+  $initGetIt(getService, environment: env);
 }

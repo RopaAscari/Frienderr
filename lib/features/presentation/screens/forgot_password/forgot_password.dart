@@ -25,7 +25,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   BlocGroup get _blocGroup => widget.blocGroup;
 
   Future<dynamic> _navigateToRecoverEmail() async {
-    return getIt<AppRouter>().push(RecoveryEmailSentRoute(
+    return getService<AppRouter>().push(RecoveryEmailSentRoute(
       blocGroup: _blocGroup,
     ));
   }
@@ -44,12 +44,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   AuthenticationState state,
                 ) {
                   if (state.currentState ==
-                      AuthenticationStatus.RecoverAccountFailure) {
+                      AuthenticationStatus.recoverAccountFailure) {
                     FlashMessage.buildErrorSnackbar(context, state.error);
                   }
 
                   if (state.currentState ==
-                      AuthenticationStatus.RecoverAccountSuccess) {
+                      AuthenticationStatus.recoverAccountSuccess) {
                     _navigateToRecoverEmail();
                   }
                 },
@@ -96,7 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       AppTextField(
           label: "Email",
           isObscure: false,
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.person,
             color: Colors.grey,
           ),
@@ -107,7 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         onPressed: () => _blocGroup.authenticationBloc.add(
             AuthenticationEvent.recoverAccount(email: emailController.text)),
         isLoading:
-            state.currentState == AuthenticationStatus.RecoverAccountLoading,
+            state.currentState == AuthenticationStatus.recoverAccountLoading,
       )
     ]);
   }

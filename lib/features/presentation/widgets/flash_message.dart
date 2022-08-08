@@ -6,12 +6,12 @@ class FlashMessage {
   static buildErrorSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(children: <Widget>[
-          Icon(Icons.error),
+          const Icon(Icons.error),
           //Icon widget of your choice HERE,
           Text(' $message', style: TextStyle(color: Colors.white))
         ]),
         backgroundColor: Colors.red,
-        action: new SnackBarAction(
+        action: SnackBarAction(
           label: '',
           textColor: Colors.yellow,
           onPressed: () {
@@ -23,12 +23,12 @@ class FlashMessage {
   static buildSuccessSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(children: <Widget>[
-          Icon(Icons.check_circle),
+          const Icon(Icons.check_circle),
           //Icon widget of your choice HERE,
           Text(' $message', style: TextStyle(color: Colors.white))
         ]),
         backgroundColor: Colors.green,
-        action: new SnackBarAction(
+        action: SnackBarAction(
           label: '',
           textColor: Colors.yellow,
           onPressed: () {
@@ -41,7 +41,7 @@ class FlashMessage {
       BuildContext context, String message, Duration duration) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(children: <Widget>[
-          Icon(Icons.error),
+          const Icon(Icons.error),
           //Icon widget of your choice HERE,
           Text(' $message',
               style: TextStyle(
@@ -49,7 +49,7 @@ class FlashMessage {
         ]),
         backgroundColor: Colors.amber[300],
         duration: duration,
-        action: new SnackBarAction(
+        action: SnackBarAction(
           label: '',
           textColor: Theme.of(context).textTheme.bodyText2!.color,
           onPressed: () {

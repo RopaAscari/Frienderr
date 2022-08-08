@@ -6,13 +6,13 @@ part 'content_model.g.dart';
 part 'content_model.freezed.dart';
 
 @freezed
-class ContentModel with _$ContentModel implements Content {
-  const factory ContentModel({
+class Content with _$Content implements ContentDTO {
+  const factory Content({
     @Default('') final String type,
     @Default('') final String media,
-    @Default(PostMetadataModel()) final PostMetadataModel metadata,
-  }) = _ContentModel;
+    @Default(PostMetadata()) final PostMetadata metadata,
+  }) = _Content;
 
-  factory ContentModel.fromJson(Map<String, dynamic> json) =>
-      _$ContentModelFromJson(json);
+  factory Content.fromJson(Map<String, dynamic> json) =>
+      _$ContentFromJson(json);
 }

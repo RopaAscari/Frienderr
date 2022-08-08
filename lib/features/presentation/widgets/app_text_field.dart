@@ -28,23 +28,38 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  bool canPasswordShow = true;
+  bool _isTextEmpty = true;
+  bool _canPasswordShow = true;
+
+  @override
+  void initState() {
+    widget.controller.addListener(() {
+      setState(() {
+        _isTextEmpty = !widget.controller.text.isNotEmpty;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: widget.padding,
         child: TextField(
+          style:
+              TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.3)),
           controller: widget.controller,
           decoration: InputDecoration(
             filled: true,
+            isDense: true,
             labelText: widget.label,
             errorText: widget.errorText,
             prefixIcon: widget.prefixIcon,
-            suffixIcon: widget.isObscure ? passswordIcon() : widget.suffixIcon,
+            suffixIcon:
+                widget.isObscure ? _buildPassswordIcon() : widget.suffixIcon,
             labelStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.3)),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[900]!),
               borderRadius: BorderRadius.circular(8.0),
@@ -58,27 +73,40 @@ class _AppTextFieldState extends State<AppTextField> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-            errorStyle:
-                const TextStyle(height: 0.7, color: Colors.red, fontSize: 14),
+            errorStyle: TextStyle(
+                height: 0.0,
+                color: Colors.red,
+                fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
           ),
-          obscureText: widget.isObscure ? canPasswordShow : widget.isObscure,
+          obscureText: widget.isObscure ? _canPasswordShow : widget.isObscure,
         ));
   }
 
-  Widget passswordIcon() {
-    return !canPasswordShow
+  Widget _buildPassswordIcon() {
+    if (_isTextEmpty) {
+      return const Text('');
+    }
+    return !_canPasswordShow
         ? IconButton(
+            onPressed: () {
+              setState(() {
+                _canPasswordShow = !_canPasswordShow;
+              });
+            },
             color: Colors.grey,
-            onPressed: () => setState(() => canPasswordShow = !canPasswordShow),
             icon: const Icon(
-              CupertinoIcons.eye_slash_fill,
+              CupertinoIcons.eye_slash,
               size: 21.5,
             ))
         : IconButton(
+            onPressed: () {
+              setState(() {
+                _canPasswordShow = !_canPasswordShow;
+              });
+            },
             color: Colors.grey,
-            onPressed: () => setState(() => canPasswordShow = !canPasswordShow),
             icon: const Icon(
-              CupertinoIcons.eye_fill,
+              CupertinoIcons.eye,
               size: 21.5,
             ));
   }

@@ -23,17 +23,19 @@ class _$StoryContentTearOff {
   const _$StoryContentTearOff();
 
   _StoryContent call(
-      {String id = '',
+      {int views = 0,
+      String id = '',
+      int reactions = 0,
       required StoryMedia media,
       int dateCreated = 0,
-      List<String> views = const [],
-      List<String> likes = const []}) {
+      bool isViewed = false}) {
     return _StoryContent(
+      views: views,
       id: id,
+      reactions: reactions,
       media: media,
       dateCreated: dateCreated,
-      views: views,
-      likes: likes,
+      isViewed: isViewed,
     );
   }
 
@@ -47,11 +49,12 @@ const $StoryContent = _$StoryContentTearOff();
 
 /// @nodoc
 mixin _$StoryContent {
+  int get views => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
+  int get reactions => throw _privateConstructorUsedError;
   StoryMedia get media => throw _privateConstructorUsedError;
   int get dateCreated => throw _privateConstructorUsedError;
-  List<String> get views => throw _privateConstructorUsedError;
-  List<String> get likes => throw _privateConstructorUsedError;
+  bool get isViewed => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -65,11 +68,12 @@ abstract class $StoryContentCopyWith<$Res> {
           StoryContent value, $Res Function(StoryContent) then) =
       _$StoryContentCopyWithImpl<$Res>;
   $Res call(
-      {String id,
+      {int views,
+      String id,
+      int reactions,
       StoryMedia media,
       int dateCreated,
-      List<String> views,
-      List<String> likes});
+      bool isViewed});
 
   $StoryMediaCopyWith<$Res> get media;
 }
@@ -84,17 +88,26 @@ class _$StoryContentCopyWithImpl<$Res> implements $StoryContentCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? views = freezed,
     Object? id = freezed,
+    Object? reactions = freezed,
     Object? media = freezed,
     Object? dateCreated = freezed,
-    Object? views = freezed,
-    Object? likes = freezed,
+    Object? isViewed = freezed,
   }) {
     return _then(_value.copyWith(
+      views: views == freezed
+          ? _value.views
+          : views // ignore: cast_nullable_to_non_nullable
+              as int,
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      reactions: reactions == freezed
+          ? _value.reactions
+          : reactions // ignore: cast_nullable_to_non_nullable
+              as int,
       media: media == freezed
           ? _value.media
           : media // ignore: cast_nullable_to_non_nullable
@@ -103,14 +116,10 @@ class _$StoryContentCopyWithImpl<$Res> implements $StoryContentCopyWith<$Res> {
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as int,
-      views: views == freezed
-          ? _value.views
-          : views // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      likes: likes == freezed
-          ? _value.likes
-          : likes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      isViewed: isViewed == freezed
+          ? _value.isViewed
+          : isViewed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 
@@ -130,11 +139,12 @@ abstract class _$StoryContentCopyWith<$Res>
       __$StoryContentCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id,
+      {int views,
+      String id,
+      int reactions,
       StoryMedia media,
       int dateCreated,
-      List<String> views,
-      List<String> likes});
+      bool isViewed});
 
   @override
   $StoryMediaCopyWith<$Res> get media;
@@ -152,17 +162,26 @@ class __$StoryContentCopyWithImpl<$Res> extends _$StoryContentCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? views = freezed,
     Object? id = freezed,
+    Object? reactions = freezed,
     Object? media = freezed,
     Object? dateCreated = freezed,
-    Object? views = freezed,
-    Object? likes = freezed,
+    Object? isViewed = freezed,
   }) {
     return _then(_StoryContent(
+      views: views == freezed
+          ? _value.views
+          : views // ignore: cast_nullable_to_non_nullable
+              as int,
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      reactions: reactions == freezed
+          ? _value.reactions
+          : reactions // ignore: cast_nullable_to_non_nullable
+              as int,
       media: media == freezed
           ? _value.media
           : media // ignore: cast_nullable_to_non_nullable
@@ -171,14 +190,10 @@ class __$StoryContentCopyWithImpl<$Res> extends _$StoryContentCopyWithImpl<$Res>
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
               as int,
-      views: views == freezed
-          ? _value.views
-          : views // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      likes: likes == freezed
-          ? _value.likes
-          : likes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      isViewed: isViewed == freezed
+          ? _value.isViewed
+          : isViewed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -187,18 +202,25 @@ class __$StoryContentCopyWithImpl<$Res> extends _$StoryContentCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_StoryContent implements _StoryContent {
   const _$_StoryContent(
-      {this.id = '',
+      {this.views = 0,
+      this.id = '',
+      this.reactions = 0,
       required this.media,
       this.dateCreated = 0,
-      this.views = const [],
-      this.likes = const []});
+      this.isViewed = false});
 
   factory _$_StoryContent.fromJson(Map<String, dynamic> json) =>
       _$$_StoryContentFromJson(json);
 
   @JsonKey()
   @override
+  final int views;
+  @JsonKey()
+  @override
   final String id;
+  @JsonKey()
+  @override
+  final int reactions;
   @override
   final StoryMedia media;
   @JsonKey()
@@ -206,14 +228,11 @@ class _$_StoryContent implements _StoryContent {
   final int dateCreated;
   @JsonKey()
   @override
-  final List<String> views;
-  @JsonKey()
-  @override
-  final List<String> likes;
+  final bool isViewed;
 
   @override
   String toString() {
-    return 'StoryContent(id: $id, media: $media, dateCreated: $dateCreated, views: $views, likes: $likes)';
+    return 'StoryContent(views: $views, id: $id, reactions: $reactions, media: $media, dateCreated: $dateCreated, isViewed: $isViewed)';
   }
 
   @override
@@ -221,22 +240,24 @@ class _$_StoryContent implements _StoryContent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _StoryContent &&
+            const DeepCollectionEquality().equals(other.views, views) &&
             const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.reactions, reactions) &&
             const DeepCollectionEquality().equals(other.media, media) &&
             const DeepCollectionEquality()
                 .equals(other.dateCreated, dateCreated) &&
-            const DeepCollectionEquality().equals(other.views, views) &&
-            const DeepCollectionEquality().equals(other.likes, likes));
+            const DeepCollectionEquality().equals(other.isViewed, isViewed));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(views),
       const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(reactions),
       const DeepCollectionEquality().hash(media),
       const DeepCollectionEquality().hash(dateCreated),
-      const DeepCollectionEquality().hash(views),
-      const DeepCollectionEquality().hash(likes));
+      const DeepCollectionEquality().hash(isViewed));
 
   @JsonKey(ignore: true)
   @override
@@ -251,25 +272,28 @@ class _$_StoryContent implements _StoryContent {
 
 abstract class _StoryContent implements StoryContent {
   const factory _StoryContent(
-      {String id,
+      {int views,
+      String id,
+      int reactions,
       required StoryMedia media,
       int dateCreated,
-      List<String> views,
-      List<String> likes}) = _$_StoryContent;
+      bool isViewed}) = _$_StoryContent;
 
   factory _StoryContent.fromJson(Map<String, dynamic> json) =
       _$_StoryContent.fromJson;
 
   @override
+  int get views;
+  @override
   String get id;
+  @override
+  int get reactions;
   @override
   StoryMedia get media;
   @override
   int get dateCreated;
   @override
-  List<String> get views;
-  @override
-  List<String> get likes;
+  bool get isViewed;
   @override
   @JsonKey(ignore: true)
   _$StoryContentCopyWith<_StoryContent> get copyWith =>
