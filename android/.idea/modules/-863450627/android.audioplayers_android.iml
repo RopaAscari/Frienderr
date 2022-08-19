@@ -27,15 +27,25 @@
     </facet>
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="4" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
-        <compilerSettings />
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files" />
+        </compilerSettings>
         <compilerArguments>
-          <option name="languageVersion" value="1.5" />
-          <option name="apiVersion" value="1.5" />
+          <option name="destination" value="$MODULE_DIR$/../../../../build/audioplayers_android/tmp/kotlin-classes/debug" />
+          <option name="classpath" value="$MODULE_DIR$/../../../../build/audioplayers_android/intermediates/compile_r_class_jar/debug/R.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/00d7b9ee213c39a2f1159c5e375f4f77/transformed/jetified-flutter_embedding_debug-1.0.0-6ba2af10bb05c88a2731482cedf2cfd11cf5af0b.jar;C:/Users/DanyelRoper/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common-java8/2.2.0/cd3478503da69b1a7e0319bd2d1389943db9b364/lifecycle-common-java8-2.2.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/a40854ed23ec383c1c86cbe26bb73ed0/transformed/jetified-core-ktx-1.7.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/ac827067490e1da3732d53e5420c1eed/transformed/fragment-1.1.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/8df6e1257434466bc8080593f415ede5/transformed/viewpager-1.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/42416c4f8f15e7f860309e6c4f7b1a11/transformed/loader-1.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/16a14079f51436e49eaef777f01e9dbc/transformed/jetified-activity-1.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/fee8627aa7dda369ea069091c7391e36/transformed/customview-1.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/142fc2b0f581eb79ad5bee78ea31a7cc/transformed/core-1.7.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/92a0f0c1a53aeef2c9c8bd6cb9681566/transformed/lifecycle-runtime-2.3.1-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/d2aaee798b8e7b6b9cb6b44d3b24c8ab/transformed/jetified-savedstate-1.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/84f273ec76bf6aaebc9022ae6f4f594f/transformed/lifecycle-livedata-2.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/0322b25a15cdc5d805dce30a28a2d586/transformed/lifecycle-livedata-core-2.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common/2.3.1/fc466261d52f4433863642fb40d12441ae274a98/lifecycle-common-2.3.1.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/d1e42c0bf3ecfeaf5ba6d5b44f35e10a/transformed/core-runtime-2.1.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/modules-2/files-2.1/androidx.arch.core/core-common/2.1.0/b3152fc64428c9354344bd89848ecddc09b6f07e/core-common-2.1.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/754521e6ecc439091e397e37d3062f0b/transformed/versionedparcelable-1.1.1-api.jar;C:/Users/DanyelRoper/.gradle/caches/modules-2/files-2.1/androidx.collection/collection/1.1.0/1f27220b47669781457de0d600849a5de0e89909/collection-1.1.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/c86c59d675cc65ff30fdb6b2589e024b/transformed/lifecycle-viewmodel-2.1.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/modules-2/files-2.1/androidx.annotation/annotation/1.2.0/57136ff68ee784c6e19db34ed4a175338fadfde1/annotation-1.2.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/f1d7fceba3a688e389cda00aa2c3c74c/transformed/jetified-annotation-experimental-1.1.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/9c002bf79bd012f88742ed5be5482c93/transformed/jetified-tracing-1.0.0-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/62599eca98462dd24035209b844024c9/transformed/jetified-window-java-1.0.0-beta04-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/1a37e78dbee20e6ff8deebd80fe55dc4/transformed/jetified-kotlinx-coroutines-core-jvm-1.6.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/bac2519f9e862b89f87bcf8e6e080b4d/transformed/jetified-window-1.0.0-beta04-api.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/f5dcb77e563912fd2b647fa611be3853/transformed/jetified-kotlinx-coroutines-android-1.6.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/607b856efd2140b6cb1ba440a959c4ea/transformed/jetified-kotlin-stdlib-jdk8-1.6.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/f983fd8590a8fcc4d8654b7a330116bf/transformed/jetified-kotlin-stdlib-jdk7-1.6.10.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/97ad8e6e488ae1d0a91deb4cc4e4c5bd/transformed/jetified-kotlin-stdlib-1.6.10.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/b48e7fac91c453a7336c1dd0ad4a507b/transformed/jetified-annotations-13.0.jar;C:/Users/DanyelRoper/.gradle/caches/transforms-3/3be2bb5ce44170a7d0100e1e70f56204/transformed/jetified-kotlin-stdlib-common-1.6.10.jar;C:/Users/DanyelRoper/AppData/Local/Android/Sdk/platforms/android-31/android.jar" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="audioplayers_android_debug" />
+          <option name="languageVersion" value="1.6" />
+          <option name="apiVersion" value="1.6" />
           <option name="pluginOptions">
             <array />
           </option>
           <option name="pluginClasspaths">
             <array />
+          </option>
+          <option name="errors">
+            <ArgumentParseErrors />
           </option>
         </compilerArguments>
       </configuration>
