@@ -10,6 +10,9 @@
 class FontFamily {
   FontFamily._();
 
+  /// Font family: Instagram Sans
+  static const String instagramSans = 'Instagram Sans';
+
   /// Font family: Inter
   static const String inter = 'Inter';
 

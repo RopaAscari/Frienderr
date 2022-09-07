@@ -84,13 +84,19 @@ class _PostQuickScreenState extends State<PostQuickScreen> {
   }
 
   Widget _floatingButton() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: SizedBox(
-          height: 70,
-          child: AppButton(
-              label: "Upload", isLoading: false, onPressed: () => _postQuick()),
-        ));
+    return Center(
+      child: Padding(
+          padding: const EdgeInsets.only(top: 0, bottom: 25),
+          child: SizedBox(
+            height: 70,
+            width: MediaQuery.of(context).size.width - 50,
+            child: AppButton(
+                borderRadius: 30,
+                label: "Upload",
+                isLoading: false,
+                onPressed: () => _postQuick()),
+          )),
+    );
   }
 
   AppBar _appBar() {

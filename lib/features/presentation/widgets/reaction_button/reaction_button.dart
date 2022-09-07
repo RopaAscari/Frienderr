@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:frienderr/features/presentation/widgets/latest_reaction_builder.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
@@ -119,18 +120,10 @@ final _reactions = [
     value: Reactions.unreact,
     previewIcon: Padding(
       padding: const EdgeInsets.only(bottom: 5.0),
-      child: SizedBox(
-        width: 80,
-        height: 25,
-        child: MaterialButton(
-            height: 25,
-            color: Colors.grey[900]!,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-                side: BorderSide(color: Colors.grey[700]!)),
-            onPressed: () {},
-            child: const Text('unreact',
-                style: TextStyle(color: Colors.white, fontSize: 11.5))),
+      child: Lottie.asset(
+        Assets.lottie.none,
+        width: 27.0,
+        height: 27.0,
       ),
     ),
     icon: SvgPicture.asset(
@@ -186,6 +179,9 @@ class _ReactionButtonState extends State<ReactionButton>
     late String reacted;
 
     if (_initialReaction?.postId == null) {
+      setState(() {
+        count = widget.reactionCount;
+      });
       return;
     }
 
@@ -218,15 +214,18 @@ class _ReactionButtonState extends State<ReactionButton>
       case Reactions.angry:
         reacted = Reactions.angry;
         asset = Assets.images.angryPng.path;
-
         break;
+
+      default:
+        reacted = Reactions.like;
+        asset = Assets.images.likePng.path;
     }
 
     setState(() {
       _asset = asset;
       _isReacted = true;
-      count = _reactionCount;
       currentReaction = reacted;
+      count = widget.reactionCount;
     });
 
     _loveController = AnimationController(vsync: this);
@@ -275,8 +274,12 @@ class _ReactionButtonState extends State<ReactionButton>
     }
 
     if (reaction == Reactions.unreact) {
+      if (count > 0) {
+        setState(() {
+          count--;
+        });
+      }
       setState(() {
-        count--;
         _isReacted = false;
         currentReaction = '';
       });
@@ -316,7 +319,6 @@ class _ReactionButtonState extends State<ReactionButton>
       case Reactions.angry:
         reacted = Reactions.angry;
         asset = Assets.images.angryPng.path;
-
         break;
     }
 
@@ -363,12 +365,12 @@ class _ReactionButtonState extends State<ReactionButton>
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.only(left: 10.0, top: 0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 4.0),
+                padding: const EdgeInsets.only(bottom: 0.0),
                 child: Row(
                   children: [
                     react.ReactionButton<String>(
@@ -384,11 +386,9 @@ class _ReactionButtonState extends State<ReactionButton>
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 4.0, top: 3),
+                      padding: const EdgeInsets.only(left: 4.0, top: 0),
                       child: Text(currentReaction,
-                          style: TextStyle(
-                              fontSize:
-                                  ResponsiveFlutter.of(context).fontSize(1.4))),
+                          style: const TextStyle(fontSize: 13.5)),
                     ),
                   ],
                 ),
@@ -397,17 +397,24 @@ class _ReactionButtonState extends State<ReactionButton>
                 onTap: _viewReactions,
                 child: Row(
                   children: [
-                    Padding(
+                    /*  Padding(
                       padding: EdgeInsets.only(
                           right: widget.latestReactions!.isEmpty ? 0 : 5.0),
                       child: LatestReactionBuilder(
                           reactions: widget.latestReactions ?? []),
+                    )*/
+                    Container(
+                      width: 3,
+                      height: 3,
+                      margin: const EdgeInsets.only(left: 5),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey[500],
+                      ),
                     ),
-                    Text('$count reactions',
-                        style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize:
-                                ResponsiveFlutter.of(context).fontSize(1.25))),
+                    Text('  $count reaction${count > 1 ? 's' : ''}',
+                        style:
+                            TextStyle(color: Colors.grey[500], fontSize: 12)),
                   ],
                 ),
               ),

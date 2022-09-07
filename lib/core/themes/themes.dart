@@ -38,7 +38,7 @@ class AppTheme {
         fillColor: HexColor('#767676').withOpacity(0.1),
       ),
       cardColor: HexColor('#9C9C9C').withOpacity(0.1),
-      canvasColor: HexColor('#000000'),
+      canvasColor: HexColor("#0e0e11"), // HexColor('#000000'),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       popupMenuTheme: PopupMenuThemeData(
           elevation: 10,

@@ -1,23 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frienderr/core/enums/enums.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/generated/assets.gen.dart';
 import 'package:frienderr/core/services/route_builder.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/data/models/user/user_model.dart';
+import 'package:frienderr/features/domain/entities/bloc_group.dart';
 import 'package:frienderr/features/domain/entities/media_asset.dart';
 import 'package:frienderr/features/presentation/blocs/post/post_bloc.dart';
+import 'package:frienderr/features/presentation/screens/camera/camera.dart';
 import 'package:frienderr/features/presentation/widgets/gallery_picker/gallery_picker.dart';
 import 'package:frienderr/features/presentation/widgets/mini_image_slider.dart';
 
 class MiniPostSection extends StatefulWidget {
-  const MiniPostSection({Key? key, required this.user, required this.postBloc})
+  const MiniPostSection({Key? key, required this.user, required this.blocGroup})
       : super(key: key);
 
   final UserModel? user;
-  final PostBloc postBloc;
+  final BlocGroup blocGroup;
 
   @override
   State<MiniPostSection> createState() => _MiniPostSectionState();
@@ -27,7 +33,7 @@ class _MiniPostSectionState extends State<MiniPostSection> {
   double _opacity = 0.5;
   List<GalleryAsset> _assets = [];
   UserModel? get _user => widget.user;
-  PostBloc get _postBloc => widget.postBloc;
+  BlocGroup get _blocGroup => widget.blocGroup;
   TextEditingController captionController = TextEditingController();
 
   @override
@@ -47,10 +53,59 @@ class _MiniPostSectionState extends State<MiniPostSection> {
   }
 
   void _handlePost(BuildContext ctx) {
-    _postBloc.add(PostEvent.createStatusPost(status: captionController.text));
+    if (_assets.isEmpty) {
+      _blocGroup.postBloc
+          .add(PostEvent.createStatusPost(status: captionController.text));
+    } else {
+      _blocGroup.postBloc.add(PostEvent.createPost(
+          caption: captionController.text, assets: _assets));
+    }
+
     FocusScope.of(context).unfocus();
     captionController.clear();
     Navigator.pop(ctx, 'OK');
+  }
+
+  void _showEmoji() {
+    showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return SizedBox(
+              height: 250,
+              child: EmojiPicker(
+                textEditingController: captionController,
+                config: Config(
+                  columns: 7,
+                  // Issue: https://github.com/flutter/flutter/issues/28894
+                  emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+                  verticalSpacing: 0,
+                  horizontalSpacing: 0,
+                  gridPadding: EdgeInsets.zero,
+                  initCategory: Category.RECENT,
+                  bgColor: const Color(0xFFF2F2F2),
+                  indicatorColor: Colors.blue,
+                  iconColor: Colors.grey,
+                  iconColorSelected: Colors.blue,
+                  backspaceColor: Colors.blue,
+                  skinToneDialogBgColor: Colors.white,
+                  skinToneIndicatorColor: Colors.grey,
+                  enableSkinTones: true,
+                  showRecentsTab: true,
+                  recentsLimit: 28,
+                  replaceEmojiOnLimitExceed: false,
+                  noRecents: const Text(
+                    'No Recents',
+                    style: TextStyle(fontSize: 20, color: Colors.black26),
+                    textAlign: TextAlign.center,
+                  ),
+                  //loadingIndicator: const SizedBox.shrink(),
+                  tabIndicatorAnimDuration: kTabScrollDuration,
+                  categoryIcons: const CategoryIcons(),
+                  buttonMode: ButtonMode.MATERIAL,
+                  //checkPlatformCompatibility: true,
+                ),
+              ));
+        });
   }
 
   @override
@@ -112,20 +167,17 @@ class _MiniPostSectionState extends State<MiniPostSection> {
 
   Widget _buildContainer({required Widget child}) {
     return Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.only(top: 10),
+        width: MediaQuery.of(context).size.width - 50,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[900]!.withOpacity(0.5)),
             boxShadow: const [
               BoxShadow(),
             ],
-            color: Colors.grey[800]!.withOpacity(0.1),
+            color: Theme.of(context).canvasColor.withOpacity(0.7),
             borderRadius: BorderRadius.circular(20)),
         child: child);
-  }
-
-  Widget _buildCamera() {
-    return const Center();
   }
 
   Widget _buildPostActions() {
@@ -141,7 +193,6 @@ class _MiniPostSectionState extends State<MiniPostSection> {
                     Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
                       child: GalleryPicker(
                         onPicked: (assets) {
-                          print('picked');
                           setState(() {
                             _assets = assets;
                           });
@@ -151,17 +202,29 @@ class _MiniPostSectionState extends State<MiniPostSection> {
                   },
                   child: SvgPicture.asset(Assets.icons.postIcon,
                       height: 24, width: 24, color: Colors.red[700])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Assets.icons.emojiIcon
-                      .image(height: 22, width: 22, color: Colors.green[700])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Icon(
-                    CupertinoIcons.camera,
-                    color: Colors.blue[400],
-                    size: 24,
-                  ))
+              /* GestureDetector(
+                  onTap: () {
+                    _showEmoji();
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Assets.icons.emojiIcon.image(
+                          height: 22, width: 22, color: Colors.green[700])))*/
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
+                    child: CameraScreen(
+                        mode: CameraSelectionMode.post, blocGroup: _blocGroup),
+                  ));
+                },
+                child: Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Icon(
+                      CupertinoIcons.camera,
+                      color: Colors.blue[400],
+                      size: 24,
+                    )),
+              )
             ],
           ),
           _buildPostButton()
@@ -176,7 +239,7 @@ class _MiniPostSectionState extends State<MiniPostSection> {
       child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(30),
             gradient: LinearGradient(
               stops: const [0.0, 1.0],
               end: const Alignment(1.0, 0.0),
@@ -189,7 +252,7 @@ class _MiniPostSectionState extends State<MiniPostSection> {
             minWidth: 80,
             onPressed: _buildPostDialog,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(30.0),
                 side: const BorderSide(color: Colors.transparent)),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             child: Text('Post',
@@ -212,9 +275,7 @@ class _MiniPostSectionState extends State<MiniPostSection> {
             decoration: InputDecoration(
                 isDense: true,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
-                labelStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+                labelStyle: TextStyle(color: Colors.grey[600]!, fontSize: 13.5),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(10.0),
@@ -227,7 +288,7 @@ class _MiniPostSectionState extends State<MiniPostSection> {
                   // borderSide: new BorderSide(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                labelText: 'Write Message',
+                labelText: "What's on your mind",
                 contentPadding: const EdgeInsets.only(top: 30.0, left: 10.0))));
   }
 }

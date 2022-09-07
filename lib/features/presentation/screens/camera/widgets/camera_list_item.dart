@@ -32,7 +32,9 @@ class _CameraListItemState extends State<CameraListItem> {
             duration: const Duration(milliseconds: 100),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
-              color: widget.isSelected ? Colors.white : Colors.transparent,
+              color: widget.isSelected
+                  ? Colors.white.withOpacity(0.6)
+                  : Colors.transparent,
             ),
             child: SvgPicture.asset(
               widget.icon,

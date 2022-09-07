@@ -46,37 +46,33 @@ class _AppTextFieldState extends State<AppTextField> {
     return Padding(
         padding: widget.padding,
         child: TextField(
-          style:
-              TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.3)),
+          style: const TextStyle(fontSize: 12),
           controller: widget.controller,
           decoration: InputDecoration(
             filled: true,
-            isDense: true,
+            isDense: false,
             labelText: widget.label,
             errorText: widget.errorText,
             prefixIcon: widget.prefixIcon,
             suffixIcon:
                 widget.isObscure ? _buildPassswordIcon() : widget.suffixIcon,
-            labelStyle: TextStyle(
-                color: Colors.grey,
-                fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+            labelStyle: const TextStyle(color: Colors.grey, fontSize: 12.5),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[900]!),
-              borderRadius: BorderRadius.circular(8.0),
+              borderSide: BorderSide(color: Colors.grey[800]!.withOpacity(0.3)),
+              borderRadius: BorderRadius.circular(30.0),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[900]!),
-              borderRadius: BorderRadius.circular(8.0),
+              borderSide:
+                  BorderSide(color: Colors.amber[800]!.withOpacity(0.5)),
+              borderRadius: BorderRadius.circular(30.0),
             ),
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[900]!),
-              borderRadius: BorderRadius.circular(8.0),
+              borderSide: BorderSide(color: Colors.grey[800]!.withOpacity(0.3)),
+              borderRadius: BorderRadius.circular(30.0),
             ),
             fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-            errorStyle: TextStyle(
-                height: 0.0,
-                color: Colors.red,
-                fontSize: ResponsiveFlutter.of(context).fontSize(1.4)),
+            errorStyle:
+                const TextStyle(height: 0.0, color: Colors.red, fontSize: 13),
           ),
           obscureText: widget.isObscure ? _canPasswordShow : widget.isObscure,
         ));

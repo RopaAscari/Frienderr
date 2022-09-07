@@ -105,7 +105,7 @@ class SnapRemoteDataProvider implements ISnapRemoteDataProvider {
       final String timestamp = DateTime.now().microsecondsSinceEpoch.toString();
 
       final Reference storageRef =
-          FirebaseStorage.instance.ref().child('/posts/$timestamp');
+          FirebaseStorage.instance.ref().child('/snaps/$timestamp');
 
       final Reference thumbnailRef =
           FirebaseStorage.instance.ref().child('/thumbnail/$timestamp');

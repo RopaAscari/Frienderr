@@ -32,7 +32,7 @@ class PopupMenuContainerState<T> extends State<PopupMenuContainer<T>> {
     T? value = await showMenu<T>(
       context: context,
       items: widget.items,
-      color: HexColor('#141212'),
+      color: Theme.of(context).canvasColor,
       constraints: const BoxConstraints(minWidth: 300),
       position: RelativeRect.fromLTRB(
         _tapDownPosition.value.dx,

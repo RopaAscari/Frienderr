@@ -29,33 +29,42 @@ class _PostCarouselBuilderState extends State<PostCarouselBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [_buildCarousel(), _buildDotIndicator()],
+    return Stack(
+      children: [
+        _buildCarousel(),
+      ],
     );
   }
 
   Widget _buildCarousel() {
     return SizedBox(
       height: widget.height,
-      child: PageView.builder(
-          itemCount: _post.content.length,
-          scrollDirection: Axis.horizontal,
-          onPageChanged: (i) => setState(() {
-                _currentIndex = i;
+      child: Stack(
+        children: [
+          PageView.builder(
+              itemCount: _post.content.length,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (i) => setState(() {
+                    _currentIndex = i;
+                  }),
+              itemBuilder: (BuildContext context, int i) {
+                return _mediaContainer(
+                  _post.content[i],
+                  _currentIndex,
+                );
               }),
-          itemBuilder: (BuildContext context, int i) {
-            return _mediaContainer(
-              _post.content[i],
-              _currentIndex,
-            );
-          }),
+          _buildDotIndicator()
+        ],
+      ),
     );
   }
 
   Widget _buildDotIndicator() {
     final int itemCount = _post.content.length;
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
+    return Positioned(
+      bottom: 20,
+      left: 0,
+      right: 0,
       child: Center(
         child: Align(
             alignment: Alignment.bottomCenter,
@@ -63,8 +72,8 @@ class _PostCarouselBuilderState extends State<PostCarouselBuilder> {
               activeIndex: _currentIndex,
               count: itemCount,
               effect: ExpandingDotsEffect(
-                dotWidth: 8,
-                dotHeight: 7,
+                dotWidth: 6,
+                dotHeight: 4,
                 activeDotColor: Colors.amber[500]!,
               ),
             )),
@@ -108,7 +117,9 @@ class _PostCarouselBuilderState extends State<PostCarouselBuilder> {
           },
           closedBuilder: (BuildContext context, VoidCallback openContainer) {
             return ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius!),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(widget.borderRadius!),
+                    topRight: Radius.circular(widget.borderRadius!)),
                 child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: CachedNetworkImage(

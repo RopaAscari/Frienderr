@@ -2,12 +2,12 @@ import 'dart:ui' as ui;
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frienderr/core/services/route_builder.dart';
-
+import 'package:frienderr/features/presentation/widgets/app_logo.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/core/services/route_builder.dart';
 import 'package:frienderr/core/services/responsive_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frienderr/features/domain/entities/bloc_group.dart';
@@ -137,7 +137,7 @@ class _TimelineScreenState extends State<TimelineScreen>
                   floating: true,
                   leading: const Center(),
                   title: null,
-                  backgroundColor: const Color.fromRGBO(0, 0, 0, 0.85),
+                  backgroundColor: Theme.of(context).canvasColor,
                   expandedHeight: 55,
                   flexibleSpace: _appBar()),
               SliverList(
@@ -148,14 +148,14 @@ class _TimelineScreenState extends State<TimelineScreen>
                 ),
                 _buildTimelineHeading(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  padding: const EdgeInsets.only(left: 10, right: 15),
                   child: MiniPostSection(
                     user: _user,
-                    postBloc: _blocGroup.postBloc,
+                    blocGroup: _blocGroup,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  padding: const EdgeInsets.only(left: 10, right: 15),
                   child: TimelinePosts(
                     blocGroup: _blocGroup,
                     scrollController: _scrollController,
@@ -179,7 +179,7 @@ class _TimelineScreenState extends State<TimelineScreen>
                         bottomRight: Radius.circular(30))),
                 height: 55,
                 child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
+                    padding: const EdgeInsets.only(left: 0, right: 15, top: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -307,10 +307,10 @@ class _TimelineScreenState extends State<TimelineScreen>
 
   Widget _appLogoVector() {
     final Widget appLogo = Align(
-        alignment: Alignment.center,
+        //  alignment: Alignment.center,
         child: Padding(
-            padding: const EdgeInsets.all(0),
-            child: Image.asset(Constants.appLogo, width: 140, height: 140)));
+            padding: const EdgeInsets.only(left: 10),
+            child: Image.asset('assets/images/frienderr.png', width: 100)));
     return Hero(
         flightShuttleBuilder: (_, animation, __, ___, ____) {
           animation.addStatusListener((status) {

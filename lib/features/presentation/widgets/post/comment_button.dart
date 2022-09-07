@@ -27,18 +27,28 @@ class CommentButton extends StatefulWidget {
 class _CommentButtonState extends State<CommentButton> {
   Post get _post => widget.post;
   UserModel get _user => widget.user;
+  int _count = 0;
 
   @override
   void initState() {
+    setState(() {
+      _count = _post.comments;
+    });
     super.initState();
   }
 
   void _onComment() {
     widget.onComment();
+    setState(() {
+      _count++;
+    });
   }
 
   void _onDelete() {
     widget.onDelete();
+    setState(() {
+      _count--;
+    });
   }
 
   void _viewPostComments() {
@@ -71,8 +81,9 @@ class _CommentButtonState extends State<CommentButton> {
       child: Row(
         children: [
           SvgPicture.asset(Assets.icons.commentIconOutline,
-              width: 21, height: 21, color: Colors.white),
-          //  Text(' $count', style: TextStyle(color: Colors.grey[500]))
+              width: 23, height: 23, color: Colors.grey[400]),
+          Text(' $_count',
+              style: TextStyle(fontSize: 11.5, color: Colors.grey[500]))
         ],
       ),
     );

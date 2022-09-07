@@ -76,7 +76,7 @@ class _BookmarkButtonState extends State<BookmarkButton> {
             renderWidget: GestureDetector(
               onTap: _unBookmarkPost,
               child: const Icon(CupertinoIcons.bookmark_fill,
-                  color: Colors.amber, size: 21),
+                  color: Colors.amber, size: 23),
             ),
             fallbackWidget: GestureDetector(
                 onTap: _bookmarkPost,

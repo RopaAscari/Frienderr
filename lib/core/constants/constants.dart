@@ -8,6 +8,7 @@ class Constants {
   static String lightTheme = 'Light';
   static String appLogo = 'assets/images/app_logo.png';
   static String shareIcon = 'assets/icons/share-icon.svg';
+  static String bareLogo = 'assets/main-store-lisitng/bare_logo.png';
   static String googleIcon = 'assets/images/google_icon.png';
   static String appleIconWhite = 'assets/images/apple_icon_white.png';
   static String twitterIcon = 'assets/images/twitter_icon.png';

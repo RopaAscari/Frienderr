@@ -116,10 +116,18 @@ class _SnapsState extends State<Snaps> with TickerProviderStateMixin {
       _videoPlayer(),
       _interactionHelper(),
       Positioned(
-          child: SnapOptionButton(blocGroup: _blocGroup, snap: _snap),
-          bottom: 50,
-          right: 10),
-      _userAvatar(),
+          bottom: 30,
+          left: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: _userAvatar(),
+              ),
+              SnapOptionButton(blocGroup: _blocGroup, snap: _snap),
+            ],
+          )),
     ]);
   }
 
@@ -139,34 +147,25 @@ class _SnapsState extends State<Snaps> with TickerProviderStateMixin {
 
   Widget _userAvatar() {
     _snap.user.username;
-    return Positioned(
-        bottom: 30,
-        left: 0,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(
-              height: 60,
-              width: MediaQuery.of(context).size.width,
-              child: ListTile(
-                  leading: UserAvatar(
-                    blocGroup: _blocGroup,
-                    avatarUserId: _snap.user.id,
-                    profilePic: _snap.user.profilePic ?? "",
-                  ),
-                  title: Text(_snap.user.username,
-                      style: TextStyle(
-                          fontSize:
-                              ResponsiveFlutter.of(context).fontSize(1.4))),
-                  subtitle: Text('Public',
-                      style: TextStyle(
-                          fontSize:
-                              ResponsiveFlutter.of(context).fontSize(1.4))))),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 20),
-            child: Text(_snap.caption,
-                style: TextStyle(
-                    fontSize: ResponsiveFlutter.of(context).fontSize(1.4))),
-          )
-        ]));
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(
+          height: 60,
+          width: MediaQuery.of(context).size.width - 50,
+          child: ListTile(
+              leading: UserAvatar(
+                blocGroup: _blocGroup,
+                avatarUserId: _snap.user.id,
+                profilePic: _snap.user.profilePic ?? "",
+              ),
+              title: Text(_snap.user.username,
+                  style: const TextStyle(fontSize: 12.5)),
+              subtitle:
+                  const Text('Public', style: TextStyle(fontSize: 12.5)))),
+      Padding(
+        padding: const EdgeInsets.only(left: 20.0, top: 20),
+        child: Text(_snap.caption, style: const TextStyle(fontSize: 12.5)),
+      )
+    ]);
   }
 
   Widget _interactionHelper() {

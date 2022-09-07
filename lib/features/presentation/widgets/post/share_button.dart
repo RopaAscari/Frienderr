@@ -40,7 +40,7 @@ class _ShareButtonState extends State<ShareButton> {
     return GestureDetector(
       onTap: _sharePost,
       child: SvgPicture.asset(Assets.icons.shareIconOutline,
-          width: 21, height: 21, color: Colors.white),
+          width: 21, height: 21, color: Colors.grey[400]),
     );
   }
 }

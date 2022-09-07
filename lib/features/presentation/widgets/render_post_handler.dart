@@ -89,7 +89,9 @@ class _RenderPostHandlerState extends State<RenderPostHandler> {
                       child: LoadingIndicator(size: Size(40, 40)))),
               fallbackWidget: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  child: PostItem(post: post, blocGroup: _blocGroup))),
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20),
+                      child: PostItem(post: post, blocGroup: _blocGroup)))),
         ));
   }
 

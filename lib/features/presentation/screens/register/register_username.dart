@@ -17,6 +17,7 @@ import 'package:frienderr/features/presentation/widgets/app_button.dart';
 import 'package:frienderr/features/presentation/widgets/app_logo.dart';
 import 'package:frienderr/features/presentation/widgets/app_text_field.dart';
 import 'package:frienderr/features/presentation/widgets/flash_message.dart';
+import 'package:frienderr/features/presentation/widgets/loading.dart';
 
 class RegisterUsernameScreen extends StatefulWidget {
   final String userId;
@@ -61,9 +62,9 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
     _blocGroup.postBloc
         .add(const PostEvent.fetchTimelinePosts(shouldLoad: true));
 
-    _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
-    return getService<AppRouter>()
-        .push(TabNavigationRoute(blocGroup: _blocGroup));
+    return getService<AppRouter>().pushAndPopUntil(
+        TabNavigationRoute(blocGroup: _blocGroup),
+        predicate: (r) => false);
   }
 
   @override
@@ -145,11 +146,24 @@ class _RegisterUsernameScreenState extends State<RegisterUsernameScreen> {
                       AuthenticationStatus.registerUsernameFailure
                   ? state.error
                   : null),
-          AppButton(
-              label: "Continue",
-              margin: const EdgeInsets.only(top: 20),
-              onPressed: () => _onRegisterUsername(context),
-              isLoading: false),
+          SizedBox(
+            height: 75,
+            child: AppButton(
+                label: "Continue",
+                borderRadius: 30,
+                margin: const EdgeInsets.only(top: 20),
+                onPressed: () => _onRegisterUsername(context),
+                isLoading: false,
+                disabled: state.currentState ==
+                    AuthenticationStatus.registerUsernameLoading),
+          ),
+          if (state.currentState ==
+              AuthenticationStatus.registerUsernameLoading)
+            const Center(
+              child: Padding(
+                  child: LoadingIndicator(size: Size.fromRadius(40)),
+                  padding: EdgeInsets.only(top: 20)),
+            )
         ]));
   }
 }

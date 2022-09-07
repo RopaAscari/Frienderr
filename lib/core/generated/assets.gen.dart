@@ -158,6 +158,19 @@ class $AssetsIconsGen {
   /// File path: assets/icons/add_icon.svg
   String get addIcon => 'assets/icons/add_icon.svg';
 
+  /// File path: assets/icons/app_icon.svg
+  String get appIcon => 'assets/icons/app_icon.svg';
+
+  /// File path: assets/icons/app_icon_bare.png
+  AssetGenImage get appIconBarePng =>
+      const AssetGenImage('assets/icons/app_icon_bare.png');
+
+  /// File path: assets/icons/app_icon_bare.svg
+  String get appIconBareSvg => 'assets/icons/app_icon_bare.svg';
+
+  /// File path: assets/icons/app_name_logo.svg
+  String get appNameLogo => 'assets/icons/app_name_logo.svg';
+
   /// File path: assets/icons/artboard_icon.svg
   String get artboardIcon => 'assets/icons/artboard_icon.svg';
 
@@ -407,6 +420,10 @@ class $AssetsImagesGen {
   AssetGenImage get appLogo =>
       const AssetGenImage('assets/images/app_logo.png');
 
+  /// File path: assets/images/app_logo_2.png
+  AssetGenImage get appLogo2 =>
+      const AssetGenImage('assets/images/app_logo_2.png');
+
   /// File path: assets/images/apple_icon_white.png
   AssetGenImage get appleIconWhite =>
       const AssetGenImage('assets/images/apple_icon_white.png');
@@ -414,6 +431,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/auth_vector.png
   AssetGenImage get authVector =>
       const AssetGenImage('assets/images/auth_vector.png');
+
+  /// File path: assets/images/auth_vector_2.png
+  AssetGenImage get authVector2 =>
+      const AssetGenImage('assets/images/auth_vector_2.png');
 
   /// File path: assets/images/aviators.png
   AssetGenImage get aviators =>
@@ -440,6 +461,9 @@ class $AssetsImagesGen {
   AssetGenImage get dalmatian =>
       const AssetGenImage('assets/images/dalmatian.png');
 
+  /// File path: assets/images/debug.log
+  String get debug => 'assets/images/debug.log';
+
   /// File path: assets/images/dot_menu_dark.png
   AssetGenImage get dotMenuDark =>
       const AssetGenImage('assets/images/dot_menu_dark.png');
@@ -457,6 +481,10 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/flowers.png
   AssetGenImage get flowers => const AssetGenImage('assets/images/flowers.png');
+
+  /// File path: assets/images/frienderr.png
+  AssetGenImage get frienderr =>
+      const AssetGenImage('assets/images/frienderr.png');
 
   /// File path: assets/images/friends.png
   AssetGenImage get friends => const AssetGenImage('assets/images/friends.png');
@@ -628,6 +656,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/angry.json
   String get angry => 'assets/lottie/angry.json';
 
+  /// File path: assets/lottie/auth_animation.json
+  String get authAnimation => 'assets/lottie/auth_animation.json';
+
   /// File path: assets/lottie/care.json
   String get care => 'assets/lottie/care.json';
 
@@ -649,6 +680,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/lol.json
   String get lol => 'assets/lottie/lol.json';
 
+  /// File path: assets/lottie/none.json
+  String get none => 'assets/lottie/none.json';
+
   /// File path: assets/lottie/sad.json
   String get sad => 'assets/lottie/sad.json';
 
@@ -664,6 +698,29 @@ class $AssetsLottieGen {
 
   /// File path: assets/lottie/thumbs.json
   String get thumbs => 'assets/lottie/thumbs.json';
+}
+
+class $AssetsMainStoreLisitngGen {
+  const $AssetsMainStoreLisitngGen();
+
+  /// File path: assets/main-store-lisitng/appstore.png
+  AssetGenImage get appstore =>
+      const AssetGenImage('assets/main-store-lisitng/appstore.png');
+
+  /// File path: assets/main-store-lisitng/bare_logo.png
+  AssetGenImage get bareLogo =>
+      const AssetGenImage('assets/main-store-lisitng/bare_logo.png');
+
+  /// File path: assets/main-store-lisitng/debug.log
+  String get debug => 'assets/main-store-lisitng/debug.log';
+
+  /// File path: assets/main-store-lisitng/feature_graphic.png
+  AssetGenImage get featureGraphic =>
+      const AssetGenImage('assets/main-store-lisitng/feature_graphic.png');
+
+  /// File path: assets/main-store-lisitng/playstore.png
+  AssetGenImage get playstore =>
+      const AssetGenImage('assets/main-store-lisitng/playstore.png');
 }
 
 class $AssetsMapStylesGen {
@@ -688,6 +745,8 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsMainStoreLisitngGen mainStoreLisitng =
+      $AssetsMainStoreLisitngGen();
   static const $AssetsMapStylesGen mapStyles = $AssetsMapStylesGen();
 }
 

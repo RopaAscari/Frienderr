@@ -1,3 +1,5 @@
+import 'package:frienderr/core/injection/injection.dart';
+import 'package:frienderr/core/services/services.dart';
 import 'package:frienderr/features/presentation/widgets/post/popup_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
@@ -158,36 +160,17 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
+        padding: const EdgeInsets.only(top: 25.0),
         child: _buildContainer(
             child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              _buildUserAvatar(),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildUserName(),
-                                    _buildTimeElapsed()
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          _buildOptionIcon()
-                        ]),
-                    _buildCaption(),
+                    //
                     _buildMedia(),
+                    _buildCaption(),
                     _buildPostActions()
                   ],
                 ))));
@@ -198,7 +181,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           boxShadow: const [],
-          color: Colors.grey[800]!.withOpacity(0.1),
+          color: HexColor("#070708").withOpacity(0.6),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.grey[900]!.withOpacity(0.5)),
         ),
@@ -208,6 +191,14 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   Widget _buildOptionIcon() {
     return Row(
       children: [
+        Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: BookmarkButton(
+              userId: _user.id,
+              postId: _post.id,
+              isSaved: _post.isSaved ?? false,
+              postBloc: widget.blocGroup.postBloc,
+            )),
         PopupMenuContainer<PostActions>(
           child: const Icon(Icons.more_horiz),
           items:
@@ -215,6 +206,11 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
           onItemSelected: (value) async {
             if (value == PostActions.delete) {
               _blocGroup.postBloc.add(PostEvent.deletePost(postId: _post.id));
+            } else if (value == PostActions.report) {
+              getService<AppRouter>().context.showToast(
+                  content: const Text("We are looking into this matter for you",
+                      style: TextStyle(color: Colors.white, fontSize: 12)),
+                  type: SnackBarType.idle);
             }
           },
         ),
@@ -224,7 +220,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
 
   Widget _buildPostActions() {
     return Padding(
-      padding: const EdgeInsets.only(top: 0.0),
+      padding: const EdgeInsets.only(bottom: 15.0, left: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -237,50 +233,45 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
               initialReaction: _post.userReaction,
               latestReactions: _post.latestReactions,
               animationController: _animationController),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: CommentButton(
-                            post: _post,
-                            user: _user,
-                            onDelete: _onDelete,
-                            onComment: _onComment,
-                          )),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: ShareButton(
-                      postId: _post.id,
-                      postBloc: widget.blocGroup.postBloc,
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0, top: 8, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: CommentButton(
+                              post: _post,
+                              user: _user,
+                              onDelete: _onDelete,
+                              onComment: _onComment,
+                            )),
+                      ],
                     ),
-                  ),
-                  Padding(
+                    Padding(
                       padding: const EdgeInsets.only(left: 12.0),
-                      child: BookmarkButton(
-                        userId: _user.id,
+                      child: ShareButton(
                         postId: _post.id,
-                        isSaved: _post.isSaved ?? false,
                         postBloc: widget.blocGroup.postBloc,
-                      )),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0, top: 7),
-                child: Text('$commentCount comments',
-                    style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize:
-                            ResponsiveFlutter.of(context).fontSize(1.25))),
-              )
-            ],
+                      ),
+                    ),
+                  ],
+                ),
+                /*Padding(
+                  padding: const EdgeInsets.only(left: 12.0, top: 7),
+                  child: Text('$commentCount comments',
+                      style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize:
+                              ResponsiveFlutter.of(context).fontSize(1.25))),
+                )*/
+              ],
+            ),
           ),
         ],
       ),
@@ -290,7 +281,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   Widget _buildCaption() {
     final _size = _post.type == TimelinePostType.post ? 1.35 : 1.7;
     return Padding(
-      padding: const EdgeInsets.only(top: 15.0, bottom: 10.0, left: 8),
+      padding: const EdgeInsets.only(top: 0.0, bottom: 5.0, left: 8),
       child: Text(_post.caption,
           style: TextStyle(
               fontFamily: 'Inter',
@@ -300,28 +291,52 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   }
 
   Widget _buildMedia() {
-    return ConditionalRenderDelegate(
-      condition: _post.type == TimelinePostType.post,
-      fallbackWidget: const Center(),
-      renderWidget: Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: SizedBox(
-          height: 400,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: PostCarouselBuilder(post: _post)
-              /*Center(
-                      child: Lottie.asset(
-                        _currentReacton,
-                        width: 300.0,
-                        height: 300.0,
-                        repeat: false,
-                        animate: false,
-                        controller: _animationController,
-                      ),*/
-              ),
+    return Stack(
+      children: [
+        /* Center(
+            child: Lottie.asset(
+          _currentReacton,
+          width: 300.0,
+          height: 300.0,
+          repeat: false,
+          animate: false,
+          controller: _animationController,
+        )),8*/
+        ConditionalRenderDelegate(
+          condition: _post.type == TimelinePostType.post,
+          fallbackWidget: const Center(),
+          renderWidget: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: SizedBox(
+              height: 580,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: PostCarouselBuilder(post: _post, height: 550)
+                  /*,*/
+                  ),
+            ),
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(
+              children: [
+                _buildUserAvatar(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [_buildUserName(), _buildTimeElapsed()],
+                  ),
+                )
+              ],
+            ),
+            _buildOptionIcon()
+          ]),
+        ),
+      ],
     );
   }
 
@@ -340,7 +355,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
     return Text(
       _timeElasped,
       style: TextStyle(
-          color: Colors.grey[400],
+          color: Colors.white,
           fontSize: ResponsiveFlutter.of(context).fontSize(1.2)),
     );
   }

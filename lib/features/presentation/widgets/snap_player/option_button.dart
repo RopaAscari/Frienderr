@@ -24,11 +24,9 @@ class _SnapOptionButtonState extends State<SnapOptionButton> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuContainer<PostActions>(
-      child: const Padding(
-          padding: EdgeInsets.only(top: 60),
-          child: ButtonOverlay(
-            child: Icon(Icons.more_horiz, size: 20),
-          )),
+      child: ButtonOverlay(
+        child: Icon(Icons.more_horiz, size: 20),
+      ),
       items: widget.snap.user.id == widget.blocGroup.userBloc.state.user.id
           ? userPostPopupItems
           : postPopupItems,

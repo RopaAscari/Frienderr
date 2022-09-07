@@ -73,7 +73,7 @@ class StoryDataRemoteProvider implements IStoryDataRemoteProvider {
   Future<QuerySnapshot<StoryDTO>> fetchStories(String userId) {
     return FirebaseFirestore.instance
         .collection(Collections.stories)
-        .orderBy("dateUpdated", descending: false)
+        .orderBy("dateUpdated", descending: true)
         //  .where('id', isNotEqualTo: userId)
         .limit(Constants.pageSize)
         .withConverter<StoryDTO>(

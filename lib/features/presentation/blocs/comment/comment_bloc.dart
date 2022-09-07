@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frienderr/core/injection/injection.dart';
 import 'package:frienderr/features/presentation/navigation/app_router.dart';
 import 'package:frienderr/features/presentation/widgets/snackbar_message.dart';
@@ -96,10 +98,8 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       notification: event.notification,
     ));
     return _either.fold((Failure error) {
-      print("comment error");
       emit(state.copyWith(action: CommentListenableAction.creationFailed));
     }, (Comment comment) {
-      print("comment created");
       state.paginationController.appendLastPage([comment]);
       emit(state.copyWith(action: CommentListenableAction.created));
     });
@@ -111,18 +111,16 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
         DeleteCommentParams(event.id, event.postId, event.type));
     return _either.fold((Failure error) {
       getService<AppRouter>().context.showToast(
-          content: const SnackBarMessage(
-            message: "An error occured",
-          ),
+          content: const Text("Something went wrong",
+              style: TextStyle(color: Colors.white, fontSize: 12)),
           type: SnackBarType.error);
 
       emit(state.copyWith(action: CommentListenableAction.deleteFailed));
     }, (bool success) {
       if (!success) {
         getService<AppRouter>().context.showToast(
-            content: const SnackBarMessage(
-              message: "An error occured",
-            ),
+            content: const Text("Something went wrong",
+                style: TextStyle(color: Colors.white, fontSize: 12)),
             type: SnackBarType.error);
         return;
       }

@@ -109,7 +109,8 @@ class NotificationScreenState extends State<NotificationScreen>
                             return SizedBox(
                                 height: MediaQuery.of(context).size.height * .8,
                                 child: const Center(
-                                    child: Text("You have no activity",
+                                    child: Text(
+                                        "You have no current activity on your feed",
                                         style: TextStyle(fontSize: 13))));
                           },
                           newPageProgressIndicatorBuilder: (ctx) {
@@ -142,7 +143,7 @@ class NotificationScreenState extends State<NotificationScreen>
             child: AppBar(
                 elevation: 0,
                 automaticallyImplyLeading: false,
-                backgroundColor: Colors.black,
+                backgroundColor: Theme.of(context).canvasColor,
                 title: const Text(
                   'Notifications',
                   style: TextStyle(fontSize: 15),
@@ -196,8 +197,8 @@ class NotificationScreenState extends State<NotificationScreen>
                                           color: Colors.transparent))),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.amber[800] as Color),
-                          minimumSize:
-                              MaterialStateProperty.all<Size>(Size(60, 22))),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(60, 22))),
                       child:
                           const Text('Follow', style: TextStyle(fontSize: 11)),
                       onPressed: () => null,
@@ -206,9 +207,7 @@ class NotificationScreenState extends State<NotificationScreen>
                     TimeElapsed.elapsedTimeDynamic(
                         DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
-                    style: TextStyle(
-                        fontSize: const AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 10))),
+                    style: const TextStyle(fontSize: 12)),
               ])),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
@@ -243,9 +242,7 @@ class NotificationScreenState extends State<NotificationScreen>
               avatarUserId: senderId,
               profilePic: senderProfilePic),
           title: Text('$senderUsername liked your post',
-              style: TextStyle(
-                  fontSize: const AdaptiveTextSize()
-                      .getAdaptiveTextSize(context, 10))),
+              style: const TextStyle(fontSize: 13)),
           trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -266,9 +263,7 @@ class NotificationScreenState extends State<NotificationScreen>
                     TimeElapsed.elapsedTimeDynamic(
                         DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
-                    style: TextStyle(
-                        fontSize: const AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 10)))
+                    style: const TextStyle(fontSize: 12))
               ])),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
@@ -279,7 +274,7 @@ class NotificationScreenState extends State<NotificationScreen>
             onPressed: (context) => null,
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
-            icon: Icons.delete,
+            //  icon: Icons.delete,
             label: 'Delete',
           ),
         ],
@@ -303,9 +298,7 @@ class NotificationScreenState extends State<NotificationScreen>
               avatarUserId: senderId,
               profilePic: senderProfilePic),
           title: Text('$senderUsername comment "$comment" on your post',
-              style: TextStyle(
-                  fontSize: const AdaptiveTextSize()
-                      .getAdaptiveTextSize(context, 10))),
+              style: const TextStyle(fontSize: 13)),
           trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -316,7 +309,7 @@ class NotificationScreenState extends State<NotificationScreen>
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          alignment: Alignment(-.2, 0),
+                          alignment: const Alignment(-.2, 0),
                           image: CachedNetworkImageProvider(postThumbnail),
                           fit: BoxFit.cover),
                       // color: Colors.red,
@@ -326,9 +319,7 @@ class NotificationScreenState extends State<NotificationScreen>
                     TimeElapsed.elapsedTimeDynamic(
                         DateTime.fromMicrosecondsSinceEpoch(timeElasped)
                             .toString()),
-                    style: TextStyle(
-                        fontSize: const AdaptiveTextSize()
-                            .getAdaptiveTextSize(context, 10)))
+                    style: const TextStyle(fontSize: 12)),
               ])),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),

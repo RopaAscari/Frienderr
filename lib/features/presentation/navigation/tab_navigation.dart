@@ -78,13 +78,13 @@ class _TabNavigationScreenState extends State<TabNavigationScreen>
         icon: Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
             child: SvgPicture.asset(Assets.icons.homeIconOutlineSvg,
-                height: 20, width: 20, color: Colors.grey[700])),
+                height: 23, width: 23, color: Colors.grey[700])),
         activeIcon: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 5.0),
               child: SvgPicture.asset(Assets.icons.homeIconOutlineSvg,
-                  height: 20, width: 20, color: Colors.white),
+                  height: 23, width: 23, color: Colors.white),
             ),
             const Icon(Icons.circle, size: 4, color: Colors.red)
           ],
@@ -95,28 +95,12 @@ class _TabNavigationScreenState extends State<TabNavigationScreen>
         icon: Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
             child: SvgPicture.asset(Assets.icons.snapIconOutlineSvg,
-                height: 23, width: 23, color: Colors.grey[700])),
-        activeIcon: Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.only(bottom: 5.0),
-                child: SvgPicture.asset(Assets.icons.snapIconOutlineSvg,
-                    height: 23, width: 23, color: Colors.white)),
-            const Icon(Icons.circle, size: 4, color: Colors.red)
-          ],
-        ),
-      ),
-      BottomNavigationBarItem(
-        label: '',
-        icon: Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
-            child: SvgPicture.asset(Assets.icons.cameraIconOutlineSvg,
                 height: 22, width: 22, color: Colors.grey[700])),
         activeIcon: Column(
           children: [
             Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: SvgPicture.asset(Assets.icons.cameraIconOutlineSvg,
+                child: SvgPicture.asset(Assets.icons.snapIconOutlineSvg,
                     height: 22, width: 22, color: Colors.white)),
             const Icon(Icons.circle, size: 4, color: Colors.red)
           ],
@@ -126,21 +110,14 @@ class _TabNavigationScreenState extends State<TabNavigationScreen>
         label: '',
         icon: Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
-            child: Badge(
-                badgeContent: const Text('1'),
-                child: SvgPicture.asset(Assets.icons.notificationIconOutline,
-                    height: 20, width: 20, color: Colors.grey[700]))),
+            child: SvgPicture.asset(Assets.icons.cameraIconOutlineSvg,
+                height: 25, width: 25, color: Colors.grey[700])),
         activeIcon: Column(
           children: [
             Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Badge(
-                    badgeContent: const Text('1'),
-                    child: SvgPicture.asset(
-                        Assets.icons.notificationIconOutline,
-                        height: 20,
-                        width: 20,
-                        color: Colors.white))),
+                child: SvgPicture.asset(Assets.icons.cameraIconOutlineSvg,
+                    height: 25, width: 25, color: Colors.white)),
             const Icon(Icons.circle, size: 4, color: Colors.red)
           ],
         ),
@@ -149,18 +126,30 @@ class _TabNavigationScreenState extends State<TabNavigationScreen>
         label: '',
         icon: Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
-            child: Badge(
-                badgeContent: const Text('1'),
-                child: SvgPicture.asset(Assets.icons.messageIconOutlineSvg,
-                    height: 20, width: 20, color: Colors.grey[700]))),
+            child: SvgPicture.asset(Assets.icons.notificationIconOutline,
+                height: 23, width: 23, color: Colors.grey[700])),
         activeIcon: Column(
           children: [
             Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Badge(
-                    badgeContent: const Text('1'),
-                    child: SvgPicture.asset(Assets.icons.messageIconOutlineSvg,
-                        height: 20, width: 20, color: Colors.white))),
+                child: SvgPicture.asset(Assets.icons.notificationIconOutline,
+                    height: 23, width: 23, color: Colors.white)),
+            const Icon(Icons.circle, size: 4, color: Colors.red)
+          ],
+        ),
+      ),
+      BottomNavigationBarItem(
+        label: '',
+        icon: Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: SvgPicture.asset(Assets.icons.messageIconOutlineSvg,
+                height: 23, width: 23, color: Colors.grey[700])),
+        activeIcon: Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.only(bottom: 5.0),
+                child: SvgPicture.asset(Assets.icons.messageIconOutlineSvg,
+                    height: 23, width: 23, color: Colors.white)),
             const Icon(Icons.circle, size: 4, color: Colors.red)
           ],
         ),

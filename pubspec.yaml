@@ -78,6 +78,7 @@ dev_dependencies:
   freezed_annotation: ^1.1.0
   cached_video_player: ^2.0.3
   firebase_messaging: ^11.2.8
+  emoji_picker_flutter: ^1.3.1
   wechat_assets_picker: ^7.3.2
   cube_transition_plus: ^2.0.1
   auto_route_generator: ^3.2.3
@@ -125,6 +126,7 @@ flutter:
     - assets/deep_ar/
     - assets/map_styles/
     - assets/animations/
+    - assets/main-store-lisitng/
     
     
   fonts:
@@ -143,6 +145,9 @@ flutter:
     - family: Raleway
       fonts:
          - asset: assets/fonts/Raleway-Regular.ttf
+    - family: Instagram Sans
+      fonts:
+         - asset: assets/fonts/Instagram-Sans.ttf
 
 flutter_native_splash:
 

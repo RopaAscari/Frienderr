@@ -29,7 +29,7 @@ const List<FeatureListItem> featureList = [
     mode: CameraFeatureMode.flash,
     icon: 'assets/icons/flash_icon.svg',
   ),
-  FeatureListItem(
+  /*FeatureListItem(
     title: "Filters",
     mode: CameraFeatureMode.filter,
     icon: 'assets/icons/filter_icon.svg',
@@ -38,7 +38,7 @@ const List<FeatureListItem> featureList = [
     title: "Timer",
     mode: CameraFeatureMode.timer,
     icon: 'assets/icons/timer_icon.svg',
-  )
+  )*/
 ];
 
 const List<SelectionModeItem> selectionModes = [

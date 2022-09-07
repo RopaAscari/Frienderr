@@ -270,27 +270,31 @@ class _StoriesState extends State<Stories> {
       return const Center();
     }
 
-    return SizedBox(
-        height: 150,
-        width: 145,
-        child: OpenContainer(
-            openElevation: 0,
-            closedElevation: 0,
-            closedColor: Colors.transparent,
-            transitionType: ContainerTransitionType.fadeThrough,
-            openBuilder: (BuildContext context, VoidCallback _) {
-              return ViewStories(
-                stories: stories,
-                currentPosition: index,
-                timeElasped: dateCreated,
-                isOwnerViewing: isStoryOwner,
-                storyUser: stories[index].user,
-                storyBloc: _blocGroup.storyBloc,
-              );
-            },
-            closedBuilder: (BuildContext context, VoidCallback openContainer) {
-              return _storyDisplay(stories[index]);
-            }));
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: SizedBox(
+          height: 150,
+          width: 145,
+          child: OpenContainer(
+              openElevation: 0,
+              closedElevation: 0,
+              closedColor: Colors.transparent,
+              transitionType: ContainerTransitionType.fadeThrough,
+              openBuilder: (BuildContext context, VoidCallback _) {
+                return ViewStories(
+                  stories: stories,
+                  currentPosition: index,
+                  timeElasped: dateCreated,
+                  isOwnerViewing: isStoryOwner,
+                  storyUser: stories[index].user,
+                  storyBloc: _blocGroup.storyBloc,
+                );
+              },
+              closedBuilder:
+                  (BuildContext context, VoidCallback openContainer) {
+                return _storyDisplay(stories[index]);
+              })),
+    );
   }
 
   Widget _userStoryTemplate(UserStory userStory) {

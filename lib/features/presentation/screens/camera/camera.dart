@@ -489,8 +489,13 @@ class CameraScreenState extends State<CameraScreen>
         child: GestureDetector(
           onTap: () {
             Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
-              child: GalleryPicker(onPicked: _handleSelectedAssets),
-            ));
+                child: GalleryPicker(onPicked: (assets) {
+              if (assets.isEmpty) {
+                // Navigator.pop(context);
+                return;
+              }
+              _handleSelectedAssets(assets);
+            })));
           },
           child: ClipRRect(
               borderRadius: BorderRadius.circular(11),

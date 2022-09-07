@@ -64,78 +64,102 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   }
 
   void _createChatFromFriendsList(String id, FollowingState state) {}
-
+  void _listener(BuildContext context, ChatState state) {}
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    void _listener(BuildContext context, ChatState state) {}
 
-    return CustomScrollView(slivers: [
-      _buildAppBar(),
-      SliverList(
-          delegate: SliverChildListDelegate([
-        searchChatWidget(),
-        SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: SmartRefresher(
-                enablePullUp: false,
-                enablePullDown: true,
-                controller: _refreshController,
-                onRefresh: () async {
-                  await Future.delayed(const Duration(milliseconds: 2000));
-                  _refreshController.refreshCompleted();
-                },
-                header: CustomHeader(
-                    builder: (BuildContext context, RefreshStatus? mode) {
-                  if (mode == RefreshStatus.refreshing) {
-                    return const Center(
-                        child: LoadingIndicator(size: Size(40, 40)));
-                  }
+    return Scaffold(
+      floatingActionButton: _buildMessageButton(),
+      body: CustomScrollView(slivers: [
+        _buildAppBar(),
+        SliverList(
+            delegate: SliverChildListDelegate([
+          searchChatWidget(),
+          SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: SmartRefresher(
+                  enablePullUp: false,
+                  enablePullDown: true,
+                  controller: _refreshController,
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(milliseconds: 2000));
+                    _refreshController.refreshCompleted();
+                  },
+                  header: CustomHeader(
+                      builder: (BuildContext context, RefreshStatus? mode) {
+                    if (mode == RefreshStatus.refreshing) {
+                      return const Center(
+                          child: LoadingIndicator(size: Size(40, 40)));
+                    }
 
-                  return const Center();
-                }),
-                child: BlocConsumer<ChatBloc, ChatState>(
-                    bloc: _blocGroup.chatBloc,
-                    listener: _listener,
-                    listenWhen: (ChatState prevState, ChatState currState) {
-                      return true;
-                    },
-                    builder: (BuildContext context, ChatState state) {
-                      return PagedListView<int, ChatModel>.separated(
-                        shrinkWrap: true,
-                        separatorBuilder: (ctx, i) {
-                          return const Center();
-                        },
-                        physics: const NeverScrollableScrollPhysics(),
-                        pagingController:
-                            _blocGroup.chatBloc.state.paginationController,
-                        builderDelegate: PagedChildBuilderDelegate<ChatModel>(
-                          animateTransitions: true,
-                          firstPageProgressIndicatorBuilder: (ctx) {
-                            return const LoadingIndicator(size: Size(40, 40));
+                    return const Center();
+                  }),
+                  child: BlocConsumer<ChatBloc, ChatState>(
+                      bloc: _blocGroup.chatBloc,
+                      listener: _listener,
+                      listenWhen: (ChatState prevState, ChatState currState) {
+                        return true;
+                      },
+                      builder: (BuildContext context, ChatState state) {
+                        return PagedListView<int, ChatModel>.separated(
+                          shrinkWrap: true,
+                          separatorBuilder: (ctx, i) {
+                            return const Center();
                           },
-                          noItemsFoundIndicatorBuilder: (ctx) {
-                            return SizedBox(
-                                height: MediaQuery.of(context).size.height * .7,
-                                child: const Center(
-                                    child: Text("You have no chats",
-                                        style: TextStyle(fontSize: 13))));
-                          },
-                          newPageProgressIndicatorBuilder: (ctx) {
-                            return const LoadingIndicator(size: Size(40, 40));
-                          },
-                          transitionDuration: const Duration(milliseconds: 500),
-                          itemBuilder: (context, chat, index) {
-                            return Padding(
-                              child: _buildChats(chat),
-                              padding: const EdgeInsets.only(top: 0.0),
-                            );
-                          },
-                        ),
-                      );
-                    })))
-      ]))
-    ]);
+                          physics: const NeverScrollableScrollPhysics(),
+                          pagingController:
+                              _blocGroup.chatBloc.state.paginationController,
+                          builderDelegate: PagedChildBuilderDelegate<ChatModel>(
+                            animateTransitions: true,
+                            firstPageProgressIndicatorBuilder: (ctx) {
+                              return const LoadingIndicator(size: Size(40, 40));
+                            },
+                            noItemsFoundIndicatorBuilder: (ctx) {
+                              return SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .7,
+                                  child: const Center(
+                                      child: Text(
+                                          "Start a conversation to see your chats",
+                                          style: TextStyle(fontSize: 13))));
+                            },
+                            newPageProgressIndicatorBuilder: (ctx) {
+                              return const LoadingIndicator(size: Size(40, 40));
+                            },
+                            transitionDuration:
+                                const Duration(milliseconds: 500),
+                            itemBuilder: (context, chat, index) {
+                              return Padding(
+                                child: _buildChats(chat),
+                                padding: const EdgeInsets.only(top: 0.0),
+                              );
+                            },
+                          ),
+                        );
+                      })))
+        ]))
+      ]),
+    );
+  }
+
+  Widget _buildMessageButton() {
+    return Container(
+      width: 55,
+      height: 55,
+      margin: const EdgeInsets.only(bottom: 0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.transparent),
+        borderRadius: BorderRadius.circular(100),
+        gradient: LinearGradient(
+          begin: const Alignment(-0.95, 0.0),
+          end: const Alignment(1.0, 0.0),
+          colors: [HexColor('#E09810'), HexColor('#FEDA43')],
+          stops: const [0.0, 1.0],
+        ),
+      ),
+      child: const Icon(CupertinoIcons.chat_bubble_2, size: 30),
+    );
   }
 
   Widget _buildAppBar() {
@@ -143,26 +167,26 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
         title: null,
         floating: true,
         leading: const Center(),
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).canvasColor,
         expandedHeight: 55,
         flexibleSpace: PreferredSize(
             preferredSize: const Size.fromHeight(45.0),
             child: AppBar(
               elevation: 0,
               automaticallyImplyLeading: false,
-              backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).canvasColor,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Messages\n', style: TextStyle(fontSize: 17)),
-                  InkWell(
+                children: const [
+                  Text('Chats\n', style: TextStyle(fontSize: 17)),
+                  /*InkWell(
                       onTap: () {},
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: const Icon(Icons.add, color: Colors.black)))
+                          child: const Icon(Icons.add, color: Colors.black)))*/
                 ],
               ),
             )));
@@ -199,32 +223,35 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
   }
 
   Widget searchChatWidget() {
-    return TextField(
-        obscureText: false,
-        controller: searchController,
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-            labelStyle: TextStyle(color: Colors.grey, fontSize: 13.5),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              // borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            border: OutlineInputBorder(
-              // borderSide: new BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            suffixIcon: IconButton(
-                color: HexColor('#13111A'),
-                onPressed: () {},
-                icon: const Icon(Icons.search)),
-            // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
-            filled: true,
-            labelText: 'Search',
-            contentPadding: const EdgeInsets.only(top: 30.0, left: 20.0)));
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 15),
+      child: TextField(
+          obscureText: false,
+          controller: searchController,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 13.5),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                // borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              border: OutlineInputBorder(
+                // borderSide: new BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              suffixIcon: IconButton(
+                  color: HexColor('#13111A'),
+                  onPressed: () {},
+                  icon: const Icon(Icons.search)),
+              // fillColor: HexColor('#C4C4C4').withOpacity(0.5),
+              filled: true,
+              labelText: 'Search',
+              contentPadding: const EdgeInsets.only(top: 30.0, left: 20.0))),
+    );
   }
 
   Widget renderFriendsListWidget(FollowingState state) {
@@ -299,7 +326,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
     final displayName = chat.participants
         .firstWhere((participant) => participant.id != _user.id)
         .username;
-    print("TEST");
+    ;
     final displayPhoto = chat.participants
         .firstWhere((participant) => participant.id != _user.id)
         .profilePic as String;
@@ -317,8 +344,6 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
       chatRecipient: chatRecipient,
     );
 
-    print("TEST");
-
     return Padding(
         padding: const EdgeInsets.all(0),
         child: Column(children: [
@@ -327,7 +352,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              color: Colors.black,
+              color: Theme.of(context).canvasColor,
               //HexColor('#121213'),
               child: Slidable(
                 endActionPane: ActionPane(
@@ -357,9 +382,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
                           _determineMessageDisplay(unread, chat.latestMessage),
                       title: Text(
                         '$displayName',
-                        style: TextStyle(
-                            fontSize: const AdaptiveTextSize()
-                                .getAdaptiveTextSize(context, 10)),
+                        style: const TextStyle(fontSize: 14),
                       ),
                       trailing: Container(
                           margin: const EdgeInsets.only(top: 0),
@@ -379,8 +402,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
     return Text(
         TimeElapsed.elapsedTimeDynamic(
             DateTime.fromMicrosecondsSinceEpoch(timeElapsed).toString()),
-        style:
-            TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.3)));
+        style: const TextStyle(fontSize: 12.5));
   }
 
   Widget _determineMessageDisplay(int unread, LatestMessage? latestMessage) {
@@ -412,10 +434,7 @@ class _ChatDashboardScreenState extends State<ChatDashboardScreen>
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.bold)));
     } else {
-      return Text(display,
-          style: TextStyle(
-              fontSize:
-                  const AdaptiveTextSize().getAdaptiveTextSize(context, 10)));
+      return Text(display, style: const TextStyle(fontSize: 12));
     }
   }
 }

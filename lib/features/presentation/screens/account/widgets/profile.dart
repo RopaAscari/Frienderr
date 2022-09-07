@@ -208,7 +208,7 @@ class _ProfileAccountState extends State<ProfileAccount> {
                         child: Column(
                           children: [
                             Lottie.asset(
-                              Assets.lottie.socialMediaInteraction,
+                              Assets.lottie.socialMediaNetwork,
                               width: 350,
                               height: 350,
                             ),

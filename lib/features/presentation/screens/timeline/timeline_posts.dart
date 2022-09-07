@@ -155,11 +155,11 @@ class _TimelinePostsState extends State<TimelinePosts>
                 child: Column(children: [
                   SizedBox(
                       width: 200,
-                      height: 300,
+                      height: 200,
                       child: Lottie.asset(
                         Assets.lottie.caughtUp,
-                        width: 70,
-                        height: 70,
+                        width: 150,
+                        height: 150,
                         controller: _animationController,
                       )),
                   Text('You are at the end of your journey',

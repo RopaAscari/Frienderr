@@ -1,3 +1,6 @@
+import 'package:frienderr/core/constants/constants.dart';
+import 'package:frienderr/core/services/route_builder.dart';
+import 'package:frienderr/features/presentation/screens/register/register_user.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +61,10 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<dynamic> _navigateToRegisterScreen() {
-    return getService<AppRouter>().push(RegisterRoute(
+    return Navigator.of(context).push(RouteBuilder.createAnimatedRoute(
+        child: RegisterScreen(
       blocGroup: _blocGroup,
-    ));
+    )));
   }
 
   Future<dynamic> _navigateToForgotScreen() async {
@@ -76,8 +80,9 @@ class LoginScreenState extends State<LoginScreen> {
     _blocGroup.postBloc
         .add(const PostEvent.fetchTimelinePosts(shouldLoad: true));
 
-    return getService<AppRouter>()
-        .push(TabNavigationRoute(blocGroup: _blocGroup));
+    return getService<AppRouter>().pushAndPopUntil(
+        TabNavigationRoute(blocGroup: _blocGroup),
+        predicate: (r) => false);
   }
 
   void _onProviderAuthenticate(OAuthType oAuth) {
@@ -137,9 +142,12 @@ class LoginScreenState extends State<LoginScreen> {
                     AuthenticationState state,
                   ) {
                     return Column(children: [
-                      AppLogo(
-                        onFlightCompletion: () =>
-                            setState(() => _shouldRenderUI = true),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: AppLogo(
+                          onFlightCompletion: () =>
+                              setState(() => _shouldRenderUI = true),
+                        ),
                       ),
                       ConditionalRenderDelegate(
                         condition: _shouldRenderUI,
@@ -158,17 +166,21 @@ class LoginScreenState extends State<LoginScreen> {
               top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _oAuthActions(),
-            _orDivider(),
+            _buildAuthVector(),
             _usernameOrEmailTextField(state),
             _passwordTextField(state),
             _loginActions(),
             _loginButton(state),
+            _orDivider(),
+            _oAuthActions(),
             _registerAccountText(),
             _buildLoading(state),
-            _buildAnimation(),
           ])),
     ]);
+  }
+
+  Widget _headerText() {
+    return Text('Login to your account');
   }
 
   Widget _animationLimiter({required Widget child}) {
@@ -202,15 +214,15 @@ class LoginScreenState extends State<LoginScreen> {
     }
 
     return AppTextField(
-      isObscure: false,
-      errorText: errorText,
-      label: "Username or email",
-      /* prefixIcon: const Icon(
-        Icons.person,
-        color: Colors.grey,
-      ),*/
-      controller: _emailController,
-    );
+        isObscure: false,
+        errorText: errorText,
+        label: "Email Address",
+        prefixIcon: const Icon(
+          Icons.email,
+          color: Colors.grey,
+        ),
+        controller: _emailController,
+        padding: const EdgeInsets.only(top: 1));
   }
 
   Widget _passwordTextField(state) {
@@ -224,14 +236,14 @@ class LoginScreenState extends State<LoginScreen> {
     return AppTextField(
         label: "Password",
         isObscure: true,
-        /*  prefixIcon: const Icon(
-        Icons.lock,
-        size: 21.5,
-        color: Colors.grey,
-      ),*/
+        prefixIcon: const Icon(
+          Icons.lock,
+          size: 21.5,
+          color: Colors.grey,
+        ),
         errorText: errorText,
         controller: _passwordController,
-        padding: const EdgeInsets.only(top: 15));
+        padding: const EdgeInsets.only(top: 20));
   }
 
   Widget _loginButton(AuthenticationState state) {
@@ -239,17 +251,26 @@ class LoginScreenState extends State<LoginScreen> {
         child: AppButton(
             label: "LOGIN",
             isLoading: false,
+            borderRadius: 50,
             onPressed: _onAuthenticate,
             margin: const EdgeInsets.only(top: 15),
             disabled: state.currentState ==
                 AuthenticationStatus.authenticationLoading),
-        height: 60);
+        height: 65);
+  }
+
+  Widget _buildAuthVector() {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+      child: Image.asset(Constants.authVector, height: 330, width: 330),
+    ));
   }
 
   Widget _buildAnimation() {
     return Center(
       child: Lottie.asset(
-        Assets.lottie.socialMediaNetwork,
+        Assets.lottie.authAnimation,
         width: 300,
         height: 300,
       ),
@@ -262,16 +283,14 @@ class LoginScreenState extends State<LoginScreen> {
             text: "\n\nDon't have an account.",
             style: TextStyle(
               color: Colors.grey[400]!.withOpacity(0.9),
-              fontSize: ResponsiveFlutter.of(context).fontSize(1.55),
+              fontSize: 13,
             ),
             children: <InlineSpan>[
           TextSpan(
               text: ' Sign Up',
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _navigateToRegisterScreen(),
-              style: TextStyle(
-                  fontSize: ResponsiveFlutter.of(context).fontSize(1.3),
-                  color: HexColor('#FFB126')))
+              style: TextStyle(fontSize: 12.5, color: HexColor('#FFB126')))
         ])));
   }
 
@@ -279,8 +298,27 @@ class LoginScreenState extends State<LoginScreen> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 0.0),
-        child: OAuthHandler(
+        child: /* OAuthHandler(
           onSelected: _onProviderAuthenticate,
+        ),*/
+            MaterialButton(
+          height: 60,
+          minWidth: MediaQuery.of(context).size.width,
+          onPressed: () {
+            _onProviderAuthenticate(OAuthType.google);
+          },
+          color: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              side: BorderSide(color: Colors.grey[800]!.withOpacity(0.3))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(Constants.googleIcon, height: 30, width: 30),
+              Text("Sign in with google",
+                  style: TextStyle(fontSize: 13, color: Colors.grey[400]!))
+            ],
+          ),
         ),
       ),
     );
@@ -332,7 +370,7 @@ class LoginScreenState extends State<LoginScreen> {
           GestureDetector(
               onTap: _navigateToForgotScreen,
               child: Text('Forgot password?',
-                  style: Theme.of(context).textTheme.bodyText1))
+                  style: TextStyle(fontSize: 13, color: Colors.grey[400])))
         ],
       ),
     );

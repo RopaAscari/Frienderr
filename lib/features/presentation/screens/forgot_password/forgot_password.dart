@@ -78,7 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             alignment: Alignment.topRight,
             child: IconButton(
                 iconSize: 35,
-                icon: Icon(
+                icon: const Icon(
                   Icons.close,
                 ),
                 onPressed: () => Navigator.pop(context))));
@@ -101,14 +101,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             color: Colors.grey,
           ),
           controller: emailController),
-      AppButton(
-        label: "Send Recovery Email",
-        margin: const EdgeInsets.only(top: 20),
-        onPressed: () => _blocGroup.authenticationBloc.add(
-            AuthenticationEvent.recoverAccount(email: emailController.text)),
-        isLoading:
-            state.currentState == AuthenticationStatus.recoverAccountLoading,
-      )
+      SizedBox(
+          height: 80,
+          child: AppButton(
+            label: "Send Recovery Email",
+            borderRadius: 30,
+            margin: const EdgeInsets.only(top: 25),
+            onPressed: () => _blocGroup.authenticationBloc.add(
+                AuthenticationEvent.recoverAccount(
+                    email: emailController.text)),
+            isLoading: state.currentState ==
+                AuthenticationStatus.recoverAccountLoading,
+          ))
     ]);
   }
 }

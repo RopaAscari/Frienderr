@@ -1,3 +1,4 @@
+import 'package:frienderr/core/constants/constants.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -68,17 +69,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ));
   }
 
-  void _navigateToLoginScreen() => getService<AppRouter>().push(LoginRoute(
-        shouldRenderUI: true,
-        blocGroup: _blocGroup,
-      ));
+  void _navigateToLoginScreen() => getService<AppRouter>().pop();
 
   void _navigateToRegisterUsername(AuthenticationState state) {
     _blocGroup.userBloc.add(UserEvent.setUser(state.user as UserModel));
-    getService<AppRouter>().push(RegisterUsernameRoute(
-      userId: state.user?.id ?? '',
-      blocGroup: _blocGroup,
-    ));
+    getService<AppRouter>().pushAndPopUntil(
+        RegisterUsernameRoute(
+          userId: state.user?.id ?? '',
+          blocGroup: _blocGroup,
+        ),
+        predicate: (r) => false);
   }
 
   @override
@@ -119,12 +119,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               AuthenticationState state,
                             ) {
                               return Column(children: [
+                                _closeButton(),
                                 AppLogo(
                                   onFlightCompletion: () => null,
                                 ),
                                 _appBody(state),
                               ]);
                             })))));
+  }
+
+  Widget _closeButton() {
+    return Padding(
+        padding: const EdgeInsets.all(0),
+        child: Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+                iconSize: 27,
+                icon: const Icon(
+                  Icons.close,
+                ),
+                onPressed: () => Navigator.pop(context))));
+  }
+
+  Widget _buildAuthVector() {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+      child:
+          Image.asset(Assets.images.authVector2.path, height: 330, width: 330),
+    ));
   }
 
   Widget _appBody(AuthenticationState state) {
@@ -144,13 +167,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _oAuthActions(),
-            _orDivider(),
+            _buildAuthVector(),
             _buildEmailField(state),
             // _buildPhoneNumberField(state),
             _buildPasswordField(state),
             _buildRegisterButton(state),
-            _buildAnimation(),
+            _orDivider(),
+            _oAuthActions(),
+
             _buildAccountText(),
             if (state.currentState == AuthenticationStatus.createAccountLoading)
               const Center(
@@ -167,6 +191,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         label: "Email Address",
         isObscure: false,
         controller: emailController,
+        padding: const EdgeInsets.only(
+          top: 1,
+        ),
+        prefixIcon: const Icon(
+          Icons.email,
+          color: Colors.grey,
+        ),
         errorText:
             state.currentState == AuthenticationStatus.createAccountFaliure
                 ? ''
@@ -193,6 +224,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return AppTextField(
         label: "Password",
         isObscure: true,
+        prefixIcon: const Icon(
+          Icons.lock,
+          size: 21.5,
+          color: Colors.grey,
+        ),
         controller: passwordController,
         padding: const EdgeInsets.only(top: 17),
         errorText:
@@ -206,9 +242,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       height: 70,
       child: AppButton(
           label: "Create Account",
+          borderRadius: 30,
           margin: const EdgeInsets.only(top: 20),
           onPressed: () => _onRegisterButtonPressed(context),
-          isLoading: false),
+          isLoading: false,
+          disabled:
+              state.currentState == AuthenticationStatus.createAccountLoading),
     );
   }
 
@@ -216,8 +255,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 0.0),
-        child: OAuthHandler(
+        child: /* OAuthHandler(
           onSelected: _onProviderAuthenticate,
+        )*/
+            MaterialButton(
+          height: 60,
+          minWidth: MediaQuery.of(context).size.width,
+          onPressed: () {
+            _onProviderAuthenticate(OAuthType.google);
+          },
+          color: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              side: BorderSide(color: Colors.grey[800]!.withOpacity(0.3))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(Constants.googleIcon, height: 30, width: 30),
+              Text("Sign up with google",
+                  style: TextStyle(fontSize: 13, color: Colors.grey[400]!))
+            ],
+          ),
         ),
       ),
     );
@@ -263,21 +321,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
             child: Text.rich(TextSpan(
-                text: "Alreay have an account?. Login",
+                text: "\nAlreay have an account?. Login",
                 style: TextStyle(
                   color: Colors.grey[400],
-                  fontSize:
-                      const AdaptiveTextSize().getAdaptiveTextSize(context, 10),
+                  fontSize: 13,
                 ),
                 children: <InlineSpan>[
                   TextSpan(
                       text: ' here',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => _navigateToLoginScreen(),
-                      style: TextStyle(
-                          fontSize: const AdaptiveTextSize()
-                              .getAdaptiveTextSize(context, 10),
-                          color: Colors.orangeAccent))
+                      style: const TextStyle(
+                          fontSize: 13, color: Colors.orangeAccent))
                 ]))));
   }
 }

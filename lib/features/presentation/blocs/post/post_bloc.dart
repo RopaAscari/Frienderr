@@ -194,7 +194,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     return either.fold((l) {
       getService<AppRouter>().context.showToast(
-          content: const Text("Something went wrong"),
+          content: const Text("Something went wrong",
+              style: TextStyle(color: Colors.white, fontSize: 12)),
           type: SnackBarType.error);
       emit(state.copyWith(action: PostListenableAction.likeFailure));
     }, (r) {
@@ -209,7 +210,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     return either.fold((l) {
       getService<AppRouter>().context.showToast(
-          content: const Text("Something went wrong"),
+          content: const Text("Something went wrong",
+              style: TextStyle(color: Colors.white, fontSize: 12)),
           type: SnackBarType.error);
       emit(state.copyWith(action: PostListenableAction.failure));
     }, (r) {
@@ -226,7 +228,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     return either.fold((l) {
       getService<AppRouter>().context.showToast(
             type: SnackBarType.error,
-            content: const SnackBarMessage(message: "Something went wrong"),
+            content: const Text("Something went wrong",
+                style: TextStyle(color: Colors.white, fontSize: 12)),
           );
       emit(state.copyWith(action: PostListenableAction.failure));
     }, (r) {
@@ -246,18 +249,16 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }, (r) {
       if (r) {
         getService<AppRouter>().context.showToast(
-              type: SnackBarType.success,
-              content: const SnackBarMessage(
-                message: "Post saved",
-                leading: Icon(Icons.check_circle, color: Colors.white),
-              ),
-            );
+            content: const Text("Post saved",
+                style: TextStyle(color: Colors.white, fontSize: 12)),
+            type: SnackBarType.idle);
 
         emit(state.copyWith(action: PostListenableAction.saveSuccess));
       } else {
         getService<AppRouter>().context.showToast(
               type: SnackBarType.error,
-              content: const SnackBarMessage(message: "Unable to save post"),
+              content: const Text("Unable to save post",
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
             );
         emit(state.copyWith(action: PostListenableAction.saveFailure));
       }
@@ -295,6 +296,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }, (r) {
       if (r) {
         emit(state.copyWith(action: PostListenableAction.shareSuccess));
+
+        getService<AppRouter>().context.showToast(
+              type: SnackBarType.idle,
+              content: const Text("Post shared",
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
+            );
       } else {
         emit(state.copyWith(action: PostListenableAction.shareFailure));
       }
@@ -307,10 +314,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     return either.fold((error) {
       getService<AppRouter>().context.showToast(
-          content: const SnackBarMessage(
-            message: "An error occured",
-          ),
-          type: SnackBarType.error);
+            type: SnackBarType.error,
+            content: const Text("An error occured",
+                style: TextStyle(color: Colors.white, fontSize: 12)),
+          );
+
       emit(state.copyWith(action: PostListenableAction.failure));
     }, (success) {
       if (success) {
@@ -319,16 +327,16 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         emit(state.copyWith(action: PostListenableAction.deleted));
 
         getService<AppRouter>().context.showToast(
-            content: const SnackBarMessage(
-              message: "Post deleted",
-            ),
-            type: SnackBarType.success);
+              type: SnackBarType.idle,
+              content: const Text("Post deleted",
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
+            );
       } else {
         getService<AppRouter>().context.showToast(
-            content: const SnackBarMessage(
-              message: "An error occured",
-            ),
-            type: SnackBarType.error);
+              type: SnackBarType.error,
+              content: const Text("An error occured",
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
+            );
       }
     });
   }

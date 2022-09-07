@@ -190,6 +190,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         child: AppButton(
           label: "Update",
           isLoading: false,
+          borderRadius: 30,
           onPressed: _updateProfile,
           margin: const EdgeInsets.only(top: 24),
           disabled: state.action ==

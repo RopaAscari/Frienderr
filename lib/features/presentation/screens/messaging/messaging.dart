@@ -575,8 +575,9 @@ class MessagingState extends State<MessagingScreen> {
                 ),
                 child: Container(
                     height: 50,
+                    margin: const EdgeInsets.only(top: 10),
                     alignment: Alignment.center,
-                    color: Colors.black.withOpacity(0.7),
+                    color: Theme.of(context).canvasColor,
                     width: MediaQuery.of(context).size.width,
                     child: _chatHeader(_metadata.chatRecipient)))));
   }
@@ -617,7 +618,7 @@ class MessagingState extends State<MessagingScreen> {
 
   Widget _chatHeader(UserDTO user) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 8.0, left: 5, right: 5),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         IconButton(
             icon: Icon(Icons.arrow_back,
